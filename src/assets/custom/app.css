@@ -104,3 +104,15 @@
     -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 1));
     filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 1));
 } */
+.card-img-top {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+.edu-card-img {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
