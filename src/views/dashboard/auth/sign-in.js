@@ -37,23 +37,23 @@ function FormDataEvent(event){
 
 
 function submitForm(){
-  const baseUrl = process.env.REACT_APP_API_URL;
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+  console.log('baseUrl' , baseUrl);
   axios.post(`${baseUrl}/api/login`, formData, {
     headers: {
-      'X-CSRF-Token': csrfToken
+      'Content-Type': 'application/json',
     }
   })
   .then((response) => {
     console.log('Login successful:', response.data);
     // You can store the token in localStorage or a state management library
     localStorage.setItem('access_token', response.data.access_token);
-    window.location.href = '/equity-circle'
+    window.location.href = '/'
   })
   .catch((error) => {
     console.error('Login failed:', error.response ? error.response.data : error.message);
   });
 }
-
 
 
   return (

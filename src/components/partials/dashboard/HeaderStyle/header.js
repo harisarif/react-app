@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
+import axios from 'axios';
 import { Nav, Form, Card, Container, Image, Dropdown, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -44,6 +45,27 @@ const Header = () => {
       }, 100);
     });
   }
+
+  const [userData , setUserData] = useState();
+
+useEffect(() => {
+  const getUserData = async () => {
+    const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+    console.log('baseUrl' , baseUrl);
+    try {
+      const response = await axios.get(`${baseUrl}/api/user`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+      console.log(response.data);
+      setUserData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  getUserData();
+}, []);
 
   return (
     <>
@@ -884,7 +906,7 @@ const Header = () => {
                   <Card className="shadow-none m-0">
                     <Card.Header>
                       <div className="header-title">
-                        <h5 className="mb-0 ">Hello Bni Cyst</h5>
+                       <h5 className="mb-0 ">{userData?.first_name} {userData?.last_name}</h5>
                       </div>
                     </Card.Header>
                     <Card.Body className="p-0 ">
