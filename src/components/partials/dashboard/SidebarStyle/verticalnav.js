@@ -56,7 +56,7 @@ const VerticalNav = React.memo(() => {
                     <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Profiles</Tooltip>}>
                             <i className="icon material-symbols-outlined">
-                            Home
+                            Person
                             </i>
                         </OverlayTrigger>
                         <span className="item-name">Profiles</span>
@@ -109,7 +109,7 @@ const VerticalNav = React.memo(() => {
                     <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Education</Tooltip>}>
                             <i className="icon material-symbols-outlined">
-                            Home
+                            School
                             </i>
                         </OverlayTrigger>
                         <span className="item-name">Education</span>
@@ -119,7 +119,7 @@ const VerticalNav = React.memo(() => {
                     <Link className={`${location.pathname === '/job-list' ? 'active' : ''} nav-link `} aria-current="page" to="/job-list">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Job List</Tooltip>}>
                             <i className="icon material-symbols-outlined">
-                            Home
+                            Work
                             </i>
                         </OverlayTrigger>
                         <span className="item-name">Job List</span>
@@ -129,7 +129,7 @@ const VerticalNav = React.memo(() => {
                     <Link className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-link `} aria-current="page" to="/event-calender">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Events Calender</Tooltip>}>
                             <i className="icon material-symbols-outlined">
-                            Home
+                            Today
                             </i>
                         </OverlayTrigger>
                         <span className="item-name">Events Calender</span>
@@ -139,7 +139,7 @@ const VerticalNav = React.memo(() => {
                     <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Notifications</Tooltip>}>
                             <i className="icon material-symbols-outlined">
-                            Home
+                            notifications_active
                             </i>
                         </OverlayTrigger>
                         <span className="item-name">Notifications</span>

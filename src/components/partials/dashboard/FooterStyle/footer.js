@@ -21,7 +21,7 @@ const Footer = (props) => {
     }
     return (
         <>
-            <footer className="iq-footer">
+            <footer className="iq-footer mt-5">
                 <Container fluid>
                     <Row>
                         <Col lg="6">
