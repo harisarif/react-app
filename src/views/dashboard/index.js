@@ -49,6 +49,12 @@ import mountain from "../../assets/images/page-img/mountain.webp";
 import pizza from "../../assets/images/page-img/pizza.webp";
 import bootstrapImg from "../../assets/images/icon/bootstrap-5.png";
 import adsImg from "../../assets/images/page-img/ads.jpg";
+import profile_img_1 from "../../assets/images/page-img/pro(1).jpg";
+import profile_img_2 from "../../assets/images/page-img/pro(2).jpg";
+import profile_img_3 from "../../assets/images/page-img/pro(3).jpg";
+import picture_11 from "../../assets/images/page-img/bussiness(6).jpg";
+import picture_12 from "../../assets/images/page-img/crypto(3).jpg";
+import picture_13 from "../../assets/images/page-img/gym(4).jpg";
 
 // Story components
 import Stories from "../../components/Stories";
@@ -283,15 +289,15 @@ const Index = () => {
         />
         <Container>
           <Row className="gx-4">
-            <Col lg={8}>
+            <Col lg={12}>
               <div id="content">
-                <Row>
+                {/* <Row>
                   <Col sm={12}>
                     <div className="mb-5">
                       <Stories stories={stories} />
                     </div>
                   </Col>
-                </Row>
+                </Row> */}
                 <Row>
                   <Col sm={12}>
                     <CreatePost className="card-block card-stretch card-height" />
@@ -305,8 +311,8 @@ const Index = () => {
                           <div className="d-flex align-items-center justify-content-between">
                             <div className="me-3 flex-shrik-0">
                               <img
+                              src={profile_img_1}
                                 className="border border-2 rounded-circle user-post-profile"
-                                src={user01}
                                 alt=""
                               />
                             </div>
@@ -442,7 +448,7 @@ const Index = () => {
                             className="rounded"
                           >
                             <img
-                              src={user5}
+                              src={picture_11}
                               alt="post-images"
                               className="img-fluid rounded w-100"
                               loading="lazy"
@@ -800,7 +806,7 @@ const Index = () => {
                             <div className="me-3 flex-shrik-0">
                               <img
                                 className="border border-2 rounded-circle user-post-profile"
-                                src={user3}
+                                src={profile_img_2}
                                 alt=""
                               />
                             </div>
@@ -935,7 +941,7 @@ const Index = () => {
                             <Col md={4}>
                               <Link to="#" onClick={() => imageOnSlide(2)}>
                                 <img
-                                  src={boyImg}
+                                  src={picture_12}
                                   alt="post1"
                                   className="img-fluid rounded w-100"
                                 />
@@ -944,7 +950,7 @@ const Index = () => {
                             <Col md={4} className="mt-md-0  mt-3">
                               <Link to="#" onClick={() => imageOnSlide(3)}>
                                 <img
-                                  src={busImg}
+                                  src={picture_13}
                                   alt="post1"
                                   className="img-fluid rounded w-100"
                                 />
@@ -953,7 +959,7 @@ const Index = () => {
                             <Col md={4} className="mt-md-0  mt-3">
                               <Link to="#" onClick={() => imageOnSlide(4)}>
                                 <img
-                                  src={img11}
+                                  src={picture_11}
                                   alt="post1"
                                   className="img-fluid rounded w-100"
                                 />
@@ -964,7 +970,7 @@ const Index = () => {
                             <Col md={6}>
                               <Link to="#" onClick={() => imageOnSlide(5)}>
                                 <img
-                                  src={mountain}
+                                  src={picture_12}
                                   alt="post1"
                                   className="img-fluid rounded w-100"
                                 />
@@ -973,7 +979,7 @@ const Index = () => {
                             <Col md={6} className="mt-md-0 mt-3">
                               <div className="post-overlay-box h-100 rounded">
                                 <img
-                                  src={pizza}
+                                  src={picture_13}
                                   alt="post-images"
                                   className="img-fluid rounded w-100 h-100 object-cover"
                                   loading="lazy"
@@ -1341,7 +1347,7 @@ const Index = () => {
                             <div className="me-3 flex-shrik-0">
                               <img
                                 className="border border-2 rounded-circle user-post-profile"
-                                src={user4}
+                                src={profile_img_3}
                                 alt=""
                               />
                             </div>
@@ -1810,7 +1816,7 @@ const Index = () => {
                             <div className="me-3 flex-shrik-0">
                               <img
                                 className="border border-2 rounded-circle user-post-profile"
-                                src={user1}
+                                src={profile_img_1}
                                 alt=""
                               />
                             </div>
@@ -2123,7 +2129,7 @@ const Index = () => {
                                     <div className="d-flex align-items-center gap-3">
                                       <div className="comment-list-user-img flex-shrink-0">
                                         <img
-                                          src={user3}
+                                          src={profile_img_2}
                                           alt="userimg"
                                           className="avatar-48 rounded-circle img-fluid"
                                           loading="lazy"
@@ -2284,7 +2290,7 @@ const Index = () => {
                               <div className="me-3 flex-shrik-0">
                                 <img
                                   className="border border-2 rounded-circle user-post-profile"
-                                  src={user6}
+                                  src={profile_img_2}
                                   alt=""
                                 />
                               </div>
@@ -2432,7 +2438,7 @@ const Index = () => {
                               <div className="d-flex gap-3">
                                 <div className="flex-shrink-0">
                                   <img
-                                    src={bootstrapImg}
+                                    src={picture_13}
                                     alt="bootstrap-icon"
                                     className="img-fluid"
                                   />
@@ -2802,7 +2808,7 @@ const Index = () => {
                               <div className="me-3 flex-shrik-0">
                                 <img
                                   className="border border-2 rounded-circle user-post-profile"
-                                  src={user11}
+                                  src={profile_img_3}
                                   alt=""
                                 />
                               </div>
@@ -2933,7 +2939,7 @@ const Index = () => {
                               <div className="me-3 flex-shrik-0">
                                 <img
                                   className="border border-2 rounded-circle user-post-profile"
-                                  src={user12}
+                                  src={profile_img_2}
                                   alt=""
                                 />
                               </div>
@@ -3176,7 +3182,7 @@ const Index = () => {
                               <div className="me-3 flex-shrik-0">
                                 <img
                                   className="border border-2 rounded-circle user-post-profile"
-                                  src={user7}
+                                  src={profile_img_1}
                                   alt="user-images"
                                   loading="lazy"
                                 />
@@ -3283,7 +3289,7 @@ const Index = () => {
                                     <div className="me-3 flex-shrik-0">
                                       <img
                                         className="border border-2 rounded-circle user-post-profile"
-                                        src={user8}
+                                        src={profile_img_2}
                                         alt="user-images"
                                         loading="lazy"
                                       />
@@ -3361,7 +3367,7 @@ const Index = () => {
                                 <div className="user-post mt-4">
                                   <div className="card shadow overflow-hidden mb-0">
                                     <img
-                                      src={profileBgImg}
+                                      src={picture_11}
                                       className="card-img-top w-100 object-cover"
                                       alt="group-images"
                                       height="250"
@@ -3727,7 +3733,7 @@ const Index = () => {
               </div>
             </Col>
 
-            <Col lg={4}>
+            {/* <Col lg={4}>
               <Card>
                 <div className="card-header d-flex justify-content-between">
                   <div className="header-title">
@@ -3981,7 +3987,7 @@ const Index = () => {
                   </Card.Body>
                 </Card>
               </div>
-            </Col>
+            </Col> */}
 
           </Row>
         </Container>

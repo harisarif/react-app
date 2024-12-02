@@ -29,9 +29,9 @@ const JobList = () => {
                       <img src={job_img_1} class="card-img-top" alt="#" loading="lazy" />
                     </div>
                     <div class="card-body">
-                      <h4 class="card-title turncate-2">How a Customer Academy Improves Retention</h4>
+                      <h4 class="card-title turncate-2"> <a href="/job-list-detail" class="text-black">How a Customer Academy Improves Retention</a></h4>                     
                       <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="#" class="btn btn-primary btn-block">Read More</a>
+                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
                     </div>
                   </div>
                 </div>
@@ -41,9 +41,9 @@ const JobList = () => {
                       <img src={job_img_2} class="card-img-top" alt="#" loading="lazy" />
                     </div>
                     <div class="card-body">
-                      <h4 class="card-title turncate-2">LMS Request For Personal Tooltik</h4>
+                      <h4 class="card-title turncate-2"><a href="/job-list-detail" class="text-black">LMS Request For Personal Tooltik</a></h4>
                       <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="#" class="btn btn-primary btn-block">Read More</a>
+                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
                     </div>
                   </div>
                 </div>
@@ -53,9 +53,9 @@ const JobList = () => {
                       <img src={job_img_3} class="card-img-top" alt="#" loading="lazy" />
                     </div>
                     <div class="card-body">
-                      <h4 class="card-title turncate-2">Build an LMS Buiness Case</h4>
+                      <h4 class="card-title turncate-2"><a href="/job-list-detail" class="text-black">Build an LMS Buiness Case</a></h4>
                       <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="#" class="btn btn-primary btn-block">Read More</a>
+                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
                     </div>
                   </div>
                 </div>
@@ -65,9 +65,9 @@ const JobList = () => {
                       <img src={job_img_4} class="card-img-top" alt="#" loading="lazy" />
                     </div>
                     <div class="card-body">
-                      <h4 class="card-title turncate-2">Training Evalution From Template</h4>
+                      <h4 class="card-title turncate-2"><a href="/job-list-detail" class="text-black">Training Evalution From Template</a></h4>
                       <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="#" class="btn btn-primary btn-block">Read More</a>
+                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
                     </div>
                   </div>
                 </div>
@@ -77,9 +77,9 @@ const JobList = () => {
                       <img src={job_img_5} class="card-img-top" alt="#" loading="lazy" />
                     </div>
                     <div class="card-body">
-                      <h4 class="card-title turncate-2">How a Customer Academy Improves Retention</h4>
+                      <h4 class="card-title turncate-2"> <a href="/job-list-detail" class="text-black">How a Customer Academy Improves Retention</a></h4>
                       <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="#" class="btn btn-primary btn-block">Read More</a>
+                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
                     </div>
                   </div>
                 </div>

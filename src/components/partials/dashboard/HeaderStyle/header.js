@@ -140,7 +140,7 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <Dropdown bsPrefix=" "
+              {/* <Dropdown bsPrefix=" "
                 className="iq-search-bar device-search position-relative d-none d-lg-block"
               >
                 <Dropdown.Toggle as="form" bsPrefix=" "
@@ -166,7 +166,7 @@ useEffect(() => {
                   </Link>
                 </Dropdown.Toggle>
                 <SearchModal />
-              </Dropdown>
+              </Dropdown> */}
             </div>
 
             <ul className="navbar-nav navbar-list">
