@@ -8,6 +8,10 @@ import JobList from "../views/dashboard/app/job-list";
 import JobListReadMore from "../views/dashboard/app/job-list-read-more";
 import JobListDetails from "../views/dashboard/app/job-list-details";
 import Education from "../views/dashboard/app/education";
+import Business from "../views/dashboard/app/business";
+import Crypto from "../views/dashboard/app/crypto";
+import Fitness from "../views/dashboard/app/fitness";
+
 
 import UserPrivacySetting from "../views/dashboard/app/user-privacy-setting";
 import FriendProfile from "../views/dashboard/app/friend-profile";
@@ -95,15 +99,15 @@ export const DefaultRouter = [
   },
   {
     path: "/event-calender",
-     : <EventCalender />,
+   element: <EventCalender />,
   },
   {
     path: "/job-list",
     element: <JobList />,
   },
   {
-    path: "/bussiness",
-    element: <Bussiness />,
+    path: "/business",
+    element: <Business />,
   },
   {
     path: "/crypto",
