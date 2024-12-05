@@ -90,7 +90,7 @@ const Sidebar = () => {
         data-toggle="main-sidebar"
         data-sidebar="responsive"
       >
-        <div className="sidebar-header d-flex align-items-center justify-content-start position-relative">
+        {/* <div className="sidebar-header d-flex align-items-center justify-content-start position-relative">
           <Link
             to="/"
             className="d-flex align-items-center gap-2 iq-header-logo"
@@ -109,7 +109,7 @@ const Sidebar = () => {
               </i>
             </span>
           </div>
-        </div>
+        </div> */}
         <div className="sidebar-body pt-0 data-scrollbar">
           <div className="sidebar-list">
             <Verticalnav />

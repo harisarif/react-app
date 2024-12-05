@@ -3,14 +3,15 @@
   position: fixed;
   width: 100%;
   max-width: var(--sidebar-width);
-  top: 0;
+  top: 80px;
   bottom: 0;
   transition: var(--sidebar-transition);
   transition-duration: var(--sidebar-transition-duration);
   transition-timing-function: var(--sidebar-transition-function-ease);
   z-index: 910;
-  background-color: var(--#{$prefix}gray-900);
-  color: var(--#{$variable-prefix}primary);
+  background-color: var(--bs-gray-900);
+  color: var(--bs-primary);
+  height: calc(100% - 80px) !important;
   .sidebar-body {
     padding-right: 1rem;
     overflow: hidden;

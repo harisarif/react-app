@@ -79,10 +79,10 @@ useEffect(() => {
         >
           {/* <Navbar className="iq-navbar p-lg-0" sticky="top"> */}
           <Container fluid className="navbar-inner">
-            <div className="d-flex align-items-center pb-2 pb-lg-0 d-xl-none">
+            <div className="d-flex align-items-center pb-2 pb-lg-0">
               <Link
                 to="/"
-                className="d-flex align-items-center iq-header-logo navbar-brand d-block d-xl-none"
+                className="d-flex align-items-center iq-header-logo navbar-brand d-block"
               >
                 <img src={equity} class="brand-logo" alt="#" />
               </Link>
