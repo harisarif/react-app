@@ -108,6 +108,7 @@
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
 }
+
 .edu-card-img {
     max-height: 230px;
     display: flex;
@@ -122,8 +123,6 @@
     width: 130px;
     filter: drop-shadow(0px 0px 3px #222);
 }
-
-
 
 .cards-wrapper {
     .card-body {
@@ -146,8 +145,6 @@
         }
     }
 }
-
-
 .find-more-left-side{
     .image-wrapper {
         width: 60%;
@@ -160,4 +157,102 @@
             height: 100% !important;
         }
     }
+}
+.index-img-group{
+    & a{
+        aspect-ratio: 16/9;
+        & img{
+            aspect-ratio: 16/9;
+        }
+    }
+}
+
+.index-img-group-two{
+    .img-parent{
+        aspect-ratio: 16/9;
+        & img{
+            aspect-ratio: 16/9;
+        }
+    }
+}
+
+.bg-light-subtle{
+    .flex-shrink-0{
+        aspect-ratio: 16/9;
+        & img{
+            aspect-ratio: 16/9;
+        }
+    }
+}
+.label-img {
+    position: absolute;
+    right: 25px;
+    top: 0px;
+    width: 100px;
+    height: 100px;
+    background: #a0e56d;
+}
+.label-card{
+    padding:20px 40px 40px;
+}
+
+.price {
+    position: absolute;
+    right: -0.5rem;
+    top: 20px;
+    /* rotate: 270deg; */
+    /* bottom: 10.938rem; */
+    padding: 1.125rem 1.5rem 1.125rem 2rem;
+    display: inline-block;
+    color: #fff;
+    background: var(--bs-primary);
+    width: 100%;
+    max-width: 150px;
+}
+.price:before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 0 0 8px;
+    border-color: transparent transparent transparent var(--bs-primary);
+    position: absolute;
+    left: auto;
+    right: 0;
+    top: -.5rem;
+    margin: 0 auto;
+}
+ .regular-price {
+    text-decoration: line-through;
+    font-size: .875rem;
+}
+.label-span:after {
+    content: "";
+    width: 0;
+    top: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 30px 0px 30px 22px;
+    border-color: transparent transparent transparent #ffffff;
+    position: absolute;
+    left: -1px;
+    /* right: 0; */
+    /* bottom: -0.5rem; */
+    margin: 0 auto;
+    /* rotate: 180deg; */
+}
+.label-span:after {
+    content: "";
+    width: 0;
+    top: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 30px 0px 30px 22px;
+    border-color: transparent transparent transparent #ffffff;
+    position: absolute;
+    left: -1px;
+    /* right: 0; */
+    /* bottom: -0.5rem; */
+    margin: 0 auto;
+    /* rotate: 180deg; */
 }

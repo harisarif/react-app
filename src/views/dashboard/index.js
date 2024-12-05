@@ -937,7 +937,7 @@ const Index = () => {
                           </ul>
                         </div>
                         <div className="user-post mt-4">
-                          <Row>
+                          <Row className="index-img-group">
                             <Col md={4}>
                               <Link to="#" onClick={() => imageOnSlide(2)}>
                                 <img
@@ -966,8 +966,8 @@ const Index = () => {
                               </Link>
                             </Col>
                           </Row>
-                          <Row className="mt-3">
-                            <Col md={6}>
+                          <Row className="mt-3 index-img-group ">
+                            <Col md={6} >
                               <Link to="#" onClick={() => imageOnSlide(5)}>
                                 <img
                                   src={picture_12}
@@ -976,8 +976,8 @@ const Index = () => {
                                 />
                               </Link>
                             </Col>
-                            <Col md={6} className="mt-md-0 mt-3">
-                              <div className="post-overlay-box h-100 rounded">
+                            <Col md={6} className="mt-md-0 mt-3 index-img-group-two">
+                              <div className="post-overlay-box h-100 rounded img-parent">
                                 <img
                                   src={picture_13}
                                   alt="post-images"
