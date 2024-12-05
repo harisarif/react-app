@@ -256,3 +256,14 @@
     margin: 0 auto;
     /* rotate: 180deg; */
 }
+
+.header-nav-link{
+    padding: 24px 10px;
+}
+
+.header-nav-link:hover,
+.header-nav-link.active,
+.header-nav-link:active{
+    padding: 24px 10px 22px;
+    border-bottom: 2px solid var(--bs-primary);
+}

@@ -115,6 +115,9 @@ useEffect(() => {
                           to="/business"
                           onClick={() => setActive("business")}
                         >
+                          <span class="material-symbols-outlined me-2">
+                            trending_up
+                          </span>
                           <span className="nav-text">Business Management</span>
                         </Link>
                       </li>
@@ -124,6 +127,9 @@ useEffect(() => {
                           to="/fitness"
                           onClick={() => setActive("fitness")}
                         >
+                          <span class="material-symbols-outlined me-2">
+                            exercise
+                          </span>
                           <span className="nav-text">Fitness</span>
                         </Link>
                       </li>
@@ -133,6 +139,9 @@ useEffect(() => {
                           to="/crypto"
                           onClick={() => setActive("crypto")}
                         >
+                          <span class="material-symbols-outlined">
+                            currency_bitcoin
+                          </span>
                           <span className="nav-text">Crypto</span>
                         </Link>
                       </li>
