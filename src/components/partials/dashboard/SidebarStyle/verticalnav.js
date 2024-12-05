@@ -29,6 +29,7 @@ const VerticalNav = React.memo(() => {
     const [activeMenu, setActiveMenu] = useState(false)
     const [active, setActive] = useState('')
     //location
+    window.scrollTo(0, 0);
     let location = useLocation();
     // console.log(document);
 
