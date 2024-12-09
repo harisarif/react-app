@@ -267,3 +267,43 @@
     padding: 24px 10px 22px;
     border-bottom: 2px solid var(--bs-primary);
 }
+
+.profile-img-gallary li a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1/1;
+}
+.profile-img-gallary li  a img{
+    aspect-ratio: 1/1;
+}
+.friend-cards-holder a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1/1;
+}
+
+.friend-cards-holder a img{
+    aspect-ratio: 1/1;
+}
+.event-post img{ 
+    aspect-ratio: 4/4;
+}
+.profile-carousel-cards a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 16/9;
+    }
+.profile-carousel-cards a img{
+aspect-ratio: 16/9;
+}
+.post-overlay-box img{
+aspect-ratio: 16/9;
+
+}
+
+    .user-post-profile-img{
+    aspect-ratio: 16/9;
+    }

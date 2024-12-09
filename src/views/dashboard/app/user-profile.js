@@ -89,6 +89,27 @@ import busImg from "../../../assets/images/page-img/bus.webp";
 import boyImg from "../../../assets/images/page-img/boy.webp";
 import img11 from "../../../assets/images/page-img/fd.webp";
 
+import crypto1 from "../../../assets/images/page-img/crypto(1).jpg";
+import crypto2 from "../../../assets/images/page-img/crypto(2).jpg";
+import crypto3 from "../../../assets/images/page-img/crypto(3).jpg";
+import crypto4 from "../../../assets/images/page-img/crypto(4).jpg";
+import crypto5 from "../../../assets/images/page-img/crypto(6).jpg";
+import business1 from "../../../assets/images/page-img/bussiness(1).jpg";
+import business2 from "../../../assets/images/page-img/bussiness(2).jpg";
+import business3 from "../../../assets/images/page-img/bussiness(3).jpg";
+import business4 from "../../../assets/images/page-img/bussiness(4).jpg";
+import business5 from "../../../assets/images/page-img/bussiness(5).jpg";
+import fitness1 from "../../../assets/images/page-img/gym(1).jpg";
+import fitness2 from "../../../assets/images/page-img/gym(2).jpg";
+import fitness3 from "../../../assets/images/page-img/gym(3).jpg";
+import fitness4 from "../../../assets/images/page-img/gym(4).jpg";
+import fitness5 from "../../../assets/images/page-img/gym(9).jpg";
+import pro1 from "../../../assets/images/page-img/pro(1).jpg";
+import pro2 from "../../../assets/images/page-img/pro(2).jpg";
+import pro3 from "../../../assets/images/page-img/pro(3).jpg";
+
+
+
 import coin from "../../../assets/images/gamipress/coin.svg";
 import credit from "../../../assets/images/gamipress/credit.svg";
 import gems from "../../../assets/images/gamipress/gems.svg";
@@ -270,7 +291,7 @@ const UserProfile = () => {
           <div
             className="header-cover-img"
             style={{
-              backgroundImage: `url(${pageBgImg})`,
+              backgroundImage: `url(${business2})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
@@ -388,7 +409,7 @@ const UserProfile = () => {
                             </span>
                           </span>
                           <img
-                            src={user1}
+                            src={pro1}
                             alt="user"
                             className="avatar-150 border border-4 border-white rounded-3"
                           />
@@ -543,12 +564,12 @@ const UserProfile = () => {
                             </div>
                             <Card.Body>
                               <Row>
-                                <Col sm={12}>
+                                <Col sm={12} className="d-none">
                                   <div className="event-post position-relative">
                                     <Link to="#">
                                       <img
                                         loading="lazy"
-                                        src={img9}
+                                        src={crypto1}
                                         alt="gallary1"
                                         className="img-fluid rounded"
                                       />
@@ -569,7 +590,7 @@ const UserProfile = () => {
                                     <Link to="#">
                                       <img
                                         loading="lazy"
-                                        src={img10}
+                                        src={crypto4}
                                         alt="gallary1"
                                         className="img-fluid rounded"
                                       />
@@ -606,7 +627,7 @@ const UserProfile = () => {
                                     <Link onClick={() => imageOnSlide(1)} to="#">
                                       <img
                                         loading="lazy"
-                                        src={g1}
+                                        src={crypto2}
                                         alt="gallary"
                                         className="img-fluid"
                                       />
@@ -616,7 +637,7 @@ const UserProfile = () => {
                                     <Link onClick={() => imageOnSlide(2)} to="#">
                                       <img
                                         loading="lazy"
-                                        src={g2}
+                                        src={crypto3}
                                         alt="gallary"
                                         className="img-fluid"
                                       />
@@ -626,7 +647,7 @@ const UserProfile = () => {
                                     <Link onClick={() => imageOnSlide(3)} to="#">
                                       <img
                                         loading="lazy"
-                                        src={g3}
+                                        src={crypto4}
                                         alt="gallary"
                                         className="img-fluid"
                                       />
@@ -636,7 +657,7 @@ const UserProfile = () => {
                                     <Link onClick={() => imageOnSlide(4)} to="#">
                                       <img
                                         loading="lazy"
-                                        src={g4}
+                                        src={crypto5}
                                         alt="gallary"
                                         className="img-fluid"
                                       />
@@ -646,13 +667,13 @@ const UserProfile = () => {
                                     <Link onClick={() => imageOnSlide(5)} to="#">
                                       <img
                                         loading="lazy"
-                                        src={g5}
+                                        src={crypto1}
                                         alt="gallary"
                                         className="img-fluid"
                                       />
                                     </Link>
                                   </li>
-                                  <li>
+                                  {/* <li>
                                     <Link onClick={() => imageOnSlide(6)} to="#">
                                       <img
                                         loading="lazy"
@@ -691,7 +712,7 @@ const UserProfile = () => {
                                         className="img-fluid"
                                       />
                                     </Link>
-                                  </li>
+                                  </li> */}
                                 </ul>
                               </Card.Body>
                             </Card>
@@ -707,8 +728,8 @@ const UserProfile = () => {
                                 </div>
                               </div>
                               <Card.Body>
-                                <div className="row row-cols-xl-3 row-cols-md-2 row-cols-2">
-                                  <div className="col mt-2 text-center">
+                                <div className="row row-cols-xl-3 row-cols-md-2 row-cols-2 friend-cards-holder">
+                                  {/* <div className="col mt-2 text-center">
                                     <Link to="#"><img src={user05} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
                                     <h6 className="mt-2 text-center">Anna Rexia</h6>
                                   </div>
@@ -723,25 +744,25 @@ const UserProfile = () => {
                                   <div className="col mt-2 text-center">
                                     <Link to="#"><img src={user08} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
                                     <h6 className="mt-2 text-center">Bill Emia</h6>
-                                  </div>
+                                  </div> */}
                                   <div className="col mt-2 text-center">
-                                    <Link to="#"><img src={user09} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
+                                    <Link to="#"><img src={fitness1} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
                                     <h6 className="mt-2 text-center">Moe Fugga</h6>
                                   </div>
                                   <div className="col mt-2 text-center">
-                                    <Link to="#"><img src={user10} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
+                                    <Link to="#"><img src={fitness2} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
                                     <h6 className="mt-2 text-center">Hal Appeno </h6>
                                   </div>
                                   <div className="col mt-2 text-center">
-                                    <Link to="#"><img src={user07} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
+                                    <Link to="#"><img src={fitness3} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
                                     <h6 className="mt-2 text-center">Zack Lee</h6>
                                   </div>
                                   <div className="col mt-2 text-center">
-                                    <Link to="#"><img src={user06} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
+                                    <Link to="#"><img src={fitness4} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
                                     <h6 className="mt-2 text-center">Terry Aki</h6>
                                   </div>
                                   <div className="col mt-2 text-center">
-                                    <Link to="#"><img src={user05} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
+                                    <Link to="#"><img src={fitness5} alt="gallary-image" loading="lazy" className="img-fluid" /></Link>
                                     <h6 className="mt-2 text-center">Greta Life</h6>
                                   </div>
                                 </div>
@@ -760,10 +781,10 @@ const UserProfile = () => {
                                 <Card.Body>
                                   <div className="user-post-data">
                                     <div className="d-flex align-items-center justify-content-between">
-                                      <div className="me-3 flex-shrik-0">
+                                      <div className="me-3 flex-shrik-0 ">
                                         <img
                                           className="border border-2 rounded-circle user-post-profile"
-                                          src={user01}
+                                          src={business1}
                                           alt=""
                                         />
                                       </div>
@@ -838,9 +859,9 @@ const UserProfile = () => {
                                       className="rounded"
                                     >
                                       <img
-                                        src={img1}
+                                        src={business1}
                                         alt="post-images"
-                                        className="img-fluid rounded w-100"
+                                        className="img-fluid rounded w-100 user-post-profile-img"
                                         loading="lazy"
                                       />
                                     </Link>
@@ -850,7 +871,7 @@ const UserProfile = () => {
                                       <ul className="list-inline m-0 p-0 post-user-liked-list">
                                         <li>
                                           <img
-                                            src={user01}
+                                            src={pro1}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -858,7 +879,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={user02}
+                                            src={pro2}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -866,7 +887,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={user03}
+                                            src={pro3}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -874,7 +895,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={img04}
+                                            src={pro1}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -1212,7 +1233,7 @@ const UserProfile = () => {
                                       <div className="me-3 flex-shrik-0">
                                         <img
                                           className="border border-2 rounded-circle user-post-profile"
-                                          src={user03}
+                                          src={pro2}
                                           alt=""
                                         />
                                       </div>
@@ -1284,7 +1305,7 @@ const UserProfile = () => {
                                       </li>
                                     </ul>
                                   </div>
-                                  <div className="user-post mt-4">
+                                  <div className="user-post mt-4 profile-carousel-cards">
                                     <Row>
                                       <Col md={4}>
                                         <Link
@@ -1292,7 +1313,7 @@ const UserProfile = () => {
                                           onClick={() => imageOnSlide(11)}
                                         >
                                           <img
-                                            src={boyImg}
+                                            src={business2}
                                             alt="post1"
                                             className="img-fluid rounded w-100"
                                           />
@@ -1304,7 +1325,7 @@ const UserProfile = () => {
                                           onClick={() => imageOnSlide(12)}
                                         >
                                           <img
-                                            src={busImg}
+                                            src={business3}
                                             alt="post1"
                                             className="img-fluid rounded w-100"
                                           />
@@ -1316,7 +1337,7 @@ const UserProfile = () => {
                                           onClick={() => imageOnSlide(13)}
                                         >
                                           <img
-                                            src={img11}
+                                            src={business4}
                                             alt="post1"
                                             className="img-fluid rounded w-100"
                                           />
@@ -1330,7 +1351,7 @@ const UserProfile = () => {
                                           onClick={() => imageOnSlide(14)}
                                         >
                                           <img
-                                            src={mountain}
+                                            src={business5}
                                             alt="post1"
                                             className="img-fluid rounded w-100"
                                           />
@@ -1339,7 +1360,7 @@ const UserProfile = () => {
                                       <Col md={6} className="mt-md-0 mt-3">
                                         <div className="post-overlay-box h-100 rounded">
                                           <img
-                                            src={pizza}
+                                            src={business1}
                                             alt="post-images"
                                             className="img-fluid rounded w-100 h-100 object-cover"
                                             loading="lazy"
@@ -1360,7 +1381,7 @@ const UserProfile = () => {
                                         <ul className="list-inline m-0 p-0 post-user-liked-list">
                                           <li>
                                             <img
-                                              src={user01}
+                                              src={pro1}
                                               alt="userimg"
                                               className="rounded-circle img-fluid userimg"
                                               loading="lazy"
@@ -1368,7 +1389,7 @@ const UserProfile = () => {
                                           </li>{" "}
                                           <li>
                                             <img
-                                              src={user02}
+                                              src={pro2}
                                               alt="userimg"
                                               className="rounded-circle img-fluid userimg"
                                               loading="lazy"
@@ -1376,7 +1397,7 @@ const UserProfile = () => {
                                           </li>{" "}
                                           <li>
                                             <img
-                                              src={user03}
+                                              src={pro3}
                                               alt="userimg"
                                               className="rounded-circle img-fluid userimg"
                                               loading="lazy"
@@ -1384,7 +1405,7 @@ const UserProfile = () => {
                                           </li>{" "}
                                           <li>
                                             <img
-                                              src={img04}
+                                              src={pro1}
                                               alt="userimg"
                                               className="rounded-circle img-fluid userimg"
                                               loading="lazy"
@@ -1723,7 +1744,7 @@ const UserProfile = () => {
                                       <div className="me-3 flex-shrik-0">
                                         <img
                                           className="border border-2 rounded-circle user-post-profile"
-                                          src={img04}
+                                          src={pro3}
                                           alt=""
                                         />
                                       </div>
@@ -1781,7 +1802,7 @@ const UserProfile = () => {
                                       <ul className="list-inline m-0 p-0 post-user-liked-list">
                                         <li>
                                           <img
-                                            src={user01}
+                                            src={pro1}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -1789,7 +1810,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={user02}
+                                            src={pro2}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -1797,7 +1818,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={user03}
+                                            src={pro3}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -1805,7 +1826,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={img04}
+                                            src={pro1}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -2145,7 +2166,7 @@ const UserProfile = () => {
                                       <div className="me-3 flex-shrik-0">
                                         <img
                                           className="border border-2 rounded-circle user-post-profile"
-                                          src={user1}
+                                          src={pro1}
                                           alt=""
                                         />
                                       </div>
@@ -2213,7 +2234,7 @@ const UserProfile = () => {
                                       <ul className="list-inline m-0 p-0 post-user-liked-list">
                                         <li>
                                           <img
-                                            src={user01}
+                                            src={pro1}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -2221,7 +2242,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={user02}
+                                            src={pro2}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -2229,7 +2250,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={user03}
+                                            src={pro3}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
@@ -2237,7 +2258,7 @@ const UserProfile = () => {
                                         </li>{" "}
                                         <li>
                                           <img
-                                            src={img04}
+                                            src={pro1}
                                             alt="userimg"
                                             className="rounded-circle img-fluid userimg"
                                             loading="lazy"
