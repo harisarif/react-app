@@ -94,7 +94,7 @@ import crypto2 from "../../../assets/images/page-img/crypto(2).jpg";
 import crypto3 from "../../../assets/images/page-img/crypto(3).jpg";
 import crypto4 from "../../../assets/images/page-img/crypto(4).jpg";
 import crypto5 from "../../../assets/images/page-img/crypto(6).jpg";
-import business1 from "../../../assets/images/page-img/bussiness(1).jpg";
+import business1 from "../../../assets/images/page-img/bussiness-1.jpg";
 import business2 from "../../../assets/images/page-img/bussiness(2).jpg";
 import business3 from "../../../assets/images/page-img/bussiness(3).jpg";
 import business4 from "../../../assets/images/page-img/bussiness(4).jpg";
@@ -236,6 +236,7 @@ const UserProfile = () => {
         <FsLightbox
           toggler={imageController.toggler}
           sources={[
+            business2,
             g1,
             g2,
             g3,
@@ -284,6 +285,7 @@ const UserProfile = () => {
             img58,
             img59,
             img60,
+            business1,
           ]}
           slide={imageController.slide}
         />
@@ -291,7 +293,7 @@ const UserProfile = () => {
           <div
             className="header-cover-img"
             style={{
-              backgroundImage: `url(${business2})`,
+              backgroundImage: `url(${business1})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
