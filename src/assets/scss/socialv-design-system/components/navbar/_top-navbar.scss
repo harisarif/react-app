@@ -826,6 +826,7 @@
     >.nav-link {
       &:hover {
         color: var(--#{$variable-prefix}heading-color);
+        border-bottom: 2px solid var(--bs-primary);
       }
     }
   }
@@ -930,6 +931,7 @@
       &.active {
         >a {
           color: var(--#{$variable-prefix}heading-color);
+          border-bottom: 2px solid var(--bs-primary) !important;
         }
       }
     }
