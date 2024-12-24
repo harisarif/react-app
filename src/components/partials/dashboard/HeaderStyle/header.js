@@ -1,7 +1,8 @@
-import React, { useState , useEffect } from "react";
+import React, { useState , useEffect,useContext } from "react";
+import { UserContext } from '../../../../context/UserContext';
 import axios from 'axios';
 import { Nav, Form, Card, Container, Image, Dropdown, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link , useLocation } from "react-router-dom";
 
 //image
 import user1 from "../../../../assets/images/user/1.jpg";
@@ -24,8 +25,10 @@ import { useSelector } from "react-redux";
 import SearchModal from "../../../search-modal";
 
 const Header = () => {
+  const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
+  const { userData, setUserData } = useContext(UserContext);
   const appName = useSelector(SettingSelector.app_name);
-
+  const location = useLocation();
   const [active, setActive] = useState("home");
 
   const minisidebar = () => {
@@ -47,26 +50,12 @@ const Header = () => {
     });
   }
 
-  const [userData , setUserData] = useState();
+  const handleLogout = () =>{
+    localStorage.removeItem('access_token');
+    window.location.href = '/auth/sign-in';
+  }
 
-useEffect(() => {
-  const getUserData = async () => {
-    const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-    console.log('baseUrl' , baseUrl);
-    try {
-      const response = await axios.get(`${baseUrl}/api/user`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-      });
-      console.log(response.data);
-      setUserData(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  getUserData();
-}, []);
+
 
   return (
     <>
@@ -828,7 +817,10 @@ useEffect(() => {
                   id="drop-down-arrow"
                 >
                   <Image
-                    src={user1}
+                    src={userData && Object.keys(userData).length > 0 && userData.profile_image ? 
+                      baseurl + '/images/profiles/' + userData.profile_image : 
+                      user1}
+                    
                     className="img-fluid rounded-circle avatar-48 border border-2 me-3"
                     alt="user"
                     loading="lazy"
@@ -840,7 +832,7 @@ useEffect(() => {
                   <Card className="shadow-none m-0">
                     <Card.Header>
                       <div className="header-title">
-                       <h5 className="mb-0 ">{userData?.first_name} {userData?.last_name}</h5>
+                       <h5 className="mb-0 ">{userData?.name}</h5>
                       </div>
                     </Card.Header>
                     <Card.Body className="p-0 ">
@@ -893,16 +885,32 @@ useEffect(() => {
                           </Link>
                         </div>
                       </div>
+                      {!userData && (
                       <div className="d-flex align-items-center iq-sub-card">
-                        <span className="material-symbols-outlined">
-                          login
-                        </span>
-                        <div className="ms-3">
-                          <Link to="/auth/sign-in" className="mb-0 h6">
-                            Sign out
-                          </Link>
-                        </div>
-                      </div>
+  <span className="material-symbols-outlined">
+    login
+  </span>
+  <div className="ms-3">
+    <Link to="/auth/sign-in" className="mb-0 h6">
+      Sign in
+    </Link>
+  </div>
+</div>
+                      )}
+
+{userData && (
+  <div className="d-flex align-items-center iq-sub-card">
+    <span className="material-symbols-outlined">
+      logout
+    </span>
+    <div className="ms-3">
+      <Link onClick={handleLogout} className="mb-0 h6">
+        Sign out
+      </Link>
+    </div>
+  </div>
+)}
+
                       <div className=" iq-sub-card">
                         <h5>Chat Settings</h5>
                       </div>

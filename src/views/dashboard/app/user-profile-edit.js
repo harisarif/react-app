@@ -1,11 +1,152 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Card, Tab, Form, Button, Nav } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import axios from '../../../utils/axios'
+import Swal from 'sweetalert2'
 
 //image
 import img1 from '../../../assets/images/user/11.png'
 
 const UserProfileEdit = () => {
+    const [userData, setUserData] = useState({})
+    const [loading, setLoading] = useState(true)
+    const [profileImage, setProfileImage] = useState(null)
+
+    useEffect(() => {
+        fetchUserData()
+    }, [])
+
+    const fetchUserData = async () => {
+        const token = localStorage.getItem('access_token');
+        try {
+            const response = await axios.get('/api/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setUserData(response.data)
+            setLoading(false)
+        } catch (error) {
+            console.error('Error fetching user data:', error)
+            setLoading(false)
+        }
+    }
+
+    const handleImageChange = (e) => {
+        if (e.target.files[0]) {
+            setProfileImage(e.target.files[0])
+        }
+    }
+
+    const handlePersonalInfoSubmit = async (e) => {
+        e.preventDefault()
+        const token = localStorage.getItem('access_token');
+        const formData = new FormData()
+
+        // Append form fields to FormData
+        Object.keys(userData).forEach(key => {
+            if (key !== 'profile_image') {
+                formData.append(key, userData[key])
+            }
+        })
+
+        if (profileImage) {
+            formData.append('profile_image', profileImage)
+        }
+
+        try {
+            const response = await axios.post('/api/user/update', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Profile updated successfully!'
+            })
+            fetchUserData() // Refresh user data
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.response?.data?.message || 'Failed to update profile'
+            })
+        }
+    }
+
+    const handlePasswordChange = async (e) => {
+        e.preventDefault()
+        const token = localStorage.getItem('access_token');
+        const formData = {
+            current_password: e.target.cpass.value,
+            new_password: e.target.npass.value,
+            new_password_confirmation: e.target.vpass.value
+        }
+
+        try {
+            await axios.post('/api/user/password', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Password updated successfully!'
+            })
+            e.target.reset()
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.response?.data?.message || 'Failed to update password'
+            })
+        }
+    }
+
+    const handleNotificationSubmit = async (e) => {
+        e.preventDefault()
+        const token = localStorage.getItem('access_token');
+        const formData = {
+            email_notification: e.target.emailnotification.checked,
+            sms_notification: e.target.smsnotification.checked
+        }
+
+        try {
+            await axios.post('/api/user/notifications', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Notification preferences updated successfully!'
+            })
+            fetchUserData() // Refresh user data
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.response?.data?.message || 'Failed to update notification preferences'
+            })
+        }
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setUserData(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    if (loading) {
+        return <div>Loading...</div>
+    }
+
     return (
         <>
             <div className='content-inner'>
@@ -43,7 +184,6 @@ const UserProfileEdit = () => {
                                 </Card>
                             </Col>
                             <Col lg={12}>
-                                {/* <div className="iq-edit-list-data"> */}
                                 <Tab.Content>
                                     <Tab.Pane eventKey="first" className="fade show">
                                         <Card>
@@ -53,98 +193,168 @@ const UserProfileEdit = () => {
                                                 </div>
                                             </Card.Header>
                                             <Card.Body>
-                                                <Form>
+                                                <Form onSubmit={handlePersonalInfoSubmit}>
                                                     <Form.Group className="form-group align-items-center">
                                                         <Col md="12">
                                                             <div className="profile-img-edit">
-                                                                <img className="profile-pic" src={img1} alt="profile-pic" />
+                                                                <img 
+                                                                    className="profile-pic" 
+                                                                    src={userData.profile_image ? 
+                                                                        `${process.env.REACT_APP_BACKEND_BASE_URL}/images/profiles/${userData.profile_image}` 
+                                                                        : img1} 
+                                                                    alt="profile-pic" 
+                                                                />
                                                                 <div className="p-image d-flex align-items-center justify-content-center">
                                                                     <span className="material-symbols-outlined">edit</span>
-                                                                    <input className="file-upload" type="file" accept="image/*" />
+                                                                    <input 
+                                                                        className="file-upload" 
+                                                                        type="file" 
+                                                                        accept="image/*" 
+                                                                        onChange={handleImageChange}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </Col>
                                                     </Form.Group>
                                                     <Row className="align-items-center">
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label htmlFor="fname" className="form-label">First Name:</Form.Label>
-                                                            <Form.Control type="text" className="form-control" id="fname" placeholder="Bni" />
+                                                            <Form.Label>First Name:</Form.Label>
+                                                            <Form.Control
+                                                                type="text"
+                                                                name="first_name"
+                                                                value={userData.first_name || ''}
+                                                                onChange={handleInputChange}
+                                                            />
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label htmlFor="lname" className="form-label">Last Name:</Form.Label>
-                                                            <Form.Control type="text" className="form-control" id="lname" placeholder="Jhon" />
+                                                            <Form.Label>Last Name:</Form.Label>
+                                                            <Form.Control
+                                                                type="text"
+                                                                name="last_name"
+                                                                value={userData.last_name || ''}
+                                                                onChange={handleInputChange}
+                                                            />
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label htmlFor="uname" className="form-label">User Name:</Form.Label>
-                                                            <Form.Control type="text" className="form-control" id="uname" placeholder="Bni@01" />
+                                                            <Form.Label>User Name:</Form.Label>
+                                                            <Form.Control
+                                                                type="text"
+                                                                name="username"
+                                                                value={userData.username || ''}
+                                                                onChange={handleInputChange}
+                                                            />
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label htmlFor="cname" className="form-label">City:</Form.Label>
-                                                            <Form.Control type="text" className="form-control" id="cname" placeholder="Atlanta" />
+                                                            <Form.Label>City:</Form.Label>
+                                                            <Form.Control
+                                                                type="text"
+                                                                name="city"
+                                                                value={userData.city || ''}
+                                                                onChange={handleInputChange}
+                                                            />
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
                                                             <Form.Label className="form-label d-block">Gender:</Form.Label>
                                                             <Form.Check className="form-check form-check-inline">
-                                                                <Form.Check.Input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio10" defaultValue="option1" />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="inlineRadio10"> Male</Form.Check.Label>
-                                                            </Form.Check>{" "}
+                                                                <Form.Check.Input
+                                                                    type="radio"
+                                                                    name="gender"
+                                                                    value="male"
+                                                                    checked={userData.gender === 'male'}
+                                                                    onChange={handleInputChange}
+                                                                />
+                                                                <Form.Check.Label>Male</Form.Check.Label>
+                                                            </Form.Check>
                                                             <Form.Check className="form-check form-check-inline">
-                                                                <Form.Check.Input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio11" defaultValue="option1" />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="inlineRadio11"> Female</Form.Check.Label>
+                                                                <Form.Check.Input
+                                                                    type="radio"
+                                                                    name="gender"
+                                                                    value="female"
+                                                                    checked={userData.gender === 'female'}
+                                                                    onChange={handleInputChange}
+                                                                />
+                                                                <Form.Check.Label>Female</Form.Check.Label>
                                                             </Form.Check>
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label htmlFor="dob" className="form-label">Date Of Birth:</Form.Label>
-                                                            <Form.Control className="form-control" id="dob" placeholder="1984-01-24" />
+                                                            <Form.Label>Date Of Birth:</Form.Label>
+                                                            <Form.Control
+                                                                type="date"
+                                                                name="date_of_birth"
+                                                                value={userData.date_of_birth || ''}
+                                                                onChange={handleInputChange}
+                                                            />
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label className="form-label">Marital Status:</Form.Label>
-                                                            <Form.Select defaultValue="Single" className="form-select" aria-label="Default select example">
-                                                                <option>Single</option>
-                                                                <option>Married</option>
-                                                                <option>Widowed</option>
-                                                                <option>Divorced</option>
-                                                                <option>Separated </option>
+                                                            <Form.Label>Marital Status:</Form.Label>
+                                                            <Form.Select
+                                                                name="marital_status"
+                                                                value={userData.marital_status || ''}
+                                                                onChange={handleInputChange}
+                                                            >
+                                                                <option value="">Select Status</option>
+                                                                <option value="Single">Single</option>
+                                                                <option value="Married">Married</option>
+                                                                <option value="Widowed">Widowed</option>
+                                                                <option value="Divorced">Divorced</option>
+                                                                <option value="Separated">Separated</option>
                                                             </Form.Select>
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label className="form-label">Age:</Form.Label>
-                                                            <Form.Select className="form-select" aria-label="Default select example 2">
-                                                                <option>46-62</option>
-                                                                <option>63 </option>
+                                                            <Form.Label>Age Group:</Form.Label>
+                                                            <Form.Select
+                                                                name="age_group"
+                                                                value={userData.age_group || ''}
+                                                                onChange={handleInputChange}
+                                                            >
+                                                                <option value="">Select Age Group</option>
+                                                                <option value="18-25">18-25</option>
+                                                                <option value="26-35">26-35</option>
+                                                                <option value="36-45">36-45</option>
+                                                                <option value="46-62">46-62</option>
+                                                                <option value="63+">63+</option>
                                                             </Form.Select>
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label className="form-label">Country:</Form.Label>
-                                                            <Form.Select defaultValue="USA" className="form-select" aria-label="Default select example 3">
-                                                                <option>Caneda</option>
-                                                                <option>Noida</option>
-                                                                <option>USA</option>
-                                                                <option>India</option>
-                                                                <option>Africa</option>
+                                                            <Form.Label>Country:</Form.Label>
+                                                            <Form.Select
+                                                                name="country"
+                                                                value={userData.country || ''}
+                                                                onChange={handleInputChange}
+                                                            >
+                                                                <option value="">Select Country</option>
+                                                                <option value="USA">USA</option>
+                                                                <option value="Canada">Canada</option>
+                                                                <option value="India">India</option>
+                                                                <option value="UK">UK</option>
                                                             </Form.Select>
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-6">
-                                                            <Form.Label className="form-label">State:</Form.Label>
-                                                            <Form.Select defaultValue="Georgia" className="form-select" aria-label="Default select example 4">
-                                                                <option>California</option>
-                                                                <option>Florida</option>
-                                                                <option>Georgia</option>
-                                                                <option>Connecticut</option>
-                                                                <option>Louisiana</option>
+                                                            <Form.Label>State:</Form.Label>
+                                                            <Form.Select
+                                                                name="state"
+                                                                value={userData.state || ''}
+                                                                onChange={handleInputChange}
+                                                            >
+                                                                <option value="">Select State</option>
+                                                                <option value="California">California</option>
+                                                                <option value="Florida">Florida</option>
+                                                                <option value="Georgia">Georgia</option>
+                                                                <option value="Texas">Texas</option>
                                                             </Form.Select>
                                                         </Form.Group>
                                                         <Form.Group className="form-group col-sm-12">
-                                                            <Form.Label className="form-label">Address:</Form.Label>
-                                                            <textarea className="form-control" rows={5} style={{ lineHeight: "22px" }} >
-                                                                37 Cardinal Lane
-                                                                Petersburg, VA 23803
-                                                                United States of America
-                                                                Zip Code: 85001
-                                                            </textarea>
+                                                            <Form.Label>Address:</Form.Label>
+                                                            <Form.Control
+                                                                as="textarea"
+                                                                name="address"
+                                                                rows={5}
+                                                                value={userData.address || ''}
+                                                                onChange={handleInputChange}
+                                                            />
                                                         </Form.Group>
                                                     </Row>
-                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>{" "}
+                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>
                                                     <Button type="reset" variant='' className="btn-danger-subtle">Cancel</Button>
                                                 </Form>
                                             </Card.Body>
@@ -153,27 +363,27 @@ const UserProfileEdit = () => {
                                     <Tab.Pane eventKey="second" className="fade show">
                                         <Card>
                                             <Card.Header className="d-flex justify-content-between">
-                                                <div className="iq-header-title">
+                                                <div className="header-title">
                                                     <h4 className="card-title">Change Password</h4>
                                                 </div>
                                             </Card.Header>
                                             <Card.Body>
-                                                <Form>
+                                                <Form onSubmit={handlePasswordChange}>
                                                     <Form.Group className="form-group">
-                                                        <Form.Label htmlFor="cpass" className="form-label">Current Password:</Form.Label>
+                                                        <Form.Label>Current Password:</Form.Label>
                                                         <Link to="/auth/recoverpw" className="float-end">Forgot Password</Link>
-                                                        <Form.Control type="Password" className="form-control" id="cpass" defaultValue="" />
+                                                        <Form.Control type="password" name="cpass" />
                                                     </Form.Group>
                                                     <Form.Group className="form-group">
-                                                        <Form.Label htmlFor="npass" className="form-label">New Password:</Form.Label>
-                                                        <Form.Control type="Password" className="form-control" id="npass" defaultValue="" />
+                                                        <Form.Label>New Password:</Form.Label>
+                                                        <Form.Control type="password" name="npass" />
                                                     </Form.Group>
                                                     <Form.Group className="form-group">
-                                                        <Form.Label htmlFor="vpass" className="form-label">Verify Password:</Form.Label>
-                                                        <Form.Control type="Password" className="form-control" id="vpass" defaultValue="" />
+                                                        <Form.Label>Verify Password:</Form.Label>
+                                                        <Form.Control type="password" name="vpass" />
                                                     </Form.Group>
-                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>{" "}
-                                                    <button type="reset" className="btn btn-danger-subtle">Cancel</button>
+                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>
+                                                    <Button type="reset" variant='' className="btn-danger-subtle">Cancel</Button>
                                                 </Form>
                                             </Card.Body>
                                         </Card>
@@ -186,61 +396,35 @@ const UserProfileEdit = () => {
                                                 </div>
                                             </Card.Header>
                                             <Card.Body>
-                                                <Form>
+                                                <Form onSubmit={handleNotificationSubmit}>
                                                     <Form.Group className="form-group row align-items-center">
-                                                        <div className="col-md-3" htmlFor="emailnotification">Email Notification:</div>
-                                                        <Form.Check className="col-md-9 form-check form-switch">
-                                                            <Form.Check.Input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked11" defaultChecked />
-                                                            <Form.Check.Label className="form-check-label" htmlFor="flexSwitchCheckChecked11">Checked switch checkbox input</Form.Check.Label>
-                                                        </Form.Check>
+                                                        <Form.Label className="col-md-3">Email Notification:</Form.Label>
+                                                        <div className="col-md-9">
+                                                            <Form.Check className="form-switch">
+                                                                <Form.Check.Input
+                                                                    type="checkbox"
+                                                                    name="emailnotification"
+                                                                    defaultChecked={userData.email_notification}
+                                                                />
+                                                                <Form.Check.Label>Enable email notifications</Form.Check.Label>
+                                                            </Form.Check>
+                                                        </div>
                                                     </Form.Group>
                                                     <Form.Group className="form-group row align-items-center">
-                                                        <div className="col-md-3" htmlFor="smsnotification">SMS Notification:</div>
-                                                        <Form.Check className="col-md-9 form-check form-switch">
-                                                            <Form.Check.Input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked12" defaultChecked />
-                                                            <Form.Check.Label className="form-check-label" htmlFor="flexSwitchCheckChecked12">Checked switch checkbox input</Form.Check.Label>
-                                                        </Form.Check>
+                                                        <Form.Label className="col-md-3">SMS Notification:</Form.Label>
+                                                        <div className="col-md-9">
+                                                            <Form.Check className="form-switch">
+                                                                <Form.Check.Input
+                                                                    type="checkbox"
+                                                                    name="smsnotification"
+                                                                    defaultChecked={userData.sms_notification}
+                                                                />
+                                                                <Form.Check.Label>Enable SMS notifications</Form.Check.Label>
+                                                            </Form.Check>
+                                                        </div>
                                                     </Form.Group>
-                                                    <Form.Group className="form-group row align-items-center">
-                                                        <div className="col-md-3" htmlFor="npass">When To Email</div>
-                                                        <Col md="9">
-                                                            <Form.Check className="form-check">
-                                                                <Form.Check.Input className="form-check-input" type="checkbox" defaultValue="" id="flexCheckDefault12" />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="flexCheckDefault12">
-                                                                    You have new notifications.
-                                                                </Form.Check.Label>
-                                                            </Form.Check>
-                                                            <Form.Check className="form-check d-block">
-                                                                <Form.Check.Input className="form-check-input" type="checkbox" defaultValue="" id="email02" />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="email02">You're sent a direct message</Form.Check.Label>
-                                                            </Form.Check>
-                                                            <Form.Check className="form-check d-block">
-                                                                <Form.Check.Input type="checkbox" className="form-check-input" id="email03" defaultChecked />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="email03">Someone adds you as a connection</Form.Check.Label>
-                                                            </Form.Check>
-                                                        </Col>
-                                                    </Form.Group>
-                                                    <Form.Group className="form-group row align-items-center">
-                                                        <div className="col-md-3" htmlFor="npass">When To Escalate Emails</div>
-                                                        <Col md="9">
-                                                            <Form.Check className="form-check">
-                                                                <Form.Check.Input className="form-check-input" type="checkbox" defaultValue="" id="email04" />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="email04">
-                                                                    Upon new order.
-                                                                </Form.Check.Label>
-                                                            </Form.Check>
-                                                            <Form.Check className="form-check d-block">
-                                                                <Form.Check.Input className="form-check-input" type="checkbox" defaultValue="" id="email05" />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="email05">New membership approval</Form.Check.Label>
-                                                            </Form.Check>
-                                                            <Form.Check className="form-check d-block">
-                                                                <Form.Check.Input type="checkbox" className="form-check-input" id="email06" defaultChecked />
-                                                                <Form.Check.Label className="form-check-label" htmlFor="email06">Member registration</Form.Check.Label>
-                                                            </Form.Check>
-                                                        </Col>
-                                                    </Form.Group>
-                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>{" "}
-                                                    <button type="reset" className="btn btn-danger-subtle">Cancel</button>
+                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>
+                                                    <Button type="reset" variant='' className="btn-danger-subtle">Cancel</Button>
                                                 </Form>
                                             </Card.Body>
                                         </Card>
@@ -253,35 +437,48 @@ const UserProfileEdit = () => {
                                                 </div>
                                             </Card.Header>
                                             <Card.Body>
-                                                <Form>
+                                                <Form onSubmit={handlePersonalInfoSubmit}>
                                                     <Form.Group className="form-group">
-                                                        <Form.Label htmlFor="cno" className="form-label">Contact Number:</Form.Label>
-                                                        <Form.Control type="text" className="form-control" id="cno" defaultValue="001 2536 123 458" />
+                                                        <Form.Label>Contact Number:</Form.Label>
+                                                        <Form.Control
+                                                            type="text"
+                                                            name="phone"
+                                                            value={userData.phone || ''}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </Form.Group>
                                                     <Form.Group className="form-group">
-                                                        <Form.Label htmlFor="email" className="form-label">Email:</Form.Label>
-                                                        <Form.Control type="text" className="form-control" id="email" defaultValue="Bnijone@demo.com" />
+                                                        <Form.Label>Email:</Form.Label>
+                                                        <Form.Control
+                                                            type="email"
+                                                            name="email"
+                                                            value={userData.email || ''}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </Form.Group>
                                                     <Form.Group className="form-group">
-                                                        <Form.Label htmlFor="url" className="form-label">Url:</Form.Label>
-                                                        <Form.Control type="text" className="form-control" id="url" defaultValue="https://getbootstrap.com" />
+                                                        <Form.Label>Website URL:</Form.Label>
+                                                        <Form.Control
+                                                            type="url"
+                                                            name="website_url"
+                                                            value={userData.website_url || ''}
+                                                            onChange={handleInputChange}
+                                                        />
                                                     </Form.Group>
-                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>{" "}
-                                                    <button type="reset" className="btn btn-danger-subtle">Cancel</button>
+                                                    <Button type="submit" className="btn btn-primary me-2">Submit</Button>
+                                                    <Button type="reset" variant='' className="btn-danger-subtle">Cancel</Button>
                                                 </Form>
                                             </Card.Body>
                                         </Card>
                                     </Tab.Pane>
                                 </Tab.Content>
-                                {/* </div> */}
                             </Col>
                         </Row>
                     </Tab.Container>
                 </Container>
-            </div >
+            </div>
         </>
     )
-
 }
 
-export default UserProfileEdit;
+export default UserProfileEdit

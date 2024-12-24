@@ -1,29 +1,101 @@
-import React, { useState } from "react";
-
-//router
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-
-//react bootstrap
-import { Dropdown, Button, Modal } from "react-bootstrap";
-
-//components
-import CustomToggle from "./dropdowns";
+import { Dropdown, Button, Modal, Form } from "react-bootstrap";
+import axios from 'axios';
 
 //images
 import user1 from "../assets/images/user/1.jpg";
-// import small1 from "../assets/images/small/07.png";
-// import small2 from "../assets/images/small/08.png";
-// import small3 from "../assets/images/small/09.png";
-// import small4 from "../assets/images/small/10.png";
-// import small5 from "../assets/images/small/11.png";
-// import small6 from "../assets/images/small/12.png";
-// import small7 from "../assets/images/small/13.png";
-// import small8 from "../assets/images/small/14.png";
 
 const CreatePost = (props) => {
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [] });
+  const [previews, setPreviews] = useState({ images: [], videos: [] });
+  const [postText, setPostText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleClose = () => {
+    setShow(false);
+    setSelectedFiles({ images: [], videos: [] });
+    setPreviews({ images: [], videos: [] });
+    setPostText("");
+  };
+
   const handleShow = () => setShow(true);
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    const newImages = [];
+    const newVideos = [];
+    const imagePreviewUrls = [];
+    const videoPreviewUrls = [];
+
+    files.forEach(file => {
+      if (file.type.startsWith('image/')) {
+        newImages.push(file);
+        imagePreviewUrls.push(URL.createObjectURL(file));
+      } else if (file.type.startsWith('video/')) {
+        newVideos.push(file);
+        videoPreviewUrls.push(URL.createObjectURL(file));
+      }
+    });
+
+    setSelectedFiles({
+      images: [...selectedFiles.images, ...newImages],
+      videos: [...selectedFiles.videos, ...newVideos]
+    });
+
+    setPreviews({
+      images: [...previews.images, ...imagePreviewUrls],
+      videos: [...previews.videos, ...videoPreviewUrls]
+    });
+  };
+
+  const removeFile = (type, index) => {
+    const newFiles = { ...selectedFiles };
+    const newPreviews = { ...previews };
+    
+    URL.revokeObjectURL(newPreviews[type][index]);
+    newFiles[type].splice(index, 1);
+    newPreviews[type].splice(index, 1);
+
+    setSelectedFiles(newFiles);
+    setPreviews(newPreviews);
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('title', postText);
+    formData.append('description', postText);
+
+    selectedFiles.images.forEach((image) => {
+      formData.append('image[]', image);
+    });
+
+    selectedFiles.videos.forEach((video) => {
+      formData.append('video[]', video);
+    });
+
+    try {
+      const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+      const response = await axios.post(`${baseUrl}/api/posts`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+      
+      console.log('Post created:', response.data);
+      handleClose();
+    } catch (error) {
+      console.error('Error creating post:', error);
+      alert('Failed to create post. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <div id="post-modal-data" className={`card ${props.class}`}>
@@ -81,6 +153,7 @@ const CreatePost = (props) => {
                 className="form-control rounded px-0"
                 placeholder="Write And Share Your Post With Your Friends..."
                 style={{ border: "none" }}
+                readOnly
               />
             </form>
           </div>
@@ -219,195 +292,99 @@ const CreatePost = (props) => {
           </div>
         </div>
         <Modal
-          // className={`modal fade ${show ? "show" : ""}`}
-          // style={{ display: show ? "block" : "none" }}
           show={show}
           onHide={handleClose}
+          size="lg"
           centered
-          id="custom-post-modal"
         >
-          <div className="modal-header d-flex justify-content-between">
-            <h5 className="modal-title" id="post-modalLabel">
-              Create Post
-            </h5>
-            <Link to="#" className="lh-1" onClick={handleClose}>
-              <span className="material-symbols-outlined">close</span>
-            </Link>
-          </div>
+          <Modal.Header closeButton>
+            <Modal.Title>Create Post</Modal.Title>
+          </Modal.Header>
           <Modal.Body>
-            <div className="d-flex align-items-center">
-              <div className="user-img">
-                <img
-                  loading="lazy"
-                  src={user1}
-                  alt="userimg"
-                  className="avatar-60 rounded-circle img-fluid"
-                />
-              </div>
-              <form className="post-text ms-3 w-100 ">
-                <input
-                  type="text"
-                  className="form-control rounded"
-                  placeholder="Write something here..."
-                  style={{ border: "none" }}
-                />
-              </form>
+            <div className="d-flex align-items-center mb-3">
+              <img src={user1} alt="user1" className="avatar-60 rounded-circle me-3" />
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="What's on your mind?"
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
+              />
             </div>
-            <hr />
-            <ul className="d-flex flex-wrap align-items-center list-inline m-0 p-0">
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body"><span className="material-symbols-outlined align-middle font-size-20 me-1">
-                    add_a_photo
-                  </span>{" "}
-                    Photo/Video
-                  </Link>
 
-                </div>
-              </li>
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body">
-                    <span className="material-symbols-outlined align-middle font-size-20 me-1">
-                      group
-                    </span>{" "}
-                    Tag Friend
-                  </Link>
-                </div>
-              </li>
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body">
-                    <span className="material-symbols-outlined align-middle font-size-20 me-1">
-                      sentiment_satisfied
-                    </span>{" "}
-                    Feeling/Activity
-                  </Link>
-                </div>
-              </li>
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body">
-                    <span className="material-symbols-outlined align-middle font-size-20 me-1">
-                      location_on
-                    </span>{" "}
-                    Check in
-                  </Link>
-                </div>
-              </li>
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body">
-                    <span className="material-symbols-outlined align-middle font-size-20 me-1">
-                      live_tv
-                    </span>{" "}
-                    Live Video
-                  </Link>
-                </div>
-              </li>
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body">
-                    <span className="material-symbols-outlined align-middle font-size-20 me-1">
-                      gif_box
-                    </span>{" "}
-                    GIF
-                  </Link>
-                </div>
-              </li>
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body">
-                    <span className="material-symbols-outlined align-middle font-size-20 me-1">
-                      celebration
-                    </span>{" "}
-                    Watch Party
-                  </Link>
-                </div>
-              </li>
-              <li className="col-md-6 mb-3">
-                <div className="bg-primary-subtle rounded p-2 pointer me-3">
-                  <Link to="#" className="custom-link-color d-inline-block fw-medium text-body">
-                    <span className="material-symbols-outlined align-middle font-size-20 me-1">
-                      sports_esports
-                    </span>{" "}
-                    Play with Friends
-                  </Link>
-                </div>
-              </li>
-            </ul>
-            <hr />
-            <div className="other-option">
-              <div className="d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center">
-                  <div className="user-img me-3">
-                    <img
-                      loading="lazy"
-                      src={user1}
-                      alt="userimg"
-                      className="avatar-60 rounded-circle img-fluid"
-                    />
-                  </div>
-                  <h6>Your Story</h6>
-                </div>
-                <div className="card-post-toolbar">
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      className="btn btn-primary"
-                      data-bs-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                      role="button"
-                    >
-                      Friend
-                      {/* <span className="btn btn-primary">Friend</span> */}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className=" m-0 p-0">
-                      <Dropdown.Item className="p-3" href="#">
-                        <div className="d-flex align-items-top">
-                          <span className="material-symbols-outlined">save</span>
-                          <div className="data ms-2">
-                            <h6>Public</h6>
-                            <p className="mb-0">Anyone on or off Facebook</p>
-                          </div>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-3" href="#">
-                        <div className="d-flex align-items-top">
-                          <span className="material-symbols-outlined">cancel</span>
-                          <div className="data ms-2">
-                            <h6>Friends</h6>
-                            <p className="mb-0">Your Friend on facebook</p>
-                          </div>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-3" href="#">
-                        <div className="d-flex align-items-top">
-                          <span className="material-symbols-outlined">person_remove</span>
-                          <div className="data ms-2">
-                            <h6>Friends except</h6>
-                            <p className="mb-0">Don't show to some friends</p>
-                          </div>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-3" href="#">
-                        <div className="d-flex align-items-top">
-                          <span className="material-symbols-outlined">notifications</span>
-                          <div className="data ms-2">
-                            <h6>Only Me</h6>
-                            <p className="mb-0">Only me</p>
-                          </div>
-                        </div>
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
+            <div className="mb-3">
+              <input
+                type="file"
+                ref={fileInputRef}
+                multiple
+                accept="image/*,video/*"
+                className="d-none"
+                onChange={handleFileSelect}
+              />
+              <Button 
+                variant="outline-primary" 
+                onClick={() => fileInputRef.current.click()}
+                className="w-100"
+              >
+                <i className="material-symbols-outlined me-2">add_photo_alternate</i>
+                Add Photos/Videos
+              </Button>
             </div>
-            <Button variant="primary" className="d-block w-100 mt-3">
-              Post
-            </Button>
+
+            {/* Image Previews */}
+            <div className="d-flex flex-wrap gap-2 mb-3">
+              {previews.images.map((preview, index) => (
+                <div key={`image-${index}`} className="position-relative">
+                  <img 
+                    src={preview} 
+                    alt={`preview-${index}`} 
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  />
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="position-absolute top-0 end-0"
+                    onClick={() => removeFile('images', index)}
+                  >
+                    ×
+                  </Button>
+                </div>
+              ))}
+            </div>
+
+            {/* Video Previews */}
+            <div className="d-flex flex-wrap gap-2">
+              {previews.videos.map((preview, index) => (
+                <div key={`video-${index}`} className="position-relative">
+                  <video 
+                    src={preview} 
+                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                    controls
+                  />
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="position-absolute top-0 end-0"
+                    onClick={() => removeFile('videos', index)}
+                  >
+                    ×
+                  </Button>
+                </div>
+              ))}
+            </div>
           </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button 
+              variant="primary" 
+              onClick={handleSubmit}
+              disabled={isLoading || (!postText && !selectedFiles.images.length && !selectedFiles.videos.length)}
+            >
+              {isLoading ? 'Posting...' : 'Post'}
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
       <div
