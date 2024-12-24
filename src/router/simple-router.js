@@ -5,6 +5,8 @@ import ConfirmMail from "../views/dashboard/auth/confirm-mail";
 import LockScreen from "../views/dashboard/auth/lock-screen";
 import Recoverpw from "../views/dashboard/auth/recoverpw";
 import SignIn from "../views/dashboard/auth/sign-in";
+
+import Index from "../views/dashboard/app/index";
 import SignUp from "../views/dashboard/auth/sign-up";
 
 // errors
@@ -27,6 +29,10 @@ export const SimpleRouter = [
   {
     path: "auth/recoverpw",
     element: <Recoverpw />,
+  },
+  {
+    path: "/index-page",
+    element: <Index />,
   },
   {
     path: "auth/sign-in",

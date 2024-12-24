@@ -10,6 +10,8 @@ import JobListDetails from "../views/dashboard/app/job-list-details";
 import Education from "../views/dashboard/app/education";
 import Business from "../views/dashboard/app/business";
 import Crypto from "../views/dashboard/app/crypto";
+import EquityCircle from "../views/dashboard/app/equitycircle";
+
 import Fitness from "../views/dashboard/app/fitness";
 
 
@@ -89,9 +91,10 @@ import BlankPage from "../views/dashboard/extrapages/blankpage";
 import Admin from "../views/dashboard/app/admin";
 
 export const DefaultRouter = [
+ 
   {
-    path: "/",
-    element: <Index />,
+    path: "/equity-circle",
+    element: <EquityCircle />,
   },
   {
     path: "/profile",

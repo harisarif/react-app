@@ -89,18 +89,17 @@ const Header = () => {
               </Link>
             </div>
 
-            <div className="d-flex align-items-center">
-              <div className="d-flex align-items-center justify-content-between product-offcanvas">
+            <div className="d-flex align-items-center header-link">
+              <div className="d-flex align-items-center justify-content-between product-offcanvas h-100">
                 <div
                   className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-none d-xl-block"
                   tabIndex="-1"
-                  id="offcanvasBottomNav"
-                >
-                  <div className="offcanvas-body">
-                    <ul className="iq-nav-menu list-unstyled">
+                  id="offcanvasBottomNav">
+                  <div className="offcanvas-body h-100">
+                    <ul className="iq-nav-menu list-unstyled h-100">
                       <li className={`${location.pathname === '/business' ? 'active' : ''} nav-item`}>
                         <Link
-                          className={`nav-link menu-arrow justify-content-start ${active === "business" ? 'active' : ''}`}
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2  mx-1`}
                           to="/business"
                           onClick={() => setActive("business")}
                         >
@@ -112,7 +111,7 @@ const Header = () => {
                       </li>
                       <li className={`${location.pathname === '/fitness' ? 'active' : ''} nav-item`}>
                         <Link
-                          className={`nav-link menu-arrow justify-content-start ${active === "fitness" ? 'active' : ''}`}
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
                           to="/fitness"
                           onClick={() => setActive("fitness")}
                         >
@@ -124,7 +123,7 @@ const Header = () => {
                       </li>
                       <li className={`${location.pathname === '/crypto' ? 'active' : ''} nav-item`}>
                         <Link
-                          className={`nav-link menu-arrow justify-content-start ${active === "crypto" ? 'active' : ''}`}
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
                           to="/crypto"
                           onClick={() => setActive("crypto")}
                         >

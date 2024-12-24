@@ -54,7 +54,8 @@ const VerticalNav = React.memo(() => {
                     </Link>
                 </li>
                 <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item `}>
-                    <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile">
+                    <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile"
+                          onClick={() => setActive("profile")}>
                         <OverlayTrigger placement="right" overlay={<Tooltip>Profiles</Tooltip>}>
                             <i className="icon material-symbols-outlined">
                             Person
