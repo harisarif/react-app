@@ -817,7 +817,7 @@ const Header = () => {
                 >
                   <Image
                     src={userData && Object.keys(userData).length > 0 && userData.profile_image ? 
-                      baseurl + '/images/profiles/' + userData.profile_image : 
+                      baseurl + '/storage/' + userData.profile_image : 
                       user1}
                     
                     className="img-fluid rounded-circle avatar-48 border border-2 me-3"
@@ -829,13 +829,30 @@ const Header = () => {
                   className={`sub-drop caption-menu `}
                 >
                   <Card className="shadow-none m-0">
+                  {userData && (
                     <Card.Header>
                       <div className="header-title">
                        <h5 className="mb-0 ">{userData?.name}</h5>
                       </div>
                     </Card.Header>
+                  )}
                     <Card.Body className="p-0 ">
-                      <div className="d-flex align-items-center iq-sub-card border-0">
+                    {userData && (
+                      <div className="d-flex align-items-center iq-sub-card">
+  <span className="material-symbols-outlined">
+  line_style
+    </span>
+  <div className="ms-3">
+  <Link
+                            to="/profile"
+                            className="mb-0 h6"
+                          >
+                            My Profile
+                          </Link>
+                        </div>
+</div>
+                      )}
+                      {/* <div className="d-flex align-items-center iq-sub-card border-0">
                         <span className="material-symbols-outlined">
                           line_style
                         </span>
@@ -847,8 +864,20 @@ const Header = () => {
                             My Profile
                           </Link>
                         </div>
-                      </div>
-                      <div className="d-flex align-items-center iq-sub-card border-0">
+                      </div> */}
+                      {userData && (
+                      <div className="d-flex align-items-center iq-sub-card">
+  <span className="material-symbols-outlined">
+  edit_note
+  </span>
+  <div className="ms-3">
+                          <Link to="/dashboard/app/user-profile-edit" className="mb-0 h6">
+                            Edit Profile
+                          </Link>
+                        </div>
+</div>
+                      )}
+                      {/* <div className="d-flex align-items-center iq-sub-card border-0">
                         <span className="material-symbols-outlined">
                           edit_note
                         </span>
@@ -857,8 +886,9 @@ const Header = () => {
                             Edit Profile
                           </Link>
                         </div>
-                      </div>
-                      <div className="d-flex align-items-center iq-sub-card border-0">
+                      </div> */}
+                                          {userData && (
+                                            <div className="d-flex align-items-center iq-sub-card border-0">
                         <span className="material-symbols-outlined">
                           manage_accounts
                         </span>
@@ -871,7 +901,9 @@ const Header = () => {
                           </Link>
                         </div>
                       </div>
-                      <div className="d-flex align-items-center iq-sub-card border-0">
+                      )}
+                                          {userData && (
+                                            <div className="d-flex align-items-center iq-sub-card border-0">
                         <span className="material-symbols-outlined">
                           lock
                         </span>
@@ -884,6 +916,8 @@ const Header = () => {
                           </Link>
                         </div>
                       </div>
+                      )}
+                      
                       {!userData && (
                       <div className="d-flex align-items-center iq-sub-card">
   <span className="material-symbols-outlined">
