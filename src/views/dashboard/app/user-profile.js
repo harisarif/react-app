@@ -275,7 +275,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('/api/posts');
+        const response = await axios.get('/api/user_posts');
         console.log('Fetched posts:', response.data.data); // Log the response
         setPosts(response.data.data);
         setLoadContent(false);

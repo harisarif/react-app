@@ -8,16 +8,16 @@ import user1 from "../assets/images/user/1.jpg";
 
 const CreatePost = (props) => {
   const [show, setShow] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [] });
-  const [previews, setPreviews] = useState({ images: [], videos: [] });
+  const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
+  const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
   const [postText, setPostText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleClose = () => {
     setShow(false);
-    setSelectedFiles({ images: [], videos: [] });
-    setPreviews({ images: [], videos: [] });
+    setSelectedFiles({ images: [], videos: [], documents: [] });
+    setPreviews({ images: [], videos: [], documents: [] });
     setPostText("");
   };
 
@@ -27,8 +27,10 @@ const CreatePost = (props) => {
     const files = Array.from(e.target.files);
     const newImages = [];
     const newVideos = [];
+    const newDocuments = [];
     const imagePreviewUrls = [];
     const videoPreviewUrls = [];
+    const documentPreviewUrls = [];
 
     files.forEach(file => {
       if (file.type.startsWith('image/')) {
@@ -37,17 +39,31 @@ const CreatePost = (props) => {
       } else if (file.type.startsWith('video/')) {
         newVideos.push(file);
         videoPreviewUrls.push(URL.createObjectURL(file));
+      } else if (
+        file.type === 'application/pdf' ||
+        file.type === 'application/msword' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        file.type === 'application/vnd.ms-excel' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-powerpoint' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
+        file.type === 'text/plain'
+      ) {
+        newDocuments.push(file);
+        documentPreviewUrls.push(file.name); // Just store the filename for documents
       }
     });
 
     setSelectedFiles({
       images: [...selectedFiles.images, ...newImages],
-      videos: [...selectedFiles.videos, ...newVideos]
+      videos: [...selectedFiles.videos, ...newVideos],
+      documents: [...selectedFiles.documents, ...newDocuments]
     });
 
     setPreviews({
       images: [...previews.images, ...imagePreviewUrls],
-      videos: [...previews.videos, ...videoPreviewUrls]
+      videos: [...previews.videos, ...videoPreviewUrls],
+      documents: [...previews.documents, ...documentPreviewUrls]
     });
   };
 
@@ -55,7 +71,9 @@ const CreatePost = (props) => {
     const newFiles = { ...selectedFiles };
     const newPreviews = { ...previews };
     
-    URL.revokeObjectURL(newPreviews[type][index]);
+    if (type === 'images' || type === 'videos') {
+      URL.revokeObjectURL(newPreviews[type][index]);
+    }
     newFiles[type].splice(index, 1);
     newPreviews[type].splice(index, 1);
 
@@ -69,12 +87,16 @@ const CreatePost = (props) => {
     formData.append('title', postText);
     formData.append('description', postText);
 
-    selectedFiles.images.forEach((image) => {
-      formData.append('image[]', image);
+    selectedFiles.images.forEach((image, index) => {
+      formData.append(`images[${index}]`, image);
     });
 
-    selectedFiles.videos.forEach((video) => {
-      formData.append('video[]', video);
+    selectedFiles.videos.forEach((video, index) => {
+      formData.append(`videos[${index}]`, video);
+    });
+
+    selectedFiles.documents.forEach((document, index) => {
+      formData.append(`documents[${index}]`, document);
     });
 
     try {
@@ -89,8 +111,8 @@ const CreatePost = (props) => {
       console.log('Post created:', response.data);
       handleClose();
     } catch (error) {
-      console.error('Error creating post:', error);
-      alert('Failed to create post. Please try again.');
+      console.error('Error creating post:', error.response?.data || error);
+      alert(error.response?.data?.message || 'Failed to create post. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -317,7 +339,7 @@ const CreatePost = (props) => {
                 type="file"
                 ref={fileInputRef}
                 multiple
-                accept="image/*,video/*"
+                accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
                 className="d-none"
                 onChange={handleFileSelect}
               />
@@ -327,7 +349,7 @@ const CreatePost = (props) => {
                 className="w-100"
               >
                 <i className="material-symbols-outlined me-2">add_photo_alternate</i>
-                Add Photos/Videos
+                Add Photos/Videos/Documents
               </Button>
             </div>
 
@@ -353,7 +375,7 @@ const CreatePost = (props) => {
             </div>
 
             {/* Video Previews */}
-            <div className="d-flex flex-wrap gap-2">
+            <div className="d-flex flex-wrap gap-2 mb-3">
               {previews.videos.map((preview, index) => (
                 <div key={`video-${index}`} className="position-relative">
                   <video 
@@ -372,6 +394,26 @@ const CreatePost = (props) => {
                 </div>
               ))}
             </div>
+
+            {/* Document Previews */}
+            <div className="d-flex flex-wrap gap-2">
+              {previews.documents.map((filename, index) => (
+                <div key={`document-${index}`} className="position-relative border rounded p-2">
+                  <div className="d-flex align-items-center">
+                    <i className="material-symbols-outlined me-2">description</i>
+                    <span>{filename}</span>
+                  </div>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="position-absolute top-0 end-0"
+                    onClick={() => removeFile('documents', index)}
+                  >
+                    ×
+                  </Button>
+                </div>
+              ))}
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -380,7 +422,7 @@ const CreatePost = (props) => {
             <Button 
               variant="primary" 
               onClick={handleSubmit}
-              disabled={isLoading || (!postText && !selectedFiles.images.length && !selectedFiles.videos.length)}
+              disabled={isLoading || (!postText && !selectedFiles.images.length && !selectedFiles.videos.length && !selectedFiles.documents.length)}
             >
               {isLoading ? 'Posting...' : 'Post'}
             </Button>

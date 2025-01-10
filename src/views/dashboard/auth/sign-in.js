@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 //swiper
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -24,37 +25,53 @@ import login3 from "../../../assets/images/login/3.jpg";
 SwiperCore.use([Navigation, Autoplay]);
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const appName = useSelector(SettingSelector.app_name);
-
-const [formData, setFormData] = useState({
-  email: '',
-  password: '',
-});
-function FormDataEvent(event){
-  const { name, value } = event.target;
-  setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-}
-
-
-function submitForm(){
   const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-  console.log('baseUrl' , baseUrl);
-  axios.post(`${baseUrl}/api/login`, formData, {
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-  .then((response) => {
-    console.log('Login successful:', response.data);
-    // You can store the token in localStorage or a state management library
-    localStorage.setItem('access_token', response.data.access_token);
-    window.location.href = '/'
-  })
-  .catch((error) => {
-    console.error('Login failed:', error.response ? error.response.data : error.message);
-  });
-}
+  const Google_client_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  console.log('Google Client ID:', Google_client_ID);
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  function FormDataEvent(event){
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+  }
+
+  function submitForm(){
+    axios.post(`${baseUrl}/api/login`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then((response) => {
+      console.log('Login successful:', response.data);
+      // You can store the token in localStorage or a state management library
+      localStorage.setItem('access_token', response.data.access_token);
+      window.location.href = '/'
+    })
+    .catch((error) => {
+      console.error('Login failed:', error.response ? error.response.data : error.message);
+    });
+  }
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const response = await axios.post(`${baseUrl}/api/auth/google/callback`, {
+        id_token: credentialResponse.credential
+      });
+
+      console.log('Google login successful:', response.data);
+      localStorage.setItem('access_token', response.data.access_token);
+      navigate('/');
+    } catch (error) {
+      console.error('Google login error:', error);
+      alert('Failed to sign in with Google. Please try again.');
+    }
+  };
 
   return (
     <>
@@ -192,7 +209,6 @@ function submitForm(){
                       Forgot Password?
                     </Link>
                   </div>
-                  {/* <Link type="button" className="btn btn-primary mt-4 fw-semibold text-uppercase w-100" to="#">sign in</Link> */}
                   <Button
                     variant="primary"
                     type="button"
@@ -201,6 +217,26 @@ function submitForm(){
                   >
                     Sign in
                   </Button>
+                  <div className="mt-4">
+                    <div className="d-flex align-items-center justify-content-center mb-4">
+                      <hr className="flex-grow-1" />
+                      <span className="mx-3">OR</span>
+                      <hr className="flex-grow-1" />
+                    </div>
+                    <GoogleOAuthProvider clientId={Google_client_ID}>
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={(error) => {
+                          console.error('Google Login Error:', error);
+                          alert('Failed to sign in with Google. Please try again.');
+                        }}
+                        flow="implicit"
+                        auto_select={false}
+                        useOneTap={false}
+                        context="signin"
+                      />
+                    </GoogleOAuthProvider>
+                  </div>
                   <h6 className="mt-5">
                     Don't Have An Account ?{" "}
                     <Link to="/auth/sign-up" >Sign Up</Link>

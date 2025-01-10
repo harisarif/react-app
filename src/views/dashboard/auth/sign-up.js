@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 //swiper
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -22,8 +23,11 @@ import axios from 'axios';
 SwiperCore.use([Navigation, Autoplay]);
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const appName = useSelector(SettingSelector.app_name);
-
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+  const Google_client_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  console.log(Google_client_ID);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,7 +42,6 @@ const SignUp = () => {
     }
 
     try {
-      const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
       const response = await axios.post(`${baseUrl}/api/register`, {
         name: fullName,
         email: email,
@@ -46,14 +49,26 @@ const SignUp = () => {
         password_confirmation: password,
       });
 
-      // Store the token in local storage
       localStorage.setItem('access_token', response.data.access_token);
-
-      // Redirect or perform any other actions after successful signup
-      alert('Signup successful!');
+      navigate('/');
     } catch (error) {
       console.error('Signup error:', error);
       alert('Signup failed. Please try again.');
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      // Send the ID token to your backend
+      const response = await axios.post(`${baseUrl}/api/auth/google/callback`, {
+        id_token: credentialResponse.credential
+      });
+
+      localStorage.setItem('access_token', response.data.access_token);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      alert('Failed to sign in with Google. Please try again.');
     }
   };
 
@@ -73,7 +88,7 @@ const SignUp = () => {
               </div>
               <div className="sign-in-detail container-inside-top">
                 <Swiper
-                  className="list-inline m-0 p-0 "
+                  className="list-inline m-0 p-0"
                   spaceBetween={30}
                   centeredSlides={true}
                   loop={true}
@@ -82,7 +97,7 @@ const SignUp = () => {
                     disableOnInteraction: false,
                   }}
                 >
-                  <ul className="swiper-wrapper list-inline m-0 p-0 ">
+                  <ul className="swiper-wrapper list-inline m-0 p-0">
                     <SwiperSlide>
                       <img
                         src={login1}
@@ -197,6 +212,29 @@ const SignUp = () => {
                   >
                     Sign Up
                   </Button>
+
+                  <div className="mt-4">
+                    <div className="or-divider">
+                      <span className="or-text">OR</span>
+                    </div>
+
+                    <div className="mt-4">
+                      <GoogleOAuthProvider clientId={Google_client_ID}>
+                        <GoogleLogin
+                          onSuccess={handleGoogleSuccess}
+                          onError={(error) => {
+                            console.error('Google Login Error:', error);
+                            alert('Failed to sign in with Google. Please try again.');
+                          }}
+                          flow="implicit"
+                          auto_select={false}
+                          useOneTap={false}
+                          context="signup"
+                        />
+                      </GoogleOAuthProvider>
+                    </div>
+                  </div>
+
                   <h6 className="mt-5">
                     Already Have An Account ?{" "}
                     <Link to={"/auth/sign-in"}>Login</Link>
@@ -207,6 +245,29 @@ const SignUp = () => {
           </Row>
         </Container>
       </section>
+      <style jsx>{`
+        .or-divider {
+          position: relative;
+          text-align: center;
+          margin: 20px 0;
+        }
+        .or-divider:before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: #e0e0e0;
+        }
+        .or-text {
+          background: #fff;
+          padding: 0 15px;
+          color: #666;
+          position: relative;
+          font-size: 14px;
+        }
+      `}</style>
     </>
   );
 };
