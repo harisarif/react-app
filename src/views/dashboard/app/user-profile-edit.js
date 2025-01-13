@@ -32,9 +32,45 @@ const UserProfileEdit = () => {
         }
     }
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         if (e.target.files[0]) {
-            setProfileImage(e.target.files[0])
+            const file = e.target.files[0];
+            setProfileImage(file);
+            
+            // Create a preview and update immediately
+            setUserData(prev => ({
+                ...prev,
+                profile_image: URL.createObjectURL(file)
+            }));
+
+            // Automatically upload the image
+            const token = localStorage.getItem('access_token');
+            const formData = new FormData();
+            formData.append('profile_image', file);
+
+            try {
+                const response = await axios.post('/api/user/update', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                
+                // Refresh user data to get the new image path
+                fetchUserData();
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Profile image updated successfully!'
+                });
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.response?.data?.message || 'Failed to update profile image'
+                });
+            }
         }
     }
 
@@ -200,13 +236,18 @@ const UserProfileEdit = () => {
                                                                 <img 
                                                                     className="profile-pic" 
                                                                     src={userData.profile_image ? 
-                                                                        `${process.env.REACT_APP_BACKEND_BASE_URL}/images/profiles/${userData.profile_image}` 
+                                                                        userData.profile_image.startsWith('blob:') ? 
+                                                                            userData.profile_image 
+                                                                            : `${process.env.REACT_APP_BACKEND_BASE_URL}/storage/${userData.profile_image}` 
                                                                         : img1} 
                                                                     alt="profile-pic" 
                                                                 />
                                                                 <div className="p-image d-flex align-items-center justify-content-center">
-                                                                    <span className="material-symbols-outlined">edit</span>
+                                                                    <label htmlFor="file-upload" className="d-flex align-items-center justify-content-center w-100 h-100 m-0">
+                                                                        <span className="material-symbols-outlined">edit</span>
+                                                                    </label>
                                                                     <input 
+                                                                        id="file-upload"
                                                                         className="file-upload" 
                                                                         type="file" 
                                                                         accept="image/*" 

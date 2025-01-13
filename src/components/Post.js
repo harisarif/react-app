@@ -152,7 +152,7 @@ const handleComment = async (e) => {
             <div className="me-3 flex-shrink-0">
               <img
                 src={post.user && post.user.profile_image ? 
-                  baseurl + '/images/profiles/' + post.user.profile_image : 
+                  baseurl + '/storage/' + post.user.profile_image : 
                   user1}
                 className="border border-2 rounded-circle user-post-profile"
                 alt=""
@@ -221,7 +221,7 @@ const handleComment = async (e) => {
                   <div className="d-flex gap-3">
                     <img
                       src={comment.user && comment.user.profile_image ? 
-                        baseurl + '/images/profiles/' + comment.user.profile_image : 
+                        baseurl + '/storage/' + comment.user.profile_image : 
                         user1}
                       alt="user"
                       className="rounded-circle"
@@ -239,7 +239,7 @@ const handleComment = async (e) => {
                 <div className="d-flex gap-3">
                   <img
                     src={userData && Object.keys(userData).length > 0 && userData.profile_image ? 
-                      baseurl + '/images/profiles/' + userData.profile_image : 
+                      baseurl + '/storage/' + userData.profile_image : 
                       user1}
                     alt="user"
                     className="rounded-circle"

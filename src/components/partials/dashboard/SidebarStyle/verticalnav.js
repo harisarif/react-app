@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-
+import { UserContext } from '../../../../context/UserContext';
 //router
 import { Link, useLocation } from 'react-router-dom'
 
@@ -26,6 +26,7 @@ function CustomToggle({ children, eventKey, onClick }) {
 }
 
 const VerticalNav = React.memo(() => {
+    const { userData, setUserData } = useContext(UserContext);
     const [activeMenu, setActiveMenu] = useState(false)
     const [active, setActive] = useState('')
     //location
@@ -53,6 +54,8 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Home</span>
                     </Link>
                 </li>
+                {userData && (
+
                 <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile"
                           onClick={() => setActive("profile")}>
@@ -64,6 +67,7 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Profiles</span>
                     </Link>
                 </li>
+)}
                 
                 <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item">
                     <CustomToggle eventKey="utilities-error" active={activeMenu === 'utilities-error' ? true : false} onClick={(activeKey) => setActiveMenu(activeKey)}>
