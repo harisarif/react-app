@@ -787,3 +787,19 @@
     height: unset !important;
     height: 100% !important;
 }
+
+.add-in-ellipsis{
+    width: 100%;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+.main-wrapper{
+    .avatar-32{
+        width: 3rem !important;
+        height: 3rem !important;
+        min-width: 3rem !important;
+    }
+}
