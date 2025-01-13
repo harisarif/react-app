@@ -705,7 +705,7 @@ const Header = () => {
                   aria-labelledby="notification-drop"
                   data-bs-popper="static"
                 >
-                  <Card className=" m-0 shadow">
+                  <Card className=" m-0 shadow main-wrapper">
                     <div className="card-header d-flex justify-content-between px-0 pb-4 mx-5 border-bottom">
                       <div className="header-title">
                         <h5 className="fw-semibold">Notifications</h5>
@@ -717,12 +717,12 @@ const Header = () => {
                         <Link to="#">
                           <div className="d-flex gap-3 mb-4">
                             <img
-                              className="avatar-32 rounded-pill"
+                              className="avatar-32 "
                               src={user5}
                               alt=""
                             />
                             <div>
-                              <h6 className="font-size-14">
+                              <h6 className="font-size-14 add-in-ellipsis">
                                 Pete Sariya{" "}
                                 <span className="text-body fw-normal">
                                   voted for
@@ -738,13 +738,13 @@ const Header = () => {
                         <Link to="#">
                           <div className="d-flex gap-3 mb-4">
                             <img
-                              className="avatar-32 rounded-pill"
+                              className="avatar-32 "
                               src={user2}
                               alt=""
                               loading="lazy"
                             />
                             <div>
-                              <h6 className="font-size-14">
+                              <h6 className="font-size-14 add-in-ellipsis">
                                 Dima Davydov{" "}
                                 <span className="text-body fw-normal">
                                   replied to your
@@ -762,13 +762,13 @@ const Header = () => {
                         <Link to="#">
                           <div className="d-flex gap-3 mb-4">
                             <img
-                              className="avatar-32 rounded-pill"
+                              className="avatar-32 "
                               src={user3}
                               alt=""
                               loading="lazy"
                             />
                             <div>
-                              <h6 className="font-size-14">
+                              <h6 className="font-size-14 add-in-ellipsis">
                                 Esther Howard{" "}
                                 <span className="text-body fw-normal">
                                   reacted comment in to your{" "}
@@ -957,3 +957,7 @@ const Header = () => {
 };
 
 export default Header;
+
+
+
+
