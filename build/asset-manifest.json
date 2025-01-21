@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.ae83cbe5.css",
-    "main.js": "/static/js/main.ae3fca1c.js",
+    "main.css": "/static/css/main.f32e4748.css",
+    "main.js": "/static/js/main.7a8c88c6.js",
     "static/media/Banner.jpg": "/static/media/Banner.7eb802b56b4dc864425e.jpg",
     "static/media/video-2.mp4": "/static/media/video-2.40a85315bf4af5fbcd2b.mp4",
     "static/media/video-3.mp4": "/static/media/video-3.37562dfa01c4e7d7a734.mp4",
@@ -49,10 +49,8 @@
     "static/media/bussiness(1).jpg": "/static/media/bussiness(1).63ef1604c013bde0330d.jpg",
     "static/media/bussiness-1.jpg": "/static/media/bussiness-1.63ef1604c013bde0330d.jpg",
     "static/media/job-img-4.jpg": "/static/media/job-img-4.fd95d77df9d96a3c9f3a.jpg",
-    "static/media/job-img-1.jpg": "/static/media/job-img-1.2c6ba68e724ef9d0bfd2.jpg",
     "static/media/Equity.png": "/static/media/Equity.cbc8812b3a595af531b6.png",
     "static/media/job-img-3.jpg": "/static/media/job-img-3.ddcf3fd00d74df733575.jpg",
-    "static/media/job-img-2.jpg": "/static/media/job-img-2.36b6977e91aba68612c0.jpg",
     "static/media/job-img-5.jpg": "/static/media/job-img-5.e794e7eb8a5a0347cc4b.jpg",
     "static/media/loader.png": "/static/media/loader.12c937a136feddc59b62.png",
     "static/media/1.png": "/static/media/1.fea9f1011c2ef85a77e3.png",
@@ -116,11 +114,11 @@
     "static/media/ads.jpg": "/static/media/ads.528a73823ad85c175374.jpg",
     "static/media/pizza.webp": "/static/media/pizza.61da3f5df9a5f163c264.webp",
     "index.html": "/index.html",
-    "main.ae83cbe5.css.map": "/static/css/main.ae83cbe5.css.map",
-    "main.ae3fca1c.js.map": "/static/js/main.ae3fca1c.js.map"
+    "main.f32e4748.css.map": "/static/css/main.f32e4748.css.map",
+    "main.7a8c88c6.js.map": "/static/js/main.7a8c88c6.js.map"
   },
   "entrypoints": [
-    "static/css/main.ae83cbe5.css",
-    "static/js/main.ae3fca1c.js"
+    "static/css/main.f32e4748.css",
+    "static/js/main.7a8c88c6.js"
   ]
 }
