@@ -91,6 +91,7 @@ import pizza from "../../../assets/images/page-img/pizza.webp";
 import busImg from "../../../assets/images/page-img/bus.webp";
 import boyImg from "../../../assets/images/page-img/boy.webp";
 import img11 from "../../../assets/images/page-img/fd.webp";
+import { getProfileImageUrl } from '../../../utils/helpers';
 
 import crypto1 from "../../../assets/images/page-img/crypto(1).jpg";
 import crypto2 from "../../../assets/images/page-img/crypto(2).jpg";
@@ -463,9 +464,7 @@ useEffect(() => {
                       <Col lg={4} className="text-center profile-center">
 <div className="header-avatar position-relative d-inline-block">
   <img
-    src={userData?.profile_image ? 
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/storage/${userData.profile_image}` : 
-      pro1}
+    src={getProfileImageUrl(userData)}
     alt="user"
     className="avatar-150 border border-4 border-white rounded-3"
   />

@@ -3,7 +3,7 @@ import { UserContext } from '../../../../context/UserContext';
 import axios from 'axios';
 import { Nav, Form, Card, Container, Image, Dropdown, Navbar } from "react-bootstrap";
 import { Link , useLocation } from "react-router-dom";
-
+import { getProfileImageUrl } from '../../../../utils/helpers';
 //image
 import user1 from "../../../../assets/images/user/1.jpg";
 import user2 from "../../../../assets/images/user/02.jpg";
@@ -816,9 +816,7 @@ const Header = () => {
                   id="drop-down-arrow"
                 >
                   <Image
-                    src={userData && Object.keys(userData).length > 0 && userData.profile_image ? 
-                      baseurl + '/storage/' + userData.profile_image : 
-                      user1}
+                    src={getProfileImageUrl(userData)}
                     
                     className="img-fluid rounded-circle avatar-48 border border-2 me-3"
                     alt="user"

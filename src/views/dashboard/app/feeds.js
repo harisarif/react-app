@@ -170,6 +170,8 @@ const UserFeeds = () => {
   };
 
   useEffect(() => {
+    setHasMore(false);
+    setIsLoading(false);
     fetchPosts(1);
   }, []);
 
@@ -211,7 +213,7 @@ const UserFeeds = () => {
     };
   });
 
-  const handleNewPost = (newPost) => {
+  const handleNewPost = () => {
     fetchPosts(1);
   };
 
@@ -279,7 +281,7 @@ const UserFeeds = () => {
           <Row>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
             <Col lg={12}>
-              {userData && Object.keys(userData).length > 0 ? (
+              
                 <Row>
                   <Col sm={12}>
                     <CreatePost 
@@ -288,7 +290,6 @@ const UserFeeds = () => {
                     />
                   </Col>
                 </Row>
-              ) : null}
 
               <Row className="special-post-container">
                 {posts.map((post) => (

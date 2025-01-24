@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
+import { UserContext } from '../../../context/UserContext';
+import Swal from 'sweetalert2';
 import { Row, Col, Container, Button } from "react-bootstrap";
 import Card from "../../../components/Card";
 import { Link } from "react-router-dom";
@@ -9,6 +11,8 @@ import CreateJob from "../../../components/job/CreateJob";
 import ProfileHeader from "../../../components/profile-header";
 
 const JobList = () => {
+  const { userData } = useContext(UserContext);
+
   const [jobs, setJobs] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -41,6 +45,7 @@ const JobList = () => {
         <div className="container">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="mb-0">Job Listings</h2>
+            {userData && (
             <Button 
               variant="primary" 
               onClick={() => setShowCreateModal(true)}
@@ -48,6 +53,7 @@ const JobList = () => {
               <span className="material-symbols-outlined me-2">add</span>
               Create Job
             </Button>
+            )}
           </div>
 
           <div className="custom-container-card">

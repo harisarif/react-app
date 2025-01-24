@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown, Button, Modal, Form, Card } from "react-bootstrap";
 import axios from '../utils/axios';
@@ -19,16 +19,63 @@ const CreatePost = ({ onPostCreated, className }) => {
   const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    category_id: '',
+    images: [],
+    videos: [],
+    documents: []
+  });
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('/api/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
   const handleClose = () => {
     setShow(false);
     setSelectedFiles({ images: [], videos: [], documents: [] });
     setPreviews({ images: [], videos: [], documents: [] });
     setContent('');
+    setFormData({
+      title: '',
+      description: '',
+      category_id: '',
+      images: [],
+      videos: [],
+      documents: []
+    });
   };
 
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    if (!userData) {
+      Swal.fire({
+        title: 'Login Required',
+        text: 'Please login to create posts',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Login',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/auth/sign-in';
+        }
+      });
+      return;
+    }
+    setShow(true);
+  };
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
@@ -72,43 +119,50 @@ const CreatePost = ({ onPostCreated, className }) => {
       videos: [...previews.videos, ...videoPreviewUrls],
       documents: [...previews.documents, ...documentPreviewUrls]
     });
+
+    setFormData({
+      ...formData,
+      images: [...formData.images, ...newImages],
+      videos: [...formData.videos, ...newVideos],
+      documents: [...formData.documents, ...newDocuments]
+    });
   };
 
   const removeFile = (type, index) => {
     const newFiles = { ...selectedFiles };
     const newPreviews = { ...previews };
+    const newFormData = { ...formData };
     
     if (type === 'images' || type === 'videos') {
       URL.revokeObjectURL(newPreviews[type][index]);
     }
     newFiles[type].splice(index, 1);
     newPreviews[type].splice(index, 1);
+    newFormData[type].splice(index, 1);
 
     setSelectedFiles(newFiles);
     setPreviews(newPreviews);
+    setFormData(newFormData);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData();
-    formData.append('title', content);
-    formData.append('description', content);
-
-    // Append files
-    selectedFiles.images.forEach(file => {
-      formData.append('images[]', file);
-    });
-    selectedFiles.videos.forEach(file => {
-      formData.append('videos[]', file);
-    });
-    selectedFiles.documents.forEach(file => {
-      formData.append('documents[]', file);
-    });
+    const newFormData = {
+      ...formData,
+      content: content
+    };
 
     try {
-      const response = await axios.post('/api/posts', formData, {
+      const response = await axios.post('/api/posts', newFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -128,6 +182,14 @@ const CreatePost = ({ onPostCreated, className }) => {
         setContent('');
         setSelectedFiles({ images: [], videos: [], documents: [] });
         setPreviews({ images: [], videos: [], documents: [] });
+        setFormData({
+          title: '',
+          description: '',
+          category_id: '',
+          images: [],
+          videos: [],
+          documents: []
+        });
         setShow(false);
 
         // Notify parent component about the new post
@@ -139,6 +201,7 @@ const CreatePost = ({ onPostCreated, className }) => {
             videos: JSON.parse(response.data.post.videos || '[]'),
             documents: JSON.parse(response.data.post.documents || '[]')
           };
+
           onPostCreated(postData);
         }
       } else {
@@ -223,6 +286,23 @@ const CreatePost = ({ onPostCreated, className }) => {
               onChange={(e) => setContent(e.target.value)}
             />
           </div>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Category</Form.Label>
+            <Form.Select
+              name="category_id"
+              value={formData.category_id}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select a category</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
           
           {/* File upload section */}
           <div className="file-upload-section">
@@ -286,7 +366,7 @@ const CreatePost = ({ onPostCreated, className }) => {
           <Button 
             variant="primary" 
             onClick={handleSubmit}
-            disabled={isLoading || (!content.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
+            disabled={isLoading || !formData.category_id || (!content.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
           >
             {isLoading ? (
               <>
