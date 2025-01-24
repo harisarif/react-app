@@ -1,16 +1,23 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Dropdown, Button, Modal, Form } from "react-bootstrap";
-import axios from 'axios';
+import { Dropdown, Button, Modal, Form, Card } from "react-bootstrap";
+import axios from '../utils/axios';
+import { UserContext } from '../context/UserContext';
+import { getProfileImageUrl } from '../utils/helpers';
+import Swal from 'sweetalert2';
 
 //images
 import user1 from "../assets/images/user/1.jpg";
+import img1 from "../assets/images/icon/02.png";
+import img2 from "../assets/images/icon/02.png";
+import img3 from "../assets/images/icon/03.png";
 
-const CreatePost = (props) => {
+const CreatePost = ({ onPostCreated, className }) => {
+  const { userData } = useContext(UserContext);
   const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
   const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
-  const [postText, setPostText] = useState("");
+  const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -18,7 +25,7 @@ const CreatePost = (props) => {
     setShow(false);
     setSelectedFiles({ images: [], videos: [], documents: [] });
     setPreviews({ images: [], videos: [], documents: [] });
-    setPostText("");
+    setContent('');
   };
 
   const handleShow = () => setShow(true);
@@ -81,38 +88,70 @@ const CreatePost = (props) => {
     setPreviews(newPreviews);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
+
     const formData = new FormData();
-    formData.append('title', postText);
-    formData.append('description', postText);
+    formData.append('title', content);
+    formData.append('description', content);
 
-    selectedFiles.images.forEach((image, index) => {
-      formData.append(`images[${index}]`, image);
+    // Append files
+    selectedFiles.images.forEach(file => {
+      formData.append('images[]', file);
     });
-
-    selectedFiles.videos.forEach((video, index) => {
-      formData.append(`videos[${index}]`, video);
+    selectedFiles.videos.forEach(file => {
+      formData.append('videos[]', file);
     });
-
-    selectedFiles.documents.forEach((document, index) => {
-      formData.append(`documents[${index}]`, document);
+    selectedFiles.documents.forEach(file => {
+      formData.append('documents[]', file);
     });
 
     try {
-      const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-      const response = await axios.post(`${baseUrl}/api/posts`, formData, {
+      const response = await axios.post('/api/posts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
-      
-      console.log('Post created:', response.data);
-      handleClose();
+
+      // Check if we have a valid response with the post data
+      if (response.data && response.data.post) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: response.data.message || 'Post created successfully',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        // Reset form
+        setContent('');
+        setSelectedFiles({ images: [], videos: [], documents: [] });
+        setPreviews({ images: [], videos: [], documents: [] });
+        setShow(false);
+
+        // Notify parent component about the new post
+        if (onPostCreated) {
+          // Parse the JSON strings in the post data
+          const postData = {
+            ...response.data.post,
+            images: JSON.parse(response.data.post.images || '[]'),
+            videos: JSON.parse(response.data.post.videos || '[]'),
+            documents: JSON.parse(response.data.post.documents || '[]')
+          };
+          onPostCreated(postData);
+        }
+      } else {
+        throw new Error('Invalid response format from server');
+      }
     } catch (error) {
-      console.error('Error creating post:', error.response?.data || error);
-      alert(error.response?.data?.message || 'Failed to create post. Please try again.');
+      console.error('Error creating post:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.response?.data?.message || 'Something went wrong while creating the post!',
+      });
+      setShow(false);
     } finally {
       setIsLoading(false);
     }
@@ -120,319 +159,144 @@ const CreatePost = (props) => {
 
   return (
     <>
-      <div id="post-modal-data" className={`card ${props.class}`}>
-        <div className="card-header d-flex justify-content-between border-bottom">
+      <Card className={className}>
+        <Card.Header className="d-flex justify-content-between">
           <div className="header-title">
-            <h5 className="card-title">Add a Post</h5>
+            <h4 className="card-title">Create Post</h4>
           </div>
-          <Dropdown >
-            <Dropdown.Toggle className="lh-1" id="post-option" as="div" bsPrefix=" ">
-              <span className="material-symbols-outlined">more_horiz</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu
-              variant="right"
-              aria-labelledby="post-option"
-              style={{ position: 'absolute', inset: 'auto auto 0px 0px', margin: '0px', transform: 'translate(0px, -27px)' }}
-            >
-              <Dropdown.Item
-                href="#"
-                onClick={handleShow}
-              >
-                Check in
-              </Dropdown.Item>
-              <Dropdown.Item
-                href="#"
-                onClick={handleShow}
-              >
-                Live Video
-              </Dropdown.Item>
-              <Dropdown.Item
-                href="#"
-                onClick={handleShow}
-              >
-                GIF
-              </Dropdown.Item>
-              <Dropdown.Item
-                href="#"
-                onClick={handleShow}
-              >
-                Watch Party
-              </Dropdown.Item>
-              <Dropdown.Item
-                href="#"
-                onClick={handleShow}
-              >
-                Play with Friend
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-        <div className="card-body">
-          <div className="d-flex align-items-center mb-5">
-            <form className="post-text w-100" onClick={handleShow}>
+        </Card.Header>
+        <Card.Body>
+          <div className="d-flex align-items-center">
+            <div className="user-img">
+              <img
+                src={getProfileImageUrl(userData)}
+                alt="userimg"
+                className="avatar-60 rounded-circle"
+              />
+            </div>
+            <div className="post-text ms-3 w-100" onClick={handleShow}>
               <input
                 type="text"
-                className="form-control rounded px-0"
-                placeholder="Write And Share Your Post With Your Friends..."
-                style={{ border: "none" }}
+                className="form-control rounded"
+                placeholder="Write something here..."
+                style={{ cursor: "pointer" }}
                 readOnly
               />
-            </form>
-          </div>
-        </div>
-        <div className="card-body bg-primary-subtle rounded-bottom-3">
-          <div className="d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <div className="create-post-data">
-              <ul className="list-inline m-0 p-0 d-flex align-items-center gap-4">
-                <li>
-                  <Link to="#" className="text-body">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="16"
-                      viewBox="0 0 18 16"
-                      fill="none"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M11.5334 1.3761C12.3751 1.7111 12.6326 2.87776 12.9767 3.25276C13.3209 3.62776 13.8134 3.75526 14.0859 3.75526C15.5342 3.75526 16.7084 4.92943 16.7084 6.37693V11.2061C16.7084 13.1478 15.1334 14.7228 13.1917 14.7228H4.80841C2.86591 14.7228 1.29175 13.1478 1.29175 11.2061V6.37693C1.29175 4.92943 2.46591 3.75526 3.91425 3.75526C4.18591 3.75526 4.67841 3.62776 5.02341 3.25276C5.36758 2.87776 5.62425 1.7111 6.46591 1.3761C7.30841 1.0411 10.6917 1.0411 11.5334 1.3761Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M13.5794 5.91667H13.5869"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M11.6489 8.94C11.6489 7.47667 10.4631 6.29083 8.99975 6.29083C7.53642 6.29083 6.35059 7.47667 6.35059 8.94C6.35059 10.4033 7.53642 11.5892 8.99975 11.5892C10.4631 11.5892 11.6489 10.4033 11.6489 8.94Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-body">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
-                      fill="none"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M7.23043 11.6718C4.02709 11.6718 1.29126 12.156 1.29126 14.096C1.29126 16.036 4.01043 16.5377 7.23043 16.5377C10.4346 16.5377 13.1696 16.0527 13.1696 14.1135C13.1696 12.1743 10.4513 11.6718 7.23043 11.6718Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M7.23042 8.90493C9.33292 8.90493 11.0371 7.20076 11.0371 5.09826C11.0371 2.99576 9.33292 1.2916 7.23042 1.2916C5.12875 1.2916 3.42459 2.99576 3.42459 5.09826C3.41709 7.19326 5.10875 8.89743 7.20459 8.90493H7.23042Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M15.0031 6.22427V9.56594"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M16.7079 7.895H13.2996"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-body">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="18"
-                      viewBox="0 0 14 18"
-                      fill="none"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M9.08341 7.75041C9.08341 6.59935 8.15072 5.66666 7.0005 5.66666C5.84944 5.66666 4.91675 6.59935 4.91675 7.75041C4.91675 8.90063 5.84944 9.83332 7.0005 9.83332C8.15072 9.83332 9.08341 8.90063 9.08341 7.75041Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M6.99959 16.5C6.00086 16.5 0.75 12.2486 0.75 7.80274C0.75 4.3222 3.54758 1.5 6.99959 1.5C10.4516 1.5 13.25 4.3222 13.25 7.80274C13.25 12.2486 7.99832 16.5 6.99959 16.5Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <ul className="list-inline m-0 p-0 d-flex align-items-center gap-4">
-                <li>
-                  <Link to="#" className="text-body fw-medium">
-                    Discard
-                  </Link>
-                </li>
-                <li>
-                  <button type="button" className="btn btn-primary px-4">
-                    Post
-                  </button>
-                </li>
-              </ul>
             </div>
           </div>
-        </div>
-        <Modal
-          show={show}
-          onHide={handleClose}
-          size="lg"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Create Post</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="d-flex align-items-center mb-3">
-              <img src={user1} alt="user1" className="avatar-60 rounded-circle me-3" />
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="What's on your mind?"
-                value={postText}
-                onChange={(e) => setPostText(e.target.value)}
-              />
-            </div>
+          {/* <hr />
+          <ul className="post-opt-block d-flex list-inline m-0 p-0">
+            <li className="me-3 mb-md-0 mb-2">
+              <Link to="#" className="btn btn-soft-primary">
+                <img src={img1} alt="icon" className="img-fluid me-2" /> Photo/Video
+              </Link>
+            </li>
+            <li className="me-3 mb-md-0 mb-2">
+              <Link to="#" className="btn btn-soft-primary">
+                <img src={img2} alt="icon" className="img-fluid me-2" /> Tag Friend
+              </Link>
+            </li>
+            <li className="me-3">
+              <Link to="#" className="btn btn-soft-primary">
+                <img src={img3} alt="icon" className="img-fluid me-2" /> Feeling/Activity
+              </Link>
+            </li>
+          </ul> */}
+        </Card.Body>
+      </Card>
 
-            <div className="mb-3">
-              <input
-                type="file"
-                ref={fileInputRef}
-                multiple
-                accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-                className="d-none"
-                onChange={handleFileSelect}
-              />
-              <Button 
-                variant="outline-primary" 
-                onClick={() => fileInputRef.current.click()}
-                className="w-100"
-              >
-                <i className="material-symbols-outlined me-2">add_photo_alternate</i>
-                Add Photos/Videos/Documents
-              </Button>
-            </div>
-
-            {/* Image Previews */}
-            <div className="d-flex flex-wrap gap-2 mb-3">
-              {previews.images.map((preview, index) => (
-                <div key={`image-${index}`} className="position-relative">
-                  <img 
-                    src={preview} 
-                    alt={`preview-${index}`} 
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                  />
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    className="position-absolute top-0 end-0"
-                    onClick={() => removeFile('images', index)}
-                  >
-                    ×
-                  </Button>
-                </div>
-              ))}
-            </div>
-
-            {/* Video Previews */}
-            <div className="d-flex flex-wrap gap-2 mb-3">
-              {previews.videos.map((preview, index) => (
-                <div key={`video-${index}`} className="position-relative">
-                  <video 
-                    src={preview} 
-                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-                    controls
-                  />
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    className="position-absolute top-0 end-0"
-                    onClick={() => removeFile('videos', index)}
-                  >
-                    ×
-                  </Button>
-                </div>
-              ))}
-            </div>
-
-            {/* Document Previews */}
-            <div className="d-flex flex-wrap gap-2">
-              {previews.documents.map((filename, index) => (
-                <div key={`document-${index}`} className="position-relative border rounded p-2">
-                  <div className="d-flex align-items-center">
-                    <i className="material-symbols-outlined me-2">description</i>
-                    <span>{filename}</span>
-                  </div>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    className="position-absolute top-0 end-0"
-                    onClick={() => removeFile('documents', index)}
-                  >
-                    ×
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Cancel
-            </Button>
+      <Modal show={show} onHide={handleClose} size="lg" centered>
+        <Modal.Header className="d-flex justify-content-between">
+          <Modal.Title>Create Post</Modal.Title>
+          <Link to="#" className="lh-1" onClick={handleClose}>
+            <span className="material-symbols-outlined">close</span>
+          </Link>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="d-flex align-items-center mb-3">
+            <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
+            <Form.Control
+              as="textarea"
+              rows={3}
+              placeholder="Write something here..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
+          
+          {/* File upload section */}
+          <div className="file-upload-section">
+            <input
+              type="file"
+              multiple
+              hidden
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+            />
             <Button 
-              variant="primary" 
-              onClick={handleSubmit}
-              disabled={isLoading || (!postText && !selectedFiles.images.length && !selectedFiles.videos.length && !selectedFiles.documents.length)}
+              variant="outline-primary" 
+              className="me-2"
+              onClick={() => fileInputRef.current.click()}
             >
-              {isLoading ? 'Posting...' : 'Post'}
+              <i className="material-icons me-1">attach_file</i>
+              Add Files
             </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-      <div
-        className={`modal-backdrop fade ${show ? "show" : "d-none"}`}
-        onClick={handleClose}
-      ></div>
+          </div>
+
+          {/* Preview section */}
+          {Object.entries(previews).map(([type, files]) => (
+            files.length > 0 && (
+              <div key={type} className="preview-section mt-3">
+                <h6 className="mb-2">{type.charAt(0).toUpperCase() + type.slice(1)}</h6>
+                <div className="d-flex flex-wrap gap-2">
+                  {files.map((preview, index) => (
+                    <div key={index} className="position-relative">
+                      {type === 'images' && (
+                        <img src={preview} alt="" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                      )}
+                      {type === 'videos' && (
+                        <video width="100" height="100" controls>
+                          <source src={preview} />
+                        </video>
+                      )}
+                      {type === 'documents' && (
+                        <div className="document-preview">
+                          <i className="material-icons">description</i>
+                          <span>{selectedFiles[type][index].name}</span>
+                        </div>
+                      )}
+                      <button
+                        className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                        onClick={() => removeFile(type, index)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          ))}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={handleSubmit}
+            disabled={isLoading || (!content.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
+          >
+            {isLoading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Posting...
+              </>
+            ) : 'Post'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

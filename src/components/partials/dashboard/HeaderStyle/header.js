@@ -167,7 +167,7 @@ const Header = () => {
             </div>
 
             <ul className="navbar-nav navbar-list">
-              <Dropdown as="li" className="nav-items">
+              {/* <Dropdown as="li" className="nav-items">
                 <Dropdown.Toggle bsPrefix=" " as="a"
                   to="#"
                   className=" d-flex align-items-center"
@@ -282,7 +282,7 @@ const Header = () => {
                     </Card.Body>
                   </Card>
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
 
               <Nav.Item as="li" className="d-lg-none">
                 <Dropdown bsPrefix=" " className="iq-search-bar device-search ">

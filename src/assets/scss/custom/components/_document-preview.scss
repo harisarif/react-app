@@ -1,0 +1,127 @@
+.document-preview {
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  .document-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    
+    .document-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      
+      &.pdf {
+        background: rgba(234, 67, 53, 0.1);
+        color: #ea4335;
+      }
+      
+      &.doc, &.docx {
+        background: rgba(66, 133, 244, 0.1);
+        color: #4285f4;
+      }
+      
+      &.xls, &.xlsx {
+        background: rgba(52, 168, 83, 0.1);
+        color: #34a853;
+      }
+      
+      &.txt {
+        background: rgba(101, 101, 101, 0.1);
+        color: #656565;
+      }
+      
+      .material-symbols-outlined {
+        font-size: 24px;
+      }
+    }
+    
+    .document-info {
+      flex: 1;
+      min-width: 0;
+      
+      .document-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .document-meta {
+        font-size: 0.8rem;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+  }
+  
+  .document-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+    
+    .btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      
+      &.btn-preview {
+        background: rgba(0, 0, 0, 0.05);
+        color: #212529;
+        border: none;
+        
+        &:hover {
+          background: rgba(0, 0, 0, 0.1);
+        }
+      }
+      
+      &.btn-download {
+        background: #0d6efd;
+        color: white;
+        border: none;
+        
+        &:hover {
+          background: #0b5ed7;
+        }
+      }
+      
+      .material-symbols-outlined {
+        font-size: 20px;
+      }
+    }
+  }
+  
+  .pdf-preview {
+    margin: 1rem -1rem;
+    height: calc(100% - 120px);
+    min-height: 200px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  }
+}

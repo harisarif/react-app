@@ -1,16 +1,16 @@
 import React from "react";
 import Index from "../views/dashboard/index";
 
-//app
 import UserProfile from "../views/dashboard/app/user-profile";
 import EventCalender from "../views/dashboard/app/event-calender";
 import JobList from "../views/dashboard/app/job-list";
 import JobListReadMore from "../views/dashboard/app/job-list-read-more";
-import JobListDetails from "../views/dashboard/app/job-list-details";
+import JobDetail from "../views/dashboard/app/job-list-detail";
 import Education from "../views/dashboard/app/education";
 import Business from "../views/dashboard/app/business";
 import Crypto from "../views/dashboard/app/crypto";
 import EquityCircle from "../views/dashboard/app/equitycircle";
+import UserFeeds from "../views/dashboard/app/feeds";
 
 import Fitness from "../views/dashboard/app/fitness";
 
@@ -101,6 +101,10 @@ export const DefaultRouter = [
     element: <UserProfile />,
   },
   {
+    path: "/",
+    element: <UserFeeds />,
+  },
+  {
     path: "/event-calender",
    element: <EventCalender />,
   },
@@ -125,8 +129,8 @@ export const DefaultRouter = [
     element: <JobListReadMore />,
   },
   {
-    path: "/job-list-detail",
-    element: <JobListDetails />,
+    path: "/job-list-detail/:id",
+    element: <JobDetail />,
   },
   {
     path: "/education",

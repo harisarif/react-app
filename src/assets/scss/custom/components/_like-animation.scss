@@ -1,0 +1,44 @@
+.like-block {
+  position: relative;
+  
+  .like-button {
+    position: relative;
+    transition: all 0.3s ease;
+    
+    &.liked {
+      color: #0d6efd !important;
+      
+      .like-icon {
+        color: #0d6efd;
+      }
+    }
+  }
+
+  .like-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+    
+    &.animate {
+      animation: likeAnimation 0.8s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+    }
+  }
+}
+
+@keyframes likeAnimation {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}

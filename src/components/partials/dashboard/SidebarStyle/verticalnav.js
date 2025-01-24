@@ -46,12 +46,12 @@ const VerticalNav = React.memo(() => {
                 </li>
                 <li className={`${location.pathname === '/' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Home</Tooltip>}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             <i className="icon material-symbols-outlined">
-                                Home
+                            turned_in_not
                             </i>
                         </OverlayTrigger>
-                        <span className="item-name">Home</span>
+                        <span className="item-name">Feeds</span>
                     </Link>
                 </li>
                 {userData && (
@@ -69,7 +69,18 @@ const VerticalNav = React.memo(() => {
                 </li>
 )}
                 
-                <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item">
+                {/* <li className={`${location.pathname === '/feeds' ? 'active' : ''} nav-item `}>
+                    <Link className={`${location.pathname === '/feeds' ? 'active' : ''} nav-link `} aria-current="page" to="/feeds"
+                          onClick={() => setActive("feeds")}>
+                        <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
+                            <i className="icon material-symbols-outlined">
+                            turned_in_not
+                            </i>
+                        </OverlayTrigger>
+                        <span className="item-name">Feeds</span>
+                    </Link>
+                </li> */}
+                {/* <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item">
                     <CustomToggle eventKey="utilities-error" active={activeMenu === 'utilities-error' ? true : false} onClick={(activeKey) => setActiveMenu(activeKey)}>
                         <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             <i className="icon material-symbols-outlined">
@@ -110,7 +121,7 @@ const VerticalNav = React.memo(() => {
                             </Nav.Item>
                         </ul>
                     </Accordion.Collapse>
-                </Accordion.Item>
+                </Accordion.Item> */}
                 <li className={`${location.pathname === '/education' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Education</Tooltip>}>

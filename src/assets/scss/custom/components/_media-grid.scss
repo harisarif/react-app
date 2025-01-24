@@ -1,0 +1,231 @@
+.media-grid {
+  display: grid;
+  gap: 4px;
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+
+  &.media-grid-1 {
+    grid-template-columns: 1fr;
+    
+    .media-item {
+      aspect-ratio: 16/9;
+    }
+  }
+
+  &.media-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+    
+    .media-item {
+      aspect-ratio: 1;
+    }
+  }
+
+  &.media-grid-3 {
+    grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: 200px 200px;
+    
+    .media-item:first-child {
+      grid-row: 1 / span 2;
+    }
+  }
+
+  &.media-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 200px);
+  }
+
+  &.media-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 180px 240px;
+    gap: 4px;
+    
+    .media-item {
+      &:nth-child(1) {
+        grid-column: span 2;
+      }
+      
+      &:nth-child(2) {
+        grid-column: span 2;
+      }
+      
+      &:nth-child(3) {
+        grid-column: span 2;
+      }
+      
+      &:nth-child(4) {
+        grid-column: span 3;
+      }
+      
+      &:nth-child(5) {
+        grid-column: span 3;
+      }
+    }
+  }
+
+  .media-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    img, video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .media-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 500;
+      backdrop-filter: blur(2px);
+      
+      .overlay-text {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 1.2rem;
+      }
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .material-symbols-outlined {
+        font-size: 32px;
+      }
+    }
+  }
+}
+
+.media-gallery-modal {
+  .modal-content {
+    background: rgba(0, 0, 0, 0.95);
+    border: none;
+  }
+
+  .modal-header {
+    border-bottom: none;
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background: transparent;
+
+    .btn-close {
+      color: white;
+      filter: invert(1) grayscale(100%) brightness(200%);
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+      
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img, video {
+      max-height: 90vh;
+      max-width: 90%;
+      object-fit: contain;
+    }
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    pointer-events: none;
+
+    button {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+      
+      .material-symbols-outlined {
+        font-size: 28px;
+      }
+    }
+  }
+
+  .gallery-counter {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    backdrop-filter: blur(4px);
+  }
+}

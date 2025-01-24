@@ -1,94 +1,107 @@
-import React from "react";
-import { Row, Col, Container } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Container, Button } from "react-bootstrap";
 import Card from "../../../components/Card";
 import { Link } from "react-router-dom";
+import axios from '../../../utils/axios'
+import CreateJob from "../../../components/job/CreateJob";
 
 //profile-header
 import ProfileHeader from "../../../components/profile-header";
 
-// image
-import job_img_1 from "../../../assets/images/page-img/job-img-1.jpg";
-import job_img_2 from "../../../assets/images/page-img/job-img-2.jpg";
-import job_img_3 from "../../../assets/images/page-img/job-img-3.jpg";
-import job_img_4 from "../../../assets/images/page-img/job-img-4.jpg";
-import job_img_5 from "../../../assets/images/page-img/job-img-5.jpg";
-
 const JobList = () => {
+  const [jobs, setJobs] = useState([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
+
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get('/api/jobs');
+      if (response.data && response.data.jobs) {
+        setJobs(response.data.jobs);
+      }
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const handleJobCreated = (newJob) => {
+    fetchJobs(); // Refresh the jobs list
+  };
+
   return (
     <>
-      {/* <ProfileHeader title="Music" img={profilebg8} /> */}
       <div id="content-page" className="content-inner">
-        <div class="container">
-          <div class="custom-container-card">
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h2 className="mb-0">Job Listings</h2>
+            <Button 
+              variant="primary" 
+              onClick={() => setShowCreateModal(true)}
+            >
+              <span className="material-symbols-outlined me-2">add</span>
+              Create Job
+            </Button>
+          </div>
+
+          <div className="custom-container-card">
             <div id="content">
-              <div class="row g-3">
-
-                <div class="col-sm-6 col-lg-4">
-                  <div class="card h-100">
-                    <div class="edu-card-img">
-                      <img src={job_img_1} class="card-img-top" alt="#" loading="lazy" />
-                    </div>
-                    <div class="card-body">
-                      <h4 class="card-title turncate-2"> <a href="/job-list-detail" class="text-black">How a Customer Academy Improves Retention</a></h4>                     
-                      <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
-                    </div>
+              {loading ? (
+                <div className="text-center py-5">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
                   </div>
                 </div>
-                <div class="col-sm-6 col-lg-4">
-                  <div class="card h-100">
-                    <div class="edu-card-img">
-                      <img src={job_img_2} class="card-img-top" alt="#" loading="lazy" />
-                    </div>
-                    <div class="card-body">
-                      <h4 class="card-title turncate-2"><a href="/job-list-detail" class="text-black">LMS Request For Personal Tooltik</a></h4>
-                      <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
-                    </div>
-                  </div>
+              ) : jobs.length === 0 ? (
+                <div className="text-center py-5">
+                  <h4>No jobs found</h4>
+                  <p>Create your first job listing by clicking the Create Job button above.</p>
                 </div>
-                <div class="col-sm-6 col-lg-4">
-                  <div class="card h-100">
-                    <div class="edu-card-img">
-                      <img src={job_img_3} class="card-img-top" alt="#" loading="lazy" />
+              ) : (
+                <div className="row g-3">
+                  {jobs.data.map((job) => (
+                    <div key={job.id} className="col-sm-6 col-lg-4">
+                      <div className="card h-100">
+                        <div className="edu-card-img">
+                          <img 
+                            src={`${baseurl}/images/${job.main_image}`}
+                            className="card-img-top" 
+                            alt={job.title}
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="card-body">
+                          <h4 className="card-title turncate-2">
+                            <Link to={`/job-list-detail/${job.id}`} className="text-black">
+                              {job.title}
+                            </Link>
+                          </h4>
+                          <p className="card-text turncate-3">{job.short_description}</p>
+                          <Link to={`/job-list-detail/${job.id}`} className="btn btn-primary btn-block">
+                            Read More
+                          </Link>
+                        </div>
+                      </div>
                     </div>
-                    <div class="card-body">
-                      <h4 class="card-title turncate-2"><a href="/job-list-detail" class="text-black">Build an LMS Buiness Case</a></h4>
-                      <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-                <div class="col-sm-6 col-lg-4">
-                  <div class="card h-100">
-                    <div class="edu-card-img">
-                      <img src={job_img_4} class="card-img-top" alt="#" loading="lazy" />
-                    </div>
-                    <div class="card-body">
-                      <h4 class="card-title turncate-2"><a href="/job-list-detail" class="text-black">Training Evalution From Template</a></h4>
-                      <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-lg-4">
-                  <div class="card h-100">
-                    <div class="edu-card-img">
-                      <img src={job_img_5} class="card-img-top" alt="#" loading="lazy" />
-                    </div>
-                    <div class="card-body">
-                      <h4 class="card-title turncate-2"> <a href="/job-list-detail" class="text-black">How a Customer Academy Improves Retention</a></h4>
-                      <p class="card-text turncate-3">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <a href="/job-list-read-more" class="btn btn-primary btn-block">Read More</a>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      <CreateJob 
+        show={showCreateModal}
+        onHide={() => setShowCreateModal(false)}
+        onJobCreated={handleJobCreated}
+      />
     </>
   );
 };

@@ -9,6 +9,7 @@ import SwiperCore from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
 
 //img
+import LogoFull from "../../../assets/images/Equity_Circle_full.png";
 import login1 from "../../../assets/images/login/1.jpg";
 import login2 from "../../../assets/images/login/2.jpg";
 import login3 from "../../../assets/images/login/3.jpg";
@@ -32,8 +33,14 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [IsLoader, setLoader] = useState(false);
 
   const handleSubmit = async (e) => {
+    setSuccess(null);
+    setError(null);
+    setLoader(true);
     e.preventDefault();
 
     if (!termsAccepted) {
@@ -48,12 +55,14 @@ const SignUp = () => {
         password: password,
         password_confirmation: password,
       });
-
+      setSuccess(response.data.message);
       localStorage.setItem('access_token', response.data.access_token);
-      navigate('/');
+      setLoader(false);
+      window.location.href = '/'
     } catch (error) {
       console.error('Signup error:', error);
-      alert('Signup failed. Please try again.');
+      setError(error.response ? error.response.data.message : 'Signup failed. Please try again.');
+      setLoader(false);
     }
   };
 
@@ -65,7 +74,7 @@ const SignUp = () => {
       });
 
       localStorage.setItem('access_token', response.data.access_token);
-      navigate('/dashboard');
+      window.location.href = '/'
     } catch (error) {
       console.error('Google sign-in error:', error);
       alert('Failed to sign in with Google. Please try again.');
@@ -150,15 +159,16 @@ const SignUp = () => {
                   to="/"
                   className="d-inline-flex align-items-center justify-content-center gap-2"
                 >
-                  <h2 className="logo-title" data-setting="app_name">
-                    {appName}
-                  </h2>
+                  <img src={LogoFull} width={120} />
                 </Link>
                 <p className="mt-3 font-size-16">
-                  Welcome to socialV, a platform to connect with
+                  Welcome to Equity Circle, a platform to connect with
                   <br /> the social world
                 </p>
                 <Form className="mt-5" onSubmit={handleSubmit}>
+                {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                 {success && <div className="alert alert-success" role="alert">{success}</div>}
+                  
                   <Form.Group className="form-group text-start">
                     <h6 className="form-label fw-bold">Your Full Name</h6>
                     <Form.Control
@@ -210,7 +220,11 @@ const SignUp = () => {
                     type="submit"
                     className="btn btn-primary mt-4 fw-semibold text-uppercase w-100"
                   >
-                    Sign Up
+                      {IsLoader ? (
+                      <div className="Authloader" style={{margin: '0 auto'}}></div>
+                    ) : (
+                      'Sign up'
+                    )}
                   </Button>
 
                   <div className="mt-4">
