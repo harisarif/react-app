@@ -93,10 +93,10 @@ import Admin from "../views/dashboard/app/admin";
 
 export const DefaultRouter = [
  
-  {
-    path: "/equity-circle",
-    element: <EquityCircle />,
-  },
+  // {
+  //   path: "/equity-circle",
+  //   element: <EquityCircle />,
+  // },
   {
     path: "/profile",
     element: <UserProfile />,

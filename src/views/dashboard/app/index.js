@@ -30,6 +30,8 @@ import pro_img_2 from "../../../assets/images/page-img/pro(2).jpg";
 import pro_img_3 from "../../../assets/images/page-img/pro(3).jpg";
 
 const Index = () => {
+
+
   return (
     <>
 

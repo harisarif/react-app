@@ -324,7 +324,7 @@ const CreatePost = ({ onPostCreated, className }) => {
                 <option 
                   key={category.id} 
                   value={category.id}
-                  selected={category.id.toString() === formData.category_id}
+                  selected={category.id.toString() == formData.category_id}
                 >
                   {category.name}
                 </option>

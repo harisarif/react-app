@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Tab, Form, Button, Nav } from 'react-bootstr
 import { Link } from 'react-router-dom'
 import axios from '../../../utils/axios'
 import Swal from 'sweetalert2'
-
+import { getProfileImageUrl } from '../../../utils/helpers';
 //image
 import img1 from '../../../assets/images/user/11.png'
 
@@ -113,32 +113,59 @@ const UserProfileEdit = () => {
     }
 
     const handlePasswordChange = async (e) => {
-        e.preventDefault()
-        const token = localStorage.getItem('access_token');
-        const formData = {
-            current_password: e.target.cpass.value,
-            new_password: e.target.npass.value,
-            new_password_confirmation: e.target.vpass.value
-        }
-
+        e.preventDefault();
+        
         try {
-            await axios.post('/api/user/password', formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            // Check if passwords match
+            if (e.target.npass.value !== e.target.vpass.value) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'New password and verify password do not match'
+                });
+                return;
+            }
+
+            const formData = {
+                new_password: e.target.npass.value,
+                new_password_confirmation: e.target.vpass.value
+            };
+
+            // Add current password only if user has a password set
+            if (userData?.has_password) {
+                if (!e.target.cpass.value) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Current password is required'
+                    });
+                    return;
                 }
-            })
+                formData.current_password = e.target.cpass.value;
+            }
+
+            console.log('Sending formData:', formData);
+            const response = await axios.post('/api/user/password', formData);
+            
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
-                text: 'Password updated successfully!'
-            })
-            e.target.reset()
+                text: response.data.message
+            });
+
+            // Clear the form
+            e.target.reset();
         } catch (error) {
+            console.error('Error details:', error);
+            const errorMessage = error.response?.data?.error || 
+                               Object.values(error.response?.data?.errors || {})[0]?.[0] ||
+                               'Failed to update password';
+            
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.response?.data?.message || 'Failed to update password'
-            })
+                text: errorMessage
+            });
         }
     }
 
@@ -235,11 +262,7 @@ const UserProfileEdit = () => {
                                                             <div className="profile-img-edit">
                                                                 <img 
                                                                     className="profile-pic" 
-                                                                    src={userData.profile_image ? 
-                                                                        userData.profile_image.startsWith('blob:') ? 
-                                                                            userData.profile_image 
-                                                                            : `${process.env.REACT_APP_BACKEND_BASE_URL}/storage/${userData.profile_image}` 
-                                                                        : img1} 
+                                                                    src={getProfileImageUrl(userData)} 
                                                                     alt="profile-pic" 
                                                                 />
                                                                 <div className="p-image d-flex align-items-center justify-content-center">
@@ -410,18 +433,37 @@ const UserProfileEdit = () => {
                                             </Card.Header>
                                             <Card.Body>
                                                 <Form onSubmit={handlePasswordChange}>
-                                                    <Form.Group className="form-group">
-                                                        <Form.Label>Current Password:</Form.Label>
-                                                        <Link to="/auth/recoverpw" className="float-end">Forgot Password</Link>
-                                                        <Form.Control type="password" name="cpass" />
-                                                    </Form.Group>
+                                                    {userData?.has_password && (
+                                                        <Form.Group className="form-group">
+                                                            <Form.Label>Current Password:</Form.Label>
+                                                            <Link to="/auth/recoverpw" className="float-end">Forgot Password</Link>
+                                                            <Form.Control 
+                                                                type="password" 
+                                                                name="cpass" 
+                                                                required={!!userData?.has_password}
+                                                                placeholder="Enter your current password" 
+                                                            />
+                                                        </Form.Group>
+                                                    )}
                                                     <Form.Group className="form-group">
                                                         <Form.Label>New Password:</Form.Label>
-                                                        <Form.Control type="password" name="npass" />
+                                                        <Form.Control 
+                                                            type="password" 
+                                                            name="npass" 
+                                                            required 
+                                                            minLength={8}
+                                                            placeholder="Enter new password (min 8 characters)" 
+                                                        />
                                                     </Form.Group>
                                                     <Form.Group className="form-group">
                                                         <Form.Label>Verify Password:</Form.Label>
-                                                        <Form.Control type="password" name="vpass" />
+                                                        <Form.Control 
+                                                            type="password" 
+                                                            name="vpass" 
+                                                            required 
+                                                            minLength={8}
+                                                            placeholder="Confirm new password" 
+                                                        />
                                                     </Form.Group>
                                                     <Button type="submit" className="btn btn-primary me-2">Submit</Button>
                                                     <Button type="reset" variant='' className="btn-danger-subtle">Cancel</Button>

@@ -31,7 +31,7 @@ export const SimpleRouter = [
     element: <Recoverpw />,
   },
   {
-    path: "/index-page",
+    path: "/home",
     element: <Index />,
   },
   {
