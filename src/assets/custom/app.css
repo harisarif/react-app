@@ -841,3 +841,15 @@
     80% {background-size: 20% 50% ,20% 50% ,20% 100%}
     100%{background-size: 20% 50% ,20% 50% ,20% 50% }
   }
+
+
+
+
+
+  .dropdown-toggle::after{
+    content: '';
+all: unset !important; 
+  }
+
+
+  

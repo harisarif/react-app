@@ -45,7 +45,12 @@ const VerticalNav = React.memo(() => {
     let location = useLocation();
     // console.log(document);
 
-
+// let headerNav = document.querySelector('.iq-nav-menu').querySelectorAll('.nav-item');
+// headerNav.forEach(item =>{
+//     item.addEventListener('click', function(){
+    
+//     })
+// })
     return (
         <React.Fragment>
             <Accordion as="ul" className="navbar-nav iq-main-menu" id="sidebar-menu">
@@ -106,7 +111,7 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Feeds</span>
                         <i className="right-icon material-symbols-outlined">chevron_right</i>
                     </CustomToggle>
-                    <Accordion.Collapse eventKey="utilities-error">
+                    <Accordion.Collapse eventKey="utilities-error" className={location.pathname == "/fitness" || location.pathname == "/business" || location.pathname == "/crypto" || location.pathname == "/mindset" ? "show" : ""}>
                         <ul className="sub-nav">
                             <Nav.Item as="li">
                                 <Link className={`${location.pathname === '/business' ? 'active' : ''} nav-link`} to="/business">
