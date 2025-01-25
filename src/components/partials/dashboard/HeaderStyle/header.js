@@ -133,6 +133,18 @@ const Header = () => {
                           <span className="nav-text">Crypto</span>
                         </Link>
                       </li>
+                      <li className={`${location.pathname === '/mindset' ? 'active' : ''} nav-item`}>
+                        <Link
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                          to="/mindset"
+                          onClick={() => setActive("mindset")}
+                        >
+                          <span class="material-symbols-outlined">
+                            currency_bitcoin
+                          </span>
+                          <span className="nav-text">Mindset</span>
+                        </Link>
+                      </li>
                     </ul>
                   </div>
                 </div>

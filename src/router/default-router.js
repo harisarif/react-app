@@ -9,6 +9,7 @@ import JobDetail from "../views/dashboard/app/job-list-detail";
 import Education from "../views/dashboard/app/education";
 import Business from "../views/dashboard/app/business";
 import Crypto from "../views/dashboard/app/crypto";
+import MindSet from "../views/dashboard/app/mindset";
 import EquityCircle from "../views/dashboard/app/equitycircle";
 import UserFeeds from "../views/dashboard/app/feeds";
 
@@ -99,6 +100,10 @@ export const DefaultRouter = [
   {
     path: "/profile",
     element: <UserProfile />,
+  },
+  {
+    path: "/mindset",
+    element: <MindSet />,
   },
   {
     path: "/",

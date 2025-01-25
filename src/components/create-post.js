@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Dropdown, Button, Modal, Form, Card } from "react-bootstrap";
 import axios from '../utils/axios';
 import { UserContext } from '../context/UserContext';
@@ -14,6 +14,7 @@ import img3 from "../assets/images/icon/03.png";
 
 const CreatePost = ({ onPostCreated, className }) => {
   const { userData } = useContext(UserContext);
+  const location = useLocation();
   const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
   const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
@@ -33,6 +34,29 @@ const CreatePost = ({ onPostCreated, className }) => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    // Set default category based on URL
+    const path = location.pathname;
+    let defaultCategoryId = '';
+    
+    if (path.includes('/business')) {
+      defaultCategoryId = '1';
+    } else if (path.includes('/fitness')) {
+      defaultCategoryId = '2';
+    } else if (path.includes('/crypto')) {
+      defaultCategoryId = '3';
+    } else if (path.includes('/mindset')) {
+      defaultCategoryId = '4';
+    }
+
+    if (defaultCategoryId) {
+      setFormData(prev => ({
+        ...prev,
+        category_id: defaultCategoryId
+      }));
+    }
+  }, [location.pathname]);
 
   const fetchCategories = async () => {
     try {
@@ -297,7 +321,11 @@ const CreatePost = ({ onPostCreated, className }) => {
             >
               <option value="">Select a category</option>
               {categories.map(category => (
-                <option key={category.id} value={category.id}>
+                <option 
+                  key={category.id} 
+                  value={category.id}
+                  selected={category.id.toString() === formData.category_id}
+                >
                   {category.name}
                 </option>
               ))}

@@ -290,7 +290,6 @@ const UserFeeds = () => {
                     />
                   </Col>
                 </Row>
-
               <Row className="special-post-container">
                 {posts.map((post) => (
                   <Col sm={12} key={post.id} className="special-post">

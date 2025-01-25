@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { UserContext } from '../../../context/UserContext';
 import Swal from 'sweetalert2';
@@ -33,9 +33,13 @@ const Education = () => {
   const { userData } = useContext(UserContext);
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const [educationContents, setEducationContents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState('');
+  const [selectedContentId, setSelectedContentId] = useState(null);
+  const [pointsAwarded, setPointsAwarded] = useState(false);
+  const videoRef = useRef(null);
   const [formData, setFormData] = useState({
     title: '',
     image: null,
@@ -49,11 +53,14 @@ const Education = () => {
   }, []);
 
   const fetchEducationContents = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get('/api/education-contents');
       setEducationContents(response.data);
     } catch (error) {
       console.error('Error fetching education contents:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -97,7 +104,7 @@ const Education = () => {
     }
   };
 
-  const handleWatchVideo = (videoUrl) => {
+  const handleWatchVideo = (videoUrl, contentId) => {
     if (!userData) {
       Swal.fire({
         title: 'Login Required',
@@ -115,7 +122,99 @@ const Education = () => {
     }
 
     setSelectedVideo(videoUrl);
+    setSelectedContentId(contentId);
+    setPointsAwarded(false);
     setShowVideoModal(true);
+  };
+
+  const isYoutubeUrl = (url) => {
+    return url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=|\/sandalsResorts#\w\/\w\/.*\/))([^\/&?\n]+)/);
+  };
+
+  const getYoutubeEmbedUrl = (url) => {
+    const match = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=|\/sandalsResorts#\w\/\w\/.*\/))([^\/&?\n]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}?enablejsapi=1` : url;
+  };
+
+  const handleVideoTimeUpdate = async (e) => {
+    if (!videoRef.current || pointsAwarded) return;
+
+    let progress;
+    if (isYoutubeUrl(selectedVideo)) {
+      // For YouTube videos, we'll handle this differently
+      const iframe = document.querySelector('iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
+      }
+    } else {
+      // For direct video files
+      const video = videoRef.current;
+      progress = (video.currentTime / video.duration) * 100;
+
+      if (progress >= 80 && !pointsAwarded) {
+        try {
+          await axios.post('/api/award-video-points', {
+            content_id: selectedContentId,
+            user_id: userData.id
+          });
+          setPointsAwarded(true);
+          Swal.fire({
+            title: 'Points Awarded!',
+            text: 'You have earned 1 point for watching this video',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        } catch (error) {
+          console.error('Error awarding points:', error);
+        }
+      }
+    }
+  };
+
+  const handleYouTubePlayerStateChange = async (event) => {
+    if (!pointsAwarded && event.data === window.YT.PlayerState.PLAYING) {
+      const duration = event.target.getDuration();
+      const currentTime = event.target.getCurrentTime();
+      const progress = (currentTime / duration) * 100;
+
+      if (progress >= 80 && !pointsAwarded) {
+        try {
+          await axios.post('/api/award-video-points', {
+            content_id: selectedContentId,
+            user_id: userData.id
+          });
+          setPointsAwarded(true);
+          Swal.fire({
+            title: 'Points Awarded!',
+            text: 'You have earned 1 point for watching this video',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        } catch (error) {
+          console.error('Error awarding points:', error);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      // YouTube API is ready
+    };
+  }, []);
+
+  const handleModalClose = () => {
+    setShowVideoModal(false);
+    setSelectedVideo('');
+    setSelectedContentId(null);
+    setPointsAwarded(false);
   };
 
   return (
@@ -131,32 +230,40 @@ const Education = () => {
                 </Button>
               )}
             </div>
-            <div className="row g-3">
-              {educationContents.map((content) => (
-                <div key={content.id} className="col-sm-6 col-lg-4">
-                  <div className="card h-100">
-                    <div className="edu-card-img">
-                      <img 
-                        src={`${baseurl}/data/images/education/${content.image_path}`} 
-                        className="card-img-top" 
-                        alt={content.title} 
-                        loading="lazy" 
-                      />
-                    </div>
-                    <div className="card-body">
-                      <h4 className="card-title turncate-2">{content.title}</h4>
-                      <p className="card-text turncate-3">{content.short_description}</p>
-                      <Button 
-                        className="btn btn-primary btn-block"
-                        onClick={() => handleWatchVideo(content.video_url)}
-                      >
-                        Watch Video
-                      </Button>
+            {isLoading ? (
+              <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+                <div className="spinner-border text-primary" role="status" style={{ width: '2rem', height: '2rem' }}>
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : (
+              <div className="row g-3">
+                {educationContents.map((content) => (
+                  <div key={content.id} className="col-sm-6 col-lg-4">
+                    <div className="card h-100">
+                      <div className="edu-card-img">
+                        <img 
+                          src={`${baseurl}/data/images/education/${content.image_path}`} 
+                          className="card-img-top" 
+                          alt={content.title} 
+                          loading="lazy" 
+                        />
+                      </div>
+                      <div className="card-body">
+                        <h4 className="card-title turncate-2">{content.title}</h4>
+                        <p className="card-text turncate-3">{content.short_description}</p>
+                        <Button 
+                          className="btn btn-primary btn-block"
+                          onClick={() => handleWatchVideo(content.video_url, content.id)}
+                        >
+                          Watch Video
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -164,7 +271,7 @@ const Education = () => {
       {/* Video Modal */}
       <Modal 
         show={showVideoModal} 
-        onHide={() => setShowVideoModal(false)}
+        onHide={handleModalClose}
         size="lg"
         centered
         backdrop="static"
@@ -174,16 +281,37 @@ const Education = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="ratio ratio-16x9">
-            <iframe
-              src={selectedVideo}
-              title="Video"
-              allowFullScreen
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            ></iframe>
+            {isYoutubeUrl(selectedVideo) ? (
+              <iframe
+                src={getYoutubeEmbedUrl(selectedVideo)}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                onLoad={(e) => {
+                  if (window.YT && window.YT.Player) {
+                    new window.YT.Player(e.target, {
+                      events: {
+                        onStateChange: handleYouTubePlayerStateChange
+                      }
+                    });
+                  }
+                }}
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                src={selectedVideo}
+                className="w-100"
+                controls
+                onTimeUpdate={handleVideoTimeUpdate}
+              >
+                Your browser does not support the video tag.
+              </video>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowVideoModal(false)}>
+          <Button variant="secondary" onClick={handleModalClose}>
             Close
           </Button>
         </Modal.Footer>

@@ -1,27 +1,38 @@
 import React, { useState, useContext } from 'react'
 import { UserContext } from '../../../../context/UserContext';
 //router
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 //react-bootstrap
 import { Accordion, useAccordionButton, AccordionContext, Nav, Tooltip, OverlayTrigger } from 'react-bootstrap'
 
 
 
-function CustomToggle({ children, eventKey, onClick }) {
+function CustomToggle({ children, eventKey, onClick, to }) {
 
     const { activeEventKey } = useContext(AccordionContext);
-
     const decoratedOnClick = useAccordionButton(eventKey, (active) => onClick({ state: !active, eventKey: eventKey }));
-
     const isCurrentEventKey = activeEventKey === eventKey;
+    const location = useLocation();
+    const navigate = useNavigate();
 
     return (
-        <Link to="#" aria-expanded={isCurrentEventKey ? 'true' : 'false'} className="nav-link" role="button" onClick={(e) => {
-            decoratedOnClick(isCurrentEventKey)
-        }}>
+        <div 
+            aria-expanded={isCurrentEventKey ? 'true' : 'false'} 
+            className={`nav-link ${location.pathname === to ? 'active' : ''}`} 
+            role="button" 
+            onClick={(e) => {
+                if (e.target.closest('.right-icon')) {
+                    // If clicking the chevron icon, only toggle the dropdown
+                    decoratedOnClick(isCurrentEventKey);
+                } else {
+                    // If clicking elsewhere, navigate to the link
+                    navigate(to);
+                }
+            }}
+        >
             {children}
-        </Link>
+        </div>
     );
 }
 
@@ -44,7 +55,7 @@ const VerticalNav = React.memo(() => {
                         <span className="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
                     </Link>
                 </li>
-                <li className={`${location.pathname === '/' ? 'active' : ''} nav-item `}>
+                {/* <li className={`${location.pathname === '/' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             <i className="icon material-symbols-outlined">
@@ -53,7 +64,7 @@ const VerticalNav = React.memo(() => {
                         </OverlayTrigger>
                         <span className="item-name">Feeds</span>
                     </Link>
-                </li>
+                </li> */}
                 {userData && (
 
                 <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item `}>
@@ -80,8 +91,13 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Feeds</span>
                     </Link>
                 </li> */}
-                {/* <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item">
-                    <CustomToggle eventKey="utilities-error" active={activeMenu === 'utilities-error' ? true : false} onClick={(activeKey) => setActiveMenu(activeKey)}>
+                <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item">
+                    <CustomToggle 
+                        eventKey="utilities-error" 
+                        active={activeMenu === 'utilities-error' ? true : false} 
+                        onClick={(activeKey) => setActiveMenu(activeKey)}
+                        to="/"
+                    >
                         <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             <i className="icon material-symbols-outlined">
                                 turned_in_not
@@ -93,35 +109,44 @@ const VerticalNav = React.memo(() => {
                     <Accordion.Collapse eventKey="utilities-error">
                         <ul className="sub-nav">
                             <Nav.Item as="li">
-                                <Link className={`${location.pathname === '/errors/error404' ? 'active' : ''} nav-link`} to="/errors/error404">
-                                    <OverlayTrigger placement="right" overlay={<Tooltip>Error 404</Tooltip>}>
+                                <Link className={`${location.pathname === '/business' ? 'active' : ''} nav-link`} to="/business">
+                                    <OverlayTrigger placement="right" overlay={<Tooltip>Business Management</Tooltip>}>
                                         <i className="sidenav-mini-icon"> E  </i>
                                     </OverlayTrigger>
                                     <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
-                                    <span className="item-name">Error 404</span>
+                                    <span className="item-name">Business Management</span>
                                 </Link>
                             </Nav.Item>
                             <Nav.Item as="li">
-                                <Link className={`${location.pathname === '/errors/error500' ? 'active' : ''} nav-link`} to="/errors/error500">
-                                    <OverlayTrigger placement="right" overlay={<Tooltip>Error 500</Tooltip>}>
+                                <Link className={`${location.pathname === '/fitness' ? 'active' : ''} nav-link`} to="/fitness">
+                                    <OverlayTrigger placement="right" overlay={<Tooltip>Fitness</Tooltip>}>
                                         <i className="sidenav-mini-icon"> E  </i>
                                     </OverlayTrigger>
                                     <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
-                                    <span className="item-name">Error 500</span>
+                                    <span className="item-name">Fitness</span>
                                 </Link>
                             </Nav.Item>
                             <Nav.Item as="li">
-                                <Link className={`${location.pathname === '/extra-pages/pages-maintenance' ? 'active' : ''} nav-link`} to="/extra-pages/pages-maintenance">
-                                    <OverlayTrigger placement="right" overlay={<Tooltip>Maintenance</Tooltip>}>
+                                <Link className={`${location.pathname === '/crypto' ? 'active' : ''} nav-link`} to="/crypto">
+                                    <OverlayTrigger placement="right" overlay={<Tooltip>crypto</Tooltip>}>
                                         <i className="sidenav-mini-icon"> M  </i>
                                     </OverlayTrigger>
                                     <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
-                                    <span className="item-name">Maintenance</span>
+                                    <span className="item-name">crypto</span>
+                                </Link>
+                            </Nav.Item>
+                            <Nav.Item as="li">
+                                <Link className={`${location.pathname === '/mindset' ? 'active' : ''} nav-link`} to="/mindset">
+                                    <OverlayTrigger placement="right" overlay={<Tooltip>Mindset</Tooltip>}>
+                                        <i className="sidenav-mini-icon"> M  </i>
+                                    </OverlayTrigger>
+                                    <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
+                                    <span className="item-name">Mindset</span>
                                 </Link>
                             </Nav.Item>
                         </ul>
                     </Accordion.Collapse>
-                </Accordion.Item> */}
+                </Accordion.Item>
                 <li className={`${location.pathname === '/education' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Education</Tooltip>}>

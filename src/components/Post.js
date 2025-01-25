@@ -496,9 +496,7 @@ const Post = ({ post, onDelete }) => {
                 <form onSubmit={handleComment} className="mt-3">
                   <div className="d-flex gap-3">
                     <img
-                      src={userData && Object.keys(userData).length > 0 && userData.profile_image ? 
-                        baseurl + '/storage/' + userData.profile_image : 
-                        user1}
+                      src={getProfileImageUrl(userData)}
                       alt="user"
                       className="rounded-circle"
                       style={{ width: '40px', height: '40px' }}
