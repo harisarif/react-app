@@ -77,7 +77,7 @@ const SignIn = () => {
 
       console.log('Google login successful:', response.data);
       localStorage.setItem('access_token', response.data.access_token);
-      navigate('/');
+      window.location.href = '/'
     } catch (error) {
       console.error('Google login error:', error);
       alert('Failed to sign in with Google. Please try again.');

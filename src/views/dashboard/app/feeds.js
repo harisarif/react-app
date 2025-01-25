@@ -214,6 +214,8 @@ const UserFeeds = () => {
   });
 
   const handleNewPost = () => {
+    setHasMore(false);
+    setIsLoading(false);
     fetchPosts(1);
   };
 

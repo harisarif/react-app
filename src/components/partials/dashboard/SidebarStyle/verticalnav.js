@@ -60,16 +60,16 @@ const VerticalNav = React.memo(() => {
                         <span className="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
                     </Link>
                 </li>
-                {/* <li className={`${location.pathname === '/' ? 'active' : ''} nav-item `}>
-                    <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
+                <li className={`${location.pathname === '/home' ? 'active' : ''} nav-item `}>
+                    <Link className={`${location.pathname === '/home' ? 'active' : ''} nav-link `} aria-current="page" to="/home">
+                        <OverlayTrigger placement="right" overlay={<Tooltip>Home</Tooltip>}>
                             <i className="icon material-symbols-outlined">
-                            turned_in_not
+                            home
                             </i>
                         </OverlayTrigger>
-                        <span className="item-name">Feeds</span>
+                        <span className="item-name">Home</span>
                     </Link>
-                </li> */}
+                </li>
                 {userData && (
 
                 <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item `}>
