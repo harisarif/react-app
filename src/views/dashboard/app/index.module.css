@@ -323,10 +323,10 @@
     .cap2 { left: 883px; }
 }
 
-:global(.main-content .content-inner) {
+/* :global(.main-content .content-inner) {
     padding: 0 !important;
-}
+} */
 
 :global(.stories.storiesWrapper.carousel .story) {
     height: 90px;
-} 
+}
