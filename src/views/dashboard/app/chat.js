@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
+import axios from "../../../utils/axios";
+import { UserContext } from "../../../context/UserContext";
 import { Link } from "react-router-dom";
 import { Form, Tab, Nav, Button, Dropdown } from "react-bootstrap";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,12 +17,13 @@ import user9 from "../../../assets/images/chat/avatar/09.png";
 
 import user10 from "../../../assets/images/chat/avatar/10.png";
 import chatImg from "../../../assets/images/chat/05.png"
-
+import { getProfileImageUrl } from '../../../utils/helpers';
 //scrollbar
 import Scrollbar from "smooth-scrollbar";
 
 
 const Chat = () => {
+  const { userData, setUserData } = useContext(UserContext);
 
   useEffect(() => {
     Scrollbar.init(document.querySelector(".data-scrollbar"));
@@ -37,44 +40,27 @@ const Chat = () => {
     document.getElementsByTagName("ASIDE")[0].classList.toggle("sidebar-mini");
   };
 
-  const person_online = [
-    {
-      img: user1,
-      name: "Paul Molive"
-    },
-    {
-      img: user2,
-      name: "John Travolta"
-    },
-    {
-      img: user3,
-      name: "Barb Ackue"
-    },
-    {
-      img: user4,
-      name: "Robert Fox"
-    },
-    {
-      img: user5,
-      name: "Maya Didas"
-    },
-    {
-      img: user6,
-      name: "Monty Carlo"
-    },
-    {
-      img: user7,
-      name: "Paige Turner"
-    },
-    {
-      img: user8,
-      name: "Arnold Schwarzenegger"
-    },
-    {
-      img: user9,
-      name: "Leonardo DiCaprio"
+  const [userLists, setUserLists] = useState([]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('/api/users/list', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+      setUserLists(response.data.users);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      // Handle error appropriately
     }
-  ]
+  };
+  
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+
 
   return (
     <>
@@ -140,14 +126,14 @@ const Chat = () => {
               }}
 
             >
-              {person_online.map((ele, index) => {
+              {userLists.map((user, index) => {
                 return (
                   <SwiperSlide key={index}>
                     <div className="swiper-slide text-center" role="group" aria-label="9 / 9" style={{ width: "47.3151px", marginRight: "12px" }} key={index}>
                       <div className="messanger-box position-relative d-inline-block">
-                        <img src={ele.img} className="avatar-48 object-cover rounded-circle" alt="messanger-image" />
+                        <img src={getProfileImageUrl(user)} className="avatar-48 object-cover rounded-circle" alt="messanger-image" />
                       </div>
-                      <p className="mt-2 mb-0 font-size-14 custom-ellipsis text-body">{ele.name}</p>
+                      <p className="mt-2 mb-0 font-size-14 custom-ellipsis text-body">{user.name}</p>
                     </div>
                   </SwiperSlide>
                 )

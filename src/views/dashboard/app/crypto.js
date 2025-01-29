@@ -294,7 +294,7 @@ const UserFeeds = () => {
               <Row className="special-post-container">
                 {posts.map((post) => (
                   <Col sm={12} key={post.id} className="special-post">
-                    <Post post={post} />
+                    <Post post={post} setPosts={setPosts} posts={posts} />
                   </Col>
                 ))}
                 {loadContent && (

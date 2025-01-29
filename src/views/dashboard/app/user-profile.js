@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "../../../utils/axios";
+import { useParams } from 'react-router-dom';
 import { UserContext } from "../../../context/UserContext";
 import {
   Row,
@@ -124,6 +125,7 @@ const FsLightbox = ReactFsLightbox.default
   : ReactFsLightbox;
 
 const UserProfile = () => {
+  const { id } = useParams();
   const { userData, setUserData } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -247,16 +249,30 @@ useEffect(() => {
       const token = localStorage.getItem('access_token');
       console.log('Token:', token); 
       
-      const [profileRes, statsRes] = await Promise.all([
-        axios.get('/api/user-profile'),
-        axios.get('/api/user-stats')
-      ]);
+      if(id){
+        const [profileRes, statsRes] = await Promise.all([
+          axios.get(`/api/user-profile/${id}`),
+          axios.get(`/api/user-stats/${id}`)
+        ]);
+        console.log('Profile Response:', profileRes.data);
+        console.log('Stats Response:', statsRes.data);
+        
+        setProfileData(profileRes.data);
+        setUserStats(statsRes.data);
+      }
+      else{
+        const [profileRes, statsRes] = await Promise.all([
+          axios.get('/api/user-profile'),
+          axios.get('/api/user-stats')
+        ]);
+        console.log('Profile Response:', profileRes.data);
+        console.log('Stats Response:', statsRes.data);
+        
+        setProfileData(profileRes.data);
+        setUserStats(statsRes.data);
+      }
       
-      console.log('Profile Response:', profileRes.data);
-      console.log('Stats Response:', statsRes.data);
-      
-      setProfileData(profileRes.data);
-      setUserStats(statsRes.data);
+
     } catch (error) {
       console.error('Error details:', {
         message: error.message,
@@ -276,10 +292,18 @@ useEffect(() => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('/api/user_posts');
-        console.log('Fetched posts:', response.data.data); // Log the response
-        setPosts(response.data.data);
-        setLoadContent(false);
+        if(id){
+          const response = await axios.get(`/api/user_posts/${id}`);
+          console.log('Fetched posts:', response.data.data); // Log the response
+          setPosts(response.data.data);
+          setLoadContent(false);
+                }
+                else{
+                  const response = await axios.get('/api/user_posts');
+                  console.log('Fetched posts:', response.data.data); // Log the response
+                  setPosts(response.data.data);
+                  setLoadContent(false);
+                }
       } catch (error) {
         console.error('Error fetching posts:', error);
         setLoadContent(false);
@@ -464,13 +488,13 @@ useEffect(() => {
                       <Col lg={4} className="text-center profile-center">
 <div className="header-avatar position-relative d-inline-block">
   <img
-    src={getProfileImageUrl(userData)}
+    src={getProfileImageUrl(profileData?.user)}
     alt="user"
     className="avatar-150 border border-4 border-white rounded-3"
   />
 </div>
 <h5 className="d-flex align-items-center justify-content-center gap-1 mb-2">
-  {userData?.first_name} {userData?.last_name}
+  {profileData?.user?.first_name} {profileData?.user?.last_name} 
 </h5>
                         {/* <h5 className="d-flex align-items-center justify-content-center gap-1 mb-2">
                           Marvin McKinney{" "}
@@ -827,7 +851,7 @@ useEffect(() => {
                           </div>
                         </Col>
                         <Col lg={8}>
-                        {userData && Object.keys(userData).length > 0 ? (
+                        {userData && !id && Object.keys(userData).length > 0 ? (
   <Row>
     <Col sm={12}>
       <CreatePost className="card-block card-stretch card-height" />

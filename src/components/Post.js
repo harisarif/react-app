@@ -8,8 +8,73 @@ import axios from '../utils/axios';
 import user1 from "../assets/images/user/1.jpg";
 import { getProfileImageUrl } from '../utils/helpers';
 import moment from 'moment';
+import styled from 'styled-components';
 
-const Post = ({ post, onDelete }) => {
+const FollowButton = styled.button`
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  
+  &.follow-btn {
+    background: linear-gradient(45deg, #007bff, #6610f2);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(45deg, #0056b3, #520dc2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    }
+  }
+  
+  &.unfollow-btn {
+    background: #f8f9fa;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    
+    &:hover {
+      background: #dc3545;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .3s, opacity .5s;
+  }
+  
+  &:active::after {
+    transform: scale(0, 0);
+    opacity: .3;
+    transition: 0s;
+  }
+`;
+
+const Post = ({ post,posts,setPosts, onDelete }) => {
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const [comments, setComments] = useState(post.comments || []);
   const [likes, setLikes] = useState(post.likes || []);
@@ -264,6 +329,63 @@ const Post = ({ post, onDelete }) => {
     setSelectedMedia(post.media[currentMediaIndex]);
   };
 
+  const handleFollow = async (userId) => {
+    if (!userData) {
+      Swal.fire({
+        title: 'Please Login',
+        text: 'You need to be logged in to follow users',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Login',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/auth/sign-in';
+        }
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(`/api/follow/${userId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+
+      if (response.data.status === 'success') {
+        // Update the post's is_following status
+        setPosts(posts.map(p => {
+          if (p.user?.id === userId) {
+            return {
+              ...p,
+              is_following: !p.is_following
+            };
+          }
+          return p;
+        }));
+
+        // Show success message
+        Swal.fire({
+          title: 'Success',
+          text: response.data.message,
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }
+    } catch (error) {
+      console.error('Error following/unfollowing user:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to follow/unfollow user',
+        icon: 'error',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+  };
+
   return (
     <>
       <Card className="card-block card-stretch card-height">
@@ -288,6 +410,25 @@ const Post = ({ post, onDelete }) => {
                         </svg>
                       </span>
                     )}
+                    {post.user?.id != userData?.id && (
+                    <FollowButton
+                      className={`ms-2 ${post?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
+                      onClick={() => handleFollow(post.user?.id)}
+                    >
+                      {post?.is_following ? (
+                        <>
+                          <i className="ri-user-unfollow-line"></i>
+                          Unfollow
+                        </>
+                      ) : (
+                        <>
+                          <i className="ri-user-follow-line"></i>
+                          Follow
+                        </>
+                      )}
+                    </FollowButton>
+                  )}
+
                     <p className="mb-0">
                       {moment(post.created_at).fromNow()}
                       {' '}

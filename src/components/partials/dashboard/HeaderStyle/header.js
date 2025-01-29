@@ -1,9 +1,12 @@
-import React, { useState , useEffect,useContext } from "react";
+import React, { useState , useEffect, useContext } from "react";
 import { UserContext } from '../../../../context/UserContext';
-import axios from 'axios';
+import { NotificationContext } from '../../../../context/NotificationContext';
+import axios from '../../../../utils/axios';
+import '../../../../../src/utils/echo';  // Import Echo configuration
 import { Nav, Form, Card, Container, Image, Dropdown, Navbar } from "react-bootstrap";
 import { Link , useLocation } from "react-router-dom";
 import { getProfileImageUrl } from '../../../../utils/helpers';
+import moment from 'moment';
 //image
 import user1 from "../../../../assets/images/user/1.jpg";
 import user2 from "../../../../assets/images/user/02.jpg";
@@ -21,15 +24,49 @@ import equity from "../../../../assets/images/Equity_Circle.png";
 import * as SettingSelector from "../../../../store/setting/selectors";
 
 // Redux Selector / Action
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import SearchModal from "../../../search-modal";
 
 const Header = () => {
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const { userData, setUserData } = useContext(UserContext);
+  const { notification } = useContext(NotificationContext);
+  const dispatch = useDispatch();
   const appName = useSelector(SettingSelector.app_name);
   const location = useLocation();
   const [active, setActive] = useState("home");
+  const [notifications, setNotifications] = useState([]);
+  const [totalUnread, setTotalUnread] = useState(0);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    if (notification || userData) {
+      fetchNotifications();
+    }
+  }, [notification, userData]);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get('/api/notifications');
+        console.log('Fetched notifications:', response.data);
+      setNotifications(response.data.notifications);
+      setTotalUnread(response.data.total_unread);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  const handleNotificationClick = async () => {
+    if (totalUnread > 0) {
+      try {
+        // You can add an API call here to mark notifications as read
+        // setUnreadCount(0);
+        // showNotifications(false);
+      } catch (error) {
+        console.error('Error marking notifications as read:', error);
+      }
+    }
+  };
 
   const minisidebar = () => {
     const sidebarMini = document.getElementsByTagName("ASIDE")[0];
@@ -296,29 +333,27 @@ const Header = () => {
                 </Dropdown.Menu>
               </Dropdown> */}
 
-              <Nav.Item as="li" className="d-lg-none">
-                <Dropdown bsPrefix=" " className="iq-search-bar device-search ">
-                  <Dropdown.Toggle
-                    as="form"
-                    bsPrefix=" "
-                    className="searchbo open-modal-search"
-                  >
-                    <Link className="d-lg-none d-flex text-body" to="#">
-                      <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="7.82491" cy="7.82495" r="6.74142" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></circle>
-                        <path d="M12.5137 12.8638L15.1567 15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                      </svg>
-                    </Link>
-                    <Form.Control
-                      type="text"
-                      className="text search-input form-control bg-soft-primary  d-none d-lg-block"
-                      placeholder="Search here..."
-                    />
+              <Dropdown as="li" className="nav-item d-lg-none">
+                <Dropdown.Toggle
+                  as="form"
+                  bsPrefix=" "
+                  className="searchbo open-modal-search"
+                >
+                  <Link className="d-lg-none d-flex text-body" to="#">
+                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="7.82491" cy="7.82495" r="6.74142" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></circle>
+                      <path d="M12.5137 12.8638L15.1567 15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                    </svg>
+                  </Link>
+                  <Form.Control
+                    type="text"
+                    className="text search-input form-control bg-soft-primary  d-none d-lg-block"
+                    placeholder="Search here..."
+                  />
 
-                  </Dropdown.Toggle>
-                  <SearchModal />
-                </Dropdown>
-              </Nav.Item>
+                </Dropdown.Toggle>
+                <SearchModal />
+              </Dropdown>
 
               <Dropdown className="nav-item " as="li">
                 <Dropdown.Toggle as="a" bsPrefix=" "
@@ -512,7 +547,7 @@ const Header = () => {
                     </div>
                     <Card.Body className="p-0">
                       <div className="item-header-scroll">
-                        <Link to="#">
+                        <Link to="#" className="text-body">
                           <div className="thread d-flex align-items-center justify-content-between rounded-0">
                             <div>
                               <img
@@ -531,7 +566,7 @@ const Header = () => {
                             <small className="text-body">1 hr. ago</small>
                           </div>
                         </Link>
-                        <Link to="#">
+                        <Link to="#" className="text-body">
                           <div className="thread d-flex align-items-center justify-content-between rounded-0">
                             <div>
                               <img
@@ -550,7 +585,7 @@ const Header = () => {
                             <small className="text-body">4 hr. ago</small>
                           </div>
                         </Link>
-                        <Link to="#">
+                        <Link to="#" className="text-body">
                           <div className="thread d-flex align-items-center justify-content-between rounded-0">
                             <div>
                               <img
@@ -569,7 +604,7 @@ const Header = () => {
                             <small className="text-body">9 hr. ago</small>
                           </div>
                         </Link>
-                        <Link to="#">
+                        <Link to="#" className="text-body">
                           <div className="thread d-flex align-items-center justify-content-between rounded-0">
                             <div>
                               <img
@@ -702,107 +737,65 @@ const Header = () => {
                 </Dropdown.Menu>
               </Dropdown>
 
-              <Dropdown as="li" className="nav-item">
-                <Dropdown.Toggle as="a"
-                  className="search-toggle d-flex align-items-center"
+              <Dropdown
+                as="li"
+                className="nav-item"
+                show={showNotifications}
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
+                <Dropdown.Toggle
+                  as="a"
+                  bsPrefix=" "
+                  className="nav-link"
                   id="notification-drop"
+                  onClick={handleNotificationClick}
                 >
-                  <span className="material-symbols-outlined position-relative">
+                  <span className="mt-20-imp material-symbols-outlined position-relative">
                     notifications
-                    <span className="bg-primary text-white notification-badge"></span>
+                    {totalUnread > 0 && (
+                      <span className="notification-badge">
+                        {totalUnread}
+                      </span>
+                    )}
                   </span>
                 </Dropdown.Toggle>
-                <Dropdown.Menu
-                  className={`sub-drop header-notification `}
-                  aria-labelledby="notification-drop"
-                  data-bs-popper="static"
-                >
-                  <Card className=" m-0 shadow main-wrapper">
-                    <div className="card-header d-flex justify-content-between px-0 pb-4 mx-5 border-bottom">
-                      <div className="header-title">
-                        <h5 className="fw-semibold">Notifications</h5>
+                <Dropdown.Menu className="sub-drop">
+                  <Card className="shadow-none m-0">
+                    <Card.Header className="d-flex justify-content-between bg-primary">
+                      <div className="header-title bg-primary">
+                        <h5 className="mb-0 text-white">Notifications</h5>
                       </div>
-                      <h6 className="material-symbols-outlined">settings</h6>
-                    </div>
-                    <Card.Body>
-                      <div className="item-header-scroll">
-                        <Link to="#">
-                          <div className="d-flex gap-3 mb-4">
-                            <img
-                              className="avatar-32 "
-                              src={user5}
-                              alt=""
-                            />
-                            <div>
-                              <h6 className="font-size-14 add-in-ellipsis">
-                                Pete Sariya{" "}
-                                <span className="text-body fw-normal">
-                                  voted for
-                                </span>{" "}
-                                combination of colors from your brand palette{" "}
-                              </h6>
-                              <small className="text-body fw-500">
-                                1 month ago
-                              </small>
+                    </Card.Header>
+                    <Card.Body className="p-0">
+                      {notifications.length === 0 ? (
+                        <div className="text-center p-3">
+                          <p className="mb-0">No notifications</p>
+                        </div>
+                      ) : (
+                        notifications.map((notification, index) => (
+                          <Link key={index} to="#" className="iq-sub-card">
+                            <div className="d-flex align-items-center">
+                              <div className="">
+                                <Image
+                                  className="avatar-40 rounded"
+                                  src={notification.sender?.profile_image || '/default-avatar.png'}
+                                  alt=""
+                                  loading="lazy"
+                                />
+                              </div>
+                              <div className="ms-3 w-100">
+                                <h6 className="mb-0">{notification.sender?.name || 'Unknown User'}</h6>
+                                <div className="d-flex justify-content-between align-items-center">
+                                  <p className="mb-0">{notification.message}</p>
+                                  <small className="float-right font-size-12">
+                                    {new Date(notification.created_at).toLocaleDateString()}
+                                  </small>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                        <Link to="#">
-                          <div className="d-flex gap-3 mb-4">
-                            <img
-                              className="avatar-32 "
-                              src={user2}
-                              alt=""
-                              loading="lazy"
-                            />
-                            <div>
-                              <h6 className="font-size-14 add-in-ellipsis">
-                                Dima Davydov{" "}
-                                <span className="text-body fw-normal">
-                                  replied to your
-                                </span>{" "}
-                                <span className="text-primary fw-semibold">
-                                  Comment
-                                </span>
-                              </h6>
-                              <small className="text-body fw-500">
-                                1 month ago
-                              </small>
-                            </div>
-                          </div>
-                        </Link>
-                        <Link to="#">
-                          <div className="d-flex gap-3 mb-4">
-                            <img
-                              className="avatar-32 "
-                              src={user3}
-                              alt=""
-                              loading="lazy"
-                            />
-                            <div>
-                              <h6 className="font-size-14 add-in-ellipsis">
-                                Esther Howard{" "}
-                                <span className="text-body fw-normal">
-                                  reacted comment in to your{" "}
-                                </span>
-                                <span className="text-primary fw-semibold">
-                                  post
-                                </span>
-                                .
-                              </h6>
-                              <small className="text-body fw-500">
-                                19 min ago
-                              </small>
-                            </div>
-                          </div>
-                        </Link>
-                      </div>
-                      <button
-                        type="button"
-                        className="btn btn-primary fw-500 w-100"
-                      >
-                        View All Notifications
-                      </button>
+                          </Link>
+                        ))
+                      )}
                     </Card.Body>
                   </Card>
                 </Dropdown.Menu>
@@ -1001,7 +994,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
-
-

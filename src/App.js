@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserContext } from './context/UserContext';
+import { NotificationProvider } from './context/NotificationContext';
 import axios from 'axios';
 //scss
 import "./assets/scss/socialv.scss"
@@ -48,8 +49,10 @@ function App({ children }) {
 
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
-      {/* Your existing App content */}
-      {children}
+      <NotificationProvider>
+        {/* Your existing App content */}
+        {children}
+      </NotificationProvider>
     </UserContext.Provider>
   );
 }
