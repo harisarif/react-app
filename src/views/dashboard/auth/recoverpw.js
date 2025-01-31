@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Form, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from "../../../utils/axios";
+import { toast } from "react-toastify";
 
 //swiper
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,7 +10,6 @@ import SwiperCore from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
 
 // img
-// import logo from "../../../assets/images/logo-full.png";
 import login1 from "../../../assets/images/login/1.jpg";
 import login2 from "../../../assets/images/login/2.jpg";
 import login3 from "../../../assets/images/login/3.jpg";
@@ -22,7 +23,36 @@ import { useSelector } from "react-redux";
 SwiperCore.use([Navigation, Autoplay]);
 
 const Recoverpw = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const appName = useSelector(SettingSelector.app_name);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      const response = await axios.post("/api/forgot-password", { email });
+      setSuccess(response.data.message);
+      toast.success(response.data.message);
+    } catch (err) {
+      const message = err.response?.data?.error || err.response?.data?.message || "Something went wrong";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -123,21 +153,40 @@ const Recoverpw = () => {
                   Enter your email address and we'll send you an email with
                   instructions to reset your password.
                 </p>
-                <Form className="mt-5">
+                {error && (
+                  <div className="alert alert-danger" role="alert">
+                    {error}
+                  </div>
+                )}
+                {success && (
+                  <div className="alert alert-success" role="alert">
+                    {success}
+                  </div>
+                )}
+                <Form className="mt-5" onSubmit={handleSubmit}>
                   <Form.Group className="form-group text-start mb-0">
                     <h6 className="form-label fw-bold">Email Address</h6>
                     <Form.Control
                       type="email"
                       className="form-control mb-0"
-                      placeholder="Your Full Name"
-                      defaultValue="Enter email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
                     />
                   </Form.Group>
                   <button
-                    type="button"
+                    type="submit"
                     className="btn btn-primary mt-4 fw-semibold text-uppercase letter-spacing-1"
+                    disabled={loading}
                   >
-                    reset password
+                    {loading ? (
+                      <div className="spinner-border spinner-border-sm" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    ) : (
+                      "Reset Password"
+                    )}
                   </button>
                 </Form>
               </div>

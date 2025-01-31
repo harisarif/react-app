@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState, useCallback, useRef } from "react";
 import axios from "../../../../utils/axios";
 import { UserContext } from "../../../../context/UserContext";
 import { NotificationContext } from '../../../../context/NotificationContext';
@@ -23,7 +23,6 @@ import moment from 'moment';
 
 const RightSidebar = () => {
   const { userData, setUserData } = useContext(UserContext);
-  const { notification } = useContext(NotificationContext);
 
   const [userLists, setUserLists] = useState([]);
   const [MessageLoading, setMessageloading] = useState(false);
@@ -33,10 +32,22 @@ const RightSidebar = () => {
   const [newMessage, setNewMessage] = useState('');
   const [unreadCount, setUnreadCount] = useState(0);
   const [conversationUnreadCounts, setConversationUnreadCounts] = useState({});
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const chatBodyRef = useRef(null);
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+
+  const { 
+    notifications, 
+    totalUnread,
+    fetchNotifications 
+  } = useContext(NotificationContext);
 
   // Debounced search function
   const debouncedSearch = useCallback(
@@ -101,7 +112,24 @@ const RightSidebar = () => {
 
   const { userData: user } = useContext(UserContext);
   const { notification: notif } = useContext(NotificationContext);
-  let isMounted = true;
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
+
+  const scrollToBottom = useCallback(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, []);
+
+  // Effect for auto-scrolling
+  useEffect(() => {
+    if (shouldScrollToBottom && chatBodyRef.current) {
+      scrollToBottom();
+      setShouldScrollToBottom(false);
+    }
+  }, [messages, shouldScrollToBottom, scrollToBottom]);
 
   const fetchData = async () => {
     try {
@@ -127,9 +155,6 @@ const RightSidebar = () => {
     if (user) {
       fetchData();
     }
-    return () => {
-      isMounted = false;
-    };
   }, [user]);
 
   // Listen for new notifications
@@ -139,67 +164,93 @@ const RightSidebar = () => {
     }
   }, [notif]);
 
-  useEffect(() => {
-    let isMounted = true;
+  const handleChatClose = () => {
+    setActiveChat(null);
+    setMessages([]);
+    setPage(1);
+    setHasMore(true);
+    const modal = document.getElementById('chat-popup-modal');
+    if (modal) {
+      modal.classList.remove('show');
+    }
+  };
 
-    const fetchMessages = async () => {
-      if (activeChat) {
-        try {
-          const response = await axios.get(`/api/messages/${activeChat.id}`);
-          if (isMounted) {
-            setMessages(response.data.messages);
+  const fetchMessages = async (pageNum = 1, append = false) => {
+    if (!activeChat || !isMounted) return;
+
+    try {
+      setIsLoadingMore(pageNum > 1);
+      const response = await axios.get(`/api/messages/${activeChat.id}?page=${pageNum}`);
+      
+      if (!isMounted) return;
+
+      const newMessages = Array.isArray(response.data.messages) 
+        ? response.data.messages 
+        : Object.values(response.data.messages);
+
+      if (append) {
+        // Store current scroll position
+        const chatList = chatBodyRef.current;
+        const oldScrollHeight = chatList.scrollHeight;
+        const oldScrollTop = chatList.scrollTop;
+
+        setMessages(prev => [...newMessages, ...prev]);
+
+        // After state update, restore scroll position
+        setTimeout(() => {
+          if (chatList) {
+            const newScrollHeight = chatList.scrollHeight;
+            const scrollDiff = newScrollHeight - oldScrollHeight;
+            chatList.scrollTop = oldScrollTop + scrollDiff;
           }
-          const modal = document.getElementById('chat-popup-modal');
-          if (modal) {
-            modal.classList.add('show');
-          }
-        } catch (error) {
-          console.error('Error fetching messages:', error);
+        }, 0);
+      } else {
+        setMessages(newMessages);
+        setShouldScrollToBottom(true);
+      }
+      setHasMore(response.data.has_more);
+
+      if (pageNum === 1) {
+        const modal = document.getElementById('chat-popup-modal');
+        if (modal) {
+          fetchNotifications();
+          modal.classList.add('show');
+          setShouldScrollToBottom(true);
         }
       }
-    };
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
 
-    fetchMessages();
-    return () => {
-      isMounted = false;
-    };
+  // Initial load of messages when chat opens
+  useEffect(() => {
+    if (activeChat) {
+      setPage(1);
+      setHasMore(true);
+      fetchMessages(1, false);
+    }
   }, [activeChat]);
 
-  // Add Pusher effect for real-time messages
-  useEffect(() => {
-    if (!userData) return;
+  const handleScroll = useCallback((e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    
+    // Calculate scroll percentage from top
+    const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+    
+    // Load more when scrolled up to about 20% from top (approximately 8 messages)
+    if (scrollPercentage < 20 && hasMore && !isLoadingMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchMessages(nextPage, true);
+    }
 
-    const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
-      cluster: process.env.REACT_APP_PUSHER_CLUSTER,
-    });
-
-    const channel = pusher.subscribe(`chat.${userData.id}`);
-    channel.bind('new-message', async (data) => {
-      console.log("New message received:", data.message);
-      
-      // Update messages if we're in the active chat
-      if (data.message.sender_id === activeChat?.id) {
-        setMessages(prev => [...prev, data.message]);
-      }
-      
-      // Fetch latest unread counts
-      try {
-        const unread = await axios.get('/api/messages/unread-count');
-        setUnreadCount(unread.data.total_count);
-        setConversationUnreadCounts(unread.data.conversation_counts || {});
-      } catch (error) {
-        console.error('Error fetching unread counts:', error);
-      }
-      
-      // Refresh conversations list to update last message
-      fetchConversations();
-    });
-
-    return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
-    };
-  }, [userData, activeChat]);
+    // Update auto-scroll flag based on scroll position
+    const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 50;
+    setShouldScrollToBottom(isAtBottom);
+  }, [page, hasMore, isLoadingMore]);
 
   const handleChatOpen = async (conversation) => {
     setActiveChat(conversation);
@@ -217,33 +268,48 @@ const RightSidebar = () => {
   };
 
   const handleSendMessage = async (e) => {
-    setMessageloading(true);
     e.preventDefault();
-    if (!newMessage.trim() || !activeChat) return;
+    if (!newMessage.trim() || MessageLoading) return;
 
+    setMessageloading(true);
     try {
       const response = await axios.post('/api/messages/send', {
         recipient_id: activeChat.id,
-        message: newMessage.trim()
+        message: newMessage
       });
-      
-      // Add the new message to the list immediately
+
       setMessages(prev => [...prev, response.data]);
-      setMessageloading(false);
       setNewMessage('');
+      setShouldScrollToBottom(true);
     } catch (error) {
       console.error('Error sending message:', error);
+    } finally {
+      setMessageloading(false);
     }
   };
 
-  const handleChatClose = () => {
-    setActiveChat(null);
-    setMessages([]);
-    const modal = document.getElementById('chat-popup-modal');
-    if (modal) {
-      modal.classList.remove('show');
-    }
-  };
+  // Listen for new messages with Pusher
+  useEffect(() => {
+    if (!userData?.id) return;
+
+    const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+      cluster: process.env.REACT_APP_PUSHER_CLUSTER,
+    });
+
+    const channel = pusher.subscribe(`chat.${userData.id}`);
+    channel.bind('new-message', async (data) => {
+      if (data.message.sender_id === activeChat?.id) {
+        setMessages(prev => [...prev, data.message]);
+        setShouldScrollToBottom(true);
+      }
+      fetchConversations();
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, [userData, activeChat]);
 
   const minirightsidebar = () => {
     document.getElementById("rightSidebar").classList.toggle("right-sidebar");
@@ -462,27 +528,6 @@ const RightSidebar = () => {
                     </Tab.Pane>
                     <Tab.Pane eventKey={"second"}>
                     {userLists?.users?.map((user, index) => (
-                            // <div
-                            //   key={index}
-                            //   className="d-flex align-items-center p-2 cursor-pointer hover-bg-light rounded"
-                            //   onClick={() => handleStartConversation(user)}
-                            //   style={{ cursor: 'pointer' }}
-                            // >
-                            //   <div className="iq-profile-avatar status-online me-3">
-                            //     <img
-                            //       className="rounded-circle avatar-40"
-                            //       src={getProfileImageUrl(user)}
-                            //       alt={user?.name}
-                            //       loading="lazy"
-                            //     />
-                            //   </div>
-                            //   <div>
-                            //     <h6 className="mb-0 font-size-14">{user?.name}</h6>
-                            //     <p className="mb-0 font-size-12 text-muted">
-                            //       {user.email}
-                            //     </p>
-                            //   </div>
-                            // </div>
                             <div
                             className="d-flex align-items-center justify-content-between chat-tabs-content border-bottom"
                             data-target="chat-popup-modal"
@@ -576,8 +621,22 @@ const RightSidebar = () => {
                 </span>
               </div>
             </div>
-            <div className="chat-popup-body p-3 border-bottom">
-              <ul className="list-inline p-0 mb-0 chat">
+            <div 
+              className="chat-popup-body p-3 border-bottom"
+            >
+              {isLoadingMore && (
+                <div className="text-center mb-2">
+                  <div className="spinner-border spinner-border-sm text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              )}
+              <ul 
+                className="list-inline p-0 mb-0 chat"
+                ref={chatBodyRef}
+                onScroll={handleScroll}
+                style={{ maxHeight: '400px', overflowY: 'auto' }}
+              >
                 <li>
                   <div className="text-center">
                     <span className="time font-size-12 text-primary">Today</span>

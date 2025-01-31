@@ -29,43 +29,28 @@ import SearchModal from "../../../search-modal";
 
 const Header = () => {
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
-  const { userData, setUserData } = useContext(UserContext);
-  const { notification } = useContext(NotificationContext);
+  const { userData } = useContext(UserContext);
+  const { 
+    notifications, 
+    totalUnread,
+    fetchNotifications 
+  } = useContext(NotificationContext);
   const dispatch = useDispatch();
   const appName = useSelector(SettingSelector.app_name);
   const location = useLocation();
   const [active, setActive] = useState("home");
-  const [notifications, setNotifications] = useState([]);
-  const [totalUnread, setTotalUnread] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
-
-  useEffect(() => {
-    if (notification || userData) {
-      fetchNotifications();
-    }
-  }, [notification, userData]);
-
-  const fetchNotifications = async () => {
-    try {
-      const response = await axios.get('/api/notifications');
-        console.log('Fetched notifications:', response.data);
-      setNotifications(response.data.notifications);
-      setTotalUnread(response.data.total_unread);
-    } catch (error) {
-      console.error('Error fetching notifications:', error);
-    }
-  };
 
   const handleNotificationClick = async () => {
     if (totalUnread > 0) {
       try {
-        // You can add an API call here to mark notifications as read
-        // setUnreadCount(0);
-        // showNotifications(false);
+        await axios.post('/api/notifications/mark-as-read');
+        fetchNotifications(); // Refresh notifications after marking as read
       } catch (error) {
         console.error('Error marking notifications as read:', error);
       }
     }
+    setShowNotifications(!showNotifications);
   };
 
   const minisidebar = () => {

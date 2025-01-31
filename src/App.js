@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { UserContext } from './context/UserContext';
 import { NotificationProvider } from './context/NotificationContext';
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 //scss
 import "./assets/scss/socialv.scss"
 import "./assets/custom/app.css"
@@ -48,12 +50,25 @@ function App({ children }) {
   dispatch(setSetting());
 
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
-      <NotificationProvider>
-        {/* Your existing App content */}
-        {children}
-      </NotificationProvider>
-    </UserContext.Provider>
+    <div className="App">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <UserContext.Provider value={{ userData, setUserData }}>
+        <NotificationProvider>
+          {/* Your existing App content */}
+          {children}
+        </NotificationProvider>
+      </UserContext.Provider>
+    </div>
   );
 }
 

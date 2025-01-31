@@ -875,3 +875,120 @@ all: unset !important;
   right: -5px !important;
   font-weight: 600 !important;
 }
+
+.chat-popup-modal .chat-popup-body .chat {
+    height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.chat-popup-modal .chat-popup-body .chat::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-popup-modal .chat-popup-body .chat::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-popup-modal .chat-popup-body .chat::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+/* Image Cropper Styles */
+.crop-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.ReactCrop {
+    max-height: 400px;
+}
+
+.ReactCrop__crop-selection {
+    border-radius: 50%;
+}
+
+.ReactCrop__drag-handle {
+    background-color: #007bff;
+}
+
+.ReactCrop__drag-handle::after {
+    background-color: #007bff;
+}
+
+.ReactCrop__drag-bar {
+    background-color: rgba(0, 123, 255, 0.5);
+}
+
+/* Background Image Styles */
+.header-for-bg {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.background-header {
+    height: 300px;
+    overflow: hidden;
+}
+
+.background-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.change-background-button {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1;
+}
+
+/* Background Image Cropper Styles */
+.ReactCrop.background-crop {
+    max-height: 500px;
+}
+
+.ReactCrop.background-crop .ReactCrop__crop-selection {
+    border-radius: 0;
+    border: 2px solid #007bff;
+}
+
+/* Profile Edit Button Styles */
+.upload-icone {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 25px !important;
+    height: 25px !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-icone:hover {
+    transform: scale(1.1);
+    background-color: #0056b3 !important;
+}
+
+.upload-icone input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.upload-icone svg {
+    width: 14px;
+    height: 14px;
+    z-index: 0;
+}

@@ -3,7 +3,7 @@ import React from "react";
 // auth
 import ConfirmMail from "../views/dashboard/auth/confirm-mail";
 import LockScreen from "../views/dashboard/auth/lock-screen";
-import Recoverpw from "../views/dashboard/auth/recoverpw";
+// import Recoverpw from "../views/dashboard/auth/recoverpw";
 import SignIn from "../views/dashboard/auth/sign-in";
 
 import Index from "../views/dashboard/app/index";
@@ -17,6 +17,9 @@ import Error500 from "../views/dashboard/errors/error500";
 import Maintenance from "../views/dashboard/extrapages/maintenance";
 import ComingSoon from "../views/dashboard/extrapages/comingsoon";
 
+import Recoverpw from '../views/dashboard/auth/recoverpw'
+import ResetPassword from '../views/dashboard/auth/resetpw'
+
 export const SimpleRouter = [
   {
     path: "auth/confirm-mail",
@@ -25,10 +28,20 @@ export const SimpleRouter = [
   {
     path: "auth/lock-screen",
     element: <LockScreen />,
+
+  },
+  // {
+  //   path: "auth/recoverpw",
+  //   element: <Recoverpw />,
+  // },
+  // ,
+  {
+    path: '/auth/recover-password',
+    element: <Recoverpw />
   },
   {
-    path: "auth/recoverpw",
-    element: <Recoverpw />,
+    path: '/auth/reset-password',
+    element: <ResetPassword />
   },
   {
     path: "/home",

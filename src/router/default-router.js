@@ -91,6 +91,9 @@ import TermsofService from "../views/dashboard/extrapages/terms-of-service";
 import BlankPage from "../views/dashboard/extrapages/blankpage";
 import Admin from "../views/dashboard/app/admin";
 
+import Recoverpw from '../views/dashboard/auth/recoverpw'
+import ResetPassword from '../views/dashboard/auth/resetpw'
+
 export const DefaultRouter = [
  
   {
@@ -416,5 +419,5 @@ export const DefaultRouter = [
   {
     path: "dashboard/form/form-radio",
     element: <FormRadio />,
-  },
+  }
 ];

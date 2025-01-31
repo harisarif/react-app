@@ -92,7 +92,7 @@ import pizza from "../../../assets/images/page-img/pizza.webp";
 import busImg from "../../../assets/images/page-img/bus.webp";
 import boyImg from "../../../assets/images/page-img/boy.webp";
 import img11 from "../../../assets/images/page-img/fd.webp";
-import { getProfileImageUrl } from '../../../utils/helpers';
+import { getProfileImageUrl , getBackgroundProfileImageUrl } from '../../../utils/helpers';
 
 import crypto1 from "../../../assets/images/page-img/crypto(1).jpg";
 import crypto2 from "../../../assets/images/page-img/crypto(2).jpg";
@@ -375,7 +375,7 @@ useEffect(() => {
           <div
             className="header-cover-img"
             style={{
-              backgroundImage: `url(${business1})`,
+              backgroundImage: `url(${getBackgroundProfileImageUrl(userData)})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
@@ -494,7 +494,7 @@ useEffect(() => {
   />
 </div>
 <h5 className="d-flex align-items-center justify-content-center gap-1 mb-2">
-  {profileData?.user?.first_name} {profileData?.user?.last_name} 
+  {profileData?.user?.name}  
 </h5>
                         {/* <h5 className="d-flex align-items-center justify-content-center gap-1 mb-2">
                           Marvin McKinney{" "}
