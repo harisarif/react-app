@@ -49,6 +49,7 @@ const JobList = () => {
             <Button 
               variant="primary" 
               onClick={() => setShowCreateModal(true)}
+              className="mb-3 d-flex align-items-center"
             >
               <span className="material-symbols-outlined me-2">add</span>
               Create Job
@@ -89,9 +90,20 @@ const JobList = () => {
                             </Link>
                           </h4>
                           <p className="card-text turncate-3">{job.short_description}</p>
-                          <Link to={`/job-list-detail/${job.id}`} className="btn btn-primary btn-block">
-                            Read More
-                          </Link>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <Link to={`/job-list-detail/${job.id}`} className="btn btn-primary">
+                              Read More
+                            </Link>
+                            {userData && job.application && (
+                              <span className={`badge ms-2 ${
+                                job.application.status === 'accepted' ? 'bg-success' :
+                                job.application.status === 'rejected' ? 'bg-danger' :
+                                'bg-info'
+                              }`}>
+                                Status: {job.application.status}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

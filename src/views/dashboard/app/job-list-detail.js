@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, Container } from 'react-bootstrap';
 import axios from '../../../utils/axios';
+import Swal from 'sweetalert2';
 
 const JobDetail = () => {
   const { id } = useParams();
@@ -25,6 +26,67 @@ const JobDetail = () => {
 
     fetchJob();
   }, [id]);
+
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    country: '',
+    company: '',
+    job_title: ''
+  })
+  const [submitLoading, setSubmitLoading] = useState(false)
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setSubmitLoading(true)
+
+    try {
+      const response = await axios.post('/api/job-applications', {
+        ...formData,
+        job_id: id // Assuming you have the job id from URL or props
+      })
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Your job application has been submitted successfully.',
+        confirmButtonColor: '#3085d6'
+      })
+
+      // Reset form
+      setFormData({
+        first_name: '',
+        last_name: '',
+        email: '',
+        country: '',
+        company: '',
+        job_title: ''
+      })
+
+    } catch (error) {
+      const errorMessage = error.response?.data?.errors 
+        ? Object.values(error.response.data.errors).flat().join('\n')
+        : 'Something went wrong. Please try again.'
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: errorMessage,
+        confirmButtonColor: '#d33'
+      })
+    } finally {
+      setSubmitLoading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -105,14 +167,11 @@ const JobDetail = () => {
               your inbox.
             </p>
             <form
-              method="POST"
+              onSubmit={handleSubmit}
               className="mt-5"
-              action="{{ route('login') }}"
               data-toggle="validator"
             >
-              {"{"}
-              {"{"} csrf_field() {"}"}
-              {"}"}
+              
               <div className="form-group text-start">
                 <h6 htmlFor="email" className="form-label fw-bold">
                   First Name
@@ -125,6 +184,8 @@ const JobDetail = () => {
                   placeholder="Enter  Your  First  Name"
                   required=""
                   autofocus=""
+                  value={formData.first_name}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group text-start">
@@ -139,6 +200,8 @@ const JobDetail = () => {
                   placeholder="Enter Your Last Name"
                   required=""
                   autofocus=""
+                  value={formData.last_name}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group text-start">
@@ -153,13 +216,15 @@ const JobDetail = () => {
                   placeholder="user@example.com"
                   required=""
                   autofocus=""
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group text-start">
                 <h6 htmlFor="email" className="form-label fw-bold">
                   Country
                 </h6>
-                <select name="country" className="form-select" id="country">
+                <select name="country" className="form-select" id="country" value={formData.country} onChange={handleInputChange}>
                   <option value="">Select a country</option>
                   <option value="AF">Afghanistan</option>
                   <option value="AL">Albania</option>
@@ -375,6 +440,8 @@ const JobDetail = () => {
                   placeholder=""
                   required=""
                   autofocus=""
+                  value={formData.company}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group text-start">
@@ -389,13 +456,23 @@ const JobDetail = () => {
                   placeholder=""
                   required=""
                   autofocus=""
+                  value={formData.job_title}
+                  onChange={handleInputChange}
                 />
               </div>
               <button
                 type="submit"
                 className="btn btn-primary mt-4 fw-semibold text-uppercase w-100"
+                disabled={submitLoading}
               >
-                Get Our Copy
+                {submitLoading ? (
+                  <div className="d-flex align-items-center justify-content-center">
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Submitting...
+                  </div>
+                ) : (
+                  'Apply for job'
+                )}
               </button>
             </form>
           </div>

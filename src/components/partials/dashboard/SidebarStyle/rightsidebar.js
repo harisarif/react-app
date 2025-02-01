@@ -20,12 +20,12 @@ import { getProfileImageUrl } from '../../../../utils/helpers';
 import { Link, useNavigate } from "react-router-dom";
 import { debounce } from 'lodash';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 const RightSidebar = () => {
   const { userData, setUserData } = useContext(UserContext);
 
   const [userLists, setUserLists] = useState([]);
-  const [MessageLoading, setMessageloading] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -36,7 +36,7 @@ const RightSidebar = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const chatBodyRef = useRef(null);
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,6 +48,9 @@ const RightSidebar = () => {
     totalUnread,
     fetchNotifications 
   } = useContext(NotificationContext);
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
 
   // Debounced search function
   const debouncedSearch = useCallback(
@@ -117,19 +120,22 @@ const RightSidebar = () => {
     return () => setIsMounted(false);
   }, []);
 
-  const scrollToBottom = useCallback(() => {
-    if (chatBodyRef.current) {
-      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-    }
-  }, []);
+  const messagesEndRef = useRef(null);
 
-  // Effect for auto-scrolling
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
-    if (shouldScrollToBottom && chatBodyRef.current) {
+    if (shouldScrollToBottom) {
       scrollToBottom();
       setShouldScrollToBottom(false);
     }
-  }, [messages, shouldScrollToBottom, scrollToBottom]);
+  }, [shouldScrollToBottom]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const fetchData = async () => {
     try {
@@ -182,6 +188,7 @@ const RightSidebar = () => {
       setIsLoadingMore(pageNum > 1);
       const response = await axios.get(`/api/messages/${activeChat.id}?page=${pageNum}`);
       
+
       if (!isMounted) return;
 
       const newMessages = Array.isArray(response.data.messages) 
@@ -204,7 +211,8 @@ const RightSidebar = () => {
             chatList.scrollTop = oldScrollTop + scrollDiff;
           }
         }, 0);
-      } else {
+      }
+      else {
         setMessages(newMessages);
         setShouldScrollToBottom(true);
       }
@@ -230,6 +238,7 @@ const RightSidebar = () => {
     if (activeChat) {
       setPage(1);
       setHasMore(true);
+      setMessages([]);
       fetchMessages(1, false);
     }
   }, [activeChat]);
@@ -263,29 +272,223 @@ const RightSidebar = () => {
       setUnreadCount(unread.data.total_count);
       setConversationUnreadCounts(unread.data.conversation_counts || {});
     } catch (error) {
+
       console.error('Error marking messages as read:', error);
     }
   };
 
   const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim() || MessageLoading) return;
+    e.preventDefault(); // Prevent form submission from reloading the page
+    if (!newMessage.trim() && !selectedFile) return;
 
-    setMessageloading(true);
+    // Create form data for file upload
+    const formData = new FormData();
+    formData.append('recipient_id', activeChat.id);
+    
+    if (selectedFile) {
+      formData.append('file', selectedFile);
+      formData.append('type', getFileType(selectedFile.type));
+    } else {
+      formData.append('message', newMessage.trim());
+      formData.append('type', 'text');
+    }
+
+    // Create pending message
+    const pendingMessage = {
+      id: Date.now(),
+      status: 'sending',
+      content: selectedFile ? selectedFile.name : newMessage.trim(),
+      sender_id: userData.id,
+      created_at: new Date().toISOString(),
+      type: selectedFile ? getFileType(selectedFile.type) : 'text',
+      file: selectedFile
+    };
+
+    // Clear input immediately for better UX
+    setNewMessage('');
+    setSelectedFile(null);
+    setFilePreview(null);  // Clear the preview
+    
+    // Add message to state immediately with pending status
+    setMessages(prev => [...prev, pendingMessage]);
+
     try {
-      const response = await axios.post('/api/messages/send', {
-        recipient_id: activeChat.id,
-        message: newMessage
+      const response = await axios.post('/api/messages/send', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
       });
 
-      setMessages(prev => [...prev, response.data]);
-      setNewMessage('');
+      // Update the message status to sent
+      setMessages(prev => prev.map(msg => 
+        msg.id === pendingMessage.id 
+          ? { ...response.data, status: response.data.is_read ? 'read' : 'sent' }
+          : msg
+      ));
       setShouldScrollToBottom(true);
     } catch (error) {
-      console.error('Error sending message:', error);
-    } finally {
-      setMessageloading(false);
+      // Update the message status to error
+      setMessages(prev => prev.map(msg => 
+        msg.id === pendingMessage.id 
+          ? { ...msg, status: 'error' }
+          : msg
+      ));
+      setSelectedFile(null);
+      setFilePreview(null);  // Clear preview even if there's an error
     }
+  };
+
+  const getFileType = (mimeType) => {
+    if (mimeType.startsWith('image/')) return 'image';
+    if (mimeType.startsWith('video/')) return 'video';
+    return 'file';
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 50 * 1024 * 1024) { // 50MB limit
+        Swal.fire({
+          icon: 'error',
+          title: 'File too large',
+          text: 'Please select a file smaller than 50MB'
+        });
+        return;
+      }
+      setSelectedFile(file);
+      
+      // Create preview
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreview({
+            type: 'image',
+            url: reader.result,
+            name: file.name
+          });
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type.startsWith('video/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreview({
+            type: 'video',
+            url: reader.result,
+            name: file.name
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setFilePreview({
+          type: 'file',
+          name: file.name,
+          size: (file.size / 1024).toFixed(2) + ' KB'
+        });
+      }
+    }
+  };
+
+  const cancelFileSelection = () => {
+    setSelectedFile(null);
+    setFilePreview(null);
+  };
+
+  const downloadFile = async (message) => {
+    try {
+      const response = await axios.get(`/api/messages/download/${message.id}`, {
+        responseType: 'blob'
+      });
+      
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', message.file_name);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Download failed',
+        text: 'Failed to download the file'
+      });
+    }
+  };
+
+  // Message content renderer based on type
+  const MessageContent = ({ message }) => {
+    switch (message.type) {
+      case 'image':
+        return (
+          <div className="message-image">
+            <img 
+              src={message.file_url} 
+              alt={message.content}
+              className="img-fluid rounded"
+              style={{ maxWidth: '200px', cursor: 'pointer' }}
+              onClick={() => downloadFile(message)}
+            />
+          </div>
+        );
+      case 'video':
+        return (
+          <div className="message-video">
+            <video 
+              controls 
+              src={message.file_url}
+              className="img-fluid rounded"
+              style={{ maxWidth: '200px' }}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        );
+      case 'file':
+        return (
+          <div 
+            className="message-file d-flex align-items-center"
+            style={{ cursor: 'pointer' }}
+            onClick={() => downloadFile(message)}
+          >
+            <span className="material-symbols-outlined me-2">description</span>
+            <span>{message.content}</span>
+          </div>
+        );
+      default:
+        return message.content;
+    }
+  };
+
+  // Message status renderer
+  const MessageStatus = ({ status }) => {
+    if (status === 'sending') {
+      return (
+        <div className="message-status d-inline-block ms-1">
+          <div className="spinner-border spinner-border-sm text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} role="status">
+            <span className="visually-hidden">Sending...</span>
+          </div>
+        </div>
+      );
+    } else if (status === 'error') {
+      return (
+        <span className="message-status text-danger ms-1" title="Failed to send">
+          <i className="material-symbols-outlined" style={{ fontSize: '14px' }}>error</i>
+        </span>
+      );
+    } else if (status === 'sent') {
+      return (
+        <span className="message-status text-secondary ms-1">
+          <i className="material-symbols-outlined" style={{ fontSize: '14px' }}>check</i>
+        </span>
+      );
+    } else if (status === 'read') {
+      return (
+        <span className="message-status text-primary ms-1">
+          <i className="material-symbols-outlined" style={{ fontSize: '14px' }}>done_all</i>
+        </span>
+      );
+    }
+    return null;
   };
 
   // Listen for new messages with Pusher
@@ -359,7 +562,7 @@ const RightSidebar = () => {
                       <svg
                         width="16"
                         height="17"
-                        viewBox="0 0 16 17"
+                        viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                       >
@@ -646,42 +849,103 @@ const RightSidebar = () => {
                   <li key={index} className={`mt-${index === 0 ? '2' : '3'}`}>
                     <div className={`text-${message.sender_id == userData?.id ? 'end' : 'start'}`}>
                       <div className={`d-inline-block py-2 px-3 ${message.sender_id == userData?.id ? 'bg-primary-subtle message-right' : 'bg-gray-subtle'} chat-popup-message font-size-12 fw-medium`}>
-                        {message.content}
+                        <MessageContent message={message} />
                       </div>
-                      <span className="mt-1 d-block time font-size-10 fst-italic">
-                        {moment(message.created_at).fromNow()}
-                      </span>
+                      {message.sender_id == userData?.id ? (
+
+                      <p className="mb-0 d-flex align-items-center " style={{ justifyContent: 'flex-end' }}>
+                        {message.sender_id === userData.id && (
+                          <MessageStatus status={message.status || (message.is_read ? 'read' : 'sent')} />
+                        )}
+                        <span className="mt-1 d-block time font-size-10 fst-italic">
+                          {moment(message.created_at).fromNow()}
+                        </span>
+                      </p>
+                      ):
+                      (<p className="mb-0 d-flex align-items-center">
+                        {message.sender_id === userData.id && (
+                          <MessageStatus status={message.status || (message.is_read ? 'read' : 'sent')} />
+                        )}
+                        <span className="mt-1 d-block time font-size-10 fst-italic">
+                          {moment(message.created_at).fromNow()}
+                        </span>
+                      </p>)}
                     </div>
                   </li>
                 ))}
+                <div ref={messagesEndRef} />
               </ul>
             </div>
             <div className="chat-popup-footer p-3">
               <div className="chat-popup-form">
-                <form onSubmit={handleSendMessage}>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Start Typing..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    disabled={MessageLoading}
-                  />
-                  <button
-                    type="submit"
-                    className="chat-popup-form-button btn btn-primary"
-                    disabled={MessageLoading}
-                  >
-                    {MessageLoading ? (
-                      <div className="spinner-border spinner-border-sm" role="status">
-                        <span className="visually-hidden">Loading...</span>
+                <form onSubmit={handleSendMessage} className="chat-form" style={{display:'flex', flexDirection: 'column'}}>
+                  {filePreview && (
+                    <div className="file-preview mb-2 p-2 bg-light rounded">
+                      <div className="d-flex align-items-center justify-content-between">
+                        <div className="d-flex align-items-center">
+                          {filePreview.type === 'image' && (
+                            <img 
+                              src={filePreview.url} 
+                              alt={filePreview.name}
+                              className="me-2"
+                              style={{ maxHeight: '50px', maxWidth: '50px', objectFit: 'cover' }}
+                            />
+                          )}
+                          {filePreview.type === 'video' && (
+                            <video 
+                              src={filePreview.url}
+                              className="me-2"
+                              style={{ maxHeight: '50px', maxWidth: '50px', objectFit: 'cover' }}
+                            />
+                          )}
+                          {filePreview.type === 'file' && (
+                            <span className="material-symbols-outlined me-2">description</span>
+                          )}
+                          <div>
+                            <div className="small fw-medium text-truncate" style={{ maxWidth: '200px' }}>
+                              {filePreview.name}
+                            </div>
+                            {filePreview.type === 'file' && (
+                              <div className="small text-muted">{filePreview.size}</div>
+                            )}
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="btn btn-link text-danger p-0 ms-2"
+                          onClick={cancelFileSelection}
+                        >
+                          <span className="material-symbols-outlined">close</span>
+                        </button>
                       </div>
-                    ) : (
-                      <span className="material-symbols-outlined font-size-18 icon-rtl">
-                        send
-                      </span>
-                    )}
-                  </button>
+                    </div>
+                  )}
+                  <div className="d-flex">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder={selectedFile ? 'Add a caption...' : 'Type your message'}
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                    />
+                    <input
+                      type="file"
+                      id="file-upload"
+                      className="d-none"
+                      onChange={handleFileSelect}
+                      accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+                    />
+                    <button 
+                      type="button"
+                      className="btn btn-link"
+                      onClick={() => document.getElementById('file-upload').click()}
+                    >
+                      <span className="material-symbols-outlined">attach_file</span>
+                    </button>
+                    <button type="submit" className="btn btn-primary d-flex align-items-center">
+                      <span className="material-symbols-outlined">send</span>
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>

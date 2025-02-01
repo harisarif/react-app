@@ -10,9 +10,10 @@ import Education from "../views/dashboard/app/education";
 import Business from "../views/dashboard/app/business";
 import Crypto from "../views/dashboard/app/crypto";
 import MindSet from "../views/dashboard/app/mindset";
+import JobApplications from "../views/dashboard/app/job-applications";
 import EquityCircle from "../views/dashboard/app/equitycircle";
 import UserFeeds from "../views/dashboard/app/feeds";
-
+import SinglePost from "../views/dashboard/app/single-post";
 import Fitness from "../views/dashboard/app/fitness";
 
 
@@ -104,7 +105,18 @@ export const DefaultRouter = [
     path: "/profile",
     element: <UserProfile />,
   },
+  
   {
+    path: "/job-applications",
+    element: <JobApplications />,
+  },
+  {
+    path: "/post/:id",
+    element: <SinglePost />,
+  },
+
+  {
+    
     path: "/mindset",
     element: <MindSet />,
   },
