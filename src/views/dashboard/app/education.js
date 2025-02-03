@@ -8,6 +8,7 @@ import axios from '../../../utils/axios';
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../../../components/Card";
+import NoDataFound from '../../../components/NoDataFound';
 
 //img
 import profilebg8 from "../../../assets/images/page-img/profile-bg8.jpg";
@@ -238,30 +239,37 @@ const Education = () => {
               </div>
             ) : (
               <div className="row g-3">
-                {educationContents.map((content) => (
-                  <div key={content.id} className="col-sm-6 col-lg-4">
-                    <div className="card h-100">
-                      <div className="edu-card-img">
-                        <img 
-                          src={`${baseurl}/data/images/education/${content.image_path}`} 
-                          className="card-img-top" 
-                          alt={content.title} 
-                          loading="lazy" 
-                        />
-                      </div>
-                      <div className="card-body">
-                        <h4 className="card-title turncate-2">{content.title}</h4>
-                        <p className="card-text turncate-3">{content.short_description}</p>
-                        <Button 
-                          className="btn btn-primary btn-block"
-                          onClick={() => handleWatchVideo(content.video_url, content.id)}
-                        >
-                          Watch Video
-                        </Button>
+                {educationContents.length > 0 ? (
+                  educationContents.map((content) => (
+                    <div key={content.id} className="col-sm-6 col-lg-4">
+                      <div className="card h-100">
+                        <div className="edu-card-img">
+                          <img 
+                            src={`${baseurl}/data/images/education/${content.image_path}`} 
+                            className="card-img-top" 
+                            alt={content.title} 
+                            loading="lazy" 
+                          />
+                        </div>
+                        <div className="card-body">
+                          <h4 className="card-title turncate-2">{content.title}</h4>
+                          <p className="card-text turncate-3">{content.short_description}</p>
+                          <Button 
+                            className="btn btn-primary btn-block"
+                            onClick={() => handleWatchVideo(content.video_url, content.id)}
+                          >
+                            Watch Video
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <NoDataFound 
+                    message="No educational content available at the moment." 
+                    containerClassName="text-center py-5 col-12"
+                  />
+                )}
               </div>
             )}
           </div>

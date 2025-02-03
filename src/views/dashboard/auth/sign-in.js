@@ -60,7 +60,7 @@ const SignIn = () => {
       // You can store the token in localStorage or a state management library
       localStorage.setItem('access_token', response.data.access_token);
       setSuccess('Login successful!');
-      window.location.href = '/'
+      window.location.href = '/home'
     })
     .catch((error) => {
       setLoader(false);
@@ -77,7 +77,7 @@ const SignIn = () => {
 
       console.log('Google login successful:', response.data);
       localStorage.setItem('access_token', response.data.access_token);
-      window.location.href = '/'
+      window.location.href = '/home'
     } catch (error) {
       console.error('Google login error:', error);
       alert('Failed to sign in with Google. Please try again.');

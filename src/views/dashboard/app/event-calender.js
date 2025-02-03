@@ -4,6 +4,7 @@ import { UserContext } from "../../../context/UserContext";
 import axios from "../../../utils/axios";
 import Swal from "sweetalert2";
 import moment from "moment";
+import NoDataFound from '../../../components/NoDataFound';
 
 const EventCalender = () => {
   const [events, setEvents] = useState([]);
@@ -142,47 +143,56 @@ const EventCalender = () => {
         )}
         
         <Row>
-          {events.map((event) => (
-            <Col xs={4} key={event.id} className="mb-4">
-              <div className="col-12">
-                <div className="card cardhover">
-                  <div className="card-body label-card">
-                    <div>
-                      <h6 className="price">
-                        <span className="regular-price text-dark pr-2 label-span">
-                          {moment(event.event_date).format('DD MMMM')}
-                        </span>
-                      </h6>
-                    </div>
-                    <h5>{event.title}</h5>
-                    <small>{event.subtitle}</small>
-                    <div className="mt-2">
-                      <p className="mb-0">{event.description}</p>
-                    </div>
-                    {userData?.roles === "admin" && (
-                      <div className="mt-3">
-                        <Button
-                          variant="outline-primary"
-                          size="sm"
-                          className="me-2"
-                          onClick={() => handleEdit(event)}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="outline-danger"
-                          size="sm"
-                          onClick={() => handleDelete(event.id)}
-                        >
-                          Delete
-                        </Button>
+          {events.length < 1 ? (
+            <Col sm={12}>
+              <NoDataFound 
+                message={userData?.roles === "admin" ? "No events found. Click 'Add New Event' to create one!" : "No upcoming events at the moment."}
+                containerClassName="text-center py-5"
+              />
+            </Col>
+          ) : (
+            events.map((event) => (
+              <Col xs={4} key={event.id} className="mb-4">
+                <div className="col-12">
+                  <div className="card cardhover">
+                    <div className="card-body label-card">
+                      <div>
+                        <h6 className="price">
+                          <span className="regular-price text-dark pr-2 label-span">
+                            {moment(event.event_date).format('DD MMMM')}
+                          </span>
+                        </h6>
                       </div>
-                    )}
+                      <h5>{event.title}</h5>
+                      <small>{event.subtitle}</small>
+                      <div className="mt-2">
+                        <p className="mb-0">{event.description}</p>
+                      </div>
+                      {userData?.roles === "admin" && (
+                        <div className="mt-3">
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
+                            className="me-2"
+                            onClick={() => handleEdit(event)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="outline-danger"
+                            size="sm"
+                            onClick={() => handleDelete(event.id)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-          ))}
+              </Col>
+            ))
+          )}
         </Row>
       </div>
 

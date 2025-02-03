@@ -353,7 +353,7 @@ const Post = ({ post,posts,setPosts, onDelete }) => {
         }
       });
 
-      if (response.data.status === 'success') {
+      if (response.data.status == 'success') {
         // Update the post's is_following status
         setPosts(posts.map(p => {
           if (p.user?.id === userId) {

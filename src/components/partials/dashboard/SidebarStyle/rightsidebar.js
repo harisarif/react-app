@@ -113,9 +113,10 @@ const RightSidebar = () => {
     }
   };
 
-  const { userData: user } = useContext(UserContext);
-  const { notification: notif } = useContext(NotificationContext);
+  // const { userData: user } = useContext(UserContext);
+  // const { notification: notif } = useContext(NotificationContext);
   useEffect(() => {
+    fetchUsers();
     setIsMounted(true);
     return () => setIsMounted(false);
   }, []);
@@ -156,19 +157,33 @@ const RightSidebar = () => {
     }
   };
 
-  // Initial data load and cleanup
-  useEffect(() => {
-    if (user) {
-      fetchData();
+  const fetchUsers = async () => {
+    try {
+      const [users] = await Promise.all([
+        axios.get('/api/users'),
+      ]);
+
+      if (isMounted) {
+        setUserLists(users.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-  }, [user]);
+  };
+
+  // // Initial data load and cleanup
+  // useEffect(() => {
+  //   if (userData) {
+  //     fetchData();
+  //   }
+  // }, [userData]);
 
   // Listen for new notifications
   useEffect(() => {
-    if (notif) {
+    if (notifications) {
       fetchData();
     }
-  }, [notif]);
+  }, [notifications]);
 
   const handleChatClose = () => {
     setActiveChat(null);
@@ -506,6 +521,7 @@ const RightSidebar = () => {
         setShouldScrollToBottom(true);
       }
       fetchConversations();
+
     });
 
     return () => {
@@ -546,7 +562,26 @@ const RightSidebar = () => {
         }
       });
     }
-  });
+
+    // Listen for startConversation event from notifications
+    const handleStartConversationForNotification = (event) => {
+      // alert("hi")
+      document.getElementById("rightSidebar").classList.add("right-sidebar");
+      document.body.classList.add("right-sidebar-close");
+      const { conversationId, user } = event.detail;
+      // console.log(conversationId, userId);
+      const conversation = conversations.find(convo => convo.id === conversationId);
+      setActiveChat(conversation);
+
+      handleStartConversation(user);
+    };
+
+    document.addEventListener('startConversation', handleStartConversationForNotification);
+
+    return () => {
+      document.removeEventListener('startConversation', handleStartConversationForNotification);
+    };
+  }, []);
 
   return (
     <>

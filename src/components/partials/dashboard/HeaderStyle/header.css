@@ -1,0 +1,67 @@
+.notification-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 18px;
+  text-align: center;
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-list .iq-sub-card {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.notification-list .iq-sub-card:hover {
+  background-color: #f8f9fa;
+}
+
+.notification-text {
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.avatar-40 {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+/* New styles for mark all as read button */
+.btn-link.text-white {
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.btn-link.text-white:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+/* Style for the notification header */
+.card-header.bg-primary {
+  padding: 12px 15px;
+}
+
+.card-header.bg-primary .header-title h5 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Improve notification dropdown positioning */
+.dropdown-menu.sub-drop {
+  margin-top: 0.5rem;
+  min-width: 320px;
+  max-width: 400px;
+}

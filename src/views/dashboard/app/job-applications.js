@@ -4,6 +4,8 @@ import axios from '../../../utils/axios';
 import Swal from 'sweetalert2';
 import { Link } from "react-router-dom";
 import { UserContext } from '../../../context/UserContext';
+import NoDataFound from '../../../components/NoDataFound';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const JobApplications = () => {
   const { userData } = useContext(UserContext);
@@ -102,6 +104,33 @@ const JobApplications = () => {
     </div>
   );
 
+  const renderTabContent = (status) => {
+    const filteredApplications = getFilteredApplications(status);
+    
+    if (loading) {
+      return <LoadingSpinner />;
+    }
+    
+    if (filteredApplications.length < 1) {
+      const messages = {
+        pending: "No pending job applications to review.",
+        accepted: "No accepted job applications yet.",
+        rejected: "No rejected job applications."
+      };
+      
+      return (
+        <NoDataFound 
+          message={messages[status]}
+          containerClassName="text-center py-5"
+        />
+      );
+    }
+    
+    return filteredApplications.map(application => (
+      <ApplicationCard key={application.id} application={application} />
+    ));
+  };
+
   return (
     <div id="content-page" className="content-inner">
       <Container>
@@ -115,31 +144,13 @@ const JobApplications = () => {
           className="mb-4"
         >
           <Tab eventKey="pending" title={`Pending (${getFilteredApplications('pending').length})`}>
-            {loading ? (
-              <div className="text-center py-5">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            ) : getFilteredApplications('pending').length === 0 ? (
-              <div className="text-center py-5">
-                <h4>No pending applications</h4>
-              </div>
-            ) : (
-              getFilteredApplications('pending').map(application => (
-                <ApplicationCard key={application.id} application={application} />
-              ))
-            )}
+            {renderTabContent('pending')}
           </Tab>
           <Tab eventKey="accepted" title={`Accepted (${getFilteredApplications('accepted').length})`}>
-            {!loading && getFilteredApplications('accepted').map(application => (
-              <ApplicationCard key={application.id} application={application} />
-            ))}
+            {renderTabContent('accepted')}
           </Tab>
           <Tab eventKey="rejected" title={`Rejected (${getFilteredApplications('rejected').length})`}>
-            {!loading && getFilteredApplications('rejected').map(application => (
-              <ApplicationCard key={application.id} application={application} />
-            ))}
+            {renderTabContent('rejected')}
           </Tab>
         </Tabs>
       </Container>

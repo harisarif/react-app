@@ -4,9 +4,12 @@ import { NotificationContext } from '../../../../context/NotificationContext';
 import axios from '../../../../utils/axios';
 import '../../../../../src/utils/echo';  // Import Echo configuration
 import { Nav, Form, Card, Container, Image, Dropdown, Navbar } from "react-bootstrap";
-import { Link , useLocation } from "react-router-dom";
+import { Link , useLocation, useNavigate } from "react-router-dom";
 import { getProfileImageUrl } from '../../../../utils/helpers';
+import { getRelativeTime } from '../../../../utils/dateUtils';
+import { getNotificationUrl } from '../../../../utils/notificationHelpers';
 import moment from 'moment';
+import './header.css';
 //image
 import user1 from "../../../../assets/images/user/1.jpg";
 import user2 from "../../../../assets/images/user/02.jpg";
@@ -33,24 +36,65 @@ const Header = () => {
   const { 
     notifications, 
     totalUnread,
-    fetchNotifications 
+    markAsRead,
+    deleteNotification,
+    setNotifications,
+    setTotalUnread
   } = useContext(NotificationContext);
   const dispatch = useDispatch();
   const appName = useSelector(SettingSelector.app_name);
   const location = useLocation();
   const [active, setActive] = useState("home");
   const [showNotifications, setShowNotifications] = useState(false);
+  const navigate = useNavigate();
 
-  const handleNotificationClick = async () => {
-    if (totalUnread > 0) {
-      try {
-        await axios.post('/api/notifications/mark-as-read');
-        fetchNotifications(); // Refresh notifications after marking as read
-      } catch (error) {
-        console.error('Error marking notifications as read:', error);
-      }
-    }
+  const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      // Update all unread notifications in the UI immediately
+      const updatedNotifications = notifications.map(notif => ({
+        ...notif,
+        is_read: true
+      }));
+      setNotifications(updatedNotifications);
+      setTotalUnread(0);
+
+      // Call the API to mark all as read
+      await axios.post('/api/notifications/mark-all-as-read');
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      // Revert the UI changes if the API call fails
+      const unreadCount = notifications.filter(n => !n.is_read).length;
+      setTotalUnread(unreadCount);
+      setNotifications(notifications);
+    }
+  };
+
+  const handleNotificationAction = async (actionFn, ...args) => {
+    try {
+      await actionFn(...args);
+    } catch (error) {
+      console.error('Error performing notification action:', error);
+    }
+  };
+
+  const handleNotificationItemClick = async (notification) => {
+    if (!notification.is_read) {
+      await handleNotificationAction(markAsRead, notification.id);
+    }
+    const url = getNotificationUrl(notification);
+    if (url !== '#') {
+      navigate(url);
+      setShowNotifications(false);
+    }
+  };
+
+  const handleDeleteNotification = async (e, notificationId) => {
+    e.stopPropagation(); // Prevent triggering the parent click
+    await handleNotificationAction(deleteNotification, notificationId);
   };
 
   const minisidebar = () => {
@@ -92,7 +136,7 @@ const Header = () => {
           <Container fluid className="navbar-inner">
             <div className="d-flex align-items-center pb-2 pb-lg-0">
               <Link
-                to="/"
+                to="/home"
                 className="d-flex align-items-center iq-header-logo navbar-brand d-block"
               >
                 <img src={equity} class="brand-logo" alt="#" />
@@ -162,7 +206,7 @@ const Header = () => {
                           onClick={() => setActive("mindset")}
                         >
                           <span class="material-symbols-outlined">
-                            currency_bitcoin
+                            self_improvement
                           </span>
                           <span className="nav-text">Mindset</span>
                         </Link>
@@ -726,19 +770,18 @@ const Header = () => {
                 as="li"
                 className="nav-item"
                 show={showNotifications}
-                onClick={() => setShowNotifications(!showNotifications)}
+                onToggle={(isOpen) => setShowNotifications(isOpen)}
               >
                 <Dropdown.Toggle
                   as="a"
                   bsPrefix=" "
-                  className="nav-link"
+                  className="nav-link d-flex align-items-center"
                   id="notification-drop"
-                  onClick={handleNotificationClick}
                 >
-                  <span className="mt-20-imp material-symbols-outlined position-relative">
+                  <span className="material-symbols-outlined position-relative">
                     notifications
                     {totalUnread > 0 && (
-                      <span className="notification-badge">
+                      <span className="bg-danger text-white notification-count">
                         {totalUnread}
                       </span>
                     )}
@@ -748,38 +791,70 @@ const Header = () => {
                   <Card className="shadow-none m-0">
                     <Card.Header className="d-flex justify-content-between bg-primary">
                       <div className="header-title bg-primary">
-                        <h5 className="mb-0 text-white">Notifications</h5>
+                        <h5 className="mb-0 text-white">
+                          All Notifications
+                          {totalUnread > 0 && ` (${totalUnread} new)`}
+                        </h5>
                       </div>
+                      {totalUnread > 0 && (
+                        <button
+                          className="btn btn-link text-white p-0 border-0"
+                          onClick={handleMarkAllAsRead}
+                        >
+                          Mark all as read
+                        </button>
+                      )}
                     </Card.Header>
                     <Card.Body className="p-0">
-                      {notifications.length === 0 ? (
-                        <div className="text-center p-3">
-                          <p className="mb-0">No notifications</p>
-                        </div>
-                      ) : (
-                        notifications.map((notification, index) => (
-                          <Link key={index} to="#" className="iq-sub-card">
-                            <div className="d-flex align-items-center">
-                              <div className="">
-                                <Image
-                                  className="avatar-40 rounded"
-                                  src={notification.sender?.profile_image || '/default-avatar.png'}
-                                  alt=""
-                                  loading="lazy"
+                      <div className="notification-list">
+                        {notifications.length === 0 ? (
+                          <div className="text-center p-3">
+                            <p className="mb-0">No notifications</p>
+                          </div>
+                        ) : (
+                          notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className={`d-flex align-items-center iq-sub-card ${!notification.is_read ? 'bg-light' : ''}`}
+                              onClick={() => handleNotificationItemClick(notification)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <div className="me-3">
+                                <img
+                                  src={getProfileImageUrl(notification.user)}
+                                  alt={notification.user?.name || 'User'}
+                                  className="rounded-circle avatar-40"
                                 />
                               </div>
-                              <div className="ms-3 w-100">
-                                <h6 className="mb-0">{notification.sender?.name || 'Unknown User'}</h6>
+                              <div className="flex-grow-1">
+                                <div className={`notification-text ${!notification.is_read ? 'fw-bold' : ''}`}>
+                                  {notification.content}
+                                </div>
                                 <div className="d-flex justify-content-between align-items-center">
-                                  <p className="mb-0">{notification.message}</p>
-                                  <small className="float-right font-size-12">
-                                    {new Date(notification.created_at).toLocaleDateString()}
+                                  <small className="text-muted">
+                                    {getRelativeTime(notification.created_at)}
                                   </small>
+                                  <button
+                                    className="btn btn-link text-danger p-0 border-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDeleteNotification(e, notification.id);
+                                    }}
+                                  >
+                                    <span className="material-symbols-outlined">delete</span>
+                                  </button>
                                 </div>
                               </div>
                             </div>
+                          ))
+                        )}
+                      </div>
+                      {notifications.length > 0 && (
+                        <div className="text-center p-3">
+                          <Link to="/notification" className="btn btn-primary w-100" onClick={() => setShowNotifications(false)}>
+                            View All Notifications
                           </Link>
-                        ))
+                        </div>
                       )}
                     </Card.Body>
                   </Card>

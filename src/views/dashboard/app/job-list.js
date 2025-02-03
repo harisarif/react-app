@@ -6,6 +6,7 @@ import Card from "../../../components/Card";
 import { Link } from "react-router-dom";
 import axios from '../../../utils/axios'
 import CreateJob from "../../../components/job/CreateJob";
+import NoDataFound from '../../../components/NoDataFound';
 
 //profile-header
 import ProfileHeader from "../../../components/profile-header";
@@ -66,10 +67,10 @@ const JobList = () => {
                   </div>
                 </div>
               ) : jobs.length === 0 ? (
-                <div className="text-center py-5">
-                  <h4>No jobs found</h4>
-                  <p>Create your first job listing by clicking the Create Job button above.</p>
-                </div>
+                <NoDataFound 
+                  message="No job listings available at the moment."
+                  containerClassName="text-center py-5"
+                />
               ) : (
                 <div className="row g-3">
                   {jobs.data.map((job) => (
