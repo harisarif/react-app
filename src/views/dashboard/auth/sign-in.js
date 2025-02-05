@@ -205,7 +205,7 @@ const SignIn = () => {
                       />
                       <h6 className="form-check-label fw-bold">Remember Me</h6>
                     </Form.Check>
-                    <Link to="/auth/recoverpw" className="font-italic">
+                    <Link to="/auth/recover-password" className="font-italic">
                       Forgot Password?
                     </Link>
                   </div>

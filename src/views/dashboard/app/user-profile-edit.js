@@ -758,7 +758,7 @@ const UserProfileEdit = () => {
                                                     {userData?.has_password && (
                                                         <Form.Group className="form-group">
                                                             <Form.Label>Current Password:</Form.Label>
-                                                            <Link to="/auth/recoverpw" className="float-end">Forgot Password</Link>
+                                                            <Link to="/auth/recover-password" className="float-end">Forgot Password</Link>
                                                             <Form.Control 
                                                                 type="password" 
                                                                 name="cpass" 

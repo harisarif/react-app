@@ -4,7 +4,7 @@ export const getNotificationUrl = (notification) => {
     switch (notif_type) {
         case 'post':
         case 'like':
-        case 'comment':
+    case 'comment':
             return `/post/${foreign_id}`;
         case 'job':
             return `/job-list-detail/${foreign_id}`;
