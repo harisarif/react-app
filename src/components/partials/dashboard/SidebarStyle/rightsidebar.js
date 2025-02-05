@@ -140,18 +140,15 @@ const RightSidebar = () => {
 
   const fetchData = async () => {
     try {
-      const [users, convos, unread] = await Promise.all([
-        axios.get('/api/users'),
+      const [ convos, unread] = await Promise.all([
         axios.get('/api/messages/conversations'),
         axios.get('/api/messages/unread-count')
       ]);
 
-      if (isMounted) {
-        setUserLists(users.data);
         setConversations(convos.data);
         setUnreadCount(unread.data.total_count);
         setConversationUnreadCounts(unread.data.conversation_counts || {});
-      }
+      
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -163,9 +160,8 @@ const RightSidebar = () => {
         axios.get('/api/users'),
       ]);
 
-      if (isMounted) {
         setUserLists(users.data);
-      }
+      
     } catch (error) {
       console.error('Error fetching data:', error);
     }

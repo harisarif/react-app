@@ -796,14 +796,14 @@ const Header = () => {
                           {totalUnread > 0 && ` (${totalUnread} new)`}
                         </h5>
                       </div>
-                      {totalUnread > 0 && (
-                        <button
-                          className="btn btn-link text-white p-0 border-0"
-                          onClick={handleMarkAllAsRead}
-                        >
-                          Mark all as read
-                        </button>
-                      )}
+                      {/* {totalUnread > 0 && (
+                        // <button
+                        //   className="btn btn-link text-white p-0 border-0"
+                        //   onClick={handleMarkAllAsRead}
+                        // >
+                        //   Mark all as read
+                        // </button>
+                      )} */}
                     </Card.Header>
                     <Card.Body className="p-0">
                       <div className="notification-list">

@@ -83,10 +83,10 @@ const CreatePost = ({ onPostCreated, className }) => {
   };
 
   const handleShow = () => {
-    if (!userData) {
+    if (!userData || userData?.roles != "admin" ) {
       Swal.fire({
-        title: 'Login Required',
-        text: 'Please login to create posts',
+        title: 'Authentication Required',
+        text: 'Only Admin can create posts',
         icon: 'info',
         showCancelButton: true,
         confirmButtonText: 'Login',

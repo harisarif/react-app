@@ -70,18 +70,7 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Home</span>
                     </Link>
                 </li>
-                {userData &&  userData.roles == "admin" && (
-                <li className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-item `}>
-                    <Link className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-link `} aria-current="page" to="/job-applications">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Job Applications</Tooltip>}>
-                            <i className="icon material-symbols-outlined">
-                            app_registration
-                            </i>
-                        </OverlayTrigger>
-                        <span className="item-name">Job Applications</span>
-                    </Link>
-                </li>
-                )}
+                
                 {userData && (
 
                 <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item `}>
@@ -184,6 +173,18 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Job List</span>
                     </Link>
                 </li>
+                {userData &&  userData.roles == "admin" && (
+                <li className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-item `}>
+                    <Link className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-link `} aria-current="page" to="/job-applications">
+                        <OverlayTrigger placement="right" overlay={<Tooltip>Job Applications</Tooltip>}>
+                            <i className="icon material-symbols-outlined">
+                            app_registration
+                            </i>
+                        </OverlayTrigger>
+                        <span className="item-name">Job Applications</span>
+                    </Link>
+                </li>
+                )}
                 <li className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-link `} aria-current="page" to="/event-calender">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Events Calender</Tooltip>}>
