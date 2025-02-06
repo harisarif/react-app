@@ -121,7 +121,20 @@ const Header = () => {
     window.location.href = '/auth/sign-in';
   }
 
-
+useEffect(() => {
+  const sideBarIconFixed = document.getElementById('first-tour');
+  const observer = new MutationObserver(() => {
+    if (sideBarIconFixed.classList.contains('sidebar-mini')) {
+     document.getElementById("sidebar-toggle-icon").style.left = "0px";
+document.getElementById("sidebar-toggle-icon").style.transition = "left 0.1s ease-in-out";
+    } else {
+      document.getElementById("sidebar-toggle-icon").style.left = "220px";
+document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s ease-in-out";
+    }
+  });
+  observer.observe(sideBarIconFixed, { attributes: true });
+  return () => observer.disconnect();
+}, []);
 
   return (
     <>
@@ -142,7 +155,8 @@ const Header = () => {
                 <img src={equity} class="brand-logo" alt="#" />
               </Link>
               <Link
-                className="sidebar-toggle"
+                className="sidebar-toggle "
+                id="sidebar-toggle-icon"
                 data-toggle="sidebar"
                 data-active="true"
                 onClick={minisidebar}
@@ -384,16 +398,16 @@ const Header = () => {
                 <SearchModal />
               </Dropdown>
 
-              <Dropdown className="nav-item " as="li">
+              <Dropdown className="nav-item group-icon" as="li">
                 <Dropdown.Toggle as="a" bsPrefix=" "
                   to="#"
                   className="dropdown-toggle d-flex align-items-center"
                   id="group-drop"
                 >
-                  <span className="material-symbols-outlined">group</span>
+                  <span className="material-symbols-outlined ">group</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu
-                  className={`sub-drop sub-drop-large`}
+                  className={`sub-drop sub-drop-large `}
                   aria-labelledby="group-drop"
                   data-bs-popper="static"
                 >
@@ -558,7 +572,7 @@ const Header = () => {
               <Dropdown as="li" className="nav-item">
                 <Dropdown.Toggle as="a"
                   to="#"
-                  className=" d-flex align-items-center"
+                  className=" d-flex align-items-center header-message-icon"
                   id="mail-drop"
                 >
                   <i className="material-symbols-outlined">mail</i>

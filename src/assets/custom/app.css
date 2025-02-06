@@ -779,16 +779,16 @@
     }
 }
 
-.header-link{
+.header-link {
     height: 80px !important;
 }
 
-.header-link #offcanvasBottomNav{
+.header-link #offcanvasBottomNav {
     height: unset !important;
     height: 100% !important;
 }
 
-.add-in-ellipsis{
+.add-in-ellipsis {
     width: 100%;
     overflow: hidden;
     display: -webkit-box;
@@ -796,8 +796,9 @@
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
 }
-.main-wrapper{
-    .avatar-32{
+
+.main-wrapper {
+    .avatar-32 {
         width: 3rem !important;
         height: 3rem !important;
         min-width: 3rem !important;
@@ -809,71 +810,110 @@
     width: 45px;
     aspect-ratio: .75;
     --c: no-repeat linear-gradient(#000 0 0);
-    background: 
-      var(--c) 0%   50%,
-      var(--c) 50%  50%,
-      var(--c) 100% 50%;
+    background:
+        var(--c) 0% 50%,
+        var(--c) 50% 50%,
+        var(--c) 100% 50%;
     animation: l7 1s infinite linear alternate;
-  }
-  @keyframes l7 {
-    0%  {background-size: 20% 50% ,20% 50% ,20% 50% }
-    20% {background-size: 20% 20% ,20% 50% ,20% 50% }
-    40% {background-size: 20% 100%,20% 20% ,20% 50% }
-    60% {background-size: 20% 50% ,20% 100%,20% 20% }
-    80% {background-size: 20% 50% ,20% 50% ,20% 100%}
-    100%{background-size: 20% 50% ,20% 50% ,20% 50% }
-  }/* HTML: <div class="loader"></div> */
+}
+
+@keyframes l7 {
+    0% {
+        background-size: 20% 50%, 20% 50%, 20% 50%
+    }
+
+    20% {
+        background-size: 20% 20%, 20% 50%, 20% 50%
+    }
+
+    40% {
+        background-size: 20% 100%, 20% 20%, 20% 50%
+    }
+
+    60% {
+        background-size: 20% 50%, 20% 100%, 20% 20%
+    }
+
+    80% {
+        background-size: 20% 50%, 20% 50%, 20% 100%
+    }
+
+    100% {
+        background-size: 20% 50%, 20% 50%, 20% 50%
+    }
+}
+
+/* HTML: <div class="loader"></div> */
 .Authloader {
     width: 18px;
     aspect-ratio: .75;
     --c: no-repeat linear-gradient(#000 0 0);
-    background: 
-      var(--c) 0%   50%,
-      var(--c) 50%  50%,
-      var(--c) 100% 50%;
+    background:
+        var(--c) 0% 50%,
+        var(--c) 50% 50%,
+        var(--c) 100% 50%;
     animation: l7 1s infinite linear alternate;
-  }
-  @keyframes l7 {
-    0%  {background-size: 20% 50% ,20% 50% ,20% 50% }
-    20% {background-size: 20% 20% ,20% 50% ,20% 50% }
-    40% {background-size: 20% 100%,20% 20% ,20% 50% }
-    60% {background-size: 20% 50% ,20% 100%,20% 20% }
-    80% {background-size: 20% 50% ,20% 50% ,20% 100%}
-    100%{background-size: 20% 50% ,20% 50% ,20% 50% }
-  }
+}
+
+@keyframes l7 {
+    0% {
+        background-size: 20% 50%, 20% 50%, 20% 50%
+    }
+
+    20% {
+        background-size: 20% 20%, 20% 50%, 20% 50%
+    }
+
+    40% {
+        background-size: 20% 100%, 20% 20%, 20% 50%
+    }
+
+    60% {
+        background-size: 20% 50%, 20% 100%, 20% 20%
+    }
+
+    80% {
+        background-size: 20% 50%, 20% 50%, 20% 100%
+    }
+
+    100% {
+        background-size: 20% 50%, 20% 50%, 20% 50%
+    }
+}
 
 
 
 
 
-  .dropdown-toggle::after{
+.dropdown-toggle::after {
     content: '';
-all: unset !important; 
-  }
+    all: unset !important;
+}
 
 
-  .mt-30-imp{
-    margin-top:30px !important;
-  }
-  .mt-20-imp{
-    margin-top:20px !important;
-  }
+.mt-30-imp {
+    margin-top: 30px !important;
+}
+
+.mt-20-imp {
+    margin-top: 20px !important;
+}
 
 .notification-badge {
-  font-size: 10px !important;
-  width: 18px !important;
-  height: 18px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 50% !important;
-  background: #ff4b4b !important;
-  color: white !important;
-  box-shadow: 0 2px 4px rgba(255, 75, 75, 0.3);
-  position: absolute !important;
-  top: -5px !important;
-  right: -5px !important;
-  font-weight: 600 !important;
+    font-size: 10px !important;
+    width: 18px !important;
+    height: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: #ff4b4b !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(255, 75, 75, 0.3);
+    position: absolute !important;
+    top: -5px !important;
+    right: -5px !important;
+    font-weight: 600 !important;
 }
 
 .chat-popup-modal .chat-popup-body .chat {
@@ -991,4 +1031,49 @@ all: unset !important;
     width: 14px;
     height: 14px;
     z-index: 0;
+}
+
+
+
+@media (max-width: 991px) {
+
+    .header-link,
+    .searchbo,
+    .group-icon,
+    .header-message-icon {
+        display: none !important;
+    }
+
+    .navbar-inner {
+        display: flex !important;
+    }
+
+    #notification-drop {
+        margin-right: 44px;
+    }
+
+    .navbar-nav.navbar-list li.user-dropdown {
+        top: 11px;
+        right: -6px;
+    }
+
+}
+.sidebar-toggle {
+    position: fixed;
+    left: 0;
+    top: 20%;
+    background-color: rgb(80 181 255) !important;
+    border-radius: 0 16px 16px 0 !important;
+    color:  white !important;
+    height: 35px !important;
+    width: 35px !important;
+}
+@media (max-width: 768px) {
+    .brand-logo {
+        width: 100px;
+    }
+
+    .navbar-inner {
+        margin-top: 5px !important;
+    }
 }

@@ -16,7 +16,27 @@ const Sidebar = () => {
   const sidebarType = useSelector(SettingSelector.sidebar_type); // array
   const sidebarMenuStyle = useSelector(SettingSelector.sidebar_menu_style);
   const appName = useSelector(SettingSelector.app_name);
+
+ 
+ 
   useEffect(() => {
+
+    function toggleSidebarMini() {
+      const element = document.getElementById("first-tour");
+      if (window.matchMedia("(max-width: 1200px)").matches) {
+          element.classList.add("sidebar-mini");  // Add class if screen is ≤ 700px
+          
+      } else {
+          element.classList.remove("sidebar-mini"); // Remove class if screen is > 700px
+      }
+  }
+  
+  // Run on page load
+  toggleSidebarMini();
+  
+  // Listen for screen size changes
+  window.addEventListener("resize", toggleSidebarMini);
+
     Scrollbar.init(document.querySelector(".data-scrollbar"));
 
     window.addEventListener("resize", () => {
@@ -122,3 +142,6 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+
+
