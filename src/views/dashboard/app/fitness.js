@@ -290,7 +290,7 @@ const UserFeeds = () => {
                   <Col sm={12}>
                     <CreatePost 
                       className="card-block card-stretch card-height"
-                      onPostCreated={handleNewPost}
+                      setPosts={setPosts} posts={posts}
                     />
                   </Col>
                 </Row>

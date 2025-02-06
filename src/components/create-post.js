@@ -12,7 +12,7 @@ import img1 from "../assets/images/icon/02.png";
 import img2 from "../assets/images/icon/02.png";
 import img3 from "../assets/images/icon/03.png";
 
-const CreatePost = ({ onPostCreated, className }) => {
+const CreatePost = ({ posts, setPosts, className }) => {
   const { userData } = useContext(UserContext);
   const location = useLocation();
   const [show, setShow] = useState(false);
@@ -217,17 +217,7 @@ const CreatePost = ({ onPostCreated, className }) => {
         setShow(false);
 
         // Notify parent component about the new post
-        if (onPostCreated) {
-          // Parse the JSON strings in the post data
-          const postData = {
-            ...response.data.post,
-            images: JSON.parse(response.data.post.images || '[]'),
-            videos: JSON.parse(response.data.post.videos || '[]'),
-            documents: JSON.parse(response.data.post.documents || '[]')
-          };
-
-          onPostCreated(postData);
-        }
+        setPosts(prevPosts => [response.data.post, ...prevPosts]);
       } else {
         throw new Error('Invalid response format from server');
       }
