@@ -54,16 +54,16 @@ const Index = () => {
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
             <div className={styles.links}>
-              <a href="/education" className={`${styles['link-item']} ${styles.laptop}`}>
+              <a href="/" className={`${styles['link-item']} ${styles.laptop}`}>
                 <span className={styles.tooltip}>Branded Laptops</span>
               </a>
-              <a href="/fitness" className={`${styles['link-item']} ${styles.cap}`}>
+              <a href="/" className={`${styles['link-item']} ${styles.cap}`}>
                 <span className={styles.tooltip}>Latest Design Caps</span>
               </a>
-              <a href="/crypto" className={`${styles['link-item']} ${styles.shoes}`}>
+              <a href="/" className={`${styles['link-item']} ${styles.shoes}`}>
                 <span className={styles.tooltip}>Branded Shoes</span>
               </a>
-              <a href="/business" className={`${styles['link-item']} ${styles.cap2}`}>
+              <a href="/" className={`${styles['link-item']} ${styles.cap2}`}>
                 <span className={styles.tooltip}>Caps</span>
               </a>
             </div>

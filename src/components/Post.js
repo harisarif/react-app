@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Card, Dropdown, OverlayTrigger, Tooltip, Collapse, Modal } from 'react-bootstrap';
+import { Card, Dropdown, OverlayTrigger, Tooltip, Collapse, Modal, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import Swal from 'sweetalert2';
@@ -74,28 +74,319 @@ const FollowButton = styled.button`
   }
 `;
 
-const Post = ({ post,posts,setPosts, onDelete }) => {
+// Helper function to get category badge
+const getCategoryBadge = (categoryId) => {
+  switch (categoryId) {
+    case 1:
+      return {
+        text: 'Business',
+        className: 'bg-primary text-white px-3 py-1 rounded-pill'
+      };
+    case 2:
+      return {
+        text: 'Fitness',
+        className: 'bg-success text-white px-3 py-1 rounded-pill'
+      };
+    case 3:
+      return {
+        text: 'Crypto',
+        className: 'bg-warning text-dark px-3 py-1 rounded-pill'
+      };
+    case 4:
+      return {
+        text: 'Technology',
+        className: 'bg-info text-white px-3 py-1 rounded-pill'
+      };
+    default:
+      return {
+        text: 'Mindset',
+        className: 'bg-secondary text-white px-3 py-1 rounded-pill'
+      };
+  }
+};
+
+const Post = ({ post, posts, setPosts, onDelete }) => {
+  const badge = getCategoryBadge(post.category_id);
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const [comments, setComments] = useState(post.comments || []);
   const [likes, setLikes] = useState(post.likes || []);
+  const [showComments, setShowComments] = useState(false);
+  const [showShareOffcanvas, setShowShareOffcanvas] = useState(false);
+  const [newComment, setNewComment] = useState('');
   const { userData } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(post.liked || false);
-  const [showComments, setShowComments] = useState(false);
-  const [newComment, setNewComment] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [filePreview, setFilePreview] = useState(null);
-  const [showMediaModal, setShowMediaModal] = useState(false);
-  const [selectedMedia, setSelectedMedia] = useState(null);
   const [isLiking, setIsLiking] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showMediaModal, setShowMediaModal] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState(null);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [isDocumentLoading, setIsDocumentLoading] = useState(false);
   const [documentError, setDocumentError] = useState(null);
+  
+  // Edit related state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    title: '',
+    content: '',
+    category_id: '',
+    images: [],
+    videos: [],
+    documents: []
+  });
+  const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
+  const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = React.createRef(null);
 
-  if (!post) return null;
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('/api/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const handleEditShow = () => {
+    // Parse the existing media arrays if they're strings
+    const images = typeof post.images === 'string' ? JSON.parse(post.images || '[]') : (post.images || []);
+    const videos = typeof post.videos === 'string' ? JSON.parse(post.videos || '[]') : (post.videos || []);
+    const documents = typeof post.documents === 'string' ? JSON.parse(post.documents || '[]') : (post.documents || []);
+
+    // Set the initial form data with existing post data
+    setEditFormData({
+      title: post.title || '',
+      content: post.content || '',
+      category_id: post.category_id?.toString() || '',
+      images: images,
+      videos: videos,
+      documents: documents
+    });
+
+    // Set previews for existing media
+    setPreviews({
+      images: images.map(img => `${baseurl}/data/images/${img}`),
+      videos: videos.map(video => `${baseurl}/data/videos/${video}`),
+      documents: documents.map(doc => doc.split('/').pop()) // Get filename from path
+    });
+
+    // Set selected files (needed for the UI)
+    setSelectedFiles({
+      images: images,
+      videos: videos,
+      documents: documents
+    });
+
+    setShowEditModal(true);
+  };
+
+  const handleEditClose = () => {
+    setShowEditModal(false);
+    setSelectedFiles({ images: [], videos: [], documents: [] });
+    setPreviews({ images: [], videos: [], documents: [] });
+  };
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    const newImages = [];
+    const newVideos = [];
+    const newDocuments = [];
+    const imagePreviewUrls = [];
+    const videoPreviewUrls = [];
+    const documentPreviewUrls = [];
+
+    files.forEach(file => {
+      if (file.type.startsWith('image/')) {
+        newImages.push(file);
+        imagePreviewUrls.push(URL.createObjectURL(file));
+      } else if (file.type.startsWith('video/')) {
+        newVideos.push(file);
+        videoPreviewUrls.push(URL.createObjectURL(file));
+      } else if (
+        file.type === 'application/pdf' ||
+        file.type === 'application/msword' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        file.type === 'application/vnd.ms-excel' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-powerpoint' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
+        file.type === 'text/plain'
+      ) {
+        newDocuments.push(file);
+        documentPreviewUrls.push(file.name);
+      }
+    });
+
+    setSelectedFiles({
+      images: [...selectedFiles.images, ...newImages],
+      videos: [...selectedFiles.videos, ...newVideos],
+      documents: [...selectedFiles.documents, ...newDocuments]
+    });
+
+    setPreviews({
+      images: [...previews.images, ...imagePreviewUrls],
+      videos: [...previews.videos, ...videoPreviewUrls],
+      documents: [...previews.documents, ...documentPreviewUrls]
+    });
+
+    setEditFormData(prev => ({
+      ...prev,
+      images: [...prev.images, ...newImages],
+      videos: [...prev.videos, ...newVideos],
+      documents: [...prev.documents, ...newDocuments]
+    }));
+  };
+
+  const removeFile = (type, index) => {
+    const newFiles = { ...selectedFiles };
+    const newPreviews = { ...previews };
+    
+    // If it's a File object, just remove it
+    // If it's a string (existing file), mark it for removal
+    if (newFiles[type][index] instanceof File) {
+      if (type === 'images' || type === 'videos') {
+        URL.revokeObjectURL(newPreviews[type][index]);
+      }
+    }
+    
+    newFiles[type].splice(index, 1);
+    newPreviews[type].splice(index, 1);
+
+    setSelectedFiles(newFiles);
+    setPreviews(newPreviews);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem('access_token');
+      const formData = new FormData();
+      
+      console.log('Form Data before sending:', {
+        title: editFormData.title,
+        category_id: editFormData.category_id,
+        selectedFiles: selectedFiles
+      });
+
+      // Add basic info
+      formData.append('title', editFormData.title || '');
+      formData.append('category_id', editFormData.category_id || '');
+      formData.append('_method', 'PUT');
+
+      // Add new files
+      if (selectedFiles.images) {
+        selectedFiles.images.forEach((file) => {
+          if (file instanceof File) {
+            formData.append('images[]', file);
+          }
+        });
+      }
+
+      if (selectedFiles.videos) {
+        selectedFiles.videos.forEach((file) => {
+          if (file instanceof File) {
+            formData.append('videos[]', file);
+          }
+        });
+      }
+
+      if (selectedFiles.documents) {
+        selectedFiles.documents.forEach((file) => {
+          if (file instanceof File) {
+            formData.append('documents[]', file);
+          }
+        });
+      }
+
+      // Handle removed media
+      const originalImages = typeof post.images === 'string' ? JSON.parse(post.images || '[]') : (post.images || []);
+      const originalVideos = typeof post.videos === 'string' ? JSON.parse(post.videos || '[]') : (post.videos || []);
+      const originalDocuments = typeof post.documents === 'string' ? JSON.parse(post.documents || '[]') : (post.documents || []);
+
+      // Find removed files by comparing original arrays with current selectedFiles
+      const removedImages = originalImages.filter(img => 
+        !selectedFiles.images.some(file => 
+          file instanceof File ? false : file === img
+        )
+      );
+      
+      const removedVideos = originalVideos.filter(vid => 
+        !selectedFiles.videos.some(file => 
+          file instanceof File ? false : file === vid
+        )
+      );
+      
+      const removedDocuments = originalDocuments.filter(doc => 
+        !selectedFiles.documents.some(file => 
+          file instanceof File ? false : file === doc
+        )
+      );
+
+      // Add removed media to formData
+      removedImages.forEach(img => formData.append('remove_media[]', img));
+      removedVideos.forEach(vid => formData.append('remove_media[]', vid));
+      removedDocuments.forEach(doc => formData.append('remove_media[]', doc));
+
+      // Keep existing media that wasn't removed
+      const keptImages = selectedFiles.images.filter(file => !(file instanceof File));
+      const keptVideos = selectedFiles.videos.filter(file => !(file instanceof File));
+      const keptDocuments = selectedFiles.documents.filter(file => !(file instanceof File));
+
+      formData.append('kept_images', JSON.stringify(keptImages));
+      formData.append('kept_videos', JSON.stringify(keptVideos));
+      formData.append('kept_documents', JSON.stringify(keptDocuments));
+
+      // Log FormData contents
+      for (let pair of formData.entries()) {
+        console.log('FormData entry:', pair[0], pair[1]);
+      }
+
+      const response = await axios.post(`/api/posts/${post.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.data) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Post updated successfully',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        // Update the post in the UI
+        const updatedPost = response.data.post;
+        setPosts(prevPosts => 
+          prevPosts.map(p => 
+            p.id === post.id ? updatedPost : p
+          )
+        );
+
+        handleEditClose();
+      }
+    } catch (error) {
+      console.error('Error updating post:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.response?.data?.message || 'Something went wrong while updating the post!',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const formatFileSize = (bytes) => {
     if (!bytes) return '0 Bytes';
@@ -402,7 +693,7 @@ const Post = ({ post,posts,setPosts, onDelete }) => {
               <div className="w-100">
                 <div className="d-flex align-items-center justify-content-between">
                   <div>
-                    <h6 className="mb-0 d-inline-block">{post.user?.name || 'Anonymous'}</h6>
+                    <h6 className="mb-0">{post.user?.name || 'Anonymous'}</h6>
                     {post.user?.verified && (
                       <span className="d-inline-block text-primary">
                         <svg className="align-text-bottom" width="17" height="17" viewBox="0 0 17 17">
@@ -436,6 +727,9 @@ const Post = ({ post,posts,setPosts, onDelete }) => {
                     </p>
                   </div>
                   <div>
+                    <div className='d-flex align-items-center justify-content-between'>
+                  <span className={badge.className}>{badge.text}</span>
+                    
                     <Dropdown>
                     {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
                       <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
@@ -444,52 +738,62 @@ const Post = ({ post,posts,setPosts, onDelete }) => {
                     )}
                       <Dropdown.Menu align="end" className="shadow-sm">
                         {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
-                          <Dropdown.Item 
-                            className="text-danger d-flex align-items-center"
-                            onClick={async () => {
-                            const result = await Swal.fire({
-                              title: 'Are you sure?',
-                              text: "You won't be able to revert this!",
-                              icon: 'warning',
-                              showCancelButton: true,
-                              confirmButtonColor: '#3085d6',
-                              cancelButtonColor: '#d33',
-                              confirmButtonText: 'Yes, delete it!'
-                            });
-                            
-                            if (result.isConfirmed) {
-                              try {
-                                const token = localStorage.getItem('access_token');
-                                await axios.delete(`/api/posts/${post.id}`, {
-                                  headers: {
-                                    Authorization: `Bearer ${token}`,
-                                  },
-                                });
-                                
-                                Swal.fire(
-                                  'Deleted!',
-                                  'Your post has been deleted.',
-                                  'success'
-                                );
-                                
-                                // Refresh the page or update the posts list
-                                window.location.reload();
-                              } catch (error) {
-                                console.error('Error deleting post:', error);
-                                Swal.fire(
-                                  'Error',
-                                  'Failed to delete the post',
-                                  'error'
-                                );
+                          <>
+                            <Dropdown.Item 
+                              className="d-flex align-items-center"
+                              onClick={handleEditShow}
+                            >
+                              <span className="material-symbols-outlined me-2">edit</span>
+                              Edit
+                            </Dropdown.Item>
+                            <Dropdown.Item 
+                              className="text-danger d-flex align-items-center"
+                              onClick={async () => {
+                              const result = await Swal.fire({
+                                title: 'Are you sure?',
+                                text: "You won't be able to revert this!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                              });
+                              
+                              if (result.isConfirmed) {
+                                try {
+                                  const token = localStorage.getItem('access_token');
+                                  await axios.delete(`/api/posts/${post.id}`, {
+                                    headers: {
+                                      Authorization: `Bearer ${token}`,
+                                    },
+                                  });
+                                  
+                                  Swal.fire(
+                                    'Deleted!',
+                                    'Your post has been deleted.',
+                                    'success'
+                                  );
+                                  
+                                  // Refresh the page or update the posts list
+                                  window.location.reload();
+                                } catch (error) {
+                                  console.error('Error deleting post:', error);
+                                  Swal.fire(
+                                    'Error',
+                                    'Failed to delete the post',
+                                    'error'
+                                  );
+                                }
                               }
-                            }
-                          }}>
-                            <span className="material-symbols-outlined me-2">delete</span>
-                            Delete
-                          </Dropdown.Item>
+                            }}>
+                              <span className="material-symbols-outlined me-2">delete</span>
+                              Delete
+                            </Dropdown.Item>
+                          </>
                         )}
                       </Dropdown.Menu>
                     </Dropdown>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -605,7 +909,7 @@ const Post = ({ post,posts,setPosts, onDelete }) => {
                 </button>
                 <button
                   className="btn btn-link text-body p-0"
-                  onClick={() => setShowDeleteModal(true)}
+                  onClick={() => setShowShareOffcanvas(true)}
                 >
                   <span className="material-symbols-outlined align-text-top font-size-20">
                     share
@@ -703,7 +1007,7 @@ const Post = ({ post,posts,setPosts, onDelete }) => {
         </Modal.Body>
       </Modal>
 
-      <ShareOffcanvasNew show={showDeleteModal} onHide={() => setShowDeleteModal(false)} />
+      <ShareOffcanvasNew show={showShareOffcanvas} onHide={() => setShowShareOffcanvas(false)} />
 
       {/* PDF Preview Modal */}
       <Modal
@@ -778,6 +1082,128 @@ const Post = ({ post,posts,setPosts, onDelete }) => {
             )}
           </button>
         </Modal.Footer>
+      </Modal>
+
+      {/* Edit Post Modal */}
+      <Modal show={showEditModal} onHide={handleEditClose} size="lg" centered>
+        <Modal.Header className="d-flex justify-content-between">
+          <Modal.Title>Edit Post</Modal.Title>
+          <Link to="#" className="lh-1" onClick={handleEditClose}>
+            <span className="material-symbols-outlined">close</span>
+          </Link>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleEditSubmit}>
+            <div className="d-flex align-items-center mb-3">
+              <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
+              <Form.Control
+                type="text"
+                className="form-control"
+                placeholder="Write something here..."
+                value={editFormData.title}
+                onChange={(e) => {
+                  console.log('Title changed:', e.target.value);
+                  setEditFormData(prev => ({ ...prev, title: e.target.value }));
+                }}
+                required
+              />
+            </div>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>
+              <Form.Select
+                value={editFormData.category_id}
+                onChange={(e) => {
+                  console.log('Category changed:', e.target.value);
+                  setEditFormData(prev => ({ ...prev, category_id: e.target.value }));
+                }}
+                required
+              >
+                <option value="">Select a category</option>
+                {categories.map(category => (
+                  <option 
+                    key={category.id} 
+                    value={category.id}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          
+            {/* File upload section */}
+            <div className="file-upload-section">
+              <input
+                type="file"
+                multiple
+                hidden
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+                accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+              />
+              <Button 
+                variant="outline-primary" 
+                className="me-2"
+                onClick={() => fileInputRef.current.click()}
+              >
+                <i className="material-icons me-1">attach_file</i>
+                Add Files
+              </Button>
+            </div>
+
+            {/* Preview section */}
+            {Object.entries(previews).map(([type, files]) => (
+              files.length > 0 && (
+                <div key={type} className="preview-section mt-3">
+                  <h6 className="mb-2">{type.charAt(0).toUpperCase() + type.slice(1)}</h6>
+                  <div className="d-flex flex-wrap gap-2">
+                    {files.map((preview, index) => (
+                      <div key={index} className="position-relative">
+                        {type === 'images' && (
+                          <img src={preview} alt="" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                        )}
+                        {type === 'videos' && (
+                          <video width="100" height="100" controls>
+                            <source src={preview} />
+                          </video>
+                        )}
+                        {type === 'documents' && (
+                          <div className="document-preview">
+                            <i className="material-icons">description</i>
+                            <span>{selectedFiles[type][index].name}</span>
+                          </div>
+                        )}
+                        <button
+                          className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                          onClick={() => removeFile(type, index)}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
+            ))}
+            <div className="mt-3">
+              <Button variant="secondary" onClick={handleEditClose} className="me-2">
+                Close
+              </Button>
+              <Button 
+                variant="primary" 
+                type="submit"
+                disabled={isLoading || !editFormData.category_id || !editFormData.title.trim()}
+              >
+                {isLoading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    Updating...
+                  </>
+                ) : 'Update'}
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
       </Modal>
     </>
   );
