@@ -181,8 +181,8 @@ const SignIn = () => {
                       type="email"
                       name="email"
                       className="form-control mb-0"
-                      placeholder="Your Full Name"
-                      defaultValue="marvin"
+                      placeholder="Enter your email address"
+                      defaultValue=""
                       onChange={FormDataEvent}
                     />
                   </Form.Group>
@@ -193,7 +193,7 @@ const SignIn = () => {
                       name="password"
                       className="form-control mb-0"
                       placeholder="Password"
-                      defaultValue="marvin"
+                      defaultValue=""
                       onChange={FormDataEvent}
                     />
                   </Form.Group>

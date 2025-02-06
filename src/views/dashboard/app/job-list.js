@@ -66,7 +66,7 @@ const JobList = () => {
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 </div>
-              ) : jobs.length === 0 ? (
+              ) : !jobs || !jobs.data || jobs.data.length === 0 ? (
                 <NoDataFound 
                   message="No job listings available at the moment."
                   containerClassName="text-center py-5"

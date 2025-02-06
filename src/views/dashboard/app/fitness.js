@@ -20,6 +20,7 @@ import CustomToggle from "../../../components/dropdowns";
 // import ShareOffcanvas from "../../../components/share-offcanvas";
 import ReactFsLightbox from "fslightbox-react";
 import Doteddropdown from "../../../components/custom/Doted_dropdown";
+import NoDataFound from '../../../components/NoDataFound';
 
 // images
 import img1 from "../../../assets/images/page-img/fun.webp";
@@ -284,6 +285,7 @@ const UserFeeds = () => {
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
             <Col lg={12}>
               
+            {(userData && userData?.roles === "admin" &&
                 <Row>
                   <Col sm={12}>
                     <CreatePost 
@@ -292,17 +294,26 @@ const UserFeeds = () => {
                     />
                   </Col>
                 </Row>
+                  )}
 
               <Row className="special-post-container">
-                {posts.map((post) => (
-                  <Col sm={12} key={post.id} className="special-post">
-                    <Post post={post} setPosts={setPosts} posts={posts} />
-                  </Col>
-                ))}
-                {loadContent && (
+                {loadContent ? (
                   <div className="col-sm-12 text-center">
                     <img src={loader} alt="loader" style={{ height: "100px" }} />
                   </div>
+                ) : posts.length === 0 ? (
+                  <Col sm={12}>
+                    <NoDataFound 
+                      message="No mindset posts available. Share your thoughts to get started!"
+                      containerClassName="text-center py-5"
+                    />
+                  </Col>
+                ) : (
+                  posts.map((post) => (
+                    <Col sm={12} key={post.id} className="special-post">
+                      <Post post={post} setPosts={setPosts} posts={posts} />
+                    </Col>
+                  ))
                 )}
               </Row>
             </Col>

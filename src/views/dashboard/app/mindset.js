@@ -283,6 +283,7 @@ const UserFeeds = () => {
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
             <Col lg={12}>
               
+            {(userData && userData?.roles === "admin" &&
                 <Row>
                   <Col sm={12}>
                     <CreatePost 
@@ -291,6 +292,7 @@ const UserFeeds = () => {
                     />
                   </Col>
                 </Row>
+                  )}
 
               <Row className="special-post-container">
                 {loadContent ? (

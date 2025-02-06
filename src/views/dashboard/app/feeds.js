@@ -285,6 +285,7 @@ const UserFeeds = () => {
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
             <Col lg={12}>
               
+                  {(userData && userData?.roles === "admin" &&
                 <Row>
                   <Col sm={12}>
                     <CreatePost 
@@ -293,6 +294,7 @@ const UserFeeds = () => {
                     />
                   </Col>
                 </Row>
+                  )}
               <Row className="special-post-container">
                 {loadContent ? (
                   <div className="col-sm-12 text-center">
@@ -301,7 +303,7 @@ const UserFeeds = () => {
                 ) : posts.length === 0 ? (
                   <Col sm={12}>
                     <NoDataFound 
-                      message="No posts available in your feed. Follow people or create a post to get started!"
+                      message="No posts available in your feed."
                       containerClassName="text-center py-5"
                     />
                   </Col>
