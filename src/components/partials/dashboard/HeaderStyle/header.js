@@ -147,7 +147,7 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
         >
           {/* <Navbar className="iq-navbar p-lg-0" sticky="top"> */}
           <Container fluid className="navbar-inner">
-            <div className="d-flex align-items-center pb-2 pb-lg-0">
+            <div className="d-flex align-items-center pb-2 pb-lg-0 header-logo">
               <Link
                 to="/home"
                 className="d-flex align-items-center iq-header-logo navbar-brand d-block"
@@ -172,7 +172,7 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
             <div className="d-flex align-items-center header-link">
               <div className="d-flex align-items-center justify-content-between product-offcanvas h-100">
                 <div
-                  className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-none d-xl-block"
+                  className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-xl-block"
                   tabIndex="-1"
                   id="offcanvasBottomNav">
                   <div className="offcanvas-body h-100">
@@ -1057,6 +1057,69 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
           {/* </Navbar> */}
         </Navbar>
       </div >
+
+
+      <div
+                  className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-xl-block nav-for-mobile"
+                  tabIndex="-1"
+                  id="offcanvasBottomNav">
+                  <div className="offcanvas-body h-100">
+                    <ul className="iq-nav-menu list-unstyled h-100">
+                      <li className={`${location.pathname === '/business' ? 'active' : ''} nav-item`}>
+                        <Link
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2  mx-1`}
+                          to="/business"
+                          onClick={() => setActive("business")}
+                        >
+                          <span class="material-symbols-outlined me-2">
+                            trending_up
+                          </span>
+                          <span className="nav-text">Business Management</span>
+                        </Link>
+                      </li>
+                      <li className={`${location.pathname === '/fitness' ? 'active' : ''} nav-item`}>
+                        <Link
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                          to="/fitness"
+                          onClick={() => setActive("fitness")}
+                        >
+                          <span class="material-symbols-outlined me-2">
+                            exercise
+                          </span>
+                          <span className="nav-text">Fitness</span>
+                        </Link>
+                      </li>
+                      <li className={`${location.pathname === '/crypto' ? 'active' : ''} nav-item`}>
+                        <Link
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                          to="/crypto"
+                          onClick={() => setActive("crypto")}
+                        >
+                          <span class="material-symbols-outlined">
+                            currency_bitcoin
+                          </span>
+                          <span className="nav-text">Crypto</span>
+                        </Link>
+                      </li>
+                      <li className={`${location.pathname === '/mindset' ? 'active' : ''} nav-item`}>
+                        <Link
+                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                          to="/mindset"
+                          onClick={() => setActive("mindset")}
+                        >
+                          <span class="material-symbols-outlined">
+                            self_improvement
+                          </span>
+                          <span className="nav-text">Mindset</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+
+
+
       {/* </div> */}
 
       {/* <div
@@ -1066,5 +1129,15 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
     </>
   );
 };
+
+
+
+
+
+
+
+
+
+
 
 export default Header;
