@@ -12,7 +12,7 @@ import img1 from "../assets/images/icon/02.png";
 import img2 from "../assets/images/icon/02.png";
 import img3 from "../assets/images/icon/03.png";
 
-const CreatePost = ({ posts, setPosts, className }) => {
+const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) => {
   const { userData } = useContext(UserContext);
   const location = useLocation();
   const [show, setShow] = useState(false);
@@ -61,7 +61,10 @@ const CreatePost = ({ posts, setPosts, className }) => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get('/api/categories');
-      setCategories(response.data);
+      const filteredCategories = response.data.filter((item) => 
+        userCanCreatePostCategories?.includes(item.id)
+      );
+      setCategories(filteredCategories); // Set the filtered categories
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -83,7 +86,7 @@ const CreatePost = ({ posts, setPosts, className }) => {
   };
 
   const handleShow = () => {
-    if (!userData || userData?.roles != "admin" ) {
+    if (!userData || userCanCreatePostCategories?.includes(1,2,3,4,5) ) {
       Swal.fire({
         title: 'Authentication Required',
         text: 'Only Admin can create posts',

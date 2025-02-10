@@ -134,7 +134,7 @@ const EventCalender = () => {
   return (
     <div id="content-page" className="content-inner">
       <div className="container mt-5">
-        {userData?.roles === "admin" && (
+        {userData &&  userData?.permissions[0]?.can_create_events == 1 && (
           <div className="mb-4">
             <Button variant="primary" onClick={handleAddNew}>
               Add New Event

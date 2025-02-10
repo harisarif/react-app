@@ -173,7 +173,7 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Job List</span>
                     </Link>
                 </li>
-                {userData &&  userData.roles == "admin" && (
+                {userData &&  userData?.permissions[0]?.can_create_jobs == 1 && (
                 <li className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-link `} aria-current="page" to="/job-applications">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Job Applications</Tooltip>}>
@@ -205,6 +205,18 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Notifications</span>
                     </Link>
                 </li>
+                {userData &&  userData?.permissions[0]?.can_manage_users == 1 && (
+                <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item `}>
+                    <Link className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-link `} aria-current="page" to="/manage-users">
+                        <OverlayTrigger placement="right" overlay={<Tooltip>Manage Users</Tooltip>}>
+                            <i className="icon material-symbols-outlined">
+                            people
+                            </i>
+                        </OverlayTrigger>
+                        <span className="item-name">Manage Users</span>
+                    </Link>
+                </li>
+                )}
             </Accordion>
         </React.Fragment >
     )

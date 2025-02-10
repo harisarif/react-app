@@ -15,7 +15,7 @@ import EquityCircle from "../views/dashboard/app/equitycircle";
 import UserFeeds from "../views/dashboard/app/feeds";
 import SinglePost from "../views/dashboard/app/single-post";
 import Fitness from "../views/dashboard/app/fitness";
-
+import ManageUsers from "../views/dashboard/app/manage-users";
 
 import UserPrivacySetting from "../views/dashboard/app/user-privacy-setting";
 import FriendProfile from "../views/dashboard/app/friend-profile";
@@ -109,6 +109,10 @@ export const DefaultRouter = [
   {
     path: "/job-applications",
     element: <JobApplications />,
+  },
+  {
+    path: "/manage-users",
+    element: <ManageUsers />,
   },
   {
     path: "/post/:id",

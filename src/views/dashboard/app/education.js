@@ -225,7 +225,7 @@ const Education = () => {
           <div id="content">
             <div className="d-flex justify-content-between mb-3">
               <h2>Education Content</h2>
-              {userData && userData.roles === "admin" && (
+              {userData && userData?.permissions[0]?.can_create_education == 1 && (
                 <Button variant="primary" onClick={() => setShowModal(true)}>
                   Add New Content
                 </Button>

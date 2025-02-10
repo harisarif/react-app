@@ -220,6 +220,23 @@ const UserFeeds = () => {
     fetchPosts(1);
   };
 
+  const [userCanCreatePostCategories, setUserCanCreatePostCategories] = useState([]);
+  useEffect(() => {
+    const canCreatePostCategory = userData?.permissions[0]?.can_create_post_category;
+    if (canCreatePostCategory) {
+      try {
+        let arr = JSON.parse(canCreatePostCategory);
+        setUserCanCreatePostCategories(arr);
+        console.log(userCanCreatePostCategories);
+      } catch (error) {
+        console.error('Error parsing can_create_post_category:', error);
+        setUserCanCreatePostCategories([]); // Set to an empty array on error
+      }
+    } else {
+      setUserCanCreatePostCategories([]); // Set to an empty array if undefined
+    }
+  }, [userData]);
+
   return (
     <>
       <div id="content-page" className="content-inner">
@@ -285,12 +302,12 @@ const UserFeeds = () => {
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
             <Col lg={12}>
               
-            {(userData && userData?.roles === "admin" &&
+            {(userData && userCanCreatePostCategories?.some(category => [2].includes(category)) &&
                 <Row>
                   <Col sm={12}>
                     <CreatePost 
                       className="card-block card-stretch card-height"
-                      setPosts={setPosts} posts={posts}
+                      setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}
                     />
                   </Col>
                 </Row>
