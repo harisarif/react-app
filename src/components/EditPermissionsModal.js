@@ -21,7 +21,7 @@ const EditPermissionsModal = ({ show, onHide, user }) => {
     if (user) {
       axios.get(`/api/users/${user.id}`)
         .then(res => {
-          let arr = JSON.parse(res.data.permissions[0]?.can_create_post_category);
+          let arr = JSON.parse(res.data.permissions[0]?.can_create_post_category) || [];
           setPermissions((prev) => ({
             ...prev,
             can_create_jobs: res.data.permissions[0]?.can_create_jobs,

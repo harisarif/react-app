@@ -124,6 +124,7 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [isDocumentLoading, setIsDocumentLoading] = useState(false);
   const [documentError, setDocumentError] = useState(null);
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
   
   // Edit related state
   const [showEditModal, setShowEditModal] = useState(false);
@@ -587,8 +588,9 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
       return;
     }
 
+    setIsCommentLoading(true);
+
     try {
-      // Retrieve the token from local storage
       const token = localStorage.getItem('access_token');
 
       const response = await axios.post(`/api/posts/${post.id}/comment`, {
@@ -602,6 +604,8 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
       setNewComment('');
     } catch (error) {
       console.error('Error posting comment:', error);
+    } finally {
+      setIsCommentLoading(false);
     }
   };
 
@@ -775,7 +779,7 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
                                   );
                                   
                                   // Refresh the page or update the posts list
-                                  window.location.reload();
+                                  setPosts(posts.filter(p => p.id !== post.id))
                                 } catch (error) {
                                   console.error('Error deleting post:', error);
                                   Swal.fire(
@@ -953,9 +957,19 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
                         placeholder="Write a comment..."
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
+                        disabled={isCommentLoading}
                       />
                     </div>
-                    <button type="submit" className="btn btn-primary">Post</button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary"
+                      disabled={isCommentLoading}
+                    >
+                      Post
+                      {isCommentLoading && (
+                        <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                      )}
+                    </button>
                   </div>
                 </form>
               </div>
@@ -1174,6 +1188,7 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
                           </div>
                         )}
                         <button
+                          type="button"
                           className="btn btn-sm btn-danger position-absolute top-0 end-0"
                           onClick={() => removeFile(type, index)}
                         >
