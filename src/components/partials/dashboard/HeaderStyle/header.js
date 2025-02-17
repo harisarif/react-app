@@ -1,15 +1,20 @@
-import React, { useState , useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from '../../../../context/UserContext';
 import { NotificationContext } from '../../../../context/NotificationContext';
 import axios from '../../../../utils/axios';
 import '../../../../../src/utils/echo';  // Import Echo configuration
 import { Nav, Form, Card, Container, Image, Dropdown, Navbar } from "react-bootstrap";
-import { Link , useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getProfileImageUrl } from '../../../../utils/helpers';
 import { getRelativeTime } from '../../../../utils/dateUtils';
 import { getNotificationUrl } from '../../../../utils/notificationHelpers';
 import moment from 'moment';
 import './header.css';
+
+
+import SettingOffCanvas from "../../../setting/SettingOffCanvas";
+import RightSidebar from "../SidebarStyle/rightsidebar";
+
 //image
 import user1 from "../../../../assets/images/user/1.jpg";
 import user2 from "../../../../assets/images/user/02.jpg";
@@ -31,10 +36,11 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchModal from "../../../search-modal";
 
 const Header = () => {
+
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const { userData } = useContext(UserContext);
-  const { 
-    notifications, 
+  const {
+    notifications,
     totalUnread,
     markAsRead,
     deleteNotification,
@@ -116,25 +122,25 @@ const Header = () => {
     });
   }
 
-  const handleLogout = () =>{
+  const handleLogout = () => {
     localStorage.removeItem('access_token');
     window.location.href = '/auth/sign-in';
   }
 
-useEffect(() => {
-  const sideBarIconFixed = document.getElementById('first-tour');
-  const observer = new MutationObserver(() => {
-    if (sideBarIconFixed.classList.contains('sidebar-mini')) {
-     document.getElementById("sidebar-toggle-icon").style.left = "0px";
-document.getElementById("sidebar-toggle-icon").style.transition = "left 0.1s ease-in-out";
-    } else {
-      document.getElementById("sidebar-toggle-icon").style.left = "220px";
-document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s ease-in-out";
-    }
-  });
-  observer.observe(sideBarIconFixed, { attributes: true });
-  return () => observer.disconnect();
-}, []);
+  useEffect(() => {
+    const sideBarIconFixed = document.getElementById('first-tour');
+    const observer = new MutationObserver(() => {
+      if (sideBarIconFixed.classList.contains('sidebar-mini')) {
+        document.getElementById("sidebar-toggle-icon").style.left = "0px";
+        document.getElementById("sidebar-toggle-icon").style.transition = "left 0.1s ease-in-out";
+      } else {
+        document.getElementById("sidebar-toggle-icon").style.left = "220px";
+        document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s ease-in-out";
+      }
+    });
+    observer.observe(sideBarIconFixed, { attributes: true });
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -155,7 +161,7 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                 <img src={equity} class="brand-logo" alt="#" />
               </Link>
               <Link
-                className="sidebar-toggle "
+                className=""
                 id="sidebar-toggle-icon"
                 data-toggle="sidebar"
                 data-active="true"
@@ -376,6 +382,8 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                 </Dropdown.Menu>
               </Dropdown> */}
 
+              <RightSidebar />
+
               <Dropdown as="li" className="nav-item d-lg-none">
                 <Dropdown.Toggle
                   as="form"
@@ -398,7 +406,7 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                 <SearchModal />
               </Dropdown>
 
-              <Dropdown className="nav-item group-icon" as="li">
+              {/* <Dropdown className="nav-item group-icon" as="li">
                 <Dropdown.Toggle as="a" bsPrefix=" "
                   to="#"
                   className="dropdown-toggle d-flex align-items-center"
@@ -567,7 +575,7 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                     </div>
                   </div>
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
 
               <Dropdown as="li" className="nav-item">
                 <Dropdown.Toggle as="a"
@@ -896,7 +904,7 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                 >
                   <Image
                     src={getProfileImageUrl(userData)}
-                    
+
                     className="img-fluid rounded-circle avatar-48 border border-2 me-3"
                     alt="user"
                     loading="lazy"
@@ -906,28 +914,28 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                   className={`sub-drop caption-menu `}
                 >
                   <Card className="shadow-none m-0">
-                  {userData && (
-                    <Card.Header>
-                      <div className="header-title">
-                       <h5 className="mb-0 ">{userData?.name}</h5>
-                      </div>
-                    </Card.Header>
-                  )}
-                    <Card.Body className="p-0 ">
                     {userData && (
-                      <div className="d-flex align-items-center iq-sub-card">
-  <span className="material-symbols-outlined">
-  line_style
-    </span>
-  <div className="ms-3">
-  <Link
-                            to="/profile"
-                            className="mb-0 h6"
-                          >
-                            My Profile
-                          </Link>
+                      <Card.Header>
+                        <div className="header-title">
+                          <h5 className="mb-0 ">{userData?.name}</h5>
                         </div>
-</div>
+                      </Card.Header>
+                    )}
+                    <Card.Body className="p-0 ">
+                      {userData && (
+                        <div className="d-flex align-items-center iq-sub-card">
+                          <span className="material-symbols-outlined">
+                            line_style
+                          </span>
+                          <div className="ms-3">
+                            <Link
+                              to="/profile"
+                              className="mb-0 h6"
+                            >
+                              My Profile
+                            </Link>
+                          </div>
+                        </div>
                       )}
                       {/* <div className="d-flex align-items-center iq-sub-card border-0">
                         <span className="material-symbols-outlined">
@@ -943,16 +951,16 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                         </div>
                       </div> */}
                       {userData && (
-                      <div className="d-flex align-items-center iq-sub-card">
-  <span className="material-symbols-outlined">
-  edit_note
-  </span>
-  <div className="ms-3">
-                          <Link to="/dashboard/app/user-profile-edit" className="mb-0 h6">
-                            Edit Profile
-                          </Link>
+                        <div className="d-flex align-items-center iq-sub-card">
+                          <span className="material-symbols-outlined">
+                            edit_note
+                          </span>
+                          <div className="ms-3">
+                            <Link to="/dashboard/app/user-profile-edit" className="mb-0 h6">
+                              Edit Profile
+                            </Link>
+                          </div>
                         </div>
-</div>
                       )}
                       {/* <div className="d-flex align-items-center iq-sub-card border-0">
                         <span className="material-symbols-outlined">
@@ -964,62 +972,65 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
                           </Link>
                         </div>
                       </div> */}
-                                          {userData && (
-                                            <div className="d-flex align-items-center iq-sub-card border-0">
-                        <span className="material-symbols-outlined">
-                          manage_accounts
-                        </span>
-                        <div className="ms-3">
-                          <Link
-                            to="/dashboard/app/user-account-setting"
-                            className="mb-0 h6"
-                          >
-                            Account settings
-                          </Link>
+                      {userData && (
+                        <div className="d-flex align-items-center iq-sub-card border-0">
+                          <span className="material-symbols-outlined">
+                            manage_accounts
+                          </span>
+                          <div className="ms-3">
+                            <Link
+                              to="/dashboard/app/user-account-setting"
+                              className="mb-0 h6"
+                            >
+                              Account settings
+                            </Link>
+                          </div>
                         </div>
-                      </div>
                       )}
-                                          {userData && (
-                                            <div className="d-flex align-items-center iq-sub-card border-0">
-                        <span className="material-symbols-outlined">
-                          lock
-                        </span>
-                        <div className="ms-3">
-                          <Link
-                            to="/dashboard/app/user-privacy-setting"
-                            className="mb-0 h6"
-                          >
-                            Privacy Settings
-                          </Link>
+                      {userData && (
+                        <div className="d-flex align-items-center iq-sub-card border-0">
+                          <span className="material-symbols-outlined">
+                            lock
+                          </span>
+                          <div className="ms-3">
+                            <Link
+                              to="/dashboard/app/user-privacy-setting"
+                              className="mb-0 h6"
+                            >
+                              Privacy Settings
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                      )}
-                      
-                      {!userData && (
-                      <div className="d-flex align-items-center iq-sub-card">
-  <span className="material-symbols-outlined">
-    login
-  </span>
-  <div className="ms-3">
-    <Link to="/auth/sign-in" className="mb-0 h6">
-      Sign in
-    </Link>
-  </div>
-</div>
                       )}
 
-{userData && (
-  <div className="d-flex align-items-center iq-sub-card">
-    <span className="material-symbols-outlined">
-      logout
-    </span>
-    <div className="ms-3">
-      <Link onClick={handleLogout} className="mb-0 h6">
-        Sign out
-      </Link>
-    </div>
-  </div>
-)}
+                      <SettingOffCanvas />
+
+
+                      {!userData && (
+                        <div className="d-flex align-items-center iq-sub-card">
+                          <span className="material-symbols-outlined">
+                            login
+                          </span>
+                          <div className="ms-3">
+                            <Link to="/auth/sign-in" className="mb-0 h6">
+                              Sign in
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+
+                      {userData && (
+                        <div className="d-flex align-items-center iq-sub-card">
+                          <span className="material-symbols-outlined">
+                            logout
+                          </span>
+                          <div className="ms-3">
+                            <Link onClick={handleLogout} className="mb-0 h6">
+                              Sign out
+                            </Link>
+                          </div>
+                        </div>
+                      )}
 
                       <div className=" iq-sub-card">
                         <h5>Chat Settings</h5>
@@ -1060,62 +1071,64 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
 
 
       <div
-                  className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-xl-block nav-for-mobile"
-                  tabIndex="-1"
-                  id="offcanvasBottomNav">
-                  <div className="offcanvas-body h-100">
-                    <ul className="iq-nav-menu list-unstyled h-100">
-                      <li className={`${location.pathname === '/business' ? 'active' : ''} nav-item`}>
-                        <Link
-                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2  mx-1`}
-                          to="/business"
-                          onClick={() => setActive("business")}
-                        >
-                          <span class="material-symbols-outlined me-2">
-                            trending_up
-                          </span>
-                          <span className="nav-text">Business Management</span>
-                        </Link>
-                      </li>
-                      <li className={`${location.pathname === '/fitness' ? 'active' : ''} nav-item`}>
-                        <Link
-                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
-                          to="/fitness"
-                          onClick={() => setActive("fitness")}
-                        >
-                          <span class="material-symbols-outlined me-2">
-                            exercise
-                          </span>
-                          <span className="nav-text">Fitness</span>
-                        </Link>
-                      </li>
-                      <li className={`${location.pathname === '/crypto' ? 'active' : ''} nav-item`}>
-                        <Link
-                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
-                          to="/crypto"
-                          onClick={() => setActive("crypto")}
-                        >
-                          <span class="material-symbols-outlined">
-                            currency_bitcoin
-                          </span>
-                          <span className="nav-text">Crypto</span>
-                        </Link>
-                      </li>
-                      <li className={`${location.pathname === '/mindset' ? 'active' : ''} nav-item`}>
-                        <Link
-                          className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
-                          to="/mindset"
-                          onClick={() => setActive("mindset")}
-                        >
-                          <span class="material-symbols-outlined">
-                            self_improvement
-                          </span>
-                          <span className="nav-text">Mindset</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+        className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-xl-block nav-for-mobile"
+        tabIndex="-1"
+        id="offcanvasBottomNav">
+        <div className="offcanvas-body h-100">
+          <ul className="iq-nav-menu list-unstyled h-100">
+            <li className={`${location.pathname === '/business' ? 'active' : ''} nav-item`}>
+              <Link
+                className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2  mx-1`}
+                to="/business"
+                onClick={() => setActive("business")}
+              >
+                <span class="material-symbols-outlined me-2">
+                  trending_up
+                </span>
+                <span className="nav-text">Business Management</span>
+              </Link>
+            </li>
+            <li className={`${location.pathname === '/fitness' ? 'active' : ''} nav-item`}>
+              <Link
+                className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                to="/fitness"
+                onClick={() => setActive("fitness")}
+              >
+                <span class="material-symbols-outlined me-2">
+                  exercise
+                </span>
+                <span className="nav-text">Fitness</span>
+              </Link>
+            </li>
+            <li className={`${location.pathname === '/crypto' ? 'active' : ''} nav-item`}>
+              <Link
+                className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                to="/crypto"
+                onClick={() => setActive("crypto")}
+              >
+                <span class="material-symbols-outlined">
+                  currency_bitcoin
+                </span>
+                <span className="nav-text">Crypto</span>
+              </Link>
+            </li>
+            <li className={`${location.pathname === '/mindset' ? 'active' : ''} nav-item`}>
+              <Link
+                className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                to="/mindset"
+                onClick={() => setActive("mindset")}
+              >
+                <span class="material-symbols-outlined">
+                  self_improvement
+                </span>
+                <span className="nav-text">Mindset</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
 
 
 
@@ -1126,6 +1139,8 @@ document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s eas
         className={`modal-backdrop fade ${show ? "show" : "d-none"}`}
         onClick={handleClose}
       ></div> */}
+
+
     </>
   );
 };

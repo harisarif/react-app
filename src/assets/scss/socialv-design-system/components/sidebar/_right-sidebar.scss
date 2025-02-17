@@ -12,6 +12,7 @@
 	z-index: 1;
 	transform: translateX(calc(111% + -2em));
 
+
 	@if $enable-transitions ==true {
 		@include transition-mixin(all 0.3s ease-in-out);
 	}
@@ -130,7 +131,7 @@
 }
 
 .right-sidebar {
-	transform: translateX(calc(10% + -1em));
+	transform: translateX(calc(10% + -4em));
 
 	.side-right-icon {
 		display: block;
@@ -383,5 +384,11 @@
 		right: 50%;
 		width: 285px;
 		transform: translateX(50%);
+	}
+}
+
+@media(max-width: 560px){
+	.right-sidebar-mini{
+		width: 100%;
 	}
 }

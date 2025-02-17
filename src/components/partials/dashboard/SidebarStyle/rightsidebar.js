@@ -4,19 +4,12 @@ import { UserContext } from "../../../../context/UserContext";
 import { NotificationContext } from '../../../../context/NotificationContext';
 import { Button, Card, Form, Image, Nav, Tab, Tabs } from "react-bootstrap";
 import Pusher from 'pusher-js';
-//image
-import user1 from "../../../../assets/images/user/01.jpg";
-import user2 from "../../../../assets/images/user/02.jpg";
-import user3 from "../../../../assets/images/user/03.jpg";
-import user4 from "../../../../assets/images/user/04.jpg";
-import user5 from "../../../../assets/images/user/11.jpg";
-import user6 from "../../../../assets/images/user/12.jpg";
-import user7 from "../../../../assets/images/user/13.jpg";
-import user8 from "../../../../assets/images/user/14.jpg";
-import user9 from "../../../../assets/images/user/15.jpg";
-import user10 from "../../../../assets/images/user/16.jpg";
+
+
+
 
 import { getProfileImageUrl } from '../../../../utils/helpers';
+import { Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { debounce } from 'lodash';
 import moment from 'moment';
@@ -43,10 +36,10 @@ const RightSidebar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  const { 
-    notifications, 
+  const {
+    notifications,
     totalUnread,
-    fetchNotifications 
+    fetchNotifications
   } = useContext(NotificationContext);
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -88,14 +81,14 @@ const RightSidebar = () => {
       // const response = await axios.post('/api/messages/create-conversation', {
       //   recipient_id: user.id
       // });
-      
+
       // Clear search
       setSearchQuery('');
       setSearchResults([]);
-      
+
       // Open chat with user
       handleChatOpen(user);
-      
+
       // Refresh conversations list
       fetchConversations();
     } catch (error) {
@@ -140,15 +133,15 @@ const RightSidebar = () => {
 
   const fetchData = async () => {
     try {
-      const [ convos, unread] = await Promise.all([
+      const [convos, unread] = await Promise.all([
         axios.get('/api/messages/conversations'),
         axios.get('/api/messages/unread-count')
       ]);
 
-        setConversations(convos.data);
-        setUnreadCount(unread.data.total_count);
-        setConversationUnreadCounts(unread.data.conversation_counts || {});
-      
+      setConversations(convos.data);
+      setUnreadCount(unread.data.total_count);
+      setConversationUnreadCounts(unread.data.conversation_counts || {});
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -160,8 +153,8 @@ const RightSidebar = () => {
         axios.get('/api/users'),
       ]);
 
-        setUserLists(users.data);
-      
+      setUserLists(users.data);
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -198,12 +191,12 @@ const RightSidebar = () => {
     try {
       setIsLoadingMore(pageNum > 1);
       const response = await axios.get(`/api/messages/${activeChat.id}?page=${pageNum}`);
-      
+
 
       if (!isMounted) return;
 
-      const newMessages = Array.isArray(response.data.messages) 
-        ? response.data.messages 
+      const newMessages = Array.isArray(response.data.messages)
+        ? response.data.messages
         : Object.values(response.data.messages);
 
       if (append) {
@@ -256,10 +249,10 @@ const RightSidebar = () => {
 
   const handleScroll = useCallback((e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
-    
+
     // Calculate scroll percentage from top
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
-    
+
     // Load more when scrolled up to about 20% from top (approximately 8 messages)
     if (scrollPercentage < 20 && hasMore && !isLoadingMore) {
       const nextPage = page + 1;
@@ -274,7 +267,7 @@ const RightSidebar = () => {
 
   const handleChatOpen = async (conversation) => {
     setActiveChat(conversation);
-    
+
     // Mark messages as read when opening chat
     try {
       await axios.post(`/api/messages/mark-read/${conversation.id}`);
@@ -295,7 +288,7 @@ const RightSidebar = () => {
     // Create form data for file upload
     const formData = new FormData();
     formData.append('recipient_id', activeChat.id);
-    
+
     if (selectedFile) {
       formData.append('file', selectedFile);
       formData.append('type', getFileType(selectedFile.type));
@@ -319,7 +312,7 @@ const RightSidebar = () => {
     setNewMessage('');
     setSelectedFile(null);
     setFilePreview(null);  // Clear the preview
-    
+
     // Add message to state immediately with pending status
     setMessages(prev => [...prev, pendingMessage]);
 
@@ -331,16 +324,16 @@ const RightSidebar = () => {
       });
 
       // Update the message status to sent
-      setMessages(prev => prev.map(msg => 
-        msg.id === pendingMessage.id 
+      setMessages(prev => prev.map(msg =>
+        msg.id === pendingMessage.id
           ? { ...response.data, status: response.data.is_read ? 'read' : 'sent' }
           : msg
       ));
       setShouldScrollToBottom(true);
     } catch (error) {
       // Update the message status to error
-      setMessages(prev => prev.map(msg => 
-        msg.id === pendingMessage.id 
+      setMessages(prev => prev.map(msg =>
+        msg.id === pendingMessage.id
           ? { ...msg, status: 'error' }
           : msg
       ));
@@ -367,7 +360,7 @@ const RightSidebar = () => {
         return;
       }
       setSelectedFile(file);
-      
+
       // Create preview
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
@@ -409,7 +402,7 @@ const RightSidebar = () => {
       const response = await axios.get(`/api/messages/download/${message.id}`, {
         responseType: 'blob'
       });
-      
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -432,8 +425,8 @@ const RightSidebar = () => {
       case 'image':
         return (
           <div className="message-image">
-            <img 
-              src={message.file_url} 
+            <img
+              src={message.file_url}
               alt={message.content}
               className="img-fluid rounded"
               style={{ maxWidth: '200px', cursor: 'pointer' }}
@@ -444,8 +437,8 @@ const RightSidebar = () => {
       case 'video':
         return (
           <div className="message-video">
-            <video 
-              controls 
+            <video
+              controls
               src={message.file_url}
               className="img-fluid rounded"
               style={{ maxWidth: '200px' }}
@@ -456,7 +449,7 @@ const RightSidebar = () => {
         );
       case 'file':
         return (
-          <div 
+          <div
             className="message-file d-flex align-items-center"
             style={{ cursor: 'pointer' }}
             onClick={() => downloadFile(message)}
@@ -581,12 +574,25 @@ const RightSidebar = () => {
 
   return (
     <>
+      {/* <div className="mt-30-imp right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
+        <span className="material-symbols-outlined">chat</span>
+      </div> */}
+      <Dropdown as="li" className="nav-item" >
+          <Link className="d-flex text-body align-items-center" to="#" onClick={minirightsidebar}>
+            <span className="material-symbols-outlined">chat</span>
+          </Link>
+      </Dropdown>
       <div className="right-sidebar-mini" id="rightSidebar">
         <div className="right-sidebar-panel p-0">
           <Card className="shadow-none m-0 h-100">
             <Card.Body className="px-0 pt-0">
               <div className="p-4">
-                <h6 className="fw-semibold m-0">Chats</h6>
+                <div className="d-flex justify-content-between align-items-center">
+                  <h6 className="fw-semibold m-0">Chats</h6>
+                  <Link className="d-flex text-body" to="#" onClick={minirightsidebar}>
+                    <span className="material-symbols-outlined">close</span>
+                  </Link>
+                </div>
                 <div className="mt-4 iq-search-bar device-search ">
                   <Form action="#" className="searchbox position-relative">
                     <Link className="search-link" to="#">
@@ -662,7 +668,7 @@ const RightSidebar = () => {
               </div>
               <Tab.Container defaultActiveKey="first">
                 <Nav
-                  className="nav-tabs right-sidebar-tabs"
+                  className="nav-tabs right-sidebar-tabs d-flex flex-row"
                   id="right-sidebar-tabs"
                   role="tablist"
                 >
@@ -678,7 +684,7 @@ const RightSidebar = () => {
                     aria-selected="true"
                   >
                     <span className="text-body icon">
-                    <svg
+                      <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="18"
                         height="18"
@@ -761,35 +767,35 @@ const RightSidebar = () => {
                       ))}
                     </Tab.Pane>
                     <Tab.Pane eventKey={"second"}>
-                    {userLists?.users?.map((user, index) => (
-                            <div
-                            className="d-flex align-items-center justify-content-between chat-tabs-content border-bottom"
-                            data-target="chat-popup-modal"
-                            key={index}
-                            onClick={() => handleStartConversation(user)}
-                          >
-                            <div className="d-flex align-items-center gap-3">
-                              <div className="flex-shrink-0">
-                                <img
-                                  className="rounded-circle avatar-50"
-                                  src={getProfileImageUrl(user)}
-                                  alt={user?.name}
-                                  loading="lazy"
-                                />
-                              </div>
-                              <div>
-                                <h6 className="font-size-14 mb-0 fw-semibold">
-                                  {user?.name}
-                                </h6>
-                                <p className="mb-0 font-size-12 fw-medium">
-                                  Start a new conversation?
-                                </p>
-                              </div>
+                      {userLists?.users?.map((user, index) => (
+                        <div
+                          className="d-flex align-items-center justify-content-between chat-tabs-content border-bottom"
+                          data-target="chat-popup-modal"
+                          key={index}
+                          onClick={() => handleStartConversation(user)}
+                        >
+                          <div className="d-flex align-items-center gap-3">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="rounded-circle avatar-50"
+                                src={getProfileImageUrl(user)}
+                                alt={user?.name}
+                                loading="lazy"
+                              />
                             </div>
-                            <span className="font-size-12 fw-medium">Now</span>
+                            <div>
+                              <h6 className="font-size-14 mb-0 fw-semibold">
+                                {user?.name}
+                              </h6>
+                              <p className="mb-0 font-size-12 fw-medium">
+                                Start a new conversation?
+                              </p>
+                            </div>
                           </div>
-                          ))}
-                      
+                          <span className="font-size-12 fw-medium">Now</span>
+                        </div>
+                      ))}
+
                     </Tab.Pane>
                   </Tab.Content>
                 </div>
@@ -815,7 +821,7 @@ const RightSidebar = () => {
                   View All Conversion
                 </Button>
               </div>
-              <div className="mt-30-imp right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
+              {/* <div className="mt-30-imp right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
                 <span className="material-symbols-outlined">chat</span>
                 {unreadCount > 0 && (
                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -823,7 +829,7 @@ const RightSidebar = () => {
                     <span className="visually-hidden">unread messages</span>
                   </span>
                 )}
-              </div>
+              </div> */}
             </Card.Body>
           </Card>
         </div>
@@ -855,7 +861,7 @@ const RightSidebar = () => {
                 </span>
               </div>
             </div>
-            <div 
+            <div
               className="chat-popup-body p-3 border-bottom"
             >
               {isLoadingMore && (
@@ -865,7 +871,7 @@ const RightSidebar = () => {
                   </div>
                 </div>
               )}
-              <ul 
+              <ul
                 className="list-inline p-0 mb-0 chat"
                 ref={chatBodyRef}
                 onScroll={handleScroll}
@@ -884,23 +890,23 @@ const RightSidebar = () => {
                       </div>
                       {message.sender_id == userData?.id ? (
 
-                      <p className="mb-0 d-flex align-items-center " style={{ justifyContent: 'flex-end' }}>
-                        {message.sender_id === userData.id && (
-                          <MessageStatus status={message.status || (message.is_read ? 'read' : 'sent')} />
-                        )}
-                        <span className="mt-1 d-block time font-size-10 fst-italic">
-                          {moment(message.created_at).fromNow()}
-                        </span>
-                      </p>
-                      ):
-                      (<p className="mb-0 d-flex align-items-center">
-                        {message.sender_id === userData.id && (
-                          <MessageStatus status={message.status || (message.is_read ? 'read' : 'sent')} />
-                        )}
-                        <span className="mt-1 d-block time font-size-10 fst-italic">
-                          {moment(message.created_at).fromNow()}
-                        </span>
-                      </p>)}
+                        <p className="mb-0 d-flex align-items-center " style={{ justifyContent: 'flex-end' }}>
+                          {message.sender_id === userData.id && (
+                            <MessageStatus status={message.status || (message.is_read ? 'read' : 'sent')} />
+                          )}
+                          <span className="mt-1 d-block time font-size-10 fst-italic">
+                            {moment(message.created_at).fromNow()}
+                          </span>
+                        </p>
+                      ) :
+                        (<p className="mb-0 d-flex align-items-center">
+                          {message.sender_id === userData.id && (
+                            <MessageStatus status={message.status || (message.is_read ? 'read' : 'sent')} />
+                          )}
+                          <span className="mt-1 d-block time font-size-10 fst-italic">
+                            {moment(message.created_at).fromNow()}
+                          </span>
+                        </p>)}
                     </div>
                   </li>
                 ))}
@@ -909,21 +915,21 @@ const RightSidebar = () => {
             </div>
             <div className="chat-popup-footer p-3">
               <div className="chat-popup-form">
-                <form onSubmit={handleSendMessage} className="chat-form" style={{display:'flex', flexDirection: 'column'}}>
+                <form onSubmit={handleSendMessage} className="chat-form" style={{ display: 'flex', flexDirection: 'column' }}>
                   {filePreview && (
                     <div className="file-preview mb-2 p-2 bg-light rounded">
                       <div className="d-flex align-items-center justify-content-between">
                         <div className="d-flex align-items-center">
                           {filePreview.type === 'image' && (
-                            <img 
-                              src={filePreview.url} 
+                            <img
+                              src={filePreview.url}
                               alt={filePreview.name}
                               className="me-2"
                               style={{ maxHeight: '50px', maxWidth: '50px', objectFit: 'cover' }}
                             />
                           )}
                           {filePreview.type === 'video' && (
-                            <video 
+                            <video
                               src={filePreview.url}
                               className="me-2"
                               style={{ maxHeight: '50px', maxWidth: '50px', objectFit: 'cover' }}
@@ -941,8 +947,8 @@ const RightSidebar = () => {
                             )}
                           </div>
                         </div>
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           className="btn btn-link text-danger p-0 ms-2"
                           onClick={cancelFileSelection}
                         >
@@ -966,7 +972,7 @@ const RightSidebar = () => {
                       onChange={handleFileSelect}
                       accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
                     />
-                    <button 
+                    <button
                       type="button"
                       className="btn btn-link"
                       onClick={() => document.getElementById('file-upload').click()}

@@ -10,6 +10,7 @@ import { Accordion, useAccordionButton, AccordionContext, Nav, Tooltip, OverlayT
 
 function CustomToggle({ children, eventKey, onClick, to }) {
 
+    
     const { activeEventKey } = useContext(AccordionContext);
     const decoratedOnClick = useAccordionButton(eventKey, (active) => onClick({ state: !active, eventKey: eventKey }));
     const isCurrentEventKey = activeEventKey === eventKey;
@@ -51,6 +52,7 @@ const VerticalNav = React.memo(() => {
     
 //     })
 // })
+const [show, setShow] = useState(false);
     return (
         <React.Fragment>
             <Accordion as="ul" className="navbar-nav iq-main-menu" id="sidebar-menu">
@@ -205,6 +207,7 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Notifications</span>
                     </Link>
                 </li>
+                
                 {userData &&  userData?.permissions[0]?.can_manage_users == 1 && (
                 <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-link `} aria-current="page" to="/manage-users">

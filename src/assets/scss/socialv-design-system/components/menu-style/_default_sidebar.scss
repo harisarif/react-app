@@ -3,7 +3,7 @@
   position: fixed;
   width: 100%;
   max-width: var(--sidebar-width);
-  top: 80px;
+  top: 66px;
   bottom: 0;
   transition: var(--sidebar-transition);
   transition-duration: var(--sidebar-transition-duration);
@@ -238,7 +238,7 @@ body {
 
 @media (max-width: 1199px) {
   .sidebar {
-    z-index: 11111;
+    z-index: 99;
     .sidebar-toggle {
       background: var(--#{$prefix}primary);
       transform: rotate(0);
