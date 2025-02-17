@@ -39,6 +39,11 @@ const SignIn = () => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   function FormDataEvent(event){
     const { name, value } = event.target;
@@ -60,7 +65,7 @@ const SignIn = () => {
       // You can store the token in localStorage or a state management library
       localStorage.setItem('access_token', response.data.access_token);
       setSuccess('Login successful!');
-      window.location.href = '/home'
+      window.location.href = '/'
     })
     .catch((error) => {
       setLoader(false);
@@ -77,7 +82,7 @@ const SignIn = () => {
 
       console.log('Google login successful:', response.data);
       localStorage.setItem('access_token', response.data.access_token);
-      window.location.href = '/home'
+      window.location.href = '/'
     } catch (error) {
       console.error('Google login error:', error);
       alert('Failed to sign in with Google. Please try again.');
@@ -188,14 +193,19 @@ const SignIn = () => {
                   </Form.Group>
                   <Form.Group className="form-group text-start">
                     <h6 className="form-label fw-bold">Your Password</h6>
-                    <Form.Control
-                      type="password"
-                      name="password"
-                      className="form-control mb-0"
-                      placeholder="Password"
-                      defaultValue=""
-                      onChange={FormDataEvent}
-                    />
+                    <div className="input-group">
+                      <Form.Control
+                        type={passwordVisible ? 'text' : 'password'}
+                        name="password"
+                        className="form-control mb-0"
+                        placeholder="Password"
+                        defaultValue=""
+                        onChange={FormDataEvent}
+                      />
+                      <span className="input-group-text" onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
+                        {passwordVisible ? '👁️' : '👁️‍🗨️'}
+                      </span>
+                    </div>
                   </Form.Group>
                   <div className="d-flex align-items-center justify-content-between">
                     <Form.Check className="form-check d-inline-block m-0">

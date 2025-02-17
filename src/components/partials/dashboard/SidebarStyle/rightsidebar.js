@@ -459,7 +459,7 @@ const RightSidebar = () => {
           </div>
         );
       default:
-        return message.content;
+        return  <div style={{ whiteSpace: "pre-line" }}>{message.content}</div>;
     }
   };
 
@@ -821,7 +821,11 @@ const RightSidebar = () => {
                   View All Conversion
                 </Button>
               </div>
+<<<<<<< HEAD
               {/* <div className="mt-30-imp right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
+=======
+              <div className="mt-30-imp d-none right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
+>>>>>>> 601baef443b40f3f1f857e0101d759d703719bdb
                 <span className="material-symbols-outlined">chat</span>
                 {unreadCount > 0 && (
                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -958,13 +962,13 @@ const RightSidebar = () => {
                     </div>
                   )}
                   <div className="d-flex">
-                    <input
+                    <textarea
                       type="text"
                       className="form-control"
                       placeholder={selectedFile ? 'Add a caption...' : 'Type your message'}
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
-                    />
+                    ></textarea>
                     <input
                       type="file"
                       id="file-upload"

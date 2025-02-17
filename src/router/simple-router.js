@@ -44,7 +44,7 @@ export const SimpleRouter = [
     element: <ResetPassword />
   },
   {
-    path: "/home",
+    path: "/",
     element: <Index />,
   },
   {

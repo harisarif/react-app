@@ -62,8 +62,8 @@ const [show, setShow] = useState(false);
                         <span className="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
                     </Link>
                 </li>
-                <li className={`${location.pathname === '/home' ? 'active' : ''} nav-item `}>
-                    <Link className={`${location.pathname === '/home' ? 'active' : ''} nav-link `} aria-current="page" to="/home">
+                <li className={`${location.pathname === '/' ? 'active' : ''} nav-item `}>
+                    <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Home</Tooltip>}>
                             <i className="icon material-symbols-outlined">
                             home
@@ -104,7 +104,7 @@ const [show, setShow] = useState(false);
                         eventKey="utilities-error" 
                         active={activeMenu === 'utilities-error' ? true : false} 
                         onClick={(activeKey) => setActiveMenu(activeKey)}
-                        to="/"
+                        to="/home"
                     >
                         <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             <i className="icon material-symbols-outlined">

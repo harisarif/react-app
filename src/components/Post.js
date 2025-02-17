@@ -9,6 +9,8 @@ import user1 from "../assets/images/user/1.jpg";
 import { getProfileImageUrl } from '../utils/helpers';
 import moment from 'moment';
 import styled from 'styled-components';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import the styles
 
 const FollowButton = styled.button`
   border: none;
@@ -804,7 +806,7 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
             </div>
           </div>
           <div className="mt-4">
-            <p className="m-0">{post.title}</p>
+            <div className="m-0" dangerouslySetInnerHTML={{ __html: post.title }} />
           </div>
           {post.media && post.media.length > 0 && (
             <div className={`media-grid media-grid-${Math.min(post.media.length, 5)}`}>
@@ -1110,14 +1112,12 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
           <Form onSubmit={handleEditSubmit}>
             <div className="d-flex align-items-center mb-3">
               <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
-              <Form.Control
-                type="text"
-                className="form-control"
+              <ReactQuill
                 placeholder="Write something here..."
                 value={editFormData.title}
-                onChange={(e) => {
-                  console.log('Title changed:', e.target.value);
-                  setEditFormData(prev => ({ ...prev, title: e.target.value }));
+                onChange={(value) => {
+                  console.log('Title changed:', value);
+                  setEditFormData(prev => ({ ...prev, title: value }));
                 }}
                 required
               />

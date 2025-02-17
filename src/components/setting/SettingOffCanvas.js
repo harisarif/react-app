@@ -45,6 +45,7 @@ const SettingOffCanvas = memo((props) => {
     })
     return (
         <Fragment>
+<<<<<<< HEAD
             {/* <div className="btn btn-fixed-end btn-danger btn-icon btn-setting" onClick={(e) => { e.stopPropagation(); setShow(true) }} >
                 <span className="icon material-symbols-outlined animated-rotate text-white">
                     settings
@@ -62,6 +63,12 @@ const SettingOffCanvas = memo((props) => {
                         App Settings
                     </Link>
                 </div>
+=======
+            <div className="btn btn-fixed-end btn-danger btn-icon btn-setting" onClick={(e) => {e.stopPropagation();setShow(true)}} >
+            <span className="icon material-symbols-outlined animated-rotate text-white">
+                settings
+            </span>
+>>>>>>> 601baef443b40f3f1f857e0101d759d703719bdb
             </div>
 
             <Offcanvas show={show} onHide={() => setShow(false)} placement={`${themeSchemeDirection === "rtl" ? 'start' : 'end'}`} backdrop={false} scroll={true} className="live-customizer">

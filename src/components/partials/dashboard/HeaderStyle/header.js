@@ -27,7 +27,6 @@ import shop1 from "../../../../assets/images/store/06.jpg";
 import shop2 from "../../../../assets/images/store/02.jpg";
 import shop3 from "../../../../assets/images/store/01.jpg";
 import equity from "../../../../assets/images/Equity_Circle.png";
-
 // Import selectors & action from setting store
 import * as SettingSelector from "../../../../store/setting/selectors";
 
@@ -36,7 +35,12 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchModal from "../../../search-modal";
 
 const Header = () => {
+<<<<<<< HEAD
 
+=======
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [conversationUnreadCounts, setConversationUnreadCounts] = useState({});
+>>>>>>> 601baef443b40f3f1f857e0101d759d703719bdb
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const { userData } = useContext(UserContext);
   const {
@@ -57,6 +61,27 @@ const Header = () => {
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
   };
+
+
+  useEffect(() => {
+    if (notifications) {
+      fetchData();
+    }
+  }, [notifications]);
+
+  const fetchData = async () => {
+    try {
+      const [ unread] = await Promise.all([
+        axios.get('/api/messages/unread-count')
+      ]);
+        setUnreadCount(unread.data.total_count);
+        setConversationUnreadCounts(unread.data.conversation_counts || {});
+      
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
 
   const handleMarkAllAsRead = async () => {
     try {
@@ -582,210 +607,20 @@ const Header = () => {
                   to="#"
                   className=" d-flex align-items-center header-message-icon"
                   id="mail-drop"
+                  onClick={() => {
+                      document.getElementById("rightSidebar").classList.toggle("right-sidebar");
+                      document.body.classList.toggle("right-sidebar-close");
+                  }}
                 >
-                  <i className="material-symbols-outlined">mail</i>
+                  <i className="material-symbols-outlined">chat</i>
+                  {unreadCount > 0 && (
+                  <span className="position-absolute top-20  start-100 translate-middle badge rounded-pill bg-danger">
+                    {unreadCount}
+                    <span className="visually-hidden">unread messages</span>
+                  </span>
+                )}
                   <span className="mobile-text d-none ms-3">Message</span>
                 </Dropdown.Toggle>
-                <Dropdown.Menu
-                  className={`sub-drop header-notification`}
-                  data-bs-popper="static"
-                >
-                  <div className="card shadow m-0">
-                    <div className="card-header d-flex justify-content-between px-0 pb-4 mx-5 border-bottom">
-                      <div className="header-title">
-                        <h5 className="fw-semibold">All Message</h5>
-                      </div>
-                    </div>
-                    <Card.Body className="p-0">
-                      <div className="item-header-scroll">
-                        <Link to="#" className="text-body">
-                          <div className="thread d-flex align-items-center justify-content-between rounded-0">
-                            <div>
-                              <img
-                                className="avatar-40 rounded-pill align-top"
-                                src={user5}
-                                alt=""
-                                loading="lazy"
-                              />{" "}
-                              <div className="ms-3 d-inline-block">
-                                <h6>Bni Emma Watson</h6>
-                                <small className="fw-500 text-body">
-                                  Hello how are you?
-                                </small>
-                              </div>
-                            </div>
-                            <small className="text-body">1 hr. ago</small>
-                          </div>
-                        </Link>
-                        <Link to="#" className="text-body">
-                          <div className="thread d-flex align-items-center justify-content-between rounded-0">
-                            <div>
-                              <img
-                                className="avatar-40 rounded-pill align-top"
-                                src={user2}
-                                alt=""
-                                loading="lazy"
-                              />{" "}
-                              <div className="ms-3 d-inline-block">
-                                <h6>John Travolta</h6>
-                                <small className="fw-500 text-body">
-                                  Yes, same here. Bye.
-                                </small>
-                              </div>
-                            </div>
-                            <small className="text-body">4 hr. ago</small>
-                          </div>
-                        </Link>
-                        <Link to="#" className="text-body">
-                          <div className="thread d-flex align-items-center justify-content-between rounded-0">
-                            <div>
-                              <img
-                                className="avatar-40 rounded-pill align-top"
-                                src={user3}
-                                alt=""
-                                loading="lazy"
-                              />{" "}
-                              <div className="ms-3 d-inline-block">
-                                <h6>Maya Didas</h6>
-                                <small className="fw-500 text-body">
-                                  that’s great, see you soon
-                                </small>
-                              </div>
-                            </div>
-                            <small className="text-body">9 hr. ago</small>
-                          </div>
-                        </Link>
-                        <Link to="#" className="text-body">
-                          <div className="thread d-flex align-items-center justify-content-between rounded-0">
-                            <div>
-                              <img
-                                className="avatar-40 rounded-pill align-top"
-                                src={user13}
-                                alt=""
-                                loading="lazy"
-                              />{" "}
-                              <div className="ms-3 d-inline-block">
-                                <h6>Paige Turner</h6>
-                                <small className="fw-500 text-body">
-                                  Yes, let’s go.
-                                </small>
-                              </div>
-                            </div>
-                            <small className="text-body">1 yr. ago</small>
-                          </div>
-                        </Link>
-                      </div>
-                      <div className="m-5 mt-4">
-                        <button
-                          type="button"
-                          className="btn btn-primary fw-500 w-100"
-                        >
-                          View All Messages
-                        </button>
-                      </div>
-                    </Card.Body>
-                  </div>
-                  {/* <Card className="shadow-none m-0">
-                      <Card.Header className="d-flex justify-content-between bg-primary">
-                        <div className="header-title bg-primary">
-                          <h5 className="mb-0 text-white">All Message</h5>
-                        </div>
-                        <small className="badge bg-light text-dark">4</small>
-                      </Card.Header>
-                      <Card.Body className="p-0 ">
-                        <Link to="#" className="iq-sub-card">
-                          <div className="d-flex  align-items-center">
-                            <div className="">
-                              <Image
-                                className="avatar-40 rounded"
-                                src={user1}
-                                alt=""
-                                loading="lazy"
-                              />
-                            </div>
-                            <div className=" w-100 ms-3">
-                              <h6 className="mb-0 ">Bni Emma Watson</h6>
-                              <small className="float-left font-size-12">
-                                13 Jun
-                              </small>
-                            </div>
-                          </div>
-                        </Link>
-                        <Link to="#" className="iq-sub-card">
-                          <div className="d-flex align-items-center">
-                            <div className="">
-                              <Image
-                                className="avatar-40 rounded"
-                                src={user2}
-                                alt=""
-                                loading="lazy"
-                              />
-                            </div>
-                            <div className="ms-3">
-                              <h6 className="mb-0 ">Lorem Ipsum Watson</h6>
-                              <small className="float-left font-size-12">
-                                20 Apr
-                              </small>
-                            </div>
-                          </div>
-                        </Link>
-                        <Link to="#" className="iq-sub-card">
-                          <div className="d-flex align-items-center">
-                            <div className="">
-                              <Image
-                                className="avatar-40 rounded"
-                                src={user3}
-                                alt=""
-                                loading="lazy"
-                              />
-                            </div>
-                            <div className="ms-3">
-                              <h6 className="mb-0 ">Why do we use it?</h6>
-                              <small className="float-left font-size-12">
-                                30 Jun
-                              </small>
-                            </div>
-                          </div>
-                        </Link>
-                        <Link to="#" className="iq-sub-card">
-                          <div className="d-flex align-items-center">
-                            <div className="">
-                              <Image
-                                className="avatar-40 rounded"
-                                src={user4}
-                                alt=""
-                                loading="lazy"
-                              />
-                            </div>
-                            <div className="ms-3">
-                              <h6 className="mb-0 ">Variations Passages</h6>
-                              <small className="float-left font-size-12">
-                                12 Sep
-                              </small>
-                            </div>
-                          </div>
-                        </Link>
-                        <Link to="#" className="iq-sub-card">
-                          <div className="d-flex align-items-center">
-                            <div className="">
-                              <Image
-                                className="avatar-40 rounded"
-                                src={user5}
-                                alt=""
-                                loading="lazy"
-                              />
-                            </div>
-                            <div className="ms-3">
-                              <h6 className="mb-0 ">Lorem Ipsum generators</h6>
-                              <small className="float-left font-size-12">
-                                5 Dec
-                              </small>
-                            </div>
-                          </div>
-                        </Link>
-                      </Card.Body>
-                    </Card> */}
-                </Dropdown.Menu>
               </Dropdown>
 
               <Dropdown
