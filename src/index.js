@@ -19,8 +19,8 @@ import { ChatRouter } from './router/chat-router';
 
 const router = createBrowserRouter([
 
-  ...IndexRouters,
   ...SimpleRouter,
+  ...IndexRouters,
   ...ChatRouter
 ], { basename: process.env.PUBLIC_URL })
 ReactDOM.createRoot(document.getElementById('root')).render(

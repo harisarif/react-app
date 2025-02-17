@@ -5,6 +5,8 @@ import axios from '../utils/axios';
 import { UserContext } from '../context/UserContext';
 import { getProfileImageUrl } from '../utils/helpers';
 import Swal from 'sweetalert2';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import the styles
 
 //images
 import user1 from "../assets/images/user/1.jpg";
@@ -295,12 +297,10 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
         <Modal.Body>
           <div className="d-flex align-items-center mb-3">
             <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
-            <Form.Control
-              as="textarea"
-              rows={3}
+            <ReactQuill
               placeholder="Write something here..."
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={setContent}
             />
           </div>
 

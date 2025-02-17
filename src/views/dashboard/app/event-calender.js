@@ -2,11 +2,30 @@ import React, { useEffect, useState, useContext } from "react";
 import { Row, Col, Container, Button, Modal, Form } from "react-bootstrap";
 import { UserContext } from "../../../context/UserContext";
 import axios from "../../../utils/axios";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import Swal from "sweetalert2";
 import moment from "moment";
 import NoDataFound from '../../../components/NoDataFound';
 
 const EventCalender = () => {
+  const [showModalDetail, setShowModalDetail] = useState(false);
+  const [selectedEventDetail, setSelectedEventDetail] = useState(null);
+  const handleShow = (event) => {
+    setSelectedEventDetail(event);
+    setShowModalDetail(true);
+  };
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'align': [] }],
+      ['link', 'image'],
+      ['clean']
+    ],
+  };
+
   const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -152,45 +171,65 @@ const EventCalender = () => {
             </Col>
           ) : (
             events.map((event) => (
-              <Col xs={4} key={event.id} className="mb-4">
-                <div className="col-12">
-                  <div className="card cardhover">
-                    <div className="card-body label-card">
-                      <div>
-                        <h6 className="price">
-                          <span className="regular-price text-dark pr-2 label-span">
-                            {moment(event.event_date).format('DD MMMM')}
-                          </span>
-                        </h6>
-                      </div>
-                      <h5>{event.title}</h5>
-                      <small>{event.subtitle}</small>
-                      <div className="mt-2">
-                        <p className="mb-0">{event.description}</p>
-                      </div>
-                      {userData?.roles === "admin" && (
-                        <div className="mt-3">
-                          <Button
-                            variant="outline-primary"
-                            size="sm"
-                            className="me-2"
-                            onClick={() => handleEdit(event)}
-                          >
-                            Edit
-                          </Button>
+              <div>
+             <Col xs={4} key={event.id} className="mb-4" onClick={() => handleShow(event)}>
+               <div className="col-12">
+                 <div className="card cardhover">
+                   <div className="card-body label-card">
+                     <div>
+                       <h6 className="price">
+                         <span className="regular-price text-dark pr-2 label-span">
+                           {moment(event.event_date).format('DD MMMM')}
+                         </span>
+                       </h6>
+                     </div>
+                     <h5>{event.title}</h5>
+                     <small>{event.subtitle}</small>
+                     
+                     {userData && userData?.permissions[0]?.can_create_events == 1 && (
+                       <div className="mt-3">
+                         <Button
+                           variant="outline-primary"
+                           size="sm"
+                           className="me-2"
+                           onClick={() => handleShow(event)} // Use handleShow
+                         >
+                           View Details
+                         </Button>
                           <Button
                             variant="outline-danger"
                             size="sm"
-                            onClick={() => handleDelete(event.id)}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent the parent from receiving the click event
+                              handleDelete(event.id);
+                            }}
                           >
                             Delete
                           </Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Col>
+                       </div>
+                     )}
+                   </div>
+                 </div>
+               </div>
+             </Col>
+             
+             <Modal show={showModalDetail} onHide={() => setShowModalDetail(false)}>
+               <Modal.Header closeButton>
+                 <Modal.Title>{selectedEventDetail?.title}</Modal.Title>
+               </Modal.Header>
+               <Modal.Body>
+                 <p><strong>Short Description:</strong> {selectedEventDetail?.subtitle}</p>
+                 <p dangerouslySetInnerHTML={{ __html: selectedEventDetail?.description }} />
+                 <p><strong>Event Date:</strong> {moment(selectedEventDetail?.event_date).format('DD MMMM')}</p>
+                 <p><strong>Event Type:</strong> {selectedEventDetail?.type}</p>
+               </Modal.Body>
+               <Modal.Footer>
+                 <Button variant="secondary" onClick={() => setShowModalDetail(false)}>
+                   Close
+                 </Button>
+               </Modal.Footer>
+             </Modal>
+             </div>
             ))
           )}
         </Row>
@@ -225,13 +264,19 @@ const EventCalender = () => {
 
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                rows={3}
-              />
+              <ReactQuill
+              theme="snow"
+              name="description"
+              value={formData.description}
+              onChange={(value) => {
+                setFormData(prev => ({
+                  ...prev,
+                  description: value
+                }));
+              }}
+              modules={modules}
+              style={{ height: '200px', marginBottom: '50px' }}
+            />
             </Form.Group>
 
             <Row>

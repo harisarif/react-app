@@ -178,22 +178,34 @@ const UserFeeds = () => {
 
   // Function to check if user has scrolled near the end
   const handleScroll = useCallback(() => {
-    if (window.innerHeight + document.documentElement.scrollTop
-      === document.documentElement.offsetHeight) {
-      if (hasMore && !isLoading) {
-        setPage(prevPage => {
-          const nextPage = prevPage + 1;
-          fetchPosts(nextPage);
-          return nextPage;
-        });
-      }
+    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolledToBottom = window.scrollY >= scrollableHeight;
+  
+    if (scrolledToBottom && hasMore && !isLoading) {
+      setPage(prevPage => {
+        const nextPage = prevPage + 1;
+        fetchPosts(nextPage);
+        return nextPage;
+      });
     }
   }, [hasMore, isLoading]);
-
+  
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScrollDebounced = debounce(handleScroll, 200); // Debounce the scroll event
+  
+    window.addEventListener('scroll', handleScrollDebounced);
+    return () => window.removeEventListener('scroll', handleScrollDebounced);
   }, [handleScroll]);
+  
+  // Debounce function
+  function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), delay);
+    };
+  }
 
   const [imageController, setImageController] = useState({
     toggler: false,
