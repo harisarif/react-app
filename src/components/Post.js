@@ -136,7 +136,8 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
     category_id: '',
     images: [],
     videos: [],
-    documents: []
+    documents: [],
+    visibility: 'public'
   });
   const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
   const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
@@ -170,14 +171,15 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
       category_id: post.category_id?.toString() || '',
       images: images,
       videos: videos,
-      documents: documents
+      documents: documents,
+      visibility: post.visibility
     });
 
     // Set previews for existing media
     setPreviews({
-      images: images.map(img => `${baseurl}/data/images/${img}`),
-      videos: videos.map(video => `${baseurl}/data/videos/${video}`),
-      documents: documents.map(doc => doc.split('/').pop()) // Get filename from path
+      images: images?.map(img => `${baseurl}/data/images/${img}`),
+      videos: videos?.map(video => `${baseurl}/data/videos/${video}`),
+      documents: documents?.map(doc => doc.split('/').pop()) // Get filename from path
     });
 
     // Set selected files (needed for the UI)
@@ -282,6 +284,7 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
 
       // Add basic info
       formData.append('title', editFormData.title || '');
+      formData.append('visibility', editFormData.visibility || 'public');
       formData.append('category_id', editFormData.category_id || '');
       formData.append('_method', 'PUT');
 
@@ -372,7 +375,7 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
         // Update the post in the UI
         const updatedPost = response.data.post;
         setPosts(prevPosts => 
-          prevPosts.map(p => 
+          prevPosts?.map(p => 
             p.id === post.id ? updatedPost : p
           )
         );
@@ -683,6 +686,13 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
   //   }
   // };
 
+  const handleVisibilityChange = (visibility) => {
+    setEditFormData(prev => ({
+      ...prev,
+      visibility: visibility 
+    }));
+  };
+
   return (
     <>
       <Card className="card-block card-stretch card-height">
@@ -706,13 +716,9 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
                       {' '}
                       {moment(post.created_at).format('h:mm a')}
                     </p>
-                    </div>
-                    {post.user?.verified && (
-                      <span className="d-inline-block text-primary">
-                        <svg className="align-text-bottom" width="17" height="17" viewBox="0 0 17 17">
-                          {/* Verified badge SVG path */}
-                        </svg>
-                      </span>
+                  </div>
+                    {post.visibility == 'private' && (
+                      <span className="badge  bg-danger text-white ms-2">Private</span>
                     )}
                     {post.user?.id != userData?.id && (
                     <FollowButton
@@ -784,7 +790,7 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
                                   );
                                   
                                   // Refresh the page or update the posts list
-                                  setPosts(posts.filter(p => p.id !== post.id))
+                                  setPosts(posts?.filter(p => p.id !== post.id))
                                 } catch (error) {
                                   console.error('Error deleting post:', error);
                                   Swal.fire(
@@ -813,7 +819,7 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
           </div>
           {post.media && post.media.length > 0 && (
             <div className={`media-grid media-grid-${Math.min(post.media.length, 5)}`}>
-              {post.media.slice(0, 5).map((item, index) => (
+              {post.media.slice(0, 5)?.map((item, index) => (
                 <div 
                   key={index} 
                   className="media-item"
@@ -930,7 +936,7 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
 
             <Collapse in={showComments}>
               <div className="comments-section mt-4">
-                {comments.map((comment, index) => (
+                {comments?.map((comment, index) => (
                   <div key={index} className="comment-item mb-3">
                     <div className="d-flex gap-3">
                       <img
@@ -1106,7 +1112,22 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
       {/* Edit Post Modal */}
       <Modal show={showEditModal} onHide={handleEditClose} size="lg" centered>
         <Modal.Header className="d-flex justify-content-between">
-          <Modal.Title>Edit Post</Modal.Title>
+        <Modal.Title  className="d-flex align-items-center hover-bg">
+            <div className="d-flex align-items-center flex-grow-1">
+              <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
+              <h2 className="mb-0 me-2">{userData?.name}</h2>
+              <span className={`badge ${editFormData.visibility === 'public' ? 'bg-success' : 'bg-danger'}`}>{editFormData.visibility.charAt(0).toUpperCase() + editFormData.visibility.slice(1)}</span>
+              <Dropdown className="ms-2">
+                <Dropdown.Toggle variant="link" className="p-0">
+                  <span className="material-symbols-outlined">arrow_drop_down</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => handleVisibilityChange('public')}>Public</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleVisibilityChange('private')}>Private</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </Modal.Title>
           <Link to="#" className="lh-1" onClick={handleEditClose}>
             <span className="material-symbols-outlined">close</span>
           </Link>
@@ -1114,7 +1135,7 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
         <Modal.Body>
           <Form onSubmit={handleEditSubmit}>
             <div className="d-flex align-items-center mb-3">
-              <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
+              {/* <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" /> */}
               <ReactQuill
                 placeholder="Write something here..."
                 value={editFormData.title}
@@ -1137,7 +1158,7 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
                 required
               >
                 <option value="">Select a category</option>
-                {categories.map(category => (
+                {categories?.map(category => (
                   <option 
                     key={category.id} 
                     value={category.id}
@@ -1169,12 +1190,12 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
             </div>
 
             {/* Preview section */}
-            {Object.entries(previews).map(([type, files]) => (
+            {Object.entries(previews)?.map(([type, files]) => (
               files.length > 0 && (
                 <div key={type} className="preview-section mt-3">
                   <h6 className="mb-2">{type.charAt(0).toUpperCase() + type.slice(1)}</h6>
                   <div className="d-flex flex-wrap gap-2">
-                    {files.map((preview, index) => (
+                    {files?.map((preview, index) => (
                       <div key={index} className="position-relative">
                         {type === 'images' && (
                           <img src={preview} alt="" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />

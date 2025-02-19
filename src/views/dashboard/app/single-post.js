@@ -52,24 +52,16 @@ const SinglePost = () => {
     );
   }
 
-  if (!post) {
-    return (
-      <div className="content-inner">
-        <Container>
-          <div className="text-center">
-            <h3>Post not found</h3>
-          </div>
-        </Container>
-      </div>
-    );
-  }
-
   return (
     <div className="content-inner">
       <Container>
         <Row>
           <Col sm={12}>
-            <Post post={post} setPosts={null} posts={[post]} />
+            {post ? (
+              <Post post={post} setPosts={null} posts={[post]} />
+            ) : (
+              <div className="alert alert-danger">Post not found or cannot be displayed.</div>
+            )}
           </Col>
         </Row>
       </Container>

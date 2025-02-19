@@ -495,7 +495,7 @@ const UserFeeds = () => {
   </Row>
 )}
 
-              <Row className="special-post-container">
+               <Row className="special-post-container">
                 <Col lg={8}>
                 {loadContent ? (
                   <div className="col-sm-12 text-center">

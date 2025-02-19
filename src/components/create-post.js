@@ -29,7 +29,8 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
     category_id: '',
     images: [],
     videos: [],
-    documents: []
+    documents: [],
+    visibility: 'public'
   });
   const fileInputRef = useRef(null);
 
@@ -83,7 +84,8 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
       category_id: '',
       images: [],
       videos: [],
-      documents: []
+      documents: [],
+      visibility: 'public'
     });
   };
 
@@ -217,7 +219,8 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
           category_id: '',
           images: [],
           videos: [],
-          documents: []
+          documents: [],
+          visibility: 'public'
         });
         setShow(false);
 
@@ -237,6 +240,13 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleVisibilityChange = (visibility) => {
+    setFormData(prev => ({
+      ...prev,
+      visibility: visibility || formData.visibility === 'public' ? 'private' : 'public'
+    }));
   };
 
   return (
@@ -289,14 +299,30 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
 
       <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header className="d-flex justify-content-between">
-          <Modal.Title>Create Post</Modal.Title>
+
+          <Modal.Title  className="d-flex align-items-center hover-bg">
+            <div className="d-flex align-items-center flex-grow-1">
+              <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
+              <h2 className="mb-0 me-2">{userData?.name}</h2>
+              <span className={`badge ${formData.visibility === 'public' ? 'bg-success' : 'bg-danger'}`}>{formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1)}</span>
+              <Dropdown className="ms-2">
+                <Dropdown.Toggle variant="link" className="p-0">
+                  <span className="material-symbols-outlined">arrow_drop_down</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => handleVisibilityChange('public')}>Public</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleVisibilityChange('private')}>Private</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </Modal.Title>
           <Link to="#" className="lh-1" onClick={handleClose}>
             <span className="material-symbols-outlined">close</span>
           </Link>
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex align-items-center mb-3">
-            {/* <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" /> */}
+            
             <ReactQuill
               placeholder="Write something here..."
               value={content}
