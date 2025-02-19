@@ -14,7 +14,7 @@ import img1 from "../assets/images/icon/02.png";
 import img2 from "../assets/images/icon/02.png";
 import img3 from "../assets/images/icon/03.png";
 
-const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) => {
+const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className }) => {
   const { userData } = useContext(UserContext);
   const location = useLocation();
   const [show, setShow] = useState(false);
@@ -42,7 +42,7 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
     // Set default category based on URL
     const path = location.pathname;
     let defaultCategoryId = '';
-    
+
     if (path.includes('/business')) {
       defaultCategoryId = '1';
     } else if (path.includes('/fitness')) {
@@ -64,7 +64,7 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
   const fetchCategories = async () => {
     try {
       const response = await axios.get('/api/categories');
-      const filteredCategories = response.data.filter((item) => 
+      const filteredCategories = response.data.filter((item) =>
         userCanCreatePostCategories?.includes(item.id)
       );
       setCategories(filteredCategories); // Set the filtered categories
@@ -90,7 +90,7 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
   };
 
   const handleShow = () => {
-    if (!userData || userCanCreatePostCategories?.includes(1,2,3,4,5) ) {
+    if (!userData || userCanCreatePostCategories?.includes(1, 2, 3, 4, 5)) {
       Swal.fire({
         title: 'Authentication Required',
         text: 'Only Admin can create posts',
@@ -163,7 +163,7 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
     const newFiles = { ...selectedFiles };
     const newPreviews = { ...previews };
     const newFormData = { ...formData };
-    
+
     if (type === 'images' || type === 'videos') {
       URL.revokeObjectURL(newPreviews[type][index]);
     }
@@ -252,11 +252,11 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
   return (
     <>
       <Card className={className}>
-        <Card.Header className="d-flex justify-content-between">
+        {/* <Card.Header className="d-flex justify-content-between">
           <div className="header-title">
             <h4 className="card-title">Create Post</h4>
           </div>
-        </Card.Header>
+        </Card.Header> */}
         <Card.Body>
           <div className="d-flex align-items-center">
             <div className="user-img">
@@ -269,11 +269,33 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
             <div className="post-text ms-3 w-100" onClick={handleShow}>
               <input
                 type="text"
-                className="form-control rounded"
-                placeholder="Write something here..."
+                className="form-control create-post-form-cntrl "
+                placeholder="Let's Post Something..."
                 style={{ cursor: "pointer" }}
                 readOnly
               />
+            </div>
+          </div>
+          <div className="d-flex align-items-center justify-content-between create-post-icons-main">
+
+            <div className="d-flex align-items-center photo-with-icon">
+              <span class="material-symbols-outlined">
+                photo_library
+              </span>
+              <span>Photo/video</span>
+            </div>
+            <div className="d-flex align-items-center event-with-icon">
+              <span class="material-symbols-outlined">
+                event
+              </span>
+              <span>Events</span>
+            </div>
+            <div className="d-flex align-items-center jobs-with-icon">
+            <span class="material-symbols-outlined">
+work
+</span>
+              <span>Jobs</span>
+
             </div>
           </div>
           {/* <hr />
@@ -340,8 +362,8 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
             >
               <option value="">Select a category</option>
               {categories.map(category => (
-                <option 
-                  key={category.id} 
+                <option
+                  key={category.id}
                   value={category.id}
                   selected={category.id.toString() == formData.category_id}
                 >
@@ -350,7 +372,7 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
               ))}
             </Form.Select>
           </Form.Group>
-          
+
           {/* File upload section */}
           <div className="file-upload-section">
             <input
@@ -361,8 +383,8 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
               onChange={handleFileSelect}
               accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
             />
-            <Button 
-              variant="outline-primary" 
+            <Button
+              variant="outline-primary"
               className="me-2"
               onClick={() => fileInputRef.current.click()}
             >
@@ -410,8 +432,8 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button 
-            variant="primary" 
+          <Button
+            variant="primary"
             onClick={handleSubmit}
             disabled={isLoading || !formData.category_id || (!content.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
           >
