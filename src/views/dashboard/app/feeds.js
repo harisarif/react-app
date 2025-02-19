@@ -11,6 +11,7 @@ import {
   OverlayTrigger,
   Tooltip,
   Collapse,
+  Form
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Card from "../../../components/Card";
@@ -21,7 +22,9 @@ import CustomToggle from "../../../components/dropdowns";
 import ReactFsLightbox from "fslightbox-react";
 import Doteddropdown from "../../../components/custom/Doted_dropdown";
 import NoDataFound from '../../../components/NoDataFound';
-
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import { getProfileImageUrl } from '../../../utils/helpers';
 // images
 import img1 from "../../../assets/images/page-img/fun.webp";
 // import img2 from "../../../assets/images/user/11.png";
@@ -123,6 +126,70 @@ const FsLightbox = ReactFsLightbox.default
   ? ReactFsLightbox.default
   : ReactFsLightbox;
 
+  const FollowButton = styled.button`
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  
+  &.follow-btn {
+    background: linear-gradient(45deg, #007bff, #6610f2);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(45deg, #0056b3, #520dc2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    }
+  }
+  
+  &.unfollow-btn {
+    background: #f8f9fa;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    
+    &:hover {
+      background: #dc3545;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .3s, opacity .5s;
+  }
+  
+  &:active::after {
+    transform: scale(0, 0);
+    opacity: .3;
+    transition: 0s;
+  }
+`;
+
 const UserFeeds = () => {
   const { userData, setUserData } = useContext(UserContext);
   const [open, setOpen] = useState(false);
@@ -141,10 +208,12 @@ const UserFeeds = () => {
   const [open_replay3, setopen_replay3] = useState(false)
 
   const [posts, setPosts] = useState([]);
+  const [admins, setAdmins] = useState();
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadContent, setLoadContent] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchPosts = async (pageNumber) => {
     if (isLoading || !hasMore) return;
@@ -175,6 +244,16 @@ const UserFeeds = () => {
     setIsLoading(false);
     fetchPosts(1);
   }, []);
+
+  useEffect(() => {
+    axios.get(`/api/get-admins?search=${searchQuery}`)
+      .then(response => {
+        setAdmins(response.data.users);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [searchQuery]);
 
   // Function to check if user has scrolled near the end
   const handleScroll = useCallback(() => {
@@ -225,6 +304,20 @@ const UserFeeds = () => {
       document.body.classList.remove("profile-page");
     };
   });
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('/api/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
   const handleNewPost = () => {
     setHasMore(false);
@@ -247,6 +340,83 @@ const UserFeeds = () => {
       setUserCanCreatePostCategories([]); // Set to an empty array if undefined
     }
   }, [userData]);
+
+
+  const handleFollow = async (userId) => {
+    if (!userData) {
+      Swal.fire({
+        title: 'Please Login',
+        text: 'You need to be logged in to follow users',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Login',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/auth/sign-in';
+        }
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(`/api/follow/${userId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+
+      if (response.data.status == 'success') {
+        if(response.data.action == 'follow'){
+          console.log("follow")
+          setHasMore(false);
+          setIsLoading(false);
+          fetchPosts(1);
+        }else if(response.data.action == 'unfollow'){
+          console.log("unfollow")
+          setHasMore(false);
+          setIsLoading(false);
+          fetchPosts(1);
+        }
+        setPosts(posts.map(p => {
+          if (p.user?.id === userId) {
+            return {
+              ...p,
+              is_following: !p.is_following
+            };
+          }
+          return p;
+        }));
+
+        setAdmins(admins.map(a =>{
+          if(a.id == userId){
+          return {
+            ...a,
+            is_following: !a.is_following
+          };
+        }
+      }));
+
+        // Show success message
+        Swal.fire({
+          title: 'Success',
+          text: response.data.message,
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }
+    } catch (error) {
+      console.error('Error following/unfollowing user:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to follow/unfollow user',
+        icon: 'error',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+  };
 
   return (
     <>
@@ -324,7 +494,9 @@ const UserFeeds = () => {
     </Col>
   </Row>
 )}
+
               <Row className="special-post-container">
+                <Col lg={8}>
                 {loadContent ? (
                   <div className="col-sm-12 text-center">
                     <img src={loader} alt="loader" style={{ height: "100px" }} />
@@ -339,10 +511,69 @@ const UserFeeds = () => {
                 ) : (
                   posts.map((post) => (
                     <Col sm={12} key={post.id} className="special-post">
-                      <Post post={post} setPosts={setPosts} posts={posts} />
+                      <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
                     </Col>
                   ))
+                  
+                  
                 )}
+                
+                </Col>
+                <Col sm={4}>
+                  <div className="mb-3">
+                    <Form.Control
+                      type="text"
+                      placeholder="Search Users..."
+                      value={searchQuery}
+                      onChange={(e) => {
+                        const searchQuery = e.target.value;
+                        axios.get(`/api/get-admins?search=${searchQuery}`)
+                          .then(response => {
+                            setAdmins(response.data);
+                          })
+                          .catch(error => {
+                            console.log(error);
+                          });
+                        setSearchQuery(searchQuery);
+                      }}
+                    />
+                  </div>
+                  {admins && admins.length > 0 && admins.map((admin) => {
+                    return (
+                      <Card className="mb-3">
+                        <Card.Body className="d-flex justify-content-between align-items-center">
+                          <div className="d-flex align-items-center">
+                            <img
+                              src={getProfileImageUrl(admin)}
+                              alt={admin.name}
+                              className="rounded-circle avatar-50 me-3"
+                            />
+                            <div>
+                              <h6 className="mb-0">{admin?.name}</h6>
+                              <p className="mb-0 text-muted">{admin?.email}</p>
+                            </div>
+                          </div>
+                          <FollowButton
+                            className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
+                            onClick={() => handleFollow(admin?.id)}
+                          >
+                            {admin?.is_following ? (
+                              <> 
+                                <i className="ri-user-unfollow-line"></i>
+                                Unfollow
+                              </>
+                            ) : (
+                              <> 
+                                <i className="ri-user-follow-line"></i>
+                                Follow
+                              </>
+                            )}
+                          </FollowButton>
+                        </Card.Body>
+                      </Card>
+                    );
+                  })}
+                </Col>
               </Row>
             </Col>
           </Tab.Container>

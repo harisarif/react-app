@@ -748,7 +748,7 @@ const RightSidebar = () => {
                             </div>
                             <div>
                               <h6 className="font-size-14 mb-0 fw-semibold">
-                                {conversation.user?.name}
+                                {conversation?.name}
                               </h6>
                               <p className="mb-0 font-size-12 fw-medium">
                                 {conversation.last_message || 'Start a conversation'}
@@ -821,7 +821,6 @@ const RightSidebar = () => {
                   View All Conversion
                 </Button>
               </div>
-              {/* <div className="mt-30-imp right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
               <div className="mt-30-imp d-none right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
                 <span className="material-symbols-outlined">chat</span>
                 {unreadCount > 0 && (
@@ -830,7 +829,7 @@ const RightSidebar = () => {
                     <span className="visually-hidden">unread messages</span>
                   </span>
                 )}
-              </div> */}
+              </div> 
             </Card.Body>
           </Card>
         </div>

@@ -61,7 +61,8 @@ const SettingOffCanvas = memo((props) => {
                     >
                         App Settings
                     </Link>
-                </div> </div>
+                </div>
+            </div>
             {/* <div className="btn btn-fixed-end btn-danger btn-icon btn-setting" onClick={(e) => {e.stopPropagation();setShow(true)}} >
             <span className="icon material-symbols-outlined animated-rotate text-white">
                 settings
