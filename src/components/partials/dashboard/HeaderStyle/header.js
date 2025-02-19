@@ -35,12 +35,9 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchModal from "../../../search-modal";
 
 const Header = () => {
-<<<<<<< HEAD
 
-=======
   const [unreadCount, setUnreadCount] = useState(0);
   const [conversationUnreadCounts, setConversationUnreadCounts] = useState({});
->>>>>>> 601baef443b40f3f1f857e0101d759d703719bdb
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const { userData } = useContext(UserContext);
   const {

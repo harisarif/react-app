@@ -107,7 +107,7 @@ const getCategoryBadge = (categoryId) => {
   }
 };
 
-const Post = ({ post, posts, setPosts, onDelete }) => {
+const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => {
   const badge = getCategoryBadge(post.category_id);
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const [comments, setComments] = useState(post.comments || []);
@@ -140,22 +140,22 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
   });
   const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
   const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = React.createRef(null);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   fetchCategories();
+  // }, []);
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('/api/categories');
-      setCategories(response.data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
+  // const fetchCategories = async () => {
+  //   try {
+  //     const response = await axios.get('/api/categories');
+  //     setCategories(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching categories:', error);
+  //   }
+  // };
 
   const handleEditShow = () => {
     // Parse the existing media arrays if they're strings
@@ -626,62 +626,62 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
     setSelectedMedia(post.media[currentMediaIndex]);
   };
 
-  const handleFollow = async (userId) => {
-    if (!userData) {
-      Swal.fire({
-        title: 'Please Login',
-        text: 'You need to be logged in to follow users',
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Login',
-        cancelButtonText: 'Cancel'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = '/auth/sign-in';
-        }
-      });
-      return;
-    }
+  // const handleFollow = async (userId) => {
+  //   if (!userData) {
+  //     Swal.fire({
+  //       title: 'Please Login',
+  //       text: 'You need to be logged in to follow users',
+  //       icon: 'info',
+  //       showCancelButton: true,
+  //       confirmButtonText: 'Login',
+  //       cancelButtonText: 'Cancel'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         window.location.href = '/auth/sign-in';
+  //       }
+  //     });
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.post(`/api/follow/${userId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        }
-      });
+  //   try {
+  //     const response = await axios.post(`/api/follow/${userId}`, {}, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('access_token')}`
+  //       }
+  //     });
 
-      if (response.data.status == 'success') {
-        // Update the post's is_following status
-        setPosts(posts.map(p => {
-          if (p.user?.id === userId) {
-            return {
-              ...p,
-              is_following: !p.is_following
-            };
-          }
-          return p;
-        }));
+  //     if (response.data.status == 'success') {
+  //       // Update the post's is_following status
+  //       setPosts(posts.map(p => {
+  //         if (p.user?.id === userId) {
+  //           return {
+  //             ...p,
+  //             is_following: !p.is_following
+  //           };
+  //         }
+  //         return p;
+  //       }));
 
-        // Show success message
-        Swal.fire({
-          title: 'Success',
-          text: response.data.message,
-          icon: 'success',
-          timer: 2000,
-          showConfirmButton: false
-        });
-      }
-    } catch (error) {
-      console.error('Error following/unfollowing user:', error);
-      Swal.fire({
-        title: 'Error',
-        text: 'Failed to follow/unfollow user',
-        icon: 'error',
-        timer: 2000,
-        showConfirmButton: false
-      });
-    }
-  };
+  //       // Show success message
+  //       Swal.fire({
+  //         title: 'Success',
+  //         text: response.data.message,
+  //         icon: 'success',
+  //         timer: 2000,
+  //         showConfirmButton: false
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error following/unfollowing user:', error);
+  //     Swal.fire({
+  //       title: 'Error',
+  //       text: 'Failed to follow/unfollow user',
+  //       icon: 'error',
+  //       timer: 2000,
+  //       showConfirmButton: false
+  //     });
+  //   }
+  // };
 
   return (
     <>
