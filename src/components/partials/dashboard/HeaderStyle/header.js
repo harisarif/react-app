@@ -175,14 +175,7 @@ const Header = () => {
         >
           {/* <Navbar className="iq-navbar p-lg-0" sticky="top"> */}
           <Container fluid className="navbar-inner">
-            <div className="d-flex align-items-center pb-2 pb-lg-0 header-logo">
-              <Link
-                to="/home"
-                className="d-flex align-items-center iq-header-logo navbar-brand d-block"
-              >
-                <img src={equity} class="brand-logo" alt="#" />
-              </Link>
-              <Link
+             <Link
                 className=""
                 id="sidebar-toggle-icon"
                 data-toggle="sidebar"
@@ -195,9 +188,17 @@ const Header = () => {
                   menu{" "}
                 </div>
               </Link>
+            <div className="d-flex align-items-center pb-2 pb-lg-0 header-logo">
+              <Link
+                to="/home"
+                className="d-flex align-items-center iq-header-logo navbar-brand d-block"
+              >
+                <img src={equity} class="brand-logo" alt="#" />
+              </Link>
+             
             </div>
 
-            <div className="d-flex align-items-center header-link">
+            <div className="d-flex align-items-center header-link  bussiness-crypto-main-web-wrapper">
               <div className="d-flex align-items-center justify-content-between product-offcanvas h-50">
                 <div
                   className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-xl-block"
@@ -611,7 +612,7 @@ const Header = () => {
                 >
                   <i className="material-symbols-outlined">chat</i>
                   {unreadCount > 0 && (
-                  <span className="position-absolute top-20  start-100 translate-middle badge rounded-pill bg-danger">
+                  <span className="position-absolute      badge rounded-pill bg-danger chat-notification-bar">
                     {unreadCount}
                     <span className="visually-hidden">unread messages</span>
                   </span>

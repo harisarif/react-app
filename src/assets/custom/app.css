@@ -103,6 +103,12 @@
     -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 1));
     filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 1));
 } */
+
+
+
+#sidebar-toggle-icon {
+    display: none;
+}
 .card-img-top {
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
@@ -943,7 +949,9 @@
     max-width: 500px;
     margin: 0 auto;
 }
-
+.iq-nav-menu {
+    gap: 60px;
+}
 .ReactCrop {
     max-height: 400px;
 }
@@ -1045,13 +1053,39 @@
     height: 35px !important;
     width: 35px !important;
 }
- 
+
+.notification-count{
+padding: 0 !important;
+width: 24px !important;
+height: 24px !important;
+font-size: 10px !important;
+top: -15px !important;
+line-height: 22px !important;
+}
+.create-post-form-cntrl{
+    border-radius: 90px;
+    background-color: #f8f9fa;
+}
+.navbar-nav.navbar-list {
+    border-top: unset !important;
+}
+
+.chat-notification-bar{
+    top: 0;
+    right: 0;
+    border-radius: 50% !important;
+    height: 24px;
+    width: 24px;
+}
+
 .ql-container.ql-snow {
     border: unset !important;
 }
  
 @media (max-width: 1200px) {
-
+    #sidebar-toggle-icon {
+        display: block;
+    }
     .product-offcanvas,
     .offcanvas-body {
         height: unset !important;
@@ -1069,6 +1103,10 @@
         flex-direction: row !important;
         width: 100%;
         justify-content: space-between;
+    }
+
+    .bussiness-crypto-main-web-wrapper{
+        display: none !important;
     }
 }
 
@@ -1168,9 +1206,6 @@
 
 
 
-#sidebar-toggle-icon {
-    display: none;
-}
 
 #first-tour {
     top: 80px;
@@ -1216,23 +1251,30 @@
     & i {
 
         background-color: rgb(231, 231, 231);
-        padding: 10px;
+        padding: 5px;
         border-radius: 50%;
     }
 
     & span {
 
         background-color: rgb(231, 231, 231);
-        padding: 10px;
+        padding: 5px;
         border-radius: 50%;
     }
 }
 
 @media (max-width: 768px) {
     .brand-logo {
-        width: 100px;
+        /* padding-top: 15px; */
+        width: 85px;
     }
+.nav.navbar{
+    margin-top: 8px;
+}
 
+.navbar-nav.navbar-list li.user-dropdown {
+    top: -5px !important;
+}
     .navbar-inner {
         margin-top: 5px !important;
     }
@@ -1248,10 +1290,14 @@
         padding: 1px 13px;
         margin: 0 !important;
     }
-
-    #sidebar-toggle-icon {
-        display: block;
+.iq-nav-menu{
+    .nav-item{
+        .nav-text{
+            display: none;
+        }
     }
+}
+   
 }
 
 @media (max-width: 576px) {
@@ -1263,7 +1309,8 @@
         padding-left: 0;
         padding-right: 0;
         margin-bottom: 3px;
-
+justify-content: center !important;
+gap: 40px;
         .nav-link {
             margin: 0 !important;
         }
@@ -1301,4 +1348,34 @@
 .tech-info-btn {
     background: linear-gradient(45deg, #6592c0, #007033a1);
 
+}
+
+.create-post-icons-main{
+    border-top: 1px solid rgb(185, 185, 182);
+    margin-top: 12px;
+    padding-top: 12px;
+    .jobs-with-icon span:nth-of-type(1){
+        color: rgb(154 165 4);
+        font-size: 24px;
+    }
+    .event-with-icon span:nth-of-type(1){
+        color: #e30000;
+        font-size: 24px;
+    }
+    .photo-with-icon span:nth-of-type(1){
+        color:rgb(36 162 4);
+        font-size: 24px;
+    }
+    .jobs-with-icon span:nth-of-type(2){
+       font-size: 16px;
+       font-weight: 500;
+    }
+    .event-with-icon span:nth-of-type(2){
+       font-size: 16px;
+       font-weight: 500;
+    }
+    .photo-with-icon span:nth-of-type(2){
+       font-size: 16px;
+       font-weight: 500;
+    }
 }
