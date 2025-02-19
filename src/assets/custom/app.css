@@ -1041,70 +1041,78 @@
     top: 20%;
     background-color: rgb(80 181 255) !important;
     border-radius: 0 16px 16px 0 !important;
-    color:  white !important;
+    color: white !important;
     height: 35px !important;
     width: 35px !important;
 }
-
+ 
+.ql-container.ql-snow {
+    border: unset !important;
+}
+ 
 @media (max-width: 1200px) {
+
     .product-offcanvas,
-    .offcanvas-body{
-   height: unset !important;
+    .offcanvas-body {
+        height: unset !important;
     }
+
     .iq-product-menu-responsive {
-       left: 0 ;
-       padding-top: 2rem !important;
+        left: 0;
+        padding-top: 2rem !important;
     }
-       .iq-nav-menu {
-           border-top: 0.5px solid rgb(212, 212, 212);
-           padding: 0 14px;
-           background: white;
-           flex-direction: row !important;
-           width: 100%;
-           justify-content: space-between;
-       }
-       }
-       
 
-       @media (max-width: 991px) {
-
-        .searchbo,
-        .group-icon,
-        .header-message-icon {
-            display: none !important;
-        }
-    
-        .navbar-inner {
-            display: flex !important;
-        }
-    
-        #notification-drop {
-            margin-right: 44px;
-        }
-    
-        .navbar-nav.navbar-list li.user-dropdown {
-            top: 11px;
-            right: -6px;
-        }
-    
-    
-    
-.nav-for-mobile{
-        visibility: visible !important;
-        
-        top: 64px !important; 
-        padding-top: unset !important;
-        right:  unset !important;
-        left: 0 !important;
-        bottom: unset;
-        width:  100% !important;
-        border-left: unset !important;
-        transform: unset !important;
-.offcanvas-body{
-    padding: 0 !important;
+    .iq-nav-menu {
+        border-top: 0.5px solid rgb(212, 212, 212);
+        padding: 0 14px;
+        background: white;
+        flex-direction: row !important;
+        width: 100%;
+        justify-content: space-between;
+    }
 }
 
 
+@media (max-width: 991px) {
+
+    .searchbo,
+    .group-icon,
+    .header-message-icon {
+        display: none !important;
+    }
+
+    .navbar-inner {
+        display: flex !important;
+    }
+
+    #notification-drop {
+        margin-right: 44px;
+    }
+
+    .navbar-nav.navbar-list li.user-dropdown {
+        top: 11px;
+        right: -6px;
+    }
+
+
+
+    .nav-for-mobile {
+        visibility: visible !important;
+
+        top: 64px !important;
+        padding-top: unset !important;
+        right: unset !important;
+        left: 0 !important;
+        bottom: unset;
+        width: 100% !important;
+        border-left: unset !important;
+        transform: unset !important;
+
+        .offcanvas-body {
+            padding: 0 !important;
+        }
+
+
 
 
 
@@ -1112,46 +1120,113 @@
 
 
     }
+
     .header-link #offcanvasBottomNav {
         height: unset !important;
         bottom: unset !important;
         border-left: 0;
     }
-   
-    .iq-top-navbar{
+
+    .iq-top-navbar {
         height: 65px !important;
-        .navbar{
+
+        .navbar {
             padding: 0;
-            .navbar-inner{
+
+            .navbar-inner {
                 margin-top: 0 !important;
             }
         }
-    }  
-    .header-link{
+    }
+
+    .header-link {
         height: 65px !important;
     }
+
     .navbar-nav.navbar-list li.user-dropdown {
-    top: 2px !important;
+        top: 2px !important;
     }
-    .header-logo{
+
+    .header-logo {
         padding-bottom: 0 !important;
     }
-    .iq-nav-menu{
+
+    .iq-nav-menu {
         padding-top: 5px;
         margin-bottom: 3px;
     }
+
     .right-sidebar-mini {
         z-index: 99;
     }
+}
+
+
+
+
+
+
+
+
+#sidebar-toggle-icon {
+    display: none;
+}
+
+#first-tour {
+    top: 80px;
+}
+
+.iq-nav-menu .nav-item>.nav-link:hover {
+    color: var(--bs-heading-color);
+    border-bottom: unset !important;
+    background-color: #e7e7e7;
+    border-radius: 5%;
+}
+
+.iq-nav-menu li.active>a {
+    color: var(--bs-heading-color);
+    border-bottom: unset !important;
+    background-color: #e7e7e7;
+    border-radius: 5%;
+
+    & span {
+        font-size: 25px !important;
     }
 
+    .nav-text {
+        font-size: 16px !important;
+    }
+}
+.iq-nav-menu li a {  
 
+    & span {
+        font-size: 25px !important;
+    }
 
+    .nav-text {
+        font-size: 16px !important;
+    }
+}
+.navbar-nav .nav-item:nth-of-type(1) {
+    display: none;
+}
 
+#mail-drop,
+#notification-drop {
+    & i {
 
+        background-color: rgb(231, 231, 231);
+        padding: 10px;
+        border-radius: 50%;
+    }
 
+    & span {
 
-
+        background-color: rgb(231, 231, 231);
+        padding: 10px;
+        border-radius: 50%;
+    }
+}
 
 @media (max-width: 768px) {
     .brand-logo {
@@ -1161,22 +1236,69 @@
     .navbar-inner {
         margin-top: 5px !important;
     }
+
+    .user-post-data .user-post-profile {
+        width: 45px;
+        height: 45px;
+    }
+
+    .iQkpmr.follow-btn {
+        background: linear-gradient(45deg, #007bff, #6610f2);
+        color: white;
+        padding: 1px 13px;
+        margin: 0 !important;
+    }
+
+    #sidebar-toggle-icon {
+        display: block;
+    }
 }
+
 @media (max-width: 576px) {
     .iq-nav-menu .menu-arrow {
-    flex-direction: column;
+        flex-direction: column;
     }
-    .iq-nav-menu{
+
+    .iq-nav-menu {
         padding-left: 0;
         padding-right: 0;
         margin-bottom: 3px;
-        .nav-link{
+
+        .nav-link {
             margin: 0 !important;
         }
-        .nav-text{
+
+        .nav-text {
             font-size: 11px;
         }
     }
 }
 
 
+.crypto-info-btn {
+    background: linear-gradient(45deg, #007bff, #6610f2);
+    color: white;
+}
+
+.fitness-info-btn {
+    background: linear-gradient(45deg, #cd00ff, #e88c4f);
+}
+
+.bussiness-info-btn {
+    background: linear-gradient(45deg, #006cda, #00e568a1) !important;
+
+
+
+
+
+}
+
+.mindset-info-btn {
+    background: linear-gradient(45deg, #007bff, #6610f2);
+
+}
+
+.tech-info-btn {
+    background: linear-gradient(45deg, #6592c0, #007033a1);
+
+}

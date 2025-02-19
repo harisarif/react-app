@@ -296,7 +296,7 @@ const CreatePost = ({ posts, setPosts,userCanCreatePostCategories, className }) 
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex align-items-center mb-3">
-            <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
+            {/* <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" /> */}
             <ReactQuill
               placeholder="Write something here..."
               value={content}

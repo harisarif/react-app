@@ -82,27 +82,27 @@ const getCategoryBadge = (categoryId) => {
     case 1:
       return {
         text: 'Business',
-        className: 'bg-primary text-white px-3 py-1 rounded-pill'
+        className: 'bg-primary text-white px-3 py-1 rounded-pill info-btn'
       };
     case 2:
       return {
         text: 'Fitness',
-        className: 'bg-success text-white px-3 py-1 rounded-pill'
+        className: 'bg-success text-white px-3 py-1 rounded-pill fitness-info-btn'
       };
     case 3:
       return {
         text: 'Crypto',
-        className: 'bg-warning text-dark px-3 py-1 rounded-pill'
+        className: 'bg-warning text-dark px-3 py-1 rounded-pill crypto-info-btn ' 
       };
     case 4:
       return {
         text: 'Technology',
-        className: 'bg-info text-white px-3 py-1 rounded-pill'
+        className: 'bg-info text-white px-3 py-1 rounded-pill tech-info-btn'
       };
     default:
       return {
         text: 'Mindset',
-        className: 'bg-secondary text-white px-3 py-1 rounded-pill'
+        className: 'bg-secondary text-white px-3 py-1 rounded-pill mindset-info-btn'
       };
   }
 };
@@ -687,7 +687,7 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
     <>
       <Card className="card-block card-stretch card-height">
         <Card.Body>
-          <div className="user-post-data">
+          <div className="user-post-data ">
             <div className="d-flex align-items-center justify-content-between">
               <div className="me-3 flex-shrink-0">
                 <img
@@ -699,7 +699,14 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
               <div className="w-100">
                 <div className="d-flex align-items-center justify-content-between">
                   <div>
-                    <h6 className="mb-0">{post.user?.name || 'Anonymous'}</h6>
+                    <div className="user-profile-info d-flex align-items-center g-1">
+                      <h6 className="mb-0 me-2">{post.user?.name || 'Anonymous'}</h6>
+                    <p className="mb-0">
+                      {moment(post.created_at).fromNow()}
+                      {' '}
+                      {moment(post.created_at).format('h:mm a')}
+                    </p>
+                    </div>
                     {post.user?.verified && (
                       <span className="d-inline-block text-primary">
                         <svg className="align-text-bottom" width="17" height="17" viewBox="0 0 17 17">
@@ -726,11 +733,7 @@ const Post = ({ post, posts, setPosts, onDelete }) => {
                     </FollowButton>
                   )}
 
-                    <p className="mb-0">
-                      {moment(post.created_at).fromNow()}
-                      {' '}
-                      {moment(post.created_at).format('h:mm a')}
-                    </p>
+                   
                   </div>
                   <div>
                     <div className='d-flex align-items-center justify-content-between'>
