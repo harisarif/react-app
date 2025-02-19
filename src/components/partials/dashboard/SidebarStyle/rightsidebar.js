@@ -748,7 +748,7 @@ const RightSidebar = () => {
                             </div>
                             <div>
                               <h6 className="font-size-14 mb-0 fw-semibold">
-                                {conversation.user?.name}
+                                {conversation?.name}
                               </h6>
                               <p className="mb-0 font-size-12 fw-medium">
                                 {conversation.last_message || 'Start a conversation'}
