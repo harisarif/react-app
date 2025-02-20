@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../../../components/Card";
 import NoDataFound from '../../../components/NoDataFound';
+import toast from 'react-hot-toast';
 
 //img
 import profilebg8 from "../../../assets/images/page-img/profile-bg8.jpg";
@@ -40,6 +41,9 @@ const Education = () => {
   const [selectedVideo, setSelectedVideo] = useState('');
   const [selectedContentId, setSelectedContentId] = useState(null);
   const [pointsAwarded, setPointsAwarded] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingContent, setEditingContent] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const videoRef = useRef(null);
   const [formData, setFormData] = useState({
     title: '',
@@ -80,28 +84,59 @@ const Education = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
-      formDataToSend.append(key, formData[key]);
-    });
+    formDataToSend.append('title', formData.title);
+    formDataToSend.append('short_description', formData.short_description);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('video_url', formData.video_url);
+    
+    // Only append image if it's a new file or we're creating new content
+    if (formData.image instanceof File) {
+      formDataToSend.append('image', formData.image);
+    }
 
     try {
-      await axios.post('/api/education-contents', formDataToSend, {
+      let response;
+      const config = {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json'
         }
-      });
+      };
+
+      if (isEditMode) {
+        // Add _method field for Laravel to handle PUT request properly
+        formDataToSend.append('_method', 'PUT');
+        response = await axios.post(`${baseurl}/api/education-contents/${editingContent.id}`, formDataToSend, config);
+        setEducationContents(prevContents =>
+          prevContents.map(content =>
+            content.id === editingContent.id ? response.data : content
+          )
+        );
+      } else {
+        response = await axios.post(`${baseurl}/api/education-contents`, formDataToSend, config);
+        setEducationContents(prevContents => [...prevContents, response.data]);
+      }
+
       setShowModal(false);
-      fetchEducationContents();
       setFormData({
         title: '',
-        image: null,
         short_description: '',
         description: '',
-        video_url: ''
+        video_url: '',
+        image: null
       });
+      setIsEditMode(false);
+      setEditingContent(null);
+      toast.success(`Content ${isEditMode ? 'updated' : 'created'} successfully`);
+      fetchEducationContents(); // Refresh the list to ensure we have the latest data
     } catch (error) {
-      console.error('Error creating education content:', error);
+      console.error('Error:', error.response?.data || error);
+      toast.error(error.response?.data?.message || 'Error saving content');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -126,6 +161,36 @@ const Education = () => {
     setSelectedContentId(contentId);
     setPointsAwarded(false);
     setShowVideoModal(true);
+  };
+
+  const handleEdit = (content) => {
+    setEditingContent(content);
+    setFormData({
+      title: content.title,
+      short_description: content.short_description,
+      description: content.description,
+      video_url: content.video_url
+    });
+    setShowModal(true);
+    setIsEditMode(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this content?')) {
+      setIsLoading(true);
+      try {
+        await axios.delete(`${baseurl}/api/education-contents/${id}`);
+        setEducationContents(prevContents => 
+          prevContents.filter(content => content.id !== id)
+        );
+        toast.success('Content deleted successfully');
+      } catch (error) {
+        toast.error('Error deleting content');
+        console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const isYoutubeUrl = (url) => {
@@ -245,21 +310,45 @@ const Education = () => {
                       <div className="card h-100">
                         <div className="edu-card-img">
                           <img 
-                            src={`${baseurl}/data/images/education/${content.image_path}`} 
+                            src={content.image_path ? `${baseurl}/data/images/education/${content.image_path}` : 'placeholder-image-url'} 
                             className="card-img-top" 
                             alt={content.title} 
                             loading="lazy" 
+                            onError={(e) => {
+                              e.target.src = 'placeholder-image-url'; // Add a placeholder image URL
+                            }}
                           />
                         </div>
                         <div className="card-body">
                           <h4 className="card-title turncate-2">{content.title}</h4>
                           <p className="card-text turncate-3">{content.short_description}</p>
-                          <Button 
-                            className="btn btn-primary btn-block"
-                            onClick={() => handleWatchVideo(content.video_url, content.id)}
-                          >
-                            Watch Video
-                          </Button>
+                          <div className="d-flex gap-2">
+                            <Button 
+                              className="btn btn-primary flex-grow-1"
+                              onClick={() => handleWatchVideo(content.video_url, content.id)}
+                              disabled={isLoading}
+                            >
+                              Watch Video
+                            </Button>
+                            {userData && userData?.permissions[0]?.can_create_education == 1 && (
+                              <>
+                                <Button 
+                                  className="btn btn-warning"
+                                  onClick={() => handleEdit(content)}
+                                  disabled={isLoading}
+                                >
+                                  <i className="fas fa-edit"></i>
+                                </Button>
+                                <Button 
+                                  className="btn btn-danger"
+                                  onClick={() => handleDelete(content.id)}
+                                  disabled={isLoading}
+                                >
+                                  <i className="fas fa-trash"></i>
+                                </Button>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -326,9 +415,22 @@ const Education = () => {
       </Modal>
 
       {/* Add Content Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+      <Modal show={showModal} onHide={() => {
+        setShowModal(false);
+        setIsEditMode(false);
+        setEditingContent(null);
+        setFormData({
+          title: '',
+          short_description: '',
+          description: '',
+          video_url: '',
+          image: null
+        });
+      }} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>Add New Education Content</Modal.Title>
+          <Modal.Title>
+            {isEditMode ? 'Edit Education Content' : 'Add New Education Content'}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
@@ -350,7 +452,7 @@ const Education = () => {
                 name="image"
                 onChange={handleInputChange}
                 accept="image/*"
-                required
+                required={isEditMode ? false : true}
               />
             </Form.Group>
 
@@ -394,8 +496,19 @@ const Education = () => {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
-              Save Content
+            <Button 
+              variant="primary" 
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  {isEditMode ? 'Updating...' : 'Saving...'}
+                </>
+              ) : (
+                isEditMode ? 'Update Content' : 'Save Content'
+              )}
             </Button>
           </Form>
         </Modal.Body>
