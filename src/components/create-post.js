@@ -242,11 +242,123 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     }
   };
 
+  // const handleVisibilityChange = (visibility) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     visibility: visibility || formData.visibility === 'public' ? 'private' : 'public'
+  //   }));
+  // };
+
   const handleVisibilityChange = (visibility) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      visibility: visibility || formData.visibility === 'public' ? 'private' : 'public'
+      visibility: visibility || prev.visibility, // If no value, keep previous value
     }));
+  };
+
+  useEffect(() => {
+    if (!formData.visibility) {
+      setFormData((prev) => ({
+        ...prev,
+        visibility: prev.visibility === "public" ? "private" : "public",
+      }));
+    }
+  }, [formData.visibility]);
+
+  const [colorPanel, setColorPanel] = useState(false);
+
+  const modalClose = {
+    fontSize: '18px', background: '#bbb', padding: '3px',
+  }
+  const postViewChanger = {
+    height: 'fit-content', minWidth: 'fit-content', maxWidth: '100px',
+  }
+  const postViewIcon = {
+    fontSize: '16px'
+  }
+  const uploadBtn = {
+    width: '80px', height: '80px', display: 'flex', justifyContent: 'center', alignItems: 'center',
+    border: '2px solid #dddddd', background: '#fff', borderRadius: '8px',
+    fontSize: '28px'
+  }
+  const imageView = {
+    width: "80px", height: "80px", objectFit: "cover", border: '2px solid #dddddd', borderRadius: '8px'
+  }
+  const videoView = {
+    width: "80px", height: "80px", border: '2px solid #dddddd', borderRadius: '8px'
+  }
+  const uploadIcon = {
+    color: '#d3d3d3', fontSize: '28px'
+  }
+  const docVeiw = {
+    width: '80px', height: '80px', border: '2px solid #dddddd',
+    display: 'flex', flexDirection: 'column', gap: '4px',
+    justifyContent: 'center', alignItems: 'center'
+  }
+
+  const ex = (index) => {
+    return index.split('.').pop();
+  }
+
+  const [selectedStyle, setSelectedStyle] = useState(null);
+  const quillRef = useRef(null);
+
+  const styles = [
+    {
+      color: "#ff6b6b",
+      textColor: "#fff",
+    },
+    {
+      color: "#48dbfb",
+      textColor: "#000",
+    },
+    {
+      color: "#1dd1a1",
+      textColor: "#fff",
+    },
+    {
+      color: "#feca57",
+      textColor: "#000",
+    },
+    {
+      color: "#222f3e",
+      textColor: "#fff",
+    },
+    {
+      color: "linear-gradient(to right, #ff9a9e, #fad0c4)",
+      textColor: "#000",
+    },
+  ];
+
+  useEffect(() => {
+    if (quillRef.current) {
+      const editor = quillRef.current.getEditor();
+      if (selectedStyle) {
+        editor.root.style.background = selectedStyle.color;
+        editor.root.style.color = selectedStyle.textColor;
+        editor.root.style.fontSize = "18px";
+        editor.root.style.textAlign = "center";
+        editor.root.style.minHeight = "250px";
+        editor.root.style.padding = "30px 20px";
+      } else {
+        // Reset styles smoothly
+        editor.root.style.background = "";
+        editor.root.style.color = "";
+        editor.root.style.fontSize = "";
+        editor.root.style.textAlign = "";
+        editor.root.style.minHeight = "";
+        editor.root.style.padding = "";
+      }
+    }
+  }, [selectedStyle]);
+
+  const handleStyleClick = (style) => {
+    setSelectedStyle(selectedStyle === style ? null : style);
+  };
+
+  // Reset all styles
+  const resetStyles = () => {
+    setSelectedStyle(null);
   };
 
   return (
@@ -291,9 +403,9 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
               <span>Events</span>
             </div>
             <div className="d-flex align-items-center jobs-with-icon">
-            <span class="material-symbols-outlined">
-work
-</span>
+              <span class="material-symbols-outlined">
+                work
+              </span>
               <span>Jobs</span>
 
             </div>
@@ -319,15 +431,16 @@ work
         </Card.Body>
       </Card>
 
-      <Modal show={show} onHide={handleClose} size="lg" centered>
-        <Modal.Header className="d-flex justify-content-between">
+      <Modal show={show} onHide={handleClose} size="md" centered>
+        <Modal.Header className="d-flex justify-content-between p-3">
 
-          <Modal.Title  className="d-flex align-items-center hover-bg">
+          <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
             <div className="d-flex align-items-center flex-grow-1">
-              <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
-              <h2 className="mb-0 me-2">{userData?.name}</h2>
-              <span className={`badge ${formData.visibility === 'public' ? 'bg-success' : 'bg-danger'}`}>{formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1)}</span>
-              <Dropdown className="ms-2">
+              {/* <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" /> */}
+              {/* <h2 className="mb-0 me-2">{userData?.name}</h2> */}
+              {/* <span className={`badge ${formData.visibility === 'public' ? 'bg-success' : 'bg-danger'}`}>{formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1)}</span> */}
+              <h2 className="fs-16 fw-700 mb-0">Create Post</h2>
+              {/* <Dropdown className="ms-2">
                 <Dropdown.Toggle variant="link" className="p-0">
                   <span className="material-symbols-outlined">arrow_drop_down</span>
                 </Dropdown.Toggle>
@@ -335,24 +448,96 @@ work
                   <Dropdown.Item onClick={() => handleVisibilityChange('public')}>Public</Dropdown.Item>
                   <Dropdown.Item onClick={() => handleVisibilityChange('private')}>Private</Dropdown.Item>
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
             </div>
           </Modal.Title>
           <Link to="#" className="lh-1" onClick={handleClose}>
-            <span className="material-symbols-outlined">close</span>
+            <span className="material-symbols-outlined text-dark rounded-4" style={modalClose}>close</span>
           </Link>
         </Modal.Header>
         <Modal.Body>
-          <div className="d-flex align-items-center mb-3">
-            
+          <div className="d-flex w-100 gap-2 align-items-center mb-3">
+            <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-40 rounded-circle" />
+            <div className="d-flex flex-column gap-0">
+              <h5 className="mb-0">{userData?.name}</h5>
+              <div className="d-flex align-items-center">
+                <Dropdown className="">
+                  <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger}>
+                    <span
+                      className={`badge py-0 px-4 d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : "bg-danger"
+                        }`}
+                      style={{ cursor: "pointer" }}
+
+                    >
+                      <span className="material-symbols-outlined" style={postViewIcon}>
+                        {formData.visibility === "public" ? "people" : "person"}
+                      </span>
+                      {formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1)}
+                      <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
+                    </span>
+
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => handleVisibilityChange("public")}>
+                      Public
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleVisibilityChange("private")}>
+                      Private
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
+          </div>
+          <Form.Group className="mb-3">
+            <Form.Label>Category</Form.Label>
+            <br />
+            <div className="d-flex gap-1 overflow-auto">
+              {categories.map(category => (
+                <div className={`py-1 px-2 text-white rounded border ${category.id.toString() === formData.category_id ? 'bg-primary-2' : 'bg-primary'}`}>
+                  <input
+                    type="radio"
+                    key={category.id}
+                    value={category.id}
+                    checked={category.id.toString() === formData.category_id}
+                    id={category.id}
+                    style={{ display: 'none' }}
+                    name="category_id"
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label for={category.id}>{category.name}</label>
+                </div>
+              ))}
+            </div>
+          </Form.Group>
+          <div className="mb-3">
+
             <ReactQuill
               placeholder="Write something here..."
               value={content}
               onChange={setContent}
+              ref={quillRef}
+              style={{
+
+              }}
             />
           </div>
 
-          <Form.Group className="mb-3">
+          <div className="position-relative">
+            <div className="d-flex gap-2">
+              <span className="border rounded bg-gradient color-plate" onClick={() => { setColorPanel(!colorPanel); resetStyles() }}>
+                <span class="material-symbols-outlined">
+                  {colorPanel ? "block" : ""}                  
+                </span>
+              </span>
+              <div className={`${colorPanel ? "d-flex" : "d-none"} gap-2 color-panel`}>
+                {styles.map((style, index) => (<span className={`border rounded color-plate`} style={{ background: style.color }} key={index} title="Click to Apply" onClick={() => handleStyleClick(style)}></span>))}
+              </div>
+            </div>
+          </div>
+
+          {/* <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>
             <Form.Select
               name="category_id"
@@ -371,10 +556,10 @@ work
                 </option>
               ))}
             </Form.Select>
-          </Form.Group>
+          </Form.Group> */}
 
           {/* File upload section */}
-          <div className="file-upload-section">
+          {/* <div className="file-upload-section">
             <input
               type="file"
               multiple
@@ -391,11 +576,12 @@ work
               <i className="material-icons me-1">attach_file</i>
               Add Files
             </Button>
-          </div>
+          </div> */}
 
           {/* Preview section */}
-          {Object.entries(previews).map(([type, files]) => (
-            files.length > 0 && (
+          {/* {Object.entries(previews).map(([type, files]) => (
+            // files.length > 0
+            true && (
               <div key={type} className="preview-section mt-3">
                 <h6 className="mb-2">{type.charAt(0).toUpperCase() + type.slice(1)}</h6>
                 <div className="d-flex flex-wrap gap-2">
@@ -426,15 +612,86 @@ work
                 </div>
               </div>
             )
-          ))}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
+          ))} */}
+          {Object.entries(previews).some(([_, files]) => true) && (
+            <div className="preview-section mt-3">
+              <h6 className="mb-2">Attachments</h6>
+              <div className="d-flex gap-2 overflow-auto">
+                <div className="position-relative">
+                  <div className="file-upload-section">
+                    <input
+                      type="file"
+                      multiple
+                      hidden
+                      ref={fileInputRef}
+                      onChange={handleFileSelect}
+                      accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                    />
+                    <Button
+                      className=""
+                      onClick={() => fileInputRef.current.click()}
+                      style={uploadBtn}
+                    >
+                      <span class="material-symbols-outlined" style={uploadIcon}>
+                        cloud_upload
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+                {Object.entries(previews).flatMap(([type, files]) =>
+                  files.map((preview, index) => (
+                    <div key={`${type}-${index}`} className="position-relative">
+                      {/* Render Images */}
+                      {type === "images" && (
+                        <img src={preview} alt="" style={imageView} />
+                      )}
+
+                      {/* Render Videos */}
+                      {type === "videos" && (
+                        <video style={videoView} controls>
+                          <source src={preview} />
+                        </video>
+                      )}
+
+                      {/* Render Documents */}
+                      {type === "documents" && (
+                        <div className="document-preview" style={docVeiw}>
+                          <span class="material-symbols-outlined" style={uploadIcon}>
+                            {
+                              ex(selectedFiles[type][index].name) === 'pdf' ?
+                                'picture_as_pdf' :
+                                ex(selectedFiles[type][index].name) === 'doc' || ex(selectedFiles[type][index].name) === 'docx' ?
+                                  'docs' :
+                                  ex(selectedFiles[type][index].name) === 'xls' || ex(selectedFiles[type][index].name) === 'xlsx' ?
+                                    'table' :
+                                    ex(selectedFiles[type][index].name) === 'ppt' || ex(selectedFiles[type][index].name) === 'pptx' ?
+                                      'jamboard_kiosk' : 'description'
+                            }
+                          </span>
+                          {/* <span>{selectedFiles[type][index].name}</span> */}
+                        </div>
+                      )}
+
+                      {/* Remove Button */}
+                      <button
+                        className="btn position-absolute top-0 end-0" style={{ padding: '1px 5px 0px', background: '#d31717', borderRadius: '20px' }}
+                        onClick={() => removeFile(type, index)}
+                      >
+                        <span class="material-symbols-outlined" style={{ fontSize: '12px' }}>
+                          close
+                        </span>
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
           <Button
             variant="primary"
             onClick={handleSubmit}
+            className="mt-3 w-100"
             disabled={isLoading || !formData.category_id || (!content.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
           >
             {isLoading ? (
@@ -444,7 +701,8 @@ work
               </>
             ) : 'Post'}
           </Button>
-        </Modal.Footer>
+
+        </Modal.Body>
       </Modal>
     </>
   );

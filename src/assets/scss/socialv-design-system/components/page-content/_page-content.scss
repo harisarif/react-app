@@ -13,8 +13,8 @@
 }
 
 ::-webkit-scrollbar {
-	width: 0.5rem;
-	height: 0.5rem;
+	width: 0.25rem;
+	height: 0.25rem;
 
 	@if $enable-rounded ==true {
 		@include radius-mixin(20px);
