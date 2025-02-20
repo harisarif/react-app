@@ -199,7 +199,7 @@ const Header = () => {
             </div>
 
             <div className="d-flex align-items-center header-link  bussiness-crypto-main-web-wrapper">
-              <div className="d-flex align-items-center justify-content-between product-offcanvas h-50">
+              <div className="d-flex align-items-center justify-content-between product-offcanvas h-100">
                 <div
                   className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-xl-block"
                   tabIndex="-1"
@@ -213,9 +213,9 @@ const Header = () => {
                           onClick={() => setActive("business")}
                         >
                           <span class="material-symbols-outlined me-2">
-                            trending_up
+                            store
                           </span>
-                          <span className="nav-text">Business Management</span>
+                          <span className="nav-text">Business</span>
                         </Link>
                       </li>
                       <li className={`${location.pathname === '/fitness' ? 'active' : ''} nav-item`}>
