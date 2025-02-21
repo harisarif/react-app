@@ -8,6 +8,7 @@
     --#{$variable-prefix}#{$color-name}-hover-border: #{shade-color($color-value, 30%)};
     --#{$variable-prefix}#{$color-name}-active-bg: #{shade-color($color-value, 20%)};
     --#{$variable-prefix}#{$color-name}-active-border: #{shade-color($color-value, 30%)};
+
     &[data-#{$variable-prefix}theme="dark"] {
         --#{$variable-prefix}#{$color-name}-text-emphasis: #{tint-color($color-value, 40%)};
         --#{$variable-prefix}#{$color-name}-bg-subtle: #{shade-color($color-value, 80%)};
@@ -15,17 +16,29 @@
 }
 
 @each $color, $value in $custom-colors {
-    @if $color == 'default' {
+    @if $color =='default' {
         :root {
             @each $name, $hax-value in $value {
                 @include customizer-color-variables($name, $hax-value);
             }
         }
-    } @else {
+    }
+
+    @else {
         [data-#{$variable-prefix}theme-color="#{$color}"] {
             @each $name, $hax-value in $value {
                 @include customizer-color-variables($name, $hax-value);
             }
         }
     }
+}
+
+
+:root {
+    --bs-primary: #9146ff;
+    --bs-primary-bg-subtle: #dcf0ff;
+    --bs-primary-hover-bg: #572a99;
+    --bs-primary-hover-border: #3a1c66;
+    --bs-primary-active-bg: #572a99;
+    --bs-primary-active-border: #3a1c66;
 }
