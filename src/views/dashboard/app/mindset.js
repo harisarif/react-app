@@ -357,26 +357,20 @@ const UserFeeds = () => {
 
       if (response.data.status == 'success') {
         // Update the post's is_following status
-        if(response.data.action == 'follow'){
           console.log("follow")
           setHasMore(false);
           setIsLoading(false);
           fetchPosts(1);
-        }else if(response.data.action == 'unfollow'){
-          console.log("unfollow")
-          setHasMore(false);
-          setIsLoading(false);
-          fetchPosts(1);
-        }
-        setPosts(posts.map(p => {
-          if (p.user?.id === userId) {
-            return {
-              ...p,
-              is_following: !p.is_following
-            };
-          }
-          return p;
-        }));
+
+        // setPosts(posts.map(p => {
+        //   if (p.user?.id === userId) {
+        //     return {
+        //       ...p,
+        //       is_following: !p.is_following
+        //     };
+        //   }
+        //   return p;
+        // }));
 
         setAdmins(admins.map(a =>{
           if(a.id == userId){
@@ -385,7 +379,8 @@ const UserFeeds = () => {
             is_following: !a.is_following
           };
         }
-      }));
+        return a; // Return unchanged admin if id doesn't match
+        }));
 
         // Show success message
         Swal.fire({

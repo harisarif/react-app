@@ -1,12 +1,14 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Dropdown, Button, Modal, Form, Card } from "react-bootstrap";
+import { Dropdown, Button, Modal, Form, Card, Row, Col } from "react-bootstrap";
 import axios from '../utils/axios';
 import { UserContext } from '../context/UserContext';
 import { getProfileImageUrl } from '../utils/helpers';
 import Swal from 'sweetalert2';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the styles
+import CreateJob from './job/CreateJob';
+import toast from 'react-hot-toast';
 
 //images
 import user1 from "../assets/images/user/1.jpg";
@@ -32,6 +34,19 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     documents: [],
     visibility: 'public'
   });
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [showJobModal, setShowJobModal] = useState(false);
+  const [eventFormData, setEventFormData] = useState({
+    title: '',
+    subtitle: '',
+    description: '',
+    event_date: '',
+    start_time: '',
+    end_time: '',
+    type: 'conference',
+    is_active: true
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -201,15 +216,8 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
 
       // Check if we have a valid response with the post data
       if (response.data && response.data.post) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: response.data.message || 'Post created successfully',
-          timer: 1500,
-          showConfirmButton: false
-        });
-
-        // Reset form
+        toast.success('Post created successfully!');
+        setShow(false);
         setContent('');
         setSelectedFiles({ images: [], videos: [], documents: [] });
         setPreviews({ images: [], videos: [], documents: [] });
@@ -222,20 +230,13 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
           documents: [],
           visibility: 'public'
         });
-        setShow(false);
-
-        // Notify parent component about the new post
         setPosts(prevPosts => [response.data.post, ...prevPosts]);
       } else {
         throw new Error('Invalid response format from server');
       }
     } catch (error) {
       console.error('Error creating post:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: error.response?.data?.message || 'Something went wrong while creating the post!',
-      });
+      toast.error(error.response?.data?.message || 'Something went wrong while creating the post!');
       setShow(false);
     } finally {
       setIsLoading(false);
@@ -246,6 +247,46 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     setFormData(prev => ({
       ...prev,
       visibility: visibility || formData.visibility === 'public' ? 'private' : 'public'
+    }));
+  };
+
+  const handleEventSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await axios.post('/api/events', eventFormData);
+      toast.success('Event created successfully!');
+      setShowEventModal(false);
+      setEventFormData({
+        title: '',
+        subtitle: '',
+        description: '',
+        event_date: '',
+        start_time: '',
+        end_time: '',
+        type: 'conference',
+        is_active: true
+      });
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Error creating event');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEventInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEventFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleEventDescriptionChange = (value) => {
+    setEventFormData(prev => ({
+      ...prev,
+      description: value
     }));
   };
 
@@ -284,18 +325,25 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
               </span>
               <span>Photo/video</span>
             </div>
-            <div className="d-flex align-items-center event-with-icon">
-              <span class="material-symbols-outlined">
+            <div 
+              className="d-flex align-items-center event-with-icon" 
+              onClick={() => setShowEventModal(true)}
+              style={{ cursor: 'pointer' }}
+            >
+              <span className="material-symbols-outlined">
                 event
               </span>
               <span>Events</span>
             </div>
-            <div className="d-flex align-items-center jobs-with-icon">
-            <span class="material-symbols-outlined">
-work
-</span>
+            <div 
+              className="d-flex align-items-center jobs-with-icon"
+              onClick={() => setShowJobModal(true)}
+              style={{ cursor: 'pointer' }}
+            >
+              <span className="material-symbols-outlined">
+                work
+              </span>
               <span>Jobs</span>
-
             </div>
           </div>
           {/* <hr />
@@ -446,6 +494,145 @@ work
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Event Modal */}
+      <Modal show={showEventModal} onHide={() => setShowEventModal(false)} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Create New Event</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleEventSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                value={eventFormData.title}
+                onChange={handleEventInputChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Subtitle</Form.Label>
+              <Form.Control
+                type="text"
+                name="subtitle"
+                value={eventFormData.subtitle}
+                onChange={handleEventInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Description</Form.Label>
+              <ReactQuill
+                theme="snow"
+                value={eventFormData.description}
+                onChange={handleEventDescriptionChange}
+                modules={{
+                  toolbar: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                    ['link', 'image'],
+                    ['clean']
+                  ],
+                }}
+                style={{ height: '200px', marginBottom: '50px' }}
+              />
+            </Form.Group>
+
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Event Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="event_date"
+                    value={eventFormData.event_date}
+                    onChange={handleEventInputChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={3}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Start Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    name="start_time"
+                    value={eventFormData.start_time}
+                    onChange={handleEventInputChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={3}>
+                <Form.Group className="mb-3">
+                  <Form.Label>End Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    name="end_time"
+                    value={eventFormData.end_time}
+                    onChange={handleEventInputChange}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Type</Form.Label>
+              <Form.Select
+                name="type"
+                value={eventFormData.type}
+                onChange={handleEventInputChange}
+              >
+                <option value="conference">Conference</option>
+                <option value="workshop">Workshop</option>
+                <option value="talk">Talk</option>
+                <option value="seminar">Seminar</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Check
+                type="checkbox"
+                label="Active"
+                name="is_active"
+                checked={eventFormData.is_active}
+                onChange={handleEventInputChange}
+              />
+            </Form.Group>
+
+            <div className="text-end">
+              <Button variant="secondary" className="me-2" onClick={() => setShowEventModal(false)}>
+                Cancel
+              </Button>
+              <Button 
+                variant="primary" 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Creating...
+                  </>
+                ) : 'Create Event'}
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+      {/* Job Modal */}
+      <CreateJob 
+        show={showJobModal} 
+        onHide={() => setShowJobModal(false)}
+        onJobCreated={() => {
+          setShowJobModal(false);
+          toast.success('Job created successfully!');
+        }}
+      />
     </>
   );
 };
