@@ -296,6 +296,10 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     justifyContent: 'center', alignItems: 'center'
   }
 
+  const rubyText = {
+    display: 'ruby-text',
+  }
+
   const ex = (index) => {
     return index.split('.').pop();
   }
@@ -506,7 +510,7 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
                     onChange={handleInputChange}
                     required
                   />
-                  <label for={category.id}>{category.name}</label>
+                  <label for={category.id}>{category.name.split(" ")[0]}</label>
                 </div>
               ))}
             </div>
