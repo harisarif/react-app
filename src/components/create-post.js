@@ -483,7 +483,7 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
         </Card.Body>
       </Card>
 
-      <Modal show={show} onHide={handleClose} size="md" centered>
+      <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header className="d-flex justify-content-between p-3">
 
           <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
