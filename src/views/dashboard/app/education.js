@@ -316,52 +316,45 @@ const Education = () => {
                             alt={content.title}
                             loading="lazy"
                             onError={(e) => {
-                              e.target.src = 'placeholder-image-url'; // Add a placeholder image URL
+                              e.target.src = 'placeholder-image-url';
                             }}
                           />
-                           <div className="nav-bar-icon">
-                          <Dropdown>
-                            <Dropdown.Toggle variant="secondary">
-                              <span class="material-symbols-outlined">
-                                more_vert
-                              </span>
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                              <Dropdown.Item href="#">
-                                {userData && userData?.permissions[0]?.can_create_education == 1 && (
-                                <>
-                                  <Button
-                                    className="btn d-flex align-items-center bg-transparent w-100"
-                                    onClick={() => handleEdit(content)}
-                                    disabled={isLoading}
-                                  >
-                                    <i className="fas fa-edit text-black me-2 "></i>
-                                    <div className=" text-black ">Edit</div>
-                                  </Button>
-
-                                </>
-                              )}
-                              </Dropdown.Item>
-                              <Dropdown.Item href="#">
-                                {userData && userData?.permissions[0]?.can_create_education == 1 && (
-                                <>
-
-                                  <Button
-                                    className="btn d-flex align-items-center bg-transparent w-100"
-                                    onClick={() => handleDelete(content.id)}
-                                    disabled={isLoading}
-                                  >
-                                    <i className="fas fa-trash text-black  me-2"></i>
-                                    <div className=" text-black ">Delete</div>
-                                  </Button>
-                                </>
-                              )}
-                              </Dropdown.Item> 
-                            </Dropdown.Menu>
-                          </Dropdown>
+                          <div className="overlay"></div> {/* Dark Layer */}
+                          <div className="nav-bar-icon">
+                            <Dropdown>
+                              <Dropdown.Toggle className="bg-transparent toggle-drop-btn" variant="secondary">
+                                <span className="material-symbols-outlined">more_vert</span>
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu className="drop-menu-holder">
+                                <Dropdown.Item href="#">
+                                  {userData && userData?.permissions[0]?.can_create_education == 1 && (
+                                    <Button
+                                      className="btn d-flex align-items-center bg-transparent w-100 drop-edit-btn"
+                                      onClick={() => handleEdit(content)}
+                                      disabled={isLoading}
+                                    >
+                                      <i className="fas fa-edit text-black me-2 "></i>
+                                      <div className="text-black">Edit</div>
+                                    </Button>
+                                  )}
+                                </Dropdown.Item>
+                                <Dropdown.Item href="#">
+                                  {userData && userData?.permissions[0]?.can_create_education == 1 && (
+                                    <Button
+                                      className="btn d-flex align-items-center bg-transparent w-100 delete-edit-btn"
+                                      onClick={() => handleDelete(content.id)}
+                                      disabled={isLoading}
+                                    >
+                                      <i className="fas fa-trash text-black me-2"></i>
+                                      <div className="text-black">Delete</div>
+                                    </Button>
+                                  )}
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </div>
                         </div>
-                        </div>
+
                         <div className="card-body">
                           <h4 className="card-title turncate-2">{content.title}</h4>
                           <p className="card-text turncate-3 paragraph-holder">{content.short_description}</p>
@@ -393,7 +386,7 @@ const Education = () => {
                             )} */}
                           </div>
                         </div>
-                       
+
                       </div>
                     </div>
                   ))

@@ -3,7 +3,7 @@ $primary: #50b5ff !default;
 $navbar-vertical-dark-bg: $dark !default;
 $navbar-vertical-color-bg: var(--#{$variable-prefix}primary) !default;
 
-$navbar-vertical-width: 15.625rem !default;
+$navbar-vertical-width: 20rem !default;
 $navbar-vertical-mini-width: 5rem !default;
 
 $navbar-vertical-active-shadow: 0 10px 20px -10px rgba(darken($primary, 25%), .4);

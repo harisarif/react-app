@@ -607,7 +607,7 @@ const Header = () => {
                   id="mail-drop"
                   onClick={() => {
                       document.getElementById("rightSidebar").classList.toggle("right-sidebar");
-                      document.body.classList.toggle("right-sidebar-close");
+                      // document.body.classList.toggle("right-sidebar-close");
                   }}
                 >
                   <i className="material-symbols-outlined">chat</i>
