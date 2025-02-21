@@ -1379,3 +1379,37 @@ gap: 40px;
        font-weight: 500;
     }
 }
+#content{
+    .nav-bar-icon {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        display: none;
+        /* Additional styling as needed */
+    }
+    
+    .edu-card-img {
+        position: relative;
+        /* Ensure the container can position children absolutely */
+    }
+    
+    .edu-card-img:hover .nav-bar-icon {
+        display: block;
+    }
+    
+    .edu-card-img img {
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    .edu-card-img:hover img {
+        opacity: 0.7; /* Darker effect on hover */
+    }
+    .paragraph-holder {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+}
