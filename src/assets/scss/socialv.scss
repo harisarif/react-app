@@ -76,5 +76,73 @@
 
 
 
+.ql-editor{
+  padding: 8px ;
+  min-height: 120px ;
+  height: 120px ;
+  max-height: 120px;
+  overflow: auto;
+}
+
+.ql-snow .ql-picker-label{
+  padding-left: 0px !important;
+}
+
+.ql-editor.custom-color-post {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  color: #fff !important;
+  max-height: 200px;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.color-plate {
+  width: 30px;
+  height: 30px;
+  display: block;
+  border: 2px solid !important;
+  cursor: pointer;
+}
+
+.ql-toolbar.ql-snow {
+  /* border: 1px solid #ccc; */
+  /* padding: 8px; */
+  border-width: 0px !important;
+  padding: 0px !important;
+  display: flex !important;
+  gap: 4px !important;
+}
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 0px !important;
+}
+
+.bg-red{
+  background-color: #f00;
+}
+
+.bg-green{
+  background-color: #0f0;
+}
+
+.bg-blue{
+  background-color: #00f;
+}
+
+.bg-primary-2{
+  background-color: #0364aa;
+}
+
+.bg-gradient{
+  background: linear-gradient(45deg, 
+  #6EC1C8 0%, 
+  #F46A58 25%, 
+  #D9D01A 50%, 
+  #DCC0DC 75%, 
+  #454745 100%) !important;
+}
 
 

@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from '../../../utils/axios';
 import { Link } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Dropdown } from "react-bootstrap";
 import Card from "../../../components/Card";
 import NoDataFound from '../../../components/NoDataFound';
 import toast from 'react-hot-toast';
@@ -85,13 +85,13 @@ const Education = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const formDataToSend = new FormData();
     formDataToSend.append('title', formData.title);
     formDataToSend.append('short_description', formData.short_description);
     formDataToSend.append('description', formData.description);
     formDataToSend.append('video_url', formData.video_url);
-    
+
     // Only append image if it's a new file or we're creating new content
     if (formData.image instanceof File) {
       formDataToSend.append('image', formData.image);
@@ -180,7 +180,7 @@ const Education = () => {
       setIsLoading(true);
       try {
         await axios.delete(`${baseurl}/api/education-contents/${id}`);
-        setEducationContents(prevContents => 
+        setEducationContents(prevContents =>
           prevContents.filter(content => content.id !== id)
         );
         toast.success('Content deleted successfully');
@@ -307,39 +307,82 @@ const Education = () => {
                 {educationContents.length > 0 ? (
                   educationContents.map((content) => (
                     <div key={content.id} className="col-sm-6 col-lg-4">
+
                       <div className="card h-100">
                         <div className="edu-card-img">
-                          <img 
-                            src={content.image_path ? `${baseurl}/data/images/education/${content.image_path}` : 'placeholder-image-url'} 
-                            className="card-img-top" 
-                            alt={content.title} 
-                            loading="lazy" 
+                          <img
+                            src={content.image_path ? `${baseurl}/data/images/education/${content.image_path}` : 'placeholder-image-url'}
+                            className="card-img-top"
+                            alt={content.title}
+                            loading="lazy"
                             onError={(e) => {
                               e.target.src = 'placeholder-image-url'; // Add a placeholder image URL
                             }}
                           />
+                           <div className="nav-bar-icon">
+                          <Dropdown>
+                            <Dropdown.Toggle variant="secondary">
+                              <span class="material-symbols-outlined">
+                                more_vert
+                              </span>
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item href="#">
+                                {userData && userData?.permissions[0]?.can_create_education == 1 && (
+                                <>
+                                  <Button
+                                    className="btn d-flex align-items-center bg-transparent w-100"
+                                    onClick={() => handleEdit(content)}
+                                    disabled={isLoading}
+                                  >
+                                    <i className="fas fa-edit text-black me-2 "></i>
+                                    <div className=" text-black ">Edit</div>
+                                  </Button>
+
+                                </>
+                              )}
+                              </Dropdown.Item>
+                              <Dropdown.Item href="#">
+                                {userData && userData?.permissions[0]?.can_create_education == 1 && (
+                                <>
+
+                                  <Button
+                                    className="btn d-flex align-items-center bg-transparent w-100"
+                                    onClick={() => handleDelete(content.id)}
+                                    disabled={isLoading}
+                                  >
+                                    <i className="fas fa-trash text-black  me-2"></i>
+                                    <div className=" text-black ">Delete</div>
+                                  </Button>
+                                </>
+                              )}
+                              </Dropdown.Item> 
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
                         </div>
                         <div className="card-body">
                           <h4 className="card-title turncate-2">{content.title}</h4>
-                          <p className="card-text turncate-3">{content.short_description}</p>
+                          <p className="card-text turncate-3 paragraph-holder">{content.short_description}</p>
                           <div className="d-flex gap-2">
-                            <Button 
+                            <Button
                               className="btn btn-primary flex-grow-1"
                               onClick={() => handleWatchVideo(content.video_url, content.id)}
                               disabled={isLoading}
                             >
                               Watch Video
                             </Button>
-                            {userData && userData?.permissions[0]?.can_create_education == 1 && (
+                            {/* {userData && userData?.permissions[0]?.can_create_education == 1 && (
                               <>
-                                <Button 
+                                <Button
                                   className="btn btn-warning"
                                   onClick={() => handleEdit(content)}
                                   disabled={isLoading}
                                 >
                                   <i className="fas fa-edit"></i>
                                 </Button>
-                                <Button 
+                                <Button
                                   className="btn btn-danger"
                                   onClick={() => handleDelete(content.id)}
                                   disabled={isLoading}
@@ -347,15 +390,16 @@ const Education = () => {
                                   <i className="fas fa-trash"></i>
                                 </Button>
                               </>
-                            )}
+                            )} */}
                           </div>
                         </div>
+                       
                       </div>
                     </div>
                   ))
                 ) : (
-                  <NoDataFound 
-                    message="No educational content available at the moment." 
+                  <NoDataFound
+                    message="No educational content available at the moment."
                     containerClassName="text-center py-5 col-12"
                   />
                 )}
@@ -366,8 +410,8 @@ const Education = () => {
       </div>
 
       {/* Video Modal */}
-      <Modal 
-        show={showVideoModal} 
+      <Modal
+        show={showVideoModal}
         onHide={handleModalClose}
         size="lg"
         centered
@@ -477,7 +521,7 @@ const Education = () => {
                   toolbar: [
                     [{ 'header': [1, 2, false] }],
                     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                     ['link', 'image'],
                     ['clean']
                   ],
@@ -496,8 +540,8 @@ const Education = () => {
               />
             </Form.Group>
 
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               type="submit"
               disabled={isSubmitting}
             >

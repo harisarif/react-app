@@ -23,11 +23,11 @@ const Default = () => {
       {/* <HeaderOne/> */}
       <div className="main-content">
         <div className="position-relative">
-        <Header />
-        {/* <div id="content-page" className="content-inner"> */}
-        {/* <DefaultRouter/> */}
-        <Outlet />
-        {/* </div> */}
+          <Header />
+          {/* <div id="content-page" className="content-inner"> */}
+          {/* <DefaultRouter/> */}
+          <Outlet />
+          {/* </div> */}
 
         </div>
       </div>
