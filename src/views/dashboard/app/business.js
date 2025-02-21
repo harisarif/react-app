@@ -361,40 +361,10 @@ const UserFeeds = () => {
       });
 
       if (response.data.status == 'success') {
-<<<<<<< HEAD
-        // Update the post's is_following status
-        if (response.data.action == 'follow') {
-=======
->>>>>>> 869f38c9c16be5b0534d3517deadc6913d9f4a5a
           console.log("follow")
           setHasMore(false);
           setIsLoading(false);
           fetchPosts(1);
-<<<<<<< HEAD
-        } else if (response.data.action == 'unfollow') {
-          console.log("unfollow")
-          setHasMore(false);
-          setIsLoading(false);
-          fetchPosts(1);
-        }
-        setPosts(posts.map(p => {
-          if (p.user?.id === userId) {
-            return {
-              ...p,
-              is_following: !p.is_following
-            };
-          }
-          return p;
-        }));
-
-        setAdmins(admins.map(a => {
-          if (a.id == userId) {
-            return {
-              ...a,
-              is_following: !a.is_following
-            };
-          }
-=======
 
         // setPosts(posts.map(p => {
         //   if (p.user?.id === userId) {
@@ -414,7 +384,6 @@ const UserFeeds = () => {
           };
         }
         return a; // Return unchanged admin if id doesn't match
->>>>>>> 869f38c9c16be5b0534d3517deadc6913d9f4a5a
         }));
 
         // Show success message
