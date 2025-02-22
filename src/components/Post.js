@@ -11,6 +11,7 @@ import moment from 'moment';
 import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the styles
+import CreatePost from './create-post';
 
 const FollowButton = styled.button`
   border: none;
@@ -107,7 +108,7 @@ const getCategoryBadge = (categoryId) => {
   }
 };
 
-const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => {
+const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => {
   const badge = getCategoryBadge(post.category_id);
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const [comments, setComments] = useState(post.comments || []);
@@ -128,373 +129,39 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
   const [documentError, setDocumentError] = useState(null);
   const [isCommentLoading, setIsCommentLoading] = useState(false);
   
-  // Edit related state
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editFormData, setEditFormData] = useState({
-    title: '',
-    content: '',
-    category_id: '',
-    images: [],
-    videos: [],
-    documents: [],
-    visibility: 'public'
-  });
-  const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
-  const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
-  // const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const fileInputRef = React.createRef(null);
-
-  // useEffect(() => {
-  //   fetchCategories();
-  // }, []);
-
-  // const fetchCategories = async () => {
-  //   try {
-  //     const response = await axios.get('/api/categories');
-  //     setCategories(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching categories:', error);
-  //   }
-  // };
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const [editPostData, setEditPostData] = useState(null);
 
   const handleEditShow = () => {
-    // Parse the existing media arrays if they're strings
+    // Prepare the post data for editing
     const images = typeof post.images === 'string' ? JSON.parse(post.images || '[]') : (post.images || []);
     const videos = typeof post.videos === 'string' ? JSON.parse(post.videos || '[]') : (post.videos || []);
     const documents = typeof post.documents === 'string' ? JSON.parse(post.documents || '[]') : (post.documents || []);
 
-    // Set the initial form data with existing post data
-    setEditFormData({
+    const editData = {
+      id: post.id,
       title: post.title || '',
       content: post.content || '',
       category_id: post.category_id?.toString() || '',
       images: images,
       videos: videos,
       documents: documents,
-      visibility: post.visibility
-    });
-
-    // Set previews for existing media
-    setPreviews({
-      images: images?.map(img => `${baseurl}/data/images/${img}`),
-      videos: videos?.map(video => `${baseurl}/data/videos/${video}`),
-      documents: documents?.map(doc => doc.split('/').pop()) // Get filename from path
-    });
-
-    // Set selected files (needed for the UI)
-    setSelectedFiles({
-      images: images,
-      videos: videos,
-      documents: documents
-    });
-
-    setShowEditModal(true);
-  };
-
-  const handleEditClose = () => {
-    setShowEditModal(false);
-    setSelectedFiles({ images: [], videos: [], documents: [] });
-    setPreviews({ images: [], videos: [], documents: [] });
-  };
-
-  const handleFileSelect = (e) => {
-    const files = Array.from(e.target.files);
-    const newImages = [];
-    const newVideos = [];
-    const newDocuments = [];
-    const imagePreviewUrls = [];
-    const videoPreviewUrls = [];
-    const documentPreviewUrls = [];
-
-    files.forEach(file => {
-      if (file.type.startsWith('image/')) {
-        newImages.push(file);
-        imagePreviewUrls.push(URL.createObjectURL(file));
-      } else if (file.type.startsWith('video/')) {
-        newVideos.push(file);
-        videoPreviewUrls.push(URL.createObjectURL(file));
-      } else if (
-        file.type === 'application/pdf' ||
-        file.type === 'application/msword' ||
-        file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-        file.type === 'application/vnd.ms-excel' ||
-        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-        file.type === 'application/vnd.ms-powerpoint' ||
-        file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
-        file.type === 'text/plain'
-      ) {
-        newDocuments.push(file);
-        documentPreviewUrls.push(file.name);
-      }
-    });
-
-    setSelectedFiles({
-      images: [...selectedFiles.images, ...newImages],
-      videos: [...selectedFiles.videos, ...newVideos],
-      documents: [...selectedFiles.documents, ...newDocuments]
-    });
-
-    setPreviews({
-      images: [...previews.images, ...imagePreviewUrls],
-      videos: [...previews.videos, ...videoPreviewUrls],
-      documents: [...previews.documents, ...documentPreviewUrls]
-    });
-
-    setEditFormData(prev => ({
-      ...prev,
-      images: [...prev.images, ...newImages],
-      videos: [...prev.videos, ...newVideos],
-      documents: [...prev.documents, ...newDocuments]
-    }));
-  };
-
-  const removeFile = (type, index) => {
-    const newFiles = { ...selectedFiles };
-    const newPreviews = { ...previews };
-    
-    // If it's a File object, just remove it
-    // If it's a string (existing file), mark it for removal
-    if (newFiles[type][index] instanceof File) {
-      if (type === 'images' || type === 'videos') {
-        URL.revokeObjectURL(newPreviews[type][index]);
-      }
-    }
-    
-    newFiles[type].splice(index, 1);
-    newPreviews[type].splice(index, 1);
-
-    setSelectedFiles(newFiles);
-    setPreviews(newPreviews);
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const token = localStorage.getItem('access_token');
-      const formData = new FormData();
-      
-      console.log('Form Data before sending:', {
-        title: editFormData.title,
-        category_id: editFormData.category_id,
-        selectedFiles: selectedFiles
-      });
-
-      // Add basic info
-      formData.append('title', editFormData.title || '');
-      formData.append('visibility', editFormData.visibility || 'public');
-      formData.append('category_id', editFormData.category_id || '');
-      formData.append('_method', 'PUT');
-
-      // Add new files
-      if (selectedFiles.images) {
-        selectedFiles.images.forEach((file) => {
-          if (file instanceof File) {
-            formData.append('images[]', file);
-          }
-        });
-      }
-
-      if (selectedFiles.videos) {
-        selectedFiles.videos.forEach((file) => {
-          if (file instanceof File) {
-            formData.append('videos[]', file);
-          }
-        });
-      }
-
-      if (selectedFiles.documents) {
-        selectedFiles.documents.forEach((file) => {
-          if (file instanceof File) {
-            formData.append('documents[]', file);
-          }
-        });
-      }
-
-      // Handle removed media
-      const originalImages = typeof post.images === 'string' ? JSON.parse(post.images || '[]') : (post.images || []);
-      const originalVideos = typeof post.videos === 'string' ? JSON.parse(post.videos || '[]') : (post.videos || []);
-      const originalDocuments = typeof post.documents === 'string' ? JSON.parse(post.documents || '[]') : (post.documents || []);
-
-      // Find removed files by comparing original arrays with current selectedFiles
-      const removedImages = originalImages.filter(img => 
-        !selectedFiles.images.some(file => 
-          file instanceof File ? false : file === img
-        )
-      );
-      
-      const removedVideos = originalVideos.filter(vid => 
-        !selectedFiles.videos.some(file => 
-          file instanceof File ? false : file === vid
-        )
-      );
-      
-      const removedDocuments = originalDocuments.filter(doc => 
-        !selectedFiles.documents.some(file => 
-          file instanceof File ? false : file === doc
-        )
-      );
-
-      // Add removed media to formData
-      removedImages.forEach(img => formData.append('remove_media[]', img));
-      removedVideos.forEach(vid => formData.append('remove_media[]', vid));
-      removedDocuments.forEach(doc => formData.append('remove_media[]', doc));
-
-      // Keep existing media that wasn't removed
-      const keptImages = selectedFiles.images.filter(file => !(file instanceof File));
-      const keptVideos = selectedFiles.videos.filter(file => !(file instanceof File));
-      const keptDocuments = selectedFiles.documents.filter(file => !(file instanceof File));
-
-      formData.append('kept_images', JSON.stringify(keptImages));
-      formData.append('kept_videos', JSON.stringify(keptVideos));
-      formData.append('kept_documents', JSON.stringify(keptDocuments));
-
-      // Log FormData contents
-      for (let pair of formData.entries()) {
-        console.log('FormData entry:', pair[0], pair[1]);
-      }
-
-      const response = await axios.post(`/api/posts/${post.id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.data) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: 'Post updated successfully',
-          timer: 1500,
-          showConfirmButton: false
-        });
-
-        // Update the post in the UI
-        const updatedPost = response.data.post;
-        setPosts(prevPosts => 
-          prevPosts?.map(p => 
-            p.id === post.id ? updatedPost : p
-          )
-        );
-
-        handleEditClose();
-      }
-    } catch (error) {
-      console.error('Error updating post:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: error.response?.data?.message || 'Something went wrong while updating the post!',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const formatFileSize = (bytes) => {
-    if (!bytes) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
-  };
-
-  const getFileExtension = (url) => {
-    return url.split('.').pop().toLowerCase();
-  };
-
-  const getFileIcon = (extension) => {
-    const iconMap = {
-      pdf: 'picture_as_pdf',
-      doc: 'description',
-      docx: 'description',
-      xls: 'table_view',
-      xlsx: 'table_view',
-      txt: 'article'
+      visibility: post.visibility || 'public'
     };
-    return iconMap[extension] || 'insert_drive_file';
+
+    setEditPostData(editData);
+    setShowCreatePostModal(true);
   };
 
-  const isDocument = (url) => {
-    const documentExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt'];
-    return documentExtensions.includes(getFileExtension(url));
-  };
-
-  const handlePreview = async (item) => {
-    const extension = getFileExtension(item.url);
-    if (extension === 'pdf') {
-      setSelectedDocument(item);
-      setShowPdfPreview(true);
-      setIsDocumentLoading(true);
-      setDocumentError(null);
-      
-      try {
-        const response = await fetch(item.url);
-        if (!response.ok) throw new Error('Failed to load document');
-        
-        // Check if it's actually a PDF
-        const contentType = response.headers.get('content-type');
-        if (!contentType?.includes('application/pdf')) {
-          throw new Error('Invalid PDF document');
-        }
-      } catch (error) {
-        console.error('Error loading document:', error);
-        setDocumentError(error.message);
-      } finally {
-        setIsDocumentLoading(false);
-      }
-    } else {
-      try {
-        const response = await fetch(item.url);
-        if (!response.ok) throw new Error('Failed to load document');
-        const blob = await response.blob();
-        const objectUrl = URL.createObjectURL(blob);
-        window.open(objectUrl, '_blank');
-        URL.revokeObjectURL(objectUrl);
-      } catch (error) {
-        console.error('Error previewing file:', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'Unable to preview this file type',
-          icon: 'error',
-          timer: 3000,
-          showConfirmButton: false
-        });
-      }
+  const handleEditComplete = (updatedPost) => {
+    if (updatedPost) {
+      // Update the post in the list
+      setPosts(prevPosts => 
+        prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p)
+      );
     }
-  };
-
-  const handleDownload = async (url) => {
-    try {
-      setIsDocumentLoading(true);
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to download file');
-      
-      const blob = await response.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.href = objectUrl;
-      link.download = url.split('/').pop();
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(objectUrl);
-    } catch (error) {
-      console.error('Error downloading file:', error);
-      Swal.fire({
-        title: 'Error',
-        text: 'Failed to download file',
-        icon: 'error',
-        timer: 3000,
-        showConfirmButton: false
-      });
-    } finally {
-      setIsDocumentLoading(false);
-    }
+    setShowCreatePostModal(false);
+    setEditPostData(null);
   };
 
   const handleLike = async () => {
@@ -629,68 +296,107 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
     setSelectedMedia(post.media[currentMediaIndex]);
   };
 
-  // const handleFollow = async (userId) => {
-  //   if (!userData) {
-  //     Swal.fire({
-  //       title: 'Please Login',
-  //       text: 'You need to be logged in to follow users',
-  //       icon: 'info',
-  //       showCancelButton: true,
-  //       confirmButtonText: 'Login',
-  //       cancelButtonText: 'Cancel'
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         window.location.href = '/auth/sign-in';
-  //       }
-  //     });
-  //     return;
-  //   }
+  const handlePreview = async (item) => {
+    const extension = getFileExtension(item.url);
+    if (extension === 'pdf') {
+      setSelectedDocument(item);
+      setShowPdfPreview(true);
+      setIsDocumentLoading(true);
+      setDocumentError(null);
+      
+      try {
+        const response = await fetch(item.url);
+        if (!response.ok) throw new Error('Failed to load document');
+        
+        // Check if it's actually a PDF
+        const contentType = response.headers.get('content-type');
+        if (!contentType?.includes('application/pdf')) {
+          throw new Error('Invalid PDF document');
+        }
+      } catch (error) {
+        console.error('Error loading document:', error);
+        setDocumentError(error.message);
+      } finally {
+        setIsDocumentLoading(false);
+      }
+    } else {
+      try {
+        const response = await fetch(item.url);
+        if (!response.ok) throw new Error('Failed to load document');
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        window.open(objectUrl, '_blank');
+        URL.revokeObjectURL(objectUrl);
+      } catch (error) {
+        console.error('Error previewing file:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Unable to preview this file type',
+          icon: 'error',
+          timer: 3000,
+          showConfirmButton: false
+        });
+      }
+    }
+  };
 
-  //   try {
-  //     const response = await axios.post(`/api/follow/${userId}`, {}, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('access_token')}`
-  //       }
-  //     });
+  const handleDownload = async (url) => {
+    try {
+      setIsDocumentLoading(true);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to download file');
+      
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = url.split('/').pop();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to download file',
+        icon: 'error',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    } finally {
+      setIsDocumentLoading(false);
+    }
+  };
 
-  //     if (response.data.status == 'success') {
-  //       // Update the post's is_following status
-  //       setPosts(posts.map(p => {
-  //         if (p.user?.id === userId) {
-  //           return {
-  //             ...p,
-  //             is_following: !p.is_following
-  //           };
-  //         }
-  //         return p;
-  //       }));
+  const formatFileSize = (bytes) => {
+    if (!bytes) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+  };
 
-  //       // Show success message
-  //       Swal.fire({
-  //         title: 'Success',
-  //         text: response.data.message,
-  //         icon: 'success',
-  //         timer: 2000,
-  //         showConfirmButton: false
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error('Error following/unfollowing user:', error);
-  //     Swal.fire({
-  //       title: 'Error',
-  //       text: 'Failed to follow/unfollow user',
-  //       icon: 'error',
-  //       timer: 2000,
-  //       showConfirmButton: false
-  //     });
-  //   }
-  // };
+  const getFileExtension = (url) => {
+    return url.split('.').pop().toLowerCase();
+  };
 
-  const handleVisibilityChange = (visibility) => {
-    setEditFormData(prev => ({
-      ...prev,
-      visibility: visibility 
-    }));
+  const getFileIcon = (extension) => {
+    const iconMap = {
+      pdf: 'picture_as_pdf',
+      doc: 'description',
+      docx: 'description',
+      xls: 'table_view',
+      xlsx: 'table_view',
+      txt: 'article'
+    };
+    return iconMap[extension] || 'insert_drive_file';
+  };
+
+  const isDocument = (url) => {
+    const documentExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt'];
+    return documentExtensions.includes(getFileExtension(url));
   };
 
   return (
@@ -719,6 +425,9 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
                   </div>
                     {post.visibility == 'private' && (
                       <span className="badge  bg-danger text-white ms-2">Private</span>
+                    )}
+                    {post.visibility == 'password_protected' && (
+                      <span className="badge bg-warning text-white ms-2">Password Protected</span>
                     )}
                     {post.user?.id != userData?.id && (
                     <FollowButton
@@ -816,6 +525,9 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
           </div>
           <div className="mt-4">
             <div className="m-0" dangerouslySetInnerHTML={{ __html: post.title }} />
+          </div>
+          <div className="mt-4">
+            <div className="m-0" dangerouslySetInnerHTML={{ __html: post.description }} />
           </div>
           {post.media && post.media.length > 0 && (
             <div className={`media-grid media-grid-${Math.min(post.media.length, 5)}`}>
@@ -1109,141 +821,17 @@ const Post = ({ post, posts, setPosts, onDelete , categories ,handleFollow}) => 
         </Modal.Footer>
       </Modal>
 
-      {/* Edit Post Modal */}
-      <Modal show={showEditModal} onHide={handleEditClose} size="lg" centered>
-        <Modal.Header className="d-flex justify-content-between">
-        <Modal.Title  className="d-flex align-items-center hover-bg">
-            <div className="d-flex align-items-center flex-grow-1">
-              <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" />
-              <h2 className="mb-0 me-2">{userData?.name}</h2>
-              <span className={`badge ${editFormData.visibility === 'public' ? 'bg-success' : 'bg-danger'}`}>{editFormData.visibility.charAt(0).toUpperCase() + editFormData.visibility.slice(1)}</span>
-              <Dropdown className="ms-2">
-                <Dropdown.Toggle variant="link" className="p-0">
-                  <span className="material-symbols-outlined">arrow_drop_down</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => handleVisibilityChange('public')}>Public</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleVisibilityChange('private')}>Private</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </Modal.Title>
-          <Link to="#" className="lh-1" onClick={handleEditClose}>
-            <span className="material-symbols-outlined">close</span>
-          </Link>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleEditSubmit}>
-            <div className="d-flex align-items-center mb-3">
-              {/* <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" /> */}
-              <ReactQuill
-                placeholder="Write something here..."
-                value={editFormData.title}
-                onChange={(value) => {
-                  console.log('Title changed:', value);
-                  setEditFormData(prev => ({ ...prev, title: value }));
-                }}
-                required
-              />
-            </div>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Category</Form.Label>
-              <Form.Select
-                value={editFormData.category_id}
-                onChange={(e) => {
-                  console.log('Category changed:', e.target.value);
-                  setEditFormData(prev => ({ ...prev, category_id: e.target.value }));
-                }}
-                required
-              >
-                <option value="">Select a category</option>
-                {categories?.map(category => (
-                  <option 
-                    key={category.id} 
-                    value={category.id}
-                  >
-                    {category.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          
-            {/* File upload section */}
-            <div className="file-upload-section">
-              <input
-                type="file"
-                multiple
-                hidden
-                ref={fileInputRef}
-                onChange={handleFileSelect}
-                accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-              />
-              <Button 
-                variant="outline-primary" 
-                className="me-2"
-                onClick={() => fileInputRef.current.click()}
-              >
-                <i className="material-icons me-1">attach_file</i>
-                Add Files
-              </Button>
-            </div>
-
-            {/* Preview section */}
-            {Object.entries(previews)?.map(([type, files]) => (
-              files.length > 0 && (
-                <div key={type} className="preview-section mt-3">
-                  <h6 className="mb-2">{type.charAt(0).toUpperCase() + type.slice(1)}</h6>
-                  <div className="d-flex flex-wrap gap-2">
-                    {files?.map((preview, index) => (
-                      <div key={index} className="position-relative">
-                        {type === 'images' && (
-                          <img src={preview} alt="" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-                        )}
-                        {type === 'videos' && (
-                          <video width="100" height="100" controls>
-                            <source src={preview} />
-                          </video>
-                        )}
-                        {type === 'documents' && (
-                          <div className="document-preview">
-                            <i className="material-icons">description</i>
-                            <span>{selectedFiles[type][index].name}</span>
-                          </div>
-                        )}
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-danger position-absolute top-0 end-0"
-                          onClick={() => removeFile(type, index)}
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )
-            ))}
-            <div className="mt-3">
-              <Button variant="secondary" onClick={handleEditClose} className="me-2">
-                Close
-              </Button>
-              <Button 
-                variant="primary" 
-                type="submit"
-                disabled={isLoading || !editFormData.category_id || !editFormData.title.trim()}
-              >
-                {isLoading ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                    Updating...
-                  </>
-                ) : 'Update'}
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      {/* CreatePost modal for editing */}
+      {showCreatePostModal && (
+        <CreatePost 
+          posts={posts}
+          setPosts={setPosts}
+          userCanCreatePostCategories={[1, 2, 3, 4, 5]}  // Adjust as needed
+          editPostData={editPostData}
+          onEditComplete={handleEditComplete}
+          className="d-none"  // Hide the create post card
+        />
+      )}
     </>
   );
 };

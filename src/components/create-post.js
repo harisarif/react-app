@@ -16,15 +16,30 @@ import img1 from "../assets/images/icon/02.png";
 import img2 from "../assets/images/icon/02.png";
 import img3 from "../assets/images/icon/03.png";
 
-const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className }) => {
+const CreatePost = ({ 
+  posts, 
+  setPosts, 
+  userCanCreatePostCategories, 
+  className, 
+  editPostData,  
+  onEditComplete  
+}) => {
   const { userData } = useContext(UserContext);
   const location = useLocation();
   const [show, setShow] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState({ images: [], videos: [], documents: [] });
   const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
-  const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+
+
+  const handleDescriptionChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      description: value
+    }));
+  };
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -76,6 +91,39 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (editPostData) {
+      setShow(true);
+      setIsEditing(true);
+      // Prepare form data from edit post data
+      setFormData({
+        title: editPostData.title || '',
+        description: editPostData.description || '',
+        category_id: editPostData.category_id || '',
+        images: editPostData.images || [],
+        videos: editPostData.videos || [],
+        documents: editPostData.documents || [],
+        visibility: editPostData.visibility || 'public'
+      });
+
+
+
+      // Prepare previews
+      const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
+      setPreviews({
+        images: editPostData.images?.map(img => `${baseurl}/data/images/${img}`) || [],
+        videos: editPostData.videos?.map(video => `${baseurl}/data/videos/${video}`) || [],
+        documents: editPostData.documents?.map(doc => doc.split('/').pop()) || []
+      });
+
+      setSelectedFiles({
+        images: editPostData.images || [],
+        videos: editPostData.videos || [],
+        documents: editPostData.documents || []
+      });
+    }
+  }, [editPostData]);
+
   const fetchCategories = async () => {
     try {
       const response = await axios.get('/api/categories');
@@ -88,11 +136,32 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     }
   };
 
-  const handleClose = () => {
-    setShow(false);
+  const [showDiscardConfirmation, setShowDiscardConfirmation] = useState(false);
+
+  const hasUnsavedChanges = () => {
+    const hasContent = formData.title && formData.title.trim() !== '';
+    const hasDescription = formData.description && formData.description.trim() !== '';
+    const hasImages = formData.images && formData.images.length > 0;
+    const hasVideos = formData.videos && formData.videos.length > 0;
+    const hasDocuments = formData.documents && formData.documents.length > 0;
+    const hasModifiedVisibility = formData.visibility !== 'public';
+    const hasModifiedCategory = formData.category_id !== undefined;
+
+    return hasContent || hasDescription || hasImages || hasVideos || hasDocuments || 
+           hasModifiedVisibility || hasModifiedCategory;
+  };
+
+  const handleClose = (bypassConfirmation = false) => {
+    // Check if there are unsaved changes and confirmation is not bypassed
+    if (!bypassConfirmation && hasUnsavedChanges()) {
+      setShowDiscardConfirmation(true);
+      return; // Stop here to show confirmation
+    }
+
+    // Reset all form-related states
+    setIsEditing(false);
     setSelectedFiles({ images: [], videos: [], documents: [] });
     setPreviews({ images: [], videos: [], documents: [] });
-    setContent('');
     setFormData({
       title: '',
       description: '',
@@ -102,6 +171,40 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
       documents: [],
       visibility: 'public'
     });
+
+    // Call edit complete callback if in edit mode
+    if (isEditing && onEditComplete) {
+      onEditComplete(null);
+    }
+
+    // Close the modal
+    setShow(false);
+    setShowDiscardConfirmation(false);
+  };
+
+  const confirmDiscard = () => {
+    setShowDiscardConfirmation(false);
+    setIsEditing(false);
+    setSelectedFiles({ images: [], videos: [], documents: [] });
+    setPreviews({ images: [], videos: [], documents: [] });
+    setFormData({
+      title: '',
+      description: '',
+      category_id: '',
+      images: [],
+      videos: [],
+      documents: [],
+      visibility: 'public'
+    });
+
+    if (isEditing && onEditComplete) {
+      onEditComplete(null);
+    }
+    setShow(false);
+  };
+
+  const cancelDiscard = () => {
+    setShowDiscardConfirmation(false);
   };
 
   const handleShow = () => {
@@ -202,53 +305,92 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     e.preventDefault();
     setIsLoading(true);
 
-    const newFormData = {
-      ...formData,
-      content: content
-    };
+    const formDataToSubmit = new FormData();
+    
+    formDataToSubmit.append('visibility', formData.visibility || 'public');
+    formDataToSubmit.append('title', formData.title);
+    formDataToSubmit.append('description', formData.description);
+    formDataToSubmit.append('selectedStyle', selectedStyle || null);
+    formDataToSubmit.append('category_id', formData.category_id);
+    
+    if (isEditing && editPostData?.id) {
+      formDataToSubmit.append('_method', 'PUT');
+    }
+
+    const keptImages = formData.images.filter(img => typeof img === 'string');
+    const keptVideos = formData.videos.filter(video => typeof video === 'string');
+    const keptDocuments = formData.documents.filter(doc => typeof doc === 'string');
+
+    if (keptImages.length > 0) {
+      formDataToSubmit.append('kept_images', JSON.stringify(keptImages));
+    }
+    if (keptVideos.length > 0) {
+      formDataToSubmit.append('kept_videos', JSON.stringify(keptVideos));
+    }
+    if (keptDocuments.length > 0) {
+      formDataToSubmit.append('kept_documents', JSON.stringify(keptDocuments));
+    }
+
+    const newImages = formData.images.filter(img => img instanceof File);
+    const newVideos = formData.videos.filter(video => video instanceof File);
+    const newDocuments = formData.documents.filter(doc => doc instanceof File);
+
+    newImages.forEach((file, index) => {
+      formDataToSubmit.append(`images[${index}]`, file);
+    });
+    newVideos.forEach((file, index) => {
+      formDataToSubmit.append(`videos[${index}]`, file);
+    });
+    newDocuments.forEach((file, index) => {
+      formDataToSubmit.append(`documents[${index}]`, file);
+    });
+
+    if (formData.visibility === 'password_protected') {
+      formDataToSubmit.append('password', formData.password);
+    }
+
+    for (let [key, value] of formDataToSubmit.entries()) {
+      console.log(`${key}:`, value);
+    }
 
     try {
-      const response = await axios.post('/api/posts', newFormData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
-      });
-
-      // Check if we have a valid response with the post data
-      if (response.data && response.data.post) {
-        toast.success('Post created successfully!');
-        setShow(false);
-        setContent('');
-        setSelectedFiles({ images: [], videos: [], documents: [] });
-        setPreviews({ images: [], videos: [], documents: [] });
-        setFormData({
-          title: '',
-          description: '',
-          category_id: '',
-          images: [],
-          videos: [],
-          documents: [],
-          visibility: 'public'
+      let response;
+      if (isEditing && editPostData?.id) {
+        response = await axios.post(`/api/posts/${editPostData.id}`, formDataToSubmit, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
         });
-        setPosts(prevPosts => [response.data.post, ...prevPosts]);
+
+        if (response.data && response.data.post) {
+          toast.success('Post updated successfully!');
+          
+          if (onEditComplete) {
+            onEditComplete(response.data.post);
+          }
+        }
       } else {
-        throw new Error('Invalid response format from server');
+        response = await axios.post('/api/posts', formDataToSubmit, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        });
+
+        if (response.data && response.data.post) {
+          toast.success('Post created successfully!');
+          setPosts(prevPosts => [response.data.post, ...prevPosts]);
+        }
       }
+
+      handleClose(true);
     } catch (error) {
-      console.error('Error creating post:', error);
-      toast.error(error.response?.data?.message || 'Something went wrong while creating the post!');
-      setShow(false);
+      console.error('Error saving post:', error);
+      console.error('Error response:', error.response?.data);
+      toast.error(error.response?.data?.message || 'Something went wrong while saving the post!');
     } finally {
       setIsLoading(false);
     }
   };
-
-  // const handleVisibilityChange = (visibility) => {
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     visibility: visibility || formData.visibility === 'public' ? 'private' : 'public'
-  //   }));
-  // };
 
   const handleVisibilityChange = (visibility) => {
     setFormData((prev) => ({
@@ -341,9 +483,15 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     display: 'ruby-text',
   }
 
-  const ex = (index) => {
-    return index.split('.').pop();
-  }
+  const ex = (file) => {
+    if (file instanceof File) {
+      return file.name.split('.').pop();
+    }
+    if (typeof file === 'string') {
+      return file.split('.').pop();
+    }
+    return '';
+  };
 
   const [selectedStyle, setSelectedStyle] = useState(null);
   const quillRef = useRef(null);
@@ -386,7 +534,6 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
         editor.root.style.minHeight = "250px";
         editor.root.style.padding = "30px 20px";
       } else {
-        // Reset styles smoothly
         editor.root.style.background = "";
         editor.root.style.color = "";
         editor.root.style.fontSize = "";
@@ -401,19 +548,49 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
     setSelectedStyle(selectedStyle === style ? null : style);
   };
 
-  // Reset all styles
   const resetStyles = () => {
     setSelectedStyle(null);
+  };
+
+  const [showVisibilityModal, setShowVisibilityModal] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordProtectionData, setPasswordProtectionData] = useState({
+    type: formData.visibility || 'public',
+    password: ''
+  });
+
+  const handleVisibilityModalSubmit = () => {
+    setFormData(prev => ({
+      ...prev,
+      visibility: passwordProtectionData.type,
+      password: passwordProtectionData.type === 'password_protected' 
+        ? passwordProtectionData.password 
+        : ''
+    }));
+    setShowVisibilityModal(false);
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const handlePasswordProtectionChange = (type) => {
+    setPasswordProtectionData(prev => ({
+      ...prev,
+      type: type
+    }));
+  };
+
+  const handlePasswordChange = (e) => {
+    setPasswordProtectionData(prev => ({
+      ...prev,
+      password: e.target.value
+    }));
   };
 
   return (
     <>
       <Card className={className}>
-        {/* <Card.Header className="d-flex justify-content-between">
-          <div className="header-title">
-            <h4 className="card-title">Create Post</h4>
-          </div>
-        </Card.Header> */}
         <Card.Body>
           <div className="d-flex align-items-center">
             <div className="user-img">
@@ -427,7 +604,7 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
               <input
                 type="text"
                 className="form-control create-post-form-cntrl "
-                placeholder="Let's Post Something..."
+                placeholder={isEditing ? "Edit Post" : "Let's Post Something..."}
                 style={{ cursor: "pointer" }}
                 readOnly
               />
@@ -435,7 +612,7 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
           </div>
           <div className="d-flex align-items-center justify-content-between create-post-icons-main">
 
-            <div className="d-flex align-items-center photo-with-icon">
+            <div className="d-flex align-items-center photo-with-icon" onClick={handleShow} style={{ cursor: "pointer" }}>
               <span class="material-symbols-outlined">
                 photo_library
               </span>
@@ -462,24 +639,6 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
               <span>Jobs</span>
             </div>
           </div>
-          {/* <hr />
-          <ul className="post-opt-block d-flex list-inline m-0 p-0">
-            <li className="me-3 mb-md-0 mb-2">
-              <Link to="#" className="btn btn-soft-primary">
-                <img src={img1} alt="icon" className="img-fluid me-2" /> Photo/Video
-              </Link>
-            </li>
-            <li className="me-3 mb-md-0 mb-2">
-              <Link to="#" className="btn btn-soft-primary">
-                <img src={img2} alt="icon" className="img-fluid me-2" /> Tag Friend
-              </Link>
-            </li>
-            <li className="me-3">
-              <Link to="#" className="btn btn-soft-primary">
-                <img src={img3} alt="icon" className="img-fluid me-2" /> Feeling/Activity
-              </Link>
-            </li>
-          </ul> */}
         </Card.Body>
       </Card>
 
@@ -488,22 +647,13 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
 
           <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
             <div className="d-flex align-items-center flex-grow-1">
-              {/* <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-60 rounded-circle me-3" /> */}
-              {/* <h2 className="mb-0 me-2">{userData?.name}</h2> */}
-              {/* <span className={`badge ${formData.visibility === 'public' ? 'bg-success' : 'bg-danger'}`}>{formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1)}</span> */}
+              {(isEditing && editPostData?.id) ? 
+              <h2 className="fs-16 fw-700 mb-0">Edit Post</h2> : 
               <h2 className="fs-16 fw-700 mb-0">Create Post</h2>
-              {/* <Dropdown className="ms-2">
-                <Dropdown.Toggle variant="link" className="p-0">
-                  <span className="material-symbols-outlined">arrow_drop_down</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => handleVisibilityChange('public')}>Public</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleVisibilityChange('private')}>Private</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown> */}
+              }
             </div>
           </Modal.Title>
-          <Link to="#" className="lh-1" onClick={handleClose}>
+          <Link to="#" className="lh-1" onClick={() => handleClose(false)}>
             <span className="material-symbols-outlined text-dark rounded-4" style={modalClose}>close</span>
           </Link>
         </Modal.Header>
@@ -514,33 +664,34 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
               <h5 className="mb-0">{userData?.name}</h5>
               <div className="d-flex align-items-center">
                 <Dropdown className="">
-                  <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger}>
+                  <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
                     <span
-                      className={`badge py-0 px-4 d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : "bg-danger"
-                        }`}
+                      className={`badge py-0 px-4 d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
                       style={{ cursor: "pointer" }}
-
                     >
                       <span className="material-symbols-outlined" style={postViewIcon}>
-                        {formData.visibility === "public" ? "people" : "person"}
+                        {formData.visibility === "public" ? "people" : 
+                         formData.visibility === "private" ? "person" : "lock"}
                       </span>
-                      {formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1)}
+                      {formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1).replace('_', ' ')}
                       <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
                     </span>
-
                   </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleVisibilityChange("public")}>
-                      Public
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleVisibilityChange("private")}>
-                      Private
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
                 </Dropdown>
               </div>
             </div>
           </div>
+          <Form.Group className="mb-3">
+            <Form.Label>Title</Form.Label>
+            <Form.Control
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="Enter title"
+              required
+            />
+          </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>
             <br />
@@ -567,12 +718,11 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
 
             <ReactQuill
               placeholder="Write something here..."
-              value={content}
-              onChange={setContent}
+              value={formData.description}
+              onChange={handleDescriptionChange}
               ref={quillRef}
-              style={{
-
-              }}
+              style={{}}
+              onFocus={() => console.log('Description value:', formData.description)}
             />
           </div>
 
@@ -589,82 +739,6 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
             </div>
           </div>
 
-          {/* <Form.Group className="mb-3">
-            <Form.Label>Category</Form.Label>
-            <Form.Select
-              name="category_id"
-              value={formData.category_id}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Select a category</option>
-              {categories.map(category => (
-                <option
-                  key={category.id}
-                  value={category.id}
-                  selected={category.id.toString() == formData.category_id}
-                >
-                  {category.name}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group> */}
-
-          {/* File upload section */}
-          {/* <div className="file-upload-section">
-            <input
-              type="file"
-              multiple
-              hidden
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-            />
-            <Button
-              variant="outline-primary"
-              className="me-2"
-              onClick={() => fileInputRef.current.click()}
-            >
-              <i className="material-icons me-1">attach_file</i>
-              Add Files
-            </Button>
-          </div> */}
-
-          {/* Preview section */}
-          {/* {Object.entries(previews).map(([type, files]) => (
-            // files.length > 0
-            true && (
-              <div key={type} className="preview-section mt-3">
-                <h6 className="mb-2">{type.charAt(0).toUpperCase() + type.slice(1)}</h6>
-                <div className="d-flex flex-wrap gap-2">
-                  {files.map((preview, index) => (
-                    <div key={index} className="position-relative">
-                      {type === 'images' && (
-                        <img src={preview} alt="" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-                      )}
-                      {type === 'videos' && (
-                        <video width="100" height="100" controls>
-                          <source src={preview} />
-                        </video>
-                      )}
-                      {type === 'documents' && (
-                        <div className="document-preview">
-                          <i className="material-icons">description</i>
-                          <span>{selectedFiles[type][index].name}</span>
-                        </div>
-                      )}
-                      <button
-                        className="btn btn-sm btn-danger position-absolute top-0 end-0"
-                        onClick={() => removeFile(type, index)}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )
-          ))} */}
           {Object.entries(previews).some(([_, files]) => true) && (
             <div className="preview-section mt-3">
               <h6 className="mb-2">Attachments</h6>
@@ -693,19 +767,16 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
                 {Object.entries(previews).flatMap(([type, files]) =>
                   files.map((preview, index) => (
                     <div key={`${type}-${index}`} className="position-relative">
-                      {/* Render Images */}
                       {type === "images" && (
                         <img src={preview} alt="" style={imageView} />
                       )}
 
-                      {/* Render Videos */}
                       {type === "videos" && (
                         <video style={videoView} controls>
                           <source src={preview} />
                         </video>
                       )}
 
-                      {/* Render Documents */}
                       {type === "documents" && (
                         <div className="document-preview" style={docVeiw}>
                           <span class="material-symbols-outlined" style={uploadIcon}>
@@ -724,7 +795,6 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
                         </div>
                       )}
 
-                      {/* Remove Button */}
                       <button
                         className="btn position-absolute top-0 end-0" style={{ padding: '1px 5px 0px', background: '#d31717', borderRadius: '20px' }}
                         onClick={() => removeFile(type, index)}
@@ -744,17 +814,122 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
             variant="primary"
             onClick={handleSubmit}
             className="mt-3 w-100"
-            disabled={isLoading || !formData.category_id || (!content.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
+            disabled={isLoading || !formData.category_id || (!formData.description.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
           >
             {isLoading ? (
               <>
                 <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                Posting...
+                {isEditing ? 'Updating...' : 'Posting...'}
               </>
-            ) : 'Post'}
+            ) : (isEditing ? 'Update' : 'Post')}
           </Button>
 
         </Modal.Body>
+      </Modal>
+
+      {showDiscardConfirmation && (
+        <Modal size="sm" show={showDiscardConfirmation} onHide={cancelDiscard} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Discard Changes?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to discard your changes? All unsaved modifications will be lost.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={cancelDiscard}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={confirmDiscard}>
+              Discard
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+
+      {/* Visibility Selection Modal */}
+      <Modal 
+        show={showVisibilityModal} 
+        onHide={() => setShowVisibilityModal(false)} 
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Post Visibility</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="d-flex flex-column gap-3">
+            <div 
+              className={`d-flex align-items-center p-3 rounded cursor-pointer ${passwordProtectionData.type === 'public' ? 'bg-primary text-white' : 'border'}`}
+              onClick={() => handlePasswordProtectionChange('public')}
+            >
+              <span className="material-symbols-outlined me-2">people</span>
+              <div>
+                <h6 className="mb-0">Public</h6>
+                <small>Anyone can see your post</small>
+              </div>
+              {passwordProtectionData.type === 'public' && (
+                <span className="material-symbols-outlined ms-auto">check_circle</span>
+              )}
+            </div>
+
+            <div 
+              className={`d-flex align-items-center p-3 rounded cursor-pointer ${passwordProtectionData.type === 'private' ? 'bg-primary text-white' : 'border'}`}
+              onClick={() => handlePasswordProtectionChange('private')}
+            >
+              <span className="material-symbols-outlined me-2">person</span>
+              <div>
+                <h6 className="mb-0">Private</h6>
+                <small>Only you can see your post</small>
+              </div>
+              {passwordProtectionData.type === 'private' && (
+                <span className="material-symbols-outlined ms-auto">check_circle</span>
+              )}
+            </div>
+
+            <div 
+              className={`d-flex align-items-center p-3 rounded cursor-pointer ${passwordProtectionData.type === 'password_protected' ? 'bg-primary text-white' : 'border'}`}
+              onClick={() => handlePasswordProtectionChange('password_protected')}
+            >
+              <span className="material-symbols-outlined me-2">lock</span>
+              <div>
+                <h6 className="mb-0">Password Protected</h6>
+                <small>Only people with password can view</small>
+              </div>
+              {passwordProtectionData.type === 'password_protected' && (
+                <span className="material-symbols-outlined ms-auto">check_circle</span>
+              )}
+            </div>
+
+            {passwordProtectionData.type === 'password_protected' && (
+              <div className="position-relative">
+                <Form.Control
+                  type={passwordVisible ? 'text' : 'password'}
+                  placeholder="Enter password"
+                  value={passwordProtectionData.password}
+                  onChange={handlePasswordChange}
+                  className="pr-5"
+                />
+                <Button 
+                  variant="link" 
+                  className="position-absolute top-50 end-0 translate-middle-y"
+                  onClick={togglePasswordVisibility}
+                >
+                  <span className="material-symbols-outlined">
+                    {passwordVisible ? 'visibility_off' : 'visibility'}
+                  </span>
+                </Button>
+              </div>
+            )}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary" 
+            onClick={handleVisibilityModalSubmit}
+            disabled={passwordProtectionData.type === 'password_protected' && !passwordProtectionData.password.trim()}
+          >
+            Set Visibility
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       {/* Event Modal */}
@@ -866,7 +1041,11 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
             </Form.Group>
 
             <div className="text-end">
-              <Button variant="secondary" className="me-2" onClick={() => setShowEventModal(false)}>
+              <Button 
+                variant="secondary" 
+                className="me-2" 
+                onClick={() => setShowEventModal(false)}
+              >
                 Cancel
               </Button>
               <Button 
