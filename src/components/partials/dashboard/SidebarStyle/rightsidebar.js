@@ -237,6 +237,14 @@ const RightSidebar = () => {
     }
   };
 
+  useEffect(() => {
+    const sidebar = document.getElementById("rightSidebar");
+    if (sidebar && !sidebar.classList.contains("right-sidebar")) {
+      sidebar.classList.add("right-sidebar");
+    }
+  }, []);
+
+  
   // Initial load of messages when chat opens
   useEffect(() => {
     if (activeChat) {
@@ -521,7 +529,7 @@ const RightSidebar = () => {
 
   const minirightsidebar = () => {
     document.getElementById("rightSidebar").classList.toggle("right-sidebar");
-    document.body.classList.toggle("right-sidebar-close");
+    // document.body.classList.toggle("right-sidebar-close");
   };
 
   const history = useNavigate();
@@ -556,7 +564,7 @@ const RightSidebar = () => {
     const handleStartConversationForNotification = (event) => {
       // alert("hi")
       document.getElementById("rightSidebar").classList.add("right-sidebar");
-      document.body.classList.add("right-sidebar-close");
+      // document.body.classList.add("right-sidebar-close");
       const { conversationId, user } = event.detail;
       // console.log(conversationId, userId);
       const conversation = conversations.find(convo => convo.id === conversationId);

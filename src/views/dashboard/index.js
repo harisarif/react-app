@@ -1,4 +1,4 @@
-import React, { useState , useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from '../../utils/axios';
 import { UserContext } from '../../context/UserContext';
 import {
@@ -319,26 +319,26 @@ const Index = () => {
                     </div>
                   </Col>
                 </Row> */}
-{userData && Object.keys(userData).length > 0 ? (
-  <Row>
-    <Col sm={12}>
-      <CreatePost className="card-block card-stretch card-height" />
-    </Col>
-  </Row>
-) : null}
+                {userData && Object.keys(userData).length > 0 ? (
+                  <Row>
+                    <Col sm={12}>
+                      <CreatePost className="card-block card-stretch card-height" />
+                    </Col>
+                  </Row>
+                ) : null}
 
-                
+
                 <Row className="special-post-container">
-                {posts.map((post) => (
-  <Col sm={12} key={post.id} className="special-post">
-    <Post post={post} />
-  </Col>
-))}
-{loadContent && (
-  <div className="col-sm-12 text-center">
-    <img src={loader} alt="loader" style={{ height: "100px" }} />
-  </div>
-)}
+                  {posts.map((post) => (
+                    <Col sm={12} key={post.id} className="special-post">
+                      <Post post={post} />
+                    </Col>
+                  ))}
+                  {loadContent && (
+                    <div className="col-sm-12 text-center">
+                      <img src={loader} alt="loader" style={{ height: "100px" }} />
+                    </div>
+                  )}
 
                 </Row>
               </div>

@@ -171,7 +171,7 @@ const Header = () => {
         <Navbar
           expand="lg"
           variant="light"
-          className="nav navbar navbar-expand-lg navbar-light iq-navbar p-lg-0"
+          className="nav navbar navbar-expand-lg navbar-light iq-navbar p-lg-0 shadow-small"
         >
           {/* <Navbar className="iq-navbar p-lg-0" sticky="top"> */}
           <Container fluid className="navbar-inner">
@@ -607,7 +607,7 @@ const Header = () => {
                   id="mail-drop"
                   onClick={() => {
                       document.getElementById("rightSidebar").classList.toggle("right-sidebar");
-                      document.body.classList.toggle("right-sidebar-close");
+                      // document.body.classList.toggle("right-sidebar-close");
                   }}
                 >
                   <i className="material-symbols-outlined">chat</i>

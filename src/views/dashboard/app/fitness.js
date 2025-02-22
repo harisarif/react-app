@@ -471,9 +471,9 @@ const UserFeeds = () => {
         />
 
         <Container>
-          <Row>
+          <div>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-            <Col lg={12}>
+            <div>
               
             {(userData && userCanCreatePostCategories?.some(category => [2].includes(category)) &&
                 <Row>
@@ -486,8 +486,8 @@ const UserFeeds = () => {
                 </Row>
                   )}
 
-<Row className="special-post-container">
-                <Col lg={8}>
+<div className="special-post-container">
+                <div>
                 {loadContent ? (
                   <div className="col-sm-12 text-center">
                     <img src={loader} alt="loader" style={{ height: "100px" }} />
@@ -509,8 +509,11 @@ const UserFeeds = () => {
                   
                 )}
                 
-                </Col>
-                <Col sm={4}>
+                </div>
+               
+              </div>
+            </div>
+            <div>
                   <div className="mb-3">
                     <Form.Control
                       type="text"
@@ -564,11 +567,9 @@ const UserFeeds = () => {
                       </Card>
                     );
                   })}
-                </Col>
-              </Row>
-            </Col>
+                </div>
           </Tab.Container>
-        </Row>
+        </div>
       </Container>
     </div>
   </>);

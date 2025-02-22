@@ -1323,30 +1323,44 @@ gap: 40px;
 
 
 .crypto-info-btn {
-    background: linear-gradient(45deg, #007bff, #6610f2);
-    color: white;
+    background: #f1e185 !important;
+    color: #a1902a !important;
+    border: 1px solid #d4bd3b !important;
+    padding: 1px 16px !important;
+    font-weight: 500 !important;
 }
 
 .fitness-info-btn {
-    background: linear-gradient(45deg, #cd00ff, #e88c4f);
+    background: #aaeba8 !important;
+    color: #398637 !important;
+    border: 1px solid #57b154 !important;
+    padding: 1px 16px !important;
+    font-weight: 500 !important;
 }
 
-.bussiness-info-btn {
-    background: linear-gradient(45deg, #006cda, #00e568a1) !important;
-
-
-
-
-
+.info-btn {
+    background: #b79ae2 !important;
+    color: #643ba3 !important;
+    border: 1px solid #8859cf !important;
+    padding: 1px 16px !important;
+    font-weight: 500 !important;
 }
 
 .mindset-info-btn {
-    background: linear-gradient(45deg, #007bff, #6610f2);
+    background: #7fe9ec !important;
+    color: #1b797c !important;
+    border: 1px solid #389ea1 !important;
+    padding: 1px 16px !important;
+    font-weight: 500 !important;
 
 }
 
 .tech-info-btn {
-    background: linear-gradient(45deg, #6592c0, #007033a1);
+    background: #e972b7 !important;
+    color: #a03071 !important;
+    border: 1px solid #c9388c !important;
+    padding: 1px 16px !important;
+    font-weight: 500 !important;
 
 }
 
@@ -1397,13 +1411,7 @@ gap: 40px;
         display: block;
     }
     
-    .edu-card-img img {
-        transition: opacity 0.3s ease-in-out;
-    }
     
-    .edu-card-img:hover img {
-        opacity: 0.7; /* Darker effect on hover */
-    }
     .paragraph-holder {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -1411,5 +1419,86 @@ gap: 40px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
+    .edu-card-img {
+        position: relative;
+        overflow: hidden; /* Ensure overlay stays within the div */
+      }
+      
+      .edu-card-img img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      
+      .overlay {
+        position: absolute;
+        top: -100%; /* Initially hidden above */
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* Dark transparent layer */
+        transition: top 0.4s ease-in-out; /* Smooth effect */
+      }
+      
+      .edu-card-img:hover .overlay {
+        top: 0; /* Moves down to cover the image */
+      }
+      
+    .toggle-drop-btn{
+        border: none !important;
+        .material-symbols-outlined {
+            font-size: 32px;
+        }
+    }
+    .drop-edit-btn{
+        border: none !important;
+    }
+.delete-edit-btn{
+    border: none !important;
+}
+.drop-menu-holder:hover{
+background: #ebebeb;
+}
+}
+
+
+/* .sidebar + .main-content .content-inner {
+    margin-right: 340px;
+} */
+
+.suggestions-div{
+    position: fixed;
+    max-width: 350px;
+    width: 100%;
+    right: 0px;
+    top: 80px;
+    max-height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+#first-tour{
+    max-width: 350px;
+    width: 100%;
+}
+#rightSidebar{
+    max-width: 350px;
+    width: 100%;
+}
+
+.shadow-small{
+    box-shadow: 0 0 8px 1px #bbb !important;
+}
+
+/* .sidebar + .main-content {
+    margin-left: 20rem !important;
+} */
+
+
+.custom-conatiner{
+    max-width: 700px;
+    margin: 0 auto;
 }

@@ -12,7 +12,7 @@
         transition-duration: var(--sidebar-transition-duration);
         transition-timing-function: var(--sidebar-transition-function-ease-in-out);
         .content-inner {
-            margin-right: 300px;
+            margin-right: 350px;
         }
     }
 }
@@ -21,7 +21,7 @@
     .sidebar {
         &+.main-content {
             .content-inner {
-                margin-right: 7.25rem;
+                margin-right: 300px;
             }
         }
     }

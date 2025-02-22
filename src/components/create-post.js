@@ -642,7 +642,7 @@ const CreatePost = ({
         </Card.Body>
       </Card>
 
-      <Modal show={show} onHide={handleClose} size="md" centered>
+      <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header className="d-flex justify-content-between p-3">
 
           <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
@@ -697,7 +697,7 @@ const CreatePost = ({
             <br />
             <div className="d-flex gap-1 overflow-auto">
               {categories.map(category => (
-                <div className={`py-1 px-2 text-white rounded border ${category.id.toString() === formData.category_id ? 'bg-primary-2' : 'bg-primary'}`}>
+                <div className={`py-1 px-2 text-white rounded cursor-pointer border ${category.id.toString() === formData.category_id ? 'bg-primary-2' : 'bg-primary'}`}>
                   <input
                     type="radio"
                     key={category.id}
@@ -709,7 +709,7 @@ const CreatePost = ({
                     onChange={handleInputChange}
                     required
                   />
-                  <label for={category.id}>{category.name.split(" ")[0]}</label>
+                  <label for={category.id} className="cursor-pointer">{category.name.split(" ")[0]}</label>
                 </div>
               ))}
             </div>

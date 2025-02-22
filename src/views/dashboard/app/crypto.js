@@ -127,7 +127,7 @@ const FsLightbox = ReactFsLightbox.default
   ? ReactFsLightbox.default
   : ReactFsLightbox;
 
-  const FollowButton = styled.button`
+const FollowButton = styled.button`
   border: none;
   padding: 6px 16px;
   border-radius: 20px;
@@ -216,18 +216,18 @@ const UserFeeds = () => {
 
   const fetchPosts = async (pageNumber) => {
     if (isLoading || !hasMore) return;
-    
+
     setIsLoading(true);
     try {
       const response = await axios.get(`/api/posts?page=${pageNumber}&category=3`);
       console.log('Fetched posts:', response.data);
-      
+
       if (pageNumber === 1) {
         setPosts(response.data.data);
       } else {
         setPosts(prevPosts => [...prevPosts, ...response.data.data]);
       }
-      
+
       setHasMore(response.data.has_more);
       setLoadContent(false);
     } catch (error) {
@@ -468,107 +468,108 @@ const UserFeeds = () => {
         />
 
         <Container>
-          <Row>
+          <div>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-            <Col lg={12}>
-              
-            {(userData && userCanCreatePostCategories?.some(category => [3].includes(category)) &&
-                <Row>
-                  <Col sm={12}>
-                    <CreatePost 
-                      className="card-block card-stretch card-height"
-                      setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}
-                    />
-                  </Col>
-                </Row>
-                  )}
+              <div>
 
-<Row className="special-post-container">
-                <Col lg={8}>
-                {loadContent ? (
-                  <div className="col-sm-12 text-center">
-                    <img src={loader} alt="loader" style={{ height: "100px" }} />
-                  </div>
-                ) : posts.length === 0 ? (
-                  <Col sm={12}>
-                    <NoDataFound 
-                      message="No posts available in your feed."
-                      containerClassName="text-center py-5"
-                    />
-                  </Col>
-                ) : (
-                  posts.map((post) => (
-                    <Col sm={12} key={post.id} className="special-post">
-                      <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
+                {(userData && userCanCreatePostCategories?.some(category => [3].includes(category)) &&
+                  <Row className="special-post-container">
+                    <Col sm={12}>
+                      <CreatePost
+                        className="card-block card-stretch card-height"
+                        setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}
+                      />
+                      
+
                     </Col>
-                  ))
-                  
-                  
+                   
+                  </Row>
                 )}
-                
+                <Col sm={12}>
+                {loadContent ? (
+                        <div className="col-sm-12 text-center">
+                          <img src={loader} alt="loader" style={{ height: "100px" }} />
+                        </div>
+                      ) : posts.length === 0 ? (
+                        <Col sm={12}>
+                          <NoDataFound
+                            message="No posts available in your feed."
+                            containerClassName="text-center py-5"
+                          />
+                        </Col>
+                      ) : (
+                        posts.map((post) => (
+                          <Col sm={12} key={post.id} className="special-post">
+                            <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
+                          </Col>
+                        ))
+
+
+                      )}
                 </Col>
-                <Col sm={4}>
-                  <div className="mb-3">
-                    <Form.Control
-                      type="text"
-                      placeholder="Search Users..."
-                      value={searchQuery}
-                      onChange={(e) => {
-                        const searchQuery = e.target.value;
-                        axios.get(`/api/get-admins?search=${searchQuery}`)
-                          .then(response => {
-                            setAdmins(response.data);
-                          })
-                          .catch(error => {
-                            console.log(error);
-                          });
-                        setSearchQuery(searchQuery);
-                      }}
-                    />
-                  </div>
-                  {admins && admins.length > 0 && admins.map((admin) => {
-                    return (
-                      <Card className="mb-3">
-                        <Card.Body className="d-flex justify-content-between align-items-center">
-                          <div className="d-flex align-items-center">
-                            <img
-                              src={getProfileImageUrl(admin)}
-                              alt={admin.name}
-                              className="rounded-circle avatar-50 me-3"
-                            />
-                            <div>
-                              <h6 className="mb-0">{admin?.name}</h6>
-                              <p className="mb-0 text-muted">{admin?.email}</p>
+
+                 
+              </div>
+              <div>
+                    <div className="mb-3">
+                      <Form.Control
+                        type="text"
+                        placeholder="Search Users..."
+                        value={searchQuery}
+                        onChange={(e) => {
+                          const searchQuery = e.target.value;
+                          axios.get(`/api/get-admins?search=${searchQuery}`)
+                            .then(response => {
+                              setAdmins(response.data);
+                            })
+                            .catch(error => {
+                              console.log(error);
+                            });
+                          setSearchQuery(searchQuery);
+                        }}
+                      />
+                    </div>
+                    {admins && admins.length > 0 && admins.map((admin) => {
+                      return (
+                        <Card className="mb-3">
+                          <Card.Body className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex align-items-center">
+                              <img
+                                src={getProfileImageUrl(admin)}
+                                alt={admin.name}
+                                className="rounded-circle avatar-50 me-3"
+                              />
+                              <div>
+                                <h6 className="mb-0">{admin?.name}</h6>
+                                <p className="mb-0 text-muted">{admin?.email}</p>
+                              </div>
                             </div>
-                          </div>
-                          <FollowButton
-                            className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
-                            onClick={() => handleFollow(admin?.id)}
-                          >
-                            {admin?.is_following ? (
-                              <> 
-                                <i className="ri-user-unfollow-line"></i>
-                                Unfollow
-                              </>
-                            ) : (
-                              <> 
-                                <i className="ri-user-follow-line"></i>
-                                Follow
-                              </>
-                            )}
-                          </FollowButton>
-                        </Card.Body>
-                      </Card>
-                    );
-                  })}
-                </Col>
-              </Row>
-            </Col>
-          </Tab.Container>
-        </Row>
-      </Container>
-    </div>
-  </>);
+                            <FollowButton
+                              className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
+                              onClick={() => handleFollow(admin?.id)}
+                            >
+                              {admin?.is_following ? (
+                                <>
+                                  <i className="ri-user-unfollow-line"></i>
+                                  Unfollow
+                                </>
+                              ) : (
+                                <>
+                                  <i className="ri-user-follow-line"></i>
+                                  Follow
+                                </>
+                              )}
+                            </FollowButton>
+                          </Card.Body>
+                        </Card>
+                      );
+                    })}
+                  </div>
+            </Tab.Container>
+          </div>
+        </Container>
+      </div>
+    </>);
 };
 
 export default UserFeeds;
