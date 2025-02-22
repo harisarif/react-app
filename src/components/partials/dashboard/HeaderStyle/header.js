@@ -171,7 +171,7 @@ const Header = () => {
         <Navbar
           expand="lg"
           variant="light"
-          className="nav navbar navbar-expand-lg navbar-light iq-navbar p-lg-0"
+          className="nav navbar navbar-expand-lg navbar-light iq-navbar p-lg-0 shadow-small"
         >
           {/* <Navbar className="iq-navbar p-lg-0" sticky="top"> */}
           <Container fluid className="navbar-inner">

@@ -9,11 +9,12 @@
   transition-duration: var(--sidebar-transition-duration);
   transition-timing-function: var(--sidebar-transition-function-ease);
   z-index: 910;
-  background-color: var(--bs-gray-900);
+  // background-color: var(--bs-gray-900);
   color: var(--bs-primary);
   height: calc(100% - 80px) !important;
   .sidebar-body {
-    padding-right: 1rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
     overflow: hidden;
   }
   .data-scrollbar {
@@ -155,7 +156,7 @@
         font-weight: $font-weight-semibold;
       }
       .icon {
-        font-size: 1.25rem;
+        font-size: 28px;
         color: var(--bs-heading-color);
       }
 
@@ -229,7 +230,7 @@
 }
 
 body {
-  --sidebar-width: #{$navbar-vertical-width};
+  --sidebar-width: 350px;
   --sidebar-transition: #{$navbar-vertical-transition};
   --sidebar-transition-duration: #{$navbar-vertical-transition-duration};
   --sidebar-transition-function-ease: #{$navbar-vertical-transition-function-ease};
@@ -240,7 +241,7 @@ body {
   .sidebar {
     z-index: 99;
     .sidebar-toggle {
-      background: var(--#{$prefix}primary);
+      // background: var(--#{$prefix}primary);
       transform: rotate(0);
       z-index: 1;
       right: 18px;

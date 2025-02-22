@@ -361,10 +361,10 @@ const UserFeeds = () => {
       });
 
       if (response.data.status == 'success') {
-          console.log("follow")
-          setHasMore(false);
-          setIsLoading(false);
-          fetchPosts(1);
+        console.log("follow")
+        setHasMore(false);
+        setIsLoading(false);
+        fetchPosts(1);
 
         // setPosts(posts.map(p => {
         //   if (p.user?.id === userId) {
@@ -376,14 +376,14 @@ const UserFeeds = () => {
         //   return p;
         // }));
 
-        setAdmins(admins.map(a =>{
-          if(a.id == userId){
-          return {
-            ...a,
-            is_following: !a.is_following
-          };
-        }
-        return a; // Return unchanged admin if id doesn't match
+        setAdmins(admins.map(a => {
+          if (a.id == userId) {
+            return {
+              ...a,
+              is_following: !a.is_following
+            };
+          }
+          return a; // Return unchanged admin if id doesn't match
         }));
 
         // Show success message
@@ -471,9 +471,9 @@ const UserFeeds = () => {
         />
 
         <Container>
-          <div>
+          <div className="custom-conatiner">
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-              <div>
+              <div className="custom-main-container">
 
                 {(userData && userCanCreatePostCategories?.some(category => [1].includes(category)) &&
                   <Row>
@@ -510,43 +510,40 @@ const UserFeeds = () => {
                     )}
 
                   </div>
-                
+
                 </div>
               </div>
-              <div>
-                    <div className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Search Users..."
-                        value={searchQuery}
-                        onChange={(e) => {
-                          const searchQuery = e.target.value;
-                          axios.get(`/api/get-admins?search=${searchQuery}`)
-                            .then(response => {
-                              setAdmins(response.data);
-                            })
-                            .catch(error => {
-                              console.log(error);
-                            });
-                          setSearchQuery(searchQuery);
-                        }}
-                      />
-                    </div>
-                    {admins && admins.length > 0 && admins.map((admin) => {
-                      return (
-                        <Card className="mb-3">
-                          <Card.Body className="d-flex justify-content-between align-items-center">
-                            <div className="d-flex align-items-center">
-                              <img
-                                src={getProfileImageUrl(admin)}
-                                alt={admin.name}
-                                className="rounded-circle avatar-50 me-3"
-                              />
-                              <div>
-                                <h6 className="mb-0">{admin?.name}</h6>
-                                <p className="mb-0 text-muted">{admin?.email}</p>
-                              </div>
-                            </div>
+              <div className="suggestions-div">
+                <div className="mb-3">
+                  <Form.Control
+                    type="text"
+                    placeholder="Search Users..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      const searchQuery = e.target.value;
+                      axios.get(`/api/get-admins?search=${searchQuery}`)
+                        .then(response => {
+                          setAdmins(response.data);
+                        })
+                        .catch(error => {
+                          console.log(error);
+                        });
+                      setSearchQuery(searchQuery);
+                    }}
+                  />
+                </div>
+                {admins && admins.length > 0 && admins.map((admin) => {
+                  return (
+                    <Card className="mb-3">
+                      <Card.Body className="p-3">
+
+                        <div className="d-flex flex-column gap-2">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <img
+                              src={getProfileImageUrl(admin)}
+                              alt={admin.name}
+                              className="rounded-circle avatar-50 me-3"
+                            />
                             <FollowButton
                               className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
                               onClick={() => handleFollow(admin?.id)}
@@ -563,13 +560,19 @@ const UserFeeds = () => {
                                 </>
                               )}
                             </FollowButton>
-                          </Card.Body>
-                        </Card>
-                      );
-                    })}
-                  </div>
+                          </div>
+                          <div className="d-flex flex-column gap-0">
+                            <h6 className="mb-0">{admin?.name}</h6>
+                            <p className="mb-0 text-muted">{admin?.email}</p>
+                          </div>
+                        </div>
+
+                      </Card.Body>
+                    </Card>
+                  );
+                })}
+              </div>
             </Tab.Container>
-            
           </div>
         </Container>
       </div>

@@ -546,7 +546,7 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
             <br />
             <div className="d-flex gap-1 overflow-auto">
               {categories.map(category => (
-                <div className={`py-1 px-2 text-white rounded border ${category.id.toString() === formData.category_id ? 'bg-primary-2' : 'bg-primary'}`}>
+                <div className={`py-1 px-2 text-white rounded cursor-pointer border ${category.id.toString() === formData.category_id ? 'bg-primary-2' : 'bg-primary'}`}>
                   <input
                     type="radio"
                     key={category.id}
@@ -558,7 +558,7 @@ const CreatePost = ({ posts, setPosts, userCanCreatePostCategories, className })
                     onChange={handleInputChange}
                     required
                   />
-                  <label for={category.id}>{category.name.split(" ")[0]}</label>
+                  <label for={category.id} className="cursor-pointer">{category.name.split(" ")[0]}</label>
                 </div>
               ))}
             </div>
