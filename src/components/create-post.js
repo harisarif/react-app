@@ -10,6 +10,8 @@ import 'react-quill/dist/quill.snow.css'; // Import the styles
 import CreateJob from './job/CreateJob';
 import toast from 'react-hot-toast';
 
+import { IoIosHeartEmpty } from "react-icons/io";
+
 //images
 import user1 from "../assets/images/user/1.jpg";
 import img1 from "../assets/images/icon/02.png";
@@ -597,10 +599,10 @@ const CreatePost = ({
               <img
                 src={getProfileImageUrl(userData)}
                 alt="userimg"
-                className="avatar-60 rounded-circle"
+                className="avatar-50 rounded-circle"
               />
             </div>
-            <div className="post-text ms-3 w-100" onClick={handleShow}>
+            <div className="post-text ms-2 w-100" onClick={handleShow}>
               <input
                 type="text"
                 className="form-control create-post-form-cntrl "
@@ -610,7 +612,7 @@ const CreatePost = ({
               />
             </div>
           </div>
-          <div className="d-flex align-items-center justify-content-between create-post-icons-main">
+          <div className="d-flex align-items-center justify-content-around create-post-icons-main">
 
             <div className="d-flex align-items-center photo-with-icon" onClick={handleShow} style={{ cursor: "pointer" }}>
               <span class="material-symbols-outlined">
@@ -654,7 +656,7 @@ const CreatePost = ({
             </div>
           </Modal.Title>
           <Link to="#" className="lh-1" onClick={() => handleClose(false)}>
-            <span className="material-symbols-outlined text-dark rounded-4" style={modalClose}>close</span>
+            <span className="material-symbols-outlined text-dark rounded-4">close</span>
           </Link>
         </Modal.Header>
         <Modal.Body>
@@ -858,10 +860,10 @@ const CreatePost = ({
         <Modal.Body>
           <div className="d-flex flex-column gap-3">
             <div 
-              className={`d-flex align-items-center p-3 rounded cursor-pointer ${passwordProtectionData.type === 'public' ? 'bg-primary text-white' : 'border'}`}
+              className={`d-flex align-items-center px-3 py-2 rounded cursor-pointer ${passwordProtectionData.type === 'public' ? 'bg-primary text-white' : 'border'}`}
               onClick={() => handlePasswordProtectionChange('public')}
             >
-              <span className="material-symbols-outlined me-2">people</span>
+              <span className="material-symbols-outlined me-3 fs-18">people</span>
               <div>
                 <h6 className="mb-0">Public</h6>
                 <small>Anyone can see your post</small>
@@ -872,10 +874,10 @@ const CreatePost = ({
             </div>
 
             <div 
-              className={`d-flex align-items-center p-3 rounded cursor-pointer ${passwordProtectionData.type === 'private' ? 'bg-primary text-white' : 'border'}`}
+              className={`d-flex align-items-center px-3 py-2 rounded cursor-pointer ${passwordProtectionData.type === 'private' ? 'bg-primary text-white' : 'border'}`}
               onClick={() => handlePasswordProtectionChange('private')}
             >
-              <span className="material-symbols-outlined me-2">person</span>
+              <span className="material-symbols-outlined me-3 fs-18">person</span>
               <div>
                 <h6 className="mb-0">Private</h6>
                 <small>Only you can see your post</small>
@@ -886,10 +888,10 @@ const CreatePost = ({
             </div>
 
             <div 
-              className={`d-flex align-items-center p-3 rounded cursor-pointer ${passwordProtectionData.type === 'password_protected' ? 'bg-primary text-white' : 'border'}`}
+              className={`d-flex align-items-center px-3 py-2 rounded cursor-pointer ${passwordProtectionData.type === 'password_protected' ? 'bg-primary text-white' : 'border'}`}
               onClick={() => handlePasswordProtectionChange('password_protected')}
             >
-              <span className="material-symbols-outlined me-2">lock</span>
+              <span className="material-symbols-outlined me-3 fs-18">lock</span>
               <div>
                 <h6 className="mb-0">Password Protected</h6>
                 <small>Only people with password can view</small>

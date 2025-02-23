@@ -21,7 +21,7 @@ const BlogGrid = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col lg="6">
               <Card className="card-block card-stretch card-height shadow-none blog-grid">

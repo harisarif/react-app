@@ -6,7 +6,7 @@ const BlankPage = () => {
         <>
             <div id='content-page' className='content-inner'>
 
-           <Container>
+           <Container className="custom-conatiner">
                 <Row>
                     <Col lg="12">
                         Add Your HTML Content Here.....

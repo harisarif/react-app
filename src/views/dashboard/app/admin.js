@@ -173,7 +173,7 @@ const Admin = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row as="ul" className="list-unstyled mb-0">
             <Col md="6" lg="3" as="li">
               <Card>

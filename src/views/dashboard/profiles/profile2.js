@@ -84,7 +84,7 @@ const Profile2 = () => {
 
       {/* <div className="profile-2"> */}
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col lg="12">
               <Card>

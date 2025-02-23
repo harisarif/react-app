@@ -193,7 +193,7 @@ const Calendar = () => {
     <>
       <ProfileHeader title="Calendar and Events" img={profilebg6} />
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row className="row-eq-height">
             <Col md="4" lg="4">
               <Card className="">

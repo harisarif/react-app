@@ -13,7 +13,7 @@ const Market1 = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <div className="mb-2">
               <h4>Popular apps</h4>

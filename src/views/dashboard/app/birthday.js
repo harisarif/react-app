@@ -28,7 +28,7 @@ const Birthday = () => {
     <>
       <ProfileHeader title="Birthday" img={profilebg4} />
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col sm="12">
               <div className="birthday-block">

@@ -26,7 +26,7 @@ const StoreCheckout = () => {
         <>
             <ProfileHeader title="Store Checkout" img={pageimg} />
             <div id="content-page" className="content-inner">
-                <Container>
+                <Container className="custom-conatiner">
                     <Row>
                         <div id="cart" className={`cart-card-block p-0 col-12 ${show === 'address' || show === 'payment' ? '' : 'show'}`}>
                             <Row className="align-item-center">

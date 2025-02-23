@@ -91,7 +91,7 @@ const JobDetail = () => {
   if (loading) {
     return (
       <div className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <div className="text-center py-5">
             <div className="spinner-border text-primary" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -105,7 +105,7 @@ const JobDetail = () => {
   if (!job) {
     return (
       <div className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <div className="text-center py-5">
             <h3>Job not found</h3>
           </div>
@@ -116,7 +116,7 @@ const JobDetail = () => {
 
   return (
     <div className="content-inner">
-      <Container>
+      <Container className="custom-conatiner">
 <div className="row">
   <div className='col-12 col-md-7 col-lg-7 find-more-left-side'>
         <Card>

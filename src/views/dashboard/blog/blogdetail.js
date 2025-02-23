@@ -21,7 +21,7 @@ const BlogDetail = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col lg="8">
               <Card className="card-block card-stretch card-height blog blog-detail">

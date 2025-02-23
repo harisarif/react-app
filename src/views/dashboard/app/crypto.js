@@ -467,7 +467,7 @@ const UserFeeds = () => {
           slide={imageController.slide}
         />
 
-        <Container>
+        <Container className="custom-conatiner">
           <div>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
               <div>

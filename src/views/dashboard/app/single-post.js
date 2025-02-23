@@ -31,7 +31,7 @@ const SinglePost = () => {
   if (loading) {
     return (
       <div className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <div className="text-center">
             <img src={loader} alt="loader" style={{ height: "100px" }} />
           </div>
@@ -43,7 +43,7 @@ const SinglePost = () => {
   if (error) {
     return (
       <div className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <div className="text-center">
             <h3>{error}</h3>
           </div>
@@ -54,7 +54,7 @@ const SinglePost = () => {
 
   return (
     <div className="content-inner">
-      <Container>
+      <Container className="custom-conatiner">
         <Row>
           <Col sm={12}>
             {post ? (

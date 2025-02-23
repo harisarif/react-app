@@ -92,7 +92,7 @@ import pizza from "../../../assets/images/page-img/pizza.webp";
 import busImg from "../../../assets/images/page-img/bus.webp";
 import boyImg from "../../../assets/images/page-img/boy.webp";
 import img11 from "../../../assets/images/page-img/fd.webp";
-import { getProfileImageUrl , getBackgroundProfileImageUrl } from '../../../utils/helpers';
+import { getProfileImageUrl, getBackgroundProfileImageUrl } from '../../../utils/helpers';
 
 import crypto1 from "../../../assets/images/page-img/crypto(1).jpg";
 import crypto2 from "../../../assets/images/page-img/crypto(2).jpg";
@@ -240,70 +240,70 @@ const UserProfile = () => {
   ]
 
   const [profileData, setProfileData] = useState(null);
-const [userStats, setUserStats] = useState(null);
+  const [userStats, setUserStats] = useState(null);
 
-useEffect(() => {
-  const fetchProfileData = async () => {
-    try {
-      console.log('Fetching profile data...');
-      const token = localStorage.getItem('access_token');
-      console.log('Token:', token); 
-      
-      if(id){
-        const [profileRes, statsRes] = await Promise.all([
-          axios.get(`/api/user-profile/${id}`),
-          axios.get(`/api/user-stats/${id}`)
-        ]);
-        console.log('Profile Response:', profileRes.data);
-        console.log('Stats Response:', statsRes.data);
-        
-        setProfileData(profileRes.data);
-        setUserStats(statsRes.data);
-      }
-      else{
-        const [profileRes, statsRes] = await Promise.all([
-          axios.get('/api/user-profile'),
-          axios.get('/api/user-stats')
-        ]);
-        console.log('Profile Response:', profileRes.data);
-        console.log('Stats Response:', statsRes.data);
-        
-        setProfileData(profileRes.data);
-        setUserStats(statsRes.data);
-      }
-      
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        console.log('Fetching profile data...');
+        const token = localStorage.getItem('access_token');
+        console.log('Token:', token);
 
-    } catch (error) {
-      console.error('Error details:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
+        if (id) {
+          const [profileRes, statsRes] = await Promise.all([
+            axios.get(`/api/user-profile/${id}`),
+            axios.get(`/api/user-stats/${id}`)
+          ]);
+          console.log('Profile Response:', profileRes.data);
+          console.log('Stats Response:', statsRes.data);
+
+          setProfileData(profileRes.data);
+          setUserStats(statsRes.data);
+        }
+        else {
+          const [profileRes, statsRes] = await Promise.all([
+            axios.get('/api/user-profile'),
+            axios.get('/api/user-stats')
+          ]);
+          console.log('Profile Response:', profileRes.data);
+          console.log('Stats Response:', statsRes.data);
+
+          setProfileData(profileRes.data);
+          setUserStats(statsRes.data);
+        }
+
+
+      } catch (error) {
+        console.error('Error details:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        });
+      }
+    };
+
+    if (localStorage.getItem('access_token')) {
+      fetchProfileData();
     }
-  };
-  
-  if (localStorage.getItem('access_token')) {
-    fetchProfileData();
-  }
-}, []);
+  }, []);
 
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        if(id){
+        if (id) {
           const response = await axios.get(`/api/user_posts/${id}`);
           console.log('Fetched posts:', response.data.data); // Log the response
           setPosts(response.data.data);
           setLoadContent(false);
-                }
-                else{
-                  const response = await axios.get('/api/user_posts');
-                  console.log('Fetched posts:', response.data.data); // Log the response
-                  setPosts(response.data.data);
-                  setLoadContent(false);
-                }
+        }
+        else {
+          const response = await axios.get('/api/user_posts');
+          console.log('Fetched posts:', response.data.data); // Log the response
+          setPosts(response.data.data);
+          setLoadContent(false);
+        }
       } catch (error) {
         console.error('Error fetching posts:', error);
         setLoadContent(false);
@@ -314,7 +314,12 @@ useEffect(() => {
 
   return (
     <>
-      <div id="content-page" className="content-inner">
+      <style>{`
+        .suggestions-div {
+          display: none;
+        }
+      `}</style>
+      <div id="content-page" className="content-inner m-0">
         <FsLightbox
           toggler={imageController.toggler}
           sources={[
@@ -486,16 +491,16 @@ useEffect(() => {
                         </div>
                       </Col>
                       <Col lg={4} className="text-center profile-center">
-<div className="header-avatar position-relative d-inline-block">
-  <img
-    src={getProfileImageUrl(profileData?.user)}
-    alt="user"
-    className="avatar-150 border border-4 border-white rounded-3"
-  />
-</div>
-<h5 className="d-flex align-items-center justify-content-center gap-1 mb-2">
-  {profileData?.user?.name}  
-</h5>
+                        <div className="header-avatar position-relative d-inline-block">
+                          <img
+                            src={getProfileImageUrl(profileData?.user)}
+                            alt="user"
+                            className="avatar-150 border border-4 border-white rounded-3"
+                          />
+                        </div>
+                        <h5 className="d-flex align-items-center justify-content-center gap-1 mb-2">
+                          {profileData?.user?.name}
+                        </h5>
                         {/* <h5 className="d-flex align-items-center justify-content-center gap-1 mb-2">
                           Marvin McKinney{" "}
                           <span className="badge  bg-primary rounded-pill material-symbols-outlined font-size-14 p-0 custom-done">
@@ -525,17 +530,17 @@ useEffect(() => {
                         </ul>
                       </Col>
                       <Col lg={4} className="profile-right">
-                       <ul className="user-meta list-inline p-0 d-flex align-items-center justify-content-center">
-                         <li>
-                           <h5>{userStats?.posts_count || 0}</h5>Posts
-                         </li>
-                         <li>
-                           <h5>{userStats?.comments_count || 0}</h5>Comments
-                         </li>
-                         <li>
-                           <h5>{userStats?.likes_count || 0}</h5>Likes
-                         </li>
-                       </ul>
+                        <ul className="user-meta list-inline p-0 d-flex align-items-center justify-content-center">
+                          <li>
+                            <h5>{userStats?.posts_count || 0}</h5>Posts
+                          </li>
+                          <li>
+                            <h5>{userStats?.comments_count || 0}</h5>Comments
+                          </li>
+                          <li>
+                            <h5>{userStats?.likes_count || 0}</h5>Likes
+                          </li>
+                        </ul>
                       </Col>
                     </Row>
 
@@ -851,28 +856,28 @@ useEffect(() => {
                           </div>
                         </Col>
                         <Col lg={8}>
-                        {userData && !id && Object.keys(userData).length > 0 ? (
-  <Row>
-    <Col sm={12}>
-      <CreatePost className="card-block card-stretch card-height" />
-    </Col>
-  </Row>
-) : null}
+                          {userData && !id && Object.keys(userData).length > 0 ? (
+                            <Row>
+                              <Col sm={12}>
+                                <CreatePost className="card-block card-stretch card-height" />
+                              </Col>
+                            </Row>
+                          ) : null}
 
-                
-                <Row className="special-post-container">
-                {posts.map((post) => (
-  <Col sm={12} key={post.id} className="special-post">
-    <Post post={post} />
-  </Col>
-))}
-{loadContent && (
-  <div className="col-sm-12 text-center">
-    <img src={loader} alt="loader" style={{ height: "100px" }} />
-  </div>
-)}
 
-                </Row>
+                          <Row className="special-post-container">
+                            {posts.map((post) => (
+                              <Col sm={12} key={post.id} className="special-post">
+                                <Post post={post} />
+                              </Col>
+                            ))}
+                            {loadContent && (
+                              <div className="col-sm-12 text-center">
+                                <img src={loader} alt="loader" style={{ height: "100px" }} />
+                              </div>
+                            )}
+
+                          </Row>
                         </Col>
                       </Row>
                     </Card.Body>

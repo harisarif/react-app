@@ -48,7 +48,7 @@ const ProfileImages =() =>{
             />
         <ProfileHeader title="Your Photos" img={img5}/>
             <div id="content-page" className="content-inner">
-               <Container>
+               <Container className="custom-conatiner">
                   <Row>
                      <Col lg="4" md="6">
                         <div className="user-images position-relative overflow-hidden mb-3">

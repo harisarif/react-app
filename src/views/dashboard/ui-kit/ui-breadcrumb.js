@@ -8,7 +8,7 @@ const UiBreadcrumbs = () => {
    return (
       <>
          <div id='content-page' className='content-inner'>
-            <Container>
+            <Container className="custom-conatiner">
                <Row>
                   <Col sm="12">
                      <div className="card position-relative inner-page-bg bg-primary" style={{ height: "150px" }}>

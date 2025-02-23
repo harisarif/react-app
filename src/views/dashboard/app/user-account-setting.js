@@ -5,7 +5,7 @@ const UserAccountSetting = () => {
     return (
         <>
             <div className="content-inner">
-                <Container>
+                <Container className="custom-conatiner">
                     <Row>
                         <Col lg="6">
                             <Card>

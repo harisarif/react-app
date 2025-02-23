@@ -12,7 +12,7 @@ const Weather = () => {
     <>
       <ProfileHeader title="Weather" img={profilebg2} />
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col lg="3">
               <Card className="card-block card-stretch card-height">

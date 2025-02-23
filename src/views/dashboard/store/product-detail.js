@@ -45,7 +45,7 @@ const ProductDetail = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Card>
             <Card.Body>
               <Row className="align-items-center">

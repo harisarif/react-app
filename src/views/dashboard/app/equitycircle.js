@@ -287,7 +287,7 @@ const EquityCircle = () => {
           sources={[user5, boyImg, busImg, img11, mountain, pizza]}
           slide={imageController.slide}
         />
-        <Container>
+        <Container className="custom-conatiner">
           <Row className="gx-4">
             <Col lg={12}>
               <div id="content">

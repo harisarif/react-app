@@ -34,7 +34,7 @@ const Groups = () => {
     <>
       <ProfileHeader img={img7} title="Groups" />
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <div className="d-grid gap-3 d-grid-template-1fr-19">
             <Card className="group-box mb-0">
               <div className="top-bg-image">

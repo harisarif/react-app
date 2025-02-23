@@ -5,7 +5,7 @@ const UiNotifications = () => {
     return (
         <>
             <div id='content-page' className='content-inner'>
-            <Container>
+            <Container className="custom-conatiner">
                 <Row>
                     <Col sm="12">
                         <Card className="position-relative inner-page-bg bg-primary" style={{height: "150px"}}>
