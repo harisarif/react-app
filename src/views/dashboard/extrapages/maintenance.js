@@ -9,7 +9,7 @@ const Maintenance = () => {
     <>
       {/* <div className="wrapper"> */}
       <div className="iq-maintenance mt-4 mt-md-5 mt-lg-0">
-        <Container>
+        <Container className="custom-conatiner">
           <div className="d-flex flex-column justify-content-center align-items-center auto-vh-100">
             <div className="iq-maintenance">
               <div className="text-center">

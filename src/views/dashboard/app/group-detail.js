@@ -45,7 +45,7 @@ const GroupDetail = () => {
     <>
       <ProfileHeader img={header} title="Groups" />
       <div id="content-page" className="content-page">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col lg="12">
               <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap">

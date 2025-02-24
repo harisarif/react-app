@@ -47,7 +47,7 @@ const Music = () => {
     <>
       <ProfileHeader title="Music" img={profilebg8} />
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col md="4">
               <Card className=" card-block card-stretch card-height">

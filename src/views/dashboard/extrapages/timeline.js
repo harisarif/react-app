@@ -15,7 +15,7 @@ const Timeline = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row className="justify-content-center">
             <Col sm="12">
               <Card

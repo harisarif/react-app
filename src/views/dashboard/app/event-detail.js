@@ -45,7 +45,7 @@ const EventDetail = () => {
     <>
       <ProfileHeader img={header} title="Events" />
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col lg="12">
               <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap">

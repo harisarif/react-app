@@ -28,7 +28,7 @@ const ProfileEvents = () => {
       <>
          <ProfileHeader title="Your Events" img={img6} />
          <div id="content-page" className="content-inner">
-            <Container>
+            <Container className="custom-conatiner">
                <div className="d-grid gap-3 d-grid-template-1fr-19">
                   <div>
                      <Card className=" rounded  mb-0">

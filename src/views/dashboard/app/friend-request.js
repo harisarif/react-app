@@ -80,7 +80,7 @@ const FriendReqest = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col sm="12">
               <Card>

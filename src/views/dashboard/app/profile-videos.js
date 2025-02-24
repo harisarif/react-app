@@ -46,7 +46,7 @@ const ProfileVideos = () => {
          />
          <ProfileHeader title="Your Videos" img={img9} />
          <div id="content-page" className="content-inner">
-            <Container>
+            <Container className="custom-conatiner">
                <Row>
                   <Col lg="4" md="6">
                      <Card>

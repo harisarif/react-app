@@ -9,7 +9,7 @@ const UserPrivacySetting = () => {
     return (
         <>
             <div className="content-inner">
-                <Container>
+                <Container className="custom-conatiner">
                     <Row>
                         <Col lg="12">
                             <Card>

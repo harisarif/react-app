@@ -49,7 +49,7 @@ const UiModals = () => {
     return (
         <>
             <div id='content-page' className='content-inner'>
-                <Container>
+                <Container className="custom-conatiner">
                     <Row>
                         <Col sm="12">
                             <Card className="position-relative inner-page-bg bg-primary" style={{ height: "150px" }}>
@@ -322,7 +322,7 @@ const UiModals = () => {
                                         </Modal.Header>
                                         <Modal.Body className="show-grid">
                                         <div className="iq-example-row">
-                                    <Container>
+                                    <Container className="custom-conatiner">
                                        <Row className="mb-3">
                                           <Col className="col-md-4">.col-md-4</Col>
                                           <Col className="col-md-4 ms-auto">.col-md-4 .ms-auto</Col>

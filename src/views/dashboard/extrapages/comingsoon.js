@@ -65,7 +65,7 @@ const ComingSoon = () => {
   return (
     <>
       <div className="iq-comingsoon mt-5 mt-lg-0">
-        <Container>
+        <Container className="custom-conatiner">
           <div className="auto-vh-100 d-flex flex-column justify-content-center">
             <Row className="justify-content-center">
               <Col md="8" className="text-center">

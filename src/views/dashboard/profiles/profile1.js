@@ -94,7 +94,7 @@ const Profile1 = () => {
         <ProfileHeader title="Profile" img={imgbg1} />
       </div>
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
 
           <Row>
             <Col lg="3">

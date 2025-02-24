@@ -31,7 +31,7 @@ const Notification = () => {
 
    return (
       <div id='content-page' className='content-inner'>
-         <Container>
+         <Container className="custom-conatiner">
             <Row>
                <Col sm="12" className="d-flex justify-content-between align-items-center mb-3">
                   <h4 className="card-title mb-0">Notifications</h4>

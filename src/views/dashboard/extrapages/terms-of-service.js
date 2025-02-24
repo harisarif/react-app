@@ -4,7 +4,7 @@ import { Container, Row, Col, Card } from 'react-bootstrap'
 const TermsofService = () => {
     return (
         <div className='content-inner'>
-            <Container>
+            <Container className="custom-conatiner">
                 <Row>
                     <Col lg="12">
                         <div className="iq-accordion career-style faq-style  ">

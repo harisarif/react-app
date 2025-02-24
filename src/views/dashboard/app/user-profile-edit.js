@@ -483,7 +483,7 @@ const UserProfileEdit = () => {
     return (
         <>
             <div className='content-inner'>
-                <Container>
+                <Container className="custom-conatiner">
                     <Tab.Container defaultActiveKey="first">
                         <Row>
                             <Col lg="12">

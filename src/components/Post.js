@@ -13,6 +13,12 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import CreatePost from './create-post';
 
+import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
+import { FaRegComment } from "react-icons/fa";
+import { FaComment } from "react-icons/fa6";
+import { LiaTelegram } from "react-icons/lia";
+
 const FollowButton = styled.button`
   border: none;
   padding: 6px 16px;
@@ -93,7 +99,7 @@ const getCategoryBadge = (categoryId) => {
     case 3:
       return {
         text: 'Crypto',
-        className: 'bg-warning text-dark px-3 py-1 rounded-pill crypto-info-btn ' 
+        className: 'bg-warning text-dark px-3 py-1 rounded-pill crypto-info-btn '
       };
     case 4:
       return {
@@ -128,7 +134,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const [isDocumentLoading, setIsDocumentLoading] = useState(false);
   const [documentError, setDocumentError] = useState(null);
   const [isCommentLoading, setIsCommentLoading] = useState(false);
-  
+
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const [editPostData, setEditPostData] = useState(null);
 
@@ -156,7 +162,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const handleEditComplete = (updatedPost) => {
     if (updatedPost) {
       // Update the post in the list
-      setPosts(prevPosts => 
+      setPosts(prevPosts =>
         prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p)
       );
     }
@@ -166,10 +172,10 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
   const handleLike = async () => {
     if (isLiking) return;
-    
+
     setIsLiking(true);
     setIsAnimating(true);
-    
+
     try {
       // Check if userData exists and is valid
       if (!userData || Object.keys(userData).length === 0) {
@@ -196,8 +202,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       // Optimistic update
       const wasLiked = isLiked;
       setIsLiked(!wasLiked);
-      setLikes(prevLikes => 
-        wasLiked 
+      setLikes(prevLikes =>
+        wasLiked
           ? prevLikes.filter(like => like.user_id !== userData.id)
           : [...prevLikes, { user_id: userData.id }]
       );
@@ -215,8 +221,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       } else {
         // Revert changes if server response is not as expected
         setIsLiked(wasLiked);
-        setLikes(prevLikes => 
-          wasLiked 
+        setLikes(prevLikes =>
+          wasLiked
             ? [...prevLikes, { user_id: userData.id }]
             : prevLikes.filter(like => like.user_id !== userData.id)
         );
@@ -303,11 +309,11 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       setShowPdfPreview(true);
       setIsDocumentLoading(true);
       setDocumentError(null);
-      
+
       try {
         const response = await fetch(item.url);
         if (!response.ok) throw new Error('Failed to load document');
-        
+
         // Check if it's actually a PDF
         const contentType = response.headers.get('content-type');
         if (!contentType?.includes('application/pdf')) {
@@ -345,10 +351,10 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       setIsDocumentLoading(true);
       const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to download file');
-      
+
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
-      
+
       const link = document.createElement('a');
       link.href = objectUrl;
       link.download = url.split('/').pop();
@@ -405,118 +411,118 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
         <Card.Body>
           <div className="user-post-data ">
             <div className="d-flex align-items-center justify-content-between">
-              <div className="me-3 flex-shrink-0">
+              <div className="me-2 flex-shrink-0">
                 <img
                   src={post.user ? getProfileImageUrl(post.user) : user1}
-                  className="border border-2 rounded-circle user-post-profile"
+                  className="user-post-profile avatar-50 rounded-circle"
                   alt={post.user?.name || 'User'}
                 />
               </div>
               <div className="w-100">
                 <div className="d-flex align-items-center justify-content-between">
                   <div>
-                    <div className="user-profile-info d-flex align-items-center g-1">
+                    <div className="user-profile-info d-flex justify-content-center flex-column g-0">
                       <h6 className="mb-0 me-2">{post.user?.name || 'Anonymous'}</h6>
-                    <p className="mb-0">
-                      {moment(post.created_at).fromNow()}
-                      {' '}
-                      {moment(post.created_at).format('h:mm a')}
-                    </p>
-                  </div>
-                    {post.visibility == 'private' && (
+                      <p className="mb-0">
+                        {moment(post.created_at).fromNow()}
+                        {' '}
+                        {moment(post.created_at).format('h:mm a')}
+                      </p>
+                    </div>
+                    {post.visibility === 'private' && (
                       <span className="badge  bg-danger text-white ms-2">Private</span>
                     )}
-                    {post.visibility == 'password_protected' && (
+                    {post.visibility === 'password_protected' && (
                       <span className="badge bg-warning text-white ms-2">Password Protected</span>
                     )}
-                    {post.user?.id != userData?.id && (
-                    <FollowButton
-                      className={`ms-2 ${post?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
-                      onClick={() => handleFollow(post.user?.id)}
-                    >
-                      {post?.is_following ? (
-                        <>
-                          <i className="ri-user-unfollow-line"></i>
-                          Unfollow
-                        </>
-                      ) : (
-                        <>
-                          <i className="ri-user-follow-line"></i>
-                          Follow
-                        </>
-                      )}
-                    </FollowButton>
-                  )}
+                    {post.user?.id !== userData?.id && (
+                      <FollowButton
+                        className={`ms-2 ${post?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
+                        onClick={() => handleFollow(post.user?.id)}
+                      >
+                        {post?.is_following ? (
+                          <>
+                            <i className="ri-user-unfollow-line"></i>
+                            Unfollow
+                          </>
+                        ) : (
+                          <>
+                            <i className="ri-user-follow-line"></i>
+                            Follow
+                          </>
+                        )}
+                      </FollowButton>
+                    )}
 
-                   
+
                   </div>
                   <div>
                     <div className='d-flex align-items-center justify-content-between'>
-                  <span className={badge.className}>{badge.text}</span>
-                    
-                    <Dropdown>
-                    {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
-                      <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>more_vert</span>
-                      </Dropdown.Toggle>
-                    )}
-                      <Dropdown.Menu align="end" className="shadow-sm">
+                      <span className={badge.className}>{badge.text}</span>
+
+                      <Dropdown>
                         {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
-                          <>
-                            <Dropdown.Item 
-                              className="d-flex align-items-center"
-                              onClick={handleEditShow}
-                            >
-                              <span className="material-symbols-outlined me-2">edit</span>
-                              Edit
-                            </Dropdown.Item>
-                            <Dropdown.Item 
-                              className="text-danger d-flex align-items-center"
-                              onClick={async () => {
-                              const result = await Swal.fire({
-                                title: 'Are you sure?',
-                                text: "You won't be able to revert this!",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes, delete it!'
-                              });
-                              
-                              if (result.isConfirmed) {
-                                try {
-                                  const token = localStorage.getItem('access_token');
-                                  await axios.delete(`/api/posts/${post.id}`, {
-                                    headers: {
-                                      Authorization: `Bearer ${token}`,
-                                    },
-                                  });
-                                  
-                                  Swal.fire(
-                                    'Deleted!',
-                                    'Your post has been deleted.',
-                                    'success'
-                                  );
-                                  
-                                  // Refresh the page or update the posts list
-                                  setPosts(posts?.filter(p => p.id !== post.id))
-                                } catch (error) {
-                                  console.error('Error deleting post:', error);
-                                  Swal.fire(
-                                    'Error',
-                                    'Failed to delete the post',
-                                    'error'
-                                  );
-                                }
-                              }
-                            }}>
-                              <span className="material-symbols-outlined me-2">delete</span>
-                              Delete
-                            </Dropdown.Item>
-                          </>
+                          <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>more_vert</span>
+                          </Dropdown.Toggle>
                         )}
-                      </Dropdown.Menu>
-                    </Dropdown>
+                        <Dropdown.Menu align="end" className="shadow-sm">
+                          {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
+                            <>
+                              <Dropdown.Item
+                                className="d-flex align-items-center"
+                                onClick={handleEditShow}
+                              >
+                                <span className="material-symbols-outlined me-2">edit</span>
+                                Edit
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                className="text-danger d-flex align-items-center"
+                                onClick={async () => {
+                                  const result = await Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, delete it!'
+                                  });
+
+                                  if (result.isConfirmed) {
+                                    try {
+                                      const token = localStorage.getItem('access_token');
+                                      await axios.delete(`/api/posts/${post.id}`, {
+                                        headers: {
+                                          Authorization: `Bearer ${token}`,
+                                        },
+                                      });
+
+                                      Swal.fire(
+                                        'Deleted!',
+                                        'Your post has been deleted.',
+                                        'success'
+                                      );
+
+                                      // Refresh the page or update the posts list
+                                      setPosts(posts?.filter(p => p.id !== post.id))
+                                    } catch (error) {
+                                      console.error('Error deleting post:', error);
+                                      Swal.fire(
+                                        'Error',
+                                        'Failed to delete the post',
+                                        'error'
+                                      );
+                                    }
+                                  }
+                                }}>
+                                <span className="material-symbols-outlined me-2">delete</span>
+                                Delete
+                              </Dropdown.Item>
+                            </>
+                          )}
+                        </Dropdown.Menu>
+                      </Dropdown>
                     </div>
                   </div>
                 </div>
@@ -532,8 +538,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
           {post.media && post.media.length > 0 && (
             <div className={`media-grid media-grid-${Math.min(post.media.length, 5)}`}>
               {post.media.slice(0, 5)?.map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="media-item"
                 >
                   {isDocument(item.url) ? (
@@ -554,7 +560,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         </div>
                       </div>
                       <div className="document-actions">
-                        <button 
+                        <button
                           className="btn btn-preview"
                           onClick={() => handlePreview(item)}
                         >
@@ -580,12 +586,12 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       </div>
                     </div>
                   ) : (
-                    <div 
+                    <div
                       className="position-relative w-100 h-100"
                       onClick={() => handleMediaClick(item.url, item.type, index)}
                     >
-                      <img 
-                        src={item.url} 
+                      <img
+                        src={item.url}
                         alt={`Media ${index + 1}`}
                       />
                       {index === 4 && post.media.length > 5 && (
@@ -601,71 +607,42 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               ))}
             </div>
           )}
-          <div className="comment-area mt-4 pt-4 border-top">
-            <div className="d-flex justify-content-between align-items-center flex-wrap">
-              <div className="like-block position-relative d-flex align-items-center">
-                <button 
+          <div className="comment-area mt-4 pt-2 border-top">
+            <div className="d-flex align-items-center gap-2 w-100">
+              <div className="like-block">
+                <button
                   onClick={handleLike}
                   className={`btn btn-link text-body p-0 like-button ${isLiked ? 'liked' : ''}`}
                   disabled={isLiking}
                 >
-                  <span 
-                    className={`material-symbols-outlined align-text-top font-size-20 like-icon ${isLiked ? 'liked' : ''}`}
-                  >
-                    {isLiked ? 'thumb_up' : 'thumb_up_off_alt'}
-                  </span>
-                  <span className="ms-1">{likes.length} Likes</span>
-                  
-                  {/* Like animation overlay */}
-                  <div className={`like-animation ${isAnimating ? 'animate' : ''}`}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '100%', color: '#0d6efd' }}>
-                      thumb_up
-                    </span>
-                  </div>
+                  {isLiked ? <AiFillHeart size={'1.75rem'} /> : <AiOutlineHeart size={'1.75rem'} />}
+                  {/* <span className="ms-1">{likes.length} Likes</span> */}
                 </button>
               </div>
-              <div className="d-flex align-items-center gap-3">
-                <button
-                  className="btn btn-link text-body p-0"
-                  onClick={() => setShowComments(!showComments)}
-                >
-                  <span className="material-symbols-outlined align-text-top font-size-20">
-                    comment
-                  </span>
-                  <span className="ms-1">{comments.length} Comments</span>
-                </button>
-                <button
-                  className="btn btn-link text-body p-0"
-                  onClick={() => setShowShareOffcanvas(true)}
-                >
-                  <span className="material-symbols-outlined align-text-top font-size-20">
-                    share
-                  </span>
-                  <span className="ms-1">Share</span>
-                </button>
-              </div>
+              <button
+                className="btn btn-link text-body p-0"
+                onClick={() => setShowComments(!showComments)}
+              >
+                <FaRegComment size={'1.65rem'} />
+                {/* <span className="ms-1">{comments.length} Comments</span> */}
+              </button>
+              <button
+                className="btn btn-link text-body p-0"
+                onClick={() => setShowShareOffcanvas(true)}
+              >
+                <LiaTelegram size={'1.75rem'} />
+                {/* <span className="ms-1">Share</span> */}
+              </button>
             </div>
 
+            <div className="w-100 d-flex">
+              <span className="m-1 fw-bold">{likes.length} Likes</span>
+            </div>
+
+
             <Collapse in={showComments}>
-              <div className="comments-section mt-4">
-                {comments?.map((comment, index) => (
-                  <div key={index} className="comment-item mb-3">
-                    <div className="d-flex gap-3">
-                      <img
-                        src={comment.user ? getProfileImageUrl(comment.user) : user1}
-                        alt="user"
-                        className="rounded-circle"
-                        style={{ width: '40px', height: '40px' }}
-                      />
-                      <div>
-                        <h6 className="mb-1">{comment.user?.name || 'Anonymous'}</h6>
-                        <p className="mb-0">{comment.content}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                
-                <form onSubmit={handleComment} className="mt-3">
+              <div className="comments-section mt-0">
+                <form onSubmit={handleComment} className="mt-2 mb-3">
                   <div className="d-flex gap-3">
                     <img
                       src={getProfileImageUrl(userData)}
@@ -683,8 +660,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         disabled={isCommentLoading}
                       />
                     </div>
-                    <button 
-                      type="submit" 
+                    <button
+                      type="submit"
                       className="btn btn-primary"
                       disabled={isCommentLoading}
                     >
@@ -695,6 +672,22 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                     </button>
                   </div>
                 </form>
+                {comments?.map((comment, index) => (
+                  <div key={index} className="comment-item mb-3">
+                    <div className="d-flex gap-3">
+                      <img
+                        src={comment.user ? getProfileImageUrl(comment.user) : user1}
+                        alt="user"
+                        className="rounded-circle"
+                        style={{ width: '40px', height: '40px' }}
+                      />
+                      <div>
+                        <h6 className="m-0">{comment.user?.name || 'Anonymous'}</h6>
+                        <p className="m-0">{comment.content}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </Collapse>
           </div>
@@ -720,7 +713,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               ) : (
                 <img src={selectedMedia.url} alt="Gallery media" />
               )}
-              
+
               <div className="gallery-nav">
                 <button
                   onClick={() => handleGalleryNav('prev')}
@@ -735,7 +728,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                   <span className="material-symbols-outlined">chevron_right</span>
                 </button>
               </div>
-              
+
               <div className="gallery-counter">
                 {currentMediaIndex + 1} / {post.media.length}
               </div>
@@ -778,7 +771,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               <div className="d-flex flex-column align-items-center justify-content-center h-100 gap-3 text-danger">
                 <span className="material-symbols-outlined" style={{ fontSize: '48px' }}>error</span>
                 <div>{documentError}</div>
-                <button 
+                <button
                   className="btn btn-outline-primary mt-2"
                   onClick={() => handleDownload(selectedDocument?.url)}
                 >
@@ -823,7 +816,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
       {/* CreatePost modal for editing */}
       {showCreatePostModal && (
-        <CreatePost 
+        <CreatePost
           posts={posts}
           setPosts={setPosts}
           userCanCreatePostCategories={[1, 2, 3, 4, 5]}  // Adjust as needed

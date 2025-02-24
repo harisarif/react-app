@@ -35,7 +35,7 @@ const FriendList = () => {
     <>
       <ProfileHeader title="Friend Lists" img={img3} />
       <div id="content-page" className="content-inner">
-        <Container>
+        <Container className="custom-conatiner">
           <Row>
             <Col md={6}>
               <Card className=" card-block card-stretch card-height">

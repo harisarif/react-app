@@ -39,7 +39,7 @@ const StoreDetail = () => {
         <>
             <ProfileHeader title="Store" img={profilebg7} />
             <div id="content-page" className="content-inner">
-                <Container>
+                <Container className="custom-conatiner">
                     <Row>
                         <Col lg="12">
                             <Card>

@@ -30,7 +30,7 @@ const CatergoryGrid = () => {
       <>
          <ProfileHeader title="Store Category" img={profilebg7} />
          <div id="content-page" className="content-inner">
-            <Container>
+            <Container className="custom-conatiner">
                <Row>
                   <Col lg="4">
                      <Card>

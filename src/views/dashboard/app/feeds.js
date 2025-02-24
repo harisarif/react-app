@@ -473,11 +473,8 @@ const UserFeeds = () => {
           slide={imageController.slide}
         />
 
-        <Container>
-          <div>
+        <Container className="custom-conatiner">
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-              <div >
-
                 {userData && userCanCreatePostCategories?.some(category => [1, 2, 3, 4, 5].includes(category)) && (
                   <Row  >
                     <Col sm={12}>
@@ -517,69 +514,7 @@ const UserFeeds = () => {
 
 
                 </Row>
-
-
-
-
-              </div>
-
-              <div className="suggestions-div" >
-                <div className="mb-3">
-                  <Form.Control
-                    type="text"
-                    placeholder="Search Users..."
-                    value={searchQuery}
-                    onChange={(e) => {
-                      const searchQuery = e.target.value;
-                      axios.get(`/api/get-admins?search=${searchQuery}`)
-                        .then(response => {
-                          setAdmins(response.data);
-                        })
-                        .catch(error => {
-                          console.log(error);
-                        });
-                      setSearchQuery(searchQuery);
-                    }}
-                  />
-                </div>
-                {admins && admins.length > 0 && admins.map((admin) => {
-                  return (
-                    <Card className="mb-3">
-                      <Card.Body className="d-flex justify-content-between align-items-center">
-                        <div className="d-flex align-items-center">
-                          <img
-                            src={getProfileImageUrl(admin)}
-                            alt={admin.name}
-                            className="rounded-circle avatar-50 me-3"
-                          />
-                          <div>
-                            <h6 className="mb-0">{admin?.name}</h6>
-                            <p className="mb-0 text-muted">{admin?.email}</p>
-                          </div>
-                        </div>
-                        <FollowButton
-                          className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
-                          onClick={() => handleFollow(admin?.id)}
-                        >
-                          {admin?.is_following ? (
-                            <>
-                              <i className="ri-user-unfollow-line"></i>
-                              Unfollow
-                            </>
-                          ) : (
-                            <>
-                              <i className="ri-user-follow-line"></i>
-                              Follow
-                            </>
-                          )}
-                        </FollowButton>
-                      </Card.Body>
-                    </Card>
-                  );
-                })}
-              </div>
             </Tab.Container>
-          </div>
         </Container>
       </div>
     </>);
