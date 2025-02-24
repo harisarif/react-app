@@ -147,6 +147,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     const editData = {
       id: post.id,
       title: post.title || '',
+      description: post.description || '',
       content: post.content || '',
       category_id: post.category_id?.toString() || '',
       images: images,
@@ -405,6 +406,36 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     return documentExtensions.includes(getFileExtension(url));
   };
 
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const unlockContent = async () => {
+      setLoading(true);
+      try {
+          const response = await axios.post('/api/post/unlock', {
+              id: post.id,
+              password: password,
+          });
+          setPosts(prevPosts =>
+            prevPosts.map(p => p.id === post.id ? response.data.post : p)
+          );
+          setPassword('');
+      } catch (error) {
+          console.error('Error unlocking content:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Error unlocking content',
+            icon: 'error',
+            timer: 3000,
+            showConfirmButton: false
+          });
+      } finally {
+          setLoading(false);
+          setModalIsOpen(false); // Close modal after submission
+      }
+  };
+
   return (
     <>
       <Card className="card-block card-stretch card-height">
@@ -432,9 +463,11 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                     {post.visibility === 'private' && (
                       <span className="badge  bg-danger text-white ms-2">Private</span>
                     )}
-                    {post.visibility === 'password_protected' && (
-                      <span className="badge bg-warning text-white ms-2">Password Protected</span>
-                    )}
+            {post.visibility === 'password_protected' && (
+                <span className="badge bg-warning text-white ms-2" onClick={() => setModalIsOpen(true)}>
+                    Un-lock Content
+                </span>
+            )}
                     {post.user?.id !== userData?.id && (
                       <FollowButton
                         className={`ms-2 ${post?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
@@ -456,6 +489,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
 
                   </div>
+ 
                   <div>
                     <div className='d-flex align-items-center justify-content-between'>
                       <span className={badge.className}>{badge.text}</span>
@@ -825,6 +859,27 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
           className="d-none"  // Hide the create post card
         />
       )}
+            <Modal show={modalIsOpen} onHide={() => setModalIsOpen(false)}>
+                <Modal.Header>
+                    <Modal.Title>Enter Password</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter password"
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setModalIsOpen(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={unlockContent} disabled={loading}>
+                        {loading ? 'Loading...' : 'Submit'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
     </>
   );
 };

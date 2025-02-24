@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
@@ -28,6 +28,7 @@ const SignUp = () => {
   const appName = useSelector(SettingSelector.app_name);
   const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
   const Google_client_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const Facebook_client_ID = process.env.REACT_APP_FACEBOOK_CLIENT_ID;
   console.log(Google_client_ID);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -80,6 +81,58 @@ const SignUp = () => {
       alert('Failed to sign in with Google. Please try again.');
     }
   };
+
+
+    useEffect(() => {
+      window.fbAsyncInit = function () {
+        window.FB.init({
+          appId: Facebook_client_ID, // Replace with your App ID
+          cookie: true,
+          xfbml: true,
+          version: "v18.0",
+        });
+      };
+  
+      // Load the Facebook SDK script
+      (function (d, s, id) {
+        let js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    }, []);
+  
+    const handleFBLogin = () => {
+      window.FB.login(
+        function (response) {
+          if (response.authResponse) {
+            console.log("User logged in", response);
+    
+            axios
+              .post(`${baseUrl}/api/auth/facebook/callback`, {
+                access_token: response.authResponse.accessToken,
+              })
+              .then((res) => {
+                if (res.data.token) {
+                  console.log("Login successful, token:", res.data.token);
+                  localStorage.setItem("access_token", res.data.token);
+                } else {
+                  console.error("Login failed:", res.data);
+                }
+              })
+              .catch((error) => {
+                console.error("Error during login:", error);
+              });
+          } else {
+            console.log("User cancelled login or did not fully authorize.");
+          }
+        },
+        { scope: "public_profile,email" }
+      );
+    };
 
   return (
     <>
@@ -246,6 +299,9 @@ const SignUp = () => {
                           context="signup"
                         />
                       </GoogleOAuthProvider>
+                      <button onClick={handleFBLogin} type="button" className="btn btn-primary">
+      Login with Facebook
+    </button>
                     </div>
                   </div>
 
