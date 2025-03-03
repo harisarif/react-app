@@ -127,6 +127,56 @@
   --#{$prefix}form-invalid-color: #{$form-invalid-color};
   --#{$prefix}form-invalid-border-color: #{$form-invalid-border-color};
   // scss-docs-end root-form-validation-variables
+
+
+--purpule-color:#896AFF;
+--shadow-brown-color:#b3b3b3e8;
+
+--transparent-color: transparent;
+--light-purpule-color: #EBEAF0;
+--white-color: #FFFFFF;
+--black-color: #000000;
+
+body{
+  background-color: var(--light-purpule-color);
+}
+.iq-nav-menu li.active>a {
+  color: var(--purpule-color) !important;
+  background-color: var(--transparent-color) !important;
+}
+.iq-nav-menu .nav-item>.nav-link:hover {
+  color: var(--purpule-color) !important;
+  background-color: var(--transparent-color) !important;
+
+}
+// .sidebar.navs-rounded .sidebar-body .nav-item {
+//   background-color: var(--white-color);
+// }
+.nav-top-child,
+.nav-bottom-childs{
+background-color: var(--white-color);
+box-shadow: 0 0 10px 0 var(--shadow-brown-color);
+border-radius: 10px;  
+margin: 5px 0;
+}
+.sidebar-body {
+  // padding-top: 15px;
+  left: 10px;
+  padding-top: 20px  !important;
+}
+.nav-item{
+  .item-name{
+    font-weight: 700 !important;
+    font-size: 17px !important;
+    margin-left: 15px !important; 
+    // color: var(--black-color);
+  }
+}
+
+
+
+
+
 }
 
 @if $enable-dark-mode {
@@ -183,5 +233,9 @@
     --#{$prefix}form-invalid-color: #{$form-invalid-color-dark};
     --#{$prefix}form-invalid-border-color: #{$form-invalid-border-color-dark};
     // scss-docs-end root-dark-mode-vars
+
+
+
+
   }
 }

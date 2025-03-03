@@ -77,6 +77,7 @@ const VerticalNav = React.memo(() => {
                         <span className="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
                     </Link>
                 </li>
+                <div className="nav-top-child">
                 <li className={`${location.pathname === '/' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Home</Tooltip>}>
@@ -92,12 +93,13 @@ const VerticalNav = React.memo(() => {
                         <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile"
                             onClick={() => setActive("profile")}>
                             <OverlayTrigger placement="right" overlay={<Tooltip>Profiles</Tooltip>}>
-                            {location.pathname === '/profile' ? <FaUser size={'1.5rem'} /> : <FaRegUser size={'1.5rem'} />}
+                                {location.pathname === '/profile' ? <FaUser size={'1.5rem'} /> : <FaRegUser size={'1.5rem'} />}
                             </OverlayTrigger>
                             <span className="item-name">Profiles</span>
                         </Link>
                     </li>
                 )}
+                </div>
 
                 {/* <li className={`${location.pathname === '/feeds' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/feeds' ? 'active' : ''} nav-link `} aria-current="page" to="/feeds"
@@ -118,7 +120,7 @@ const VerticalNav = React.memo(() => {
                         to="/home"
                     >
                         <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
-                        {location.pathname === '/home' ? <MdOutlineTurnedIn size={'1.5rem'} /> : <MdOutlineTurnedInNot size={'1.5rem'} />}
+                            {location.pathname === '/home' ? <MdOutlineTurnedIn size={'1.5rem'} /> : <MdOutlineTurnedInNot size={'1.5rem'} />}
                         </OverlayTrigger>
                         <span className="item-name">Feeds</span>
                         <i className="right-icon material-symbols-outlined">chevron_right</i>
@@ -164,10 +166,12 @@ const VerticalNav = React.memo(() => {
                         </ul>
                     </Accordion.Collapse>
                 </Accordion.Item>
+
+                <div className="nav-bottom-childs">
                 <li className={`${location.pathname === '/education' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Education</Tooltip>}>
-                            {location.pathname === '/education' ? <IoSchool size={'1.5rem'} /> : <MdOutlineSchool size={'1.5rem'} /> }
+                            {location.pathname === '/education' ? <IoSchool size={'1.5rem'} /> : <MdOutlineSchool size={'1.5rem'} />}
                         </OverlayTrigger>
                         <span className="item-name">Education</span>
                     </Link>
@@ -175,7 +179,7 @@ const VerticalNav = React.memo(() => {
                 <li className={`${location.pathname === '/job-list' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/job-list' ? 'active' : ''} nav-link `} aria-current="page" to="/job-list">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Job List</Tooltip>}>
-                            {location.pathname === '/job-list' ? <BsSuitcaseLgFill size={'1.5rem'} /> : <BsSuitcaseLg size={'1.5rem'} /> }
+                            {location.pathname === '/job-list' ? <BsSuitcaseLgFill size={'1.5rem'} /> : <BsSuitcaseLg size={'1.5rem'} />}
                         </OverlayTrigger>
                         <span className="item-name">Job List</span>
                     </Link>
@@ -195,7 +199,7 @@ const VerticalNav = React.memo(() => {
                 <li className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-link `} aria-current="page" to="/event-calender">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Events Calender</Tooltip>}>
-                            {location.pathname === '/event-calender' ? <BsFillCalendar2WeekFill size={'1.5rem'} /> : <BsCalendarWeek size={'1.5rem'} /> }
+                            {location.pathname === '/event-calender' ? <BsFillCalendar2WeekFill size={'1.5rem'} /> : <BsCalendarWeek size={'1.5rem'} />}
                         </OverlayTrigger>
                         <span className="item-name">Events Calender</span>
                     </Link>
@@ -203,7 +207,7 @@ const VerticalNav = React.memo(() => {
                 <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item `}>
                     <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Notifications</Tooltip>}>
-                            {location.pathname === '/notification' ? <MdNotificationsActive size={'1.5rem'} /> : <MdOutlineNotificationsActive size={'1.5rem'} /> }
+                            {location.pathname === '/notification' ? <MdNotificationsActive size={'1.5rem'} /> : <MdOutlineNotificationsActive size={'1.5rem'} />}
                         </OverlayTrigger>
                         <span className="item-name">Notifications</span>
                     </Link>
@@ -213,12 +217,13 @@ const VerticalNav = React.memo(() => {
                     <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item `}>
                         <Link className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-link `} aria-current="page" to="/manage-users">
                             <OverlayTrigger placement="right" overlay={<Tooltip>Manage Users</Tooltip>}>
-                            {location.pathname === '/manage-users' ? <HiMiniUserGroup size={'1.5rem'} /> : <HiOutlineUserGroup size={'1.5rem'} /> }
+                                {location.pathname === '/manage-users' ? <HiMiniUserGroup size={'1.5rem'} /> : <HiOutlineUserGroup size={'1.5rem'} />}
                             </OverlayTrigger>
                             <span className="item-name">Manage Users</span>
                         </Link>
                     </li>
                 )}
+                </div>
             </Accordion>
         </React.Fragment >
     )

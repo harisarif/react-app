@@ -1243,7 +1243,11 @@ line-height: 22px !important;
     }
 }
 .navbar-nav .nav-item:nth-of-type(1) {
+    /* display: none; */
+}
+.nav-item.static-item{
     display: none;
+
 }
 
 #mail-drop,
@@ -1481,7 +1485,7 @@ background: #ebebeb;
 }
 
 #first-tour{
-    max-width: 350px;
+    max-width: 280px;
     width: 100%;
 }
 #rightSidebar{
@@ -1501,4 +1505,27 @@ background: #ebebeb;
 .custom-conatiner{
     max-width: 700px;
     margin: 0 auto;
+}
+
+
+.unfollow-btn i::before{
+    content: "" !important;
+}
+
+.suggestion-user-name{
+ 
+        width: 110px;  /* Set a fixed width */
+        white-space: nowrap;  /* Prevent text from wrapping */
+        overflow: hidden;  /* Hide overflowing text */
+        text-overflow: ellipsis;  /* Show ellipsis (...) */
+ 
+   
+    
+}
+
+.suggestions-div{
+    .inner-wrapper{
+        border-radius: 10px;
+        box-shadow: 0 0 10px 0 var(--shadow-brown-color);
+    }
 }

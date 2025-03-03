@@ -152,9 +152,10 @@ const FollowButton = styled.button`
   }
   
   &.unfollow-btn {
-    background: #f8f9fa;
-    color: #dc3545;
-    border: 1px solid #dc3545;
+    // background: #f8f9fa;
+    color:#1BA9DC;
+    background: transparent;
+    // border: 1px solid #dc3545;
     
     &:hover {
       background: #dc3545;
@@ -413,8 +414,9 @@ const Suggession = () => {
   return (
     <>
       <div className="suggestions-div">
-        <div className="mb-3">
-          <Form.Control
+       <div className="inner-wrapper bg-white">
+       <div className="mb-3">
+          {/* <Form.Control
             type="text"
             placeholder="Search Users..."
             value={searchQuery}
@@ -429,7 +431,7 @@ const Suggession = () => {
                 });
               setSearchQuery(searchQuery);
             }}
-          />
+          /> */}
         </div>
         {admins && admins.length > 0 && admins.map((admin) => {
           return (
@@ -438,11 +440,17 @@ const Suggession = () => {
 
                 <div className="d-flex flex-column gap-2">
                   <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-start align-items-center"> 
                     <img
                       src={getProfileImageUrl(admin)}
                       alt={admin.name}
                       className="rounded-circle avatar-50 me-3"
                     />
+                      <div className="d-flex flex-column gap-0">
+                    <h6 className="mb-0">{admin?.name}</h6>
+                    <p className="mb-0 text-muted suggestion-user-name">{admin?.email}</p>
+                  </div>
+                    </div>
                     <FollowButton
                       className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
                       onClick={() => handleFollow(admin?.id)}
@@ -460,16 +468,14 @@ const Suggession = () => {
                       )}
                     </FollowButton>
                   </div>
-                  <div className="d-flex flex-column gap-0">
-                    <h6 className="mb-0">{admin?.name}</h6>
-                    <p className="mb-0 text-muted">{admin?.email}</p>
-                  </div>
+                
                 </div>
 
               </Card.Body>
             </Card>
           );
         })}
+       </div>
       </div>
     </>
   );
