@@ -1502,3 +1502,26 @@ background: #ebebeb;
     max-width: 700px;
     margin: 0 auto;
 }
+
+.swal2-container.swal2-shown .swal2-show{
+    z-index: 9999999 !important;
+}
+
+.custom-swal-z-index {
+  z-index: 99999999999999999999999999999 !important;
+}
+
+.custom-swal-container {
+  z-index: 999999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.custom-swal-z-index {
+  z-index: 999999999 !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}

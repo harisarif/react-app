@@ -147,10 +147,9 @@ const CreatePost = ({
     const hasVideos = formData.videos && formData.videos.length > 0;
     const hasDocuments = formData.documents && formData.documents.length > 0;
     const hasModifiedVisibility = formData.visibility !== 'public';
-    const hasModifiedCategory = formData.category_id !== undefined;
 
     return hasContent || hasDescription || hasImages || hasVideos || hasDocuments || 
-           hasModifiedVisibility || hasModifiedCategory;
+           hasModifiedVisibility;
   };
 
   const handleClose = (bypassConfirmation = false) => {
@@ -217,7 +216,15 @@ const CreatePost = ({
         icon: 'info',
         showCancelButton: true,
         confirmButtonText: 'Login',
-        cancelButtonText: 'Cancel'
+        cancelButtonText: 'Cancel',
+        backdrop: true,
+        background: '#fff',
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
       }).then((result) => {
         if (result.isConfirmed) {
           window.location.href = '/auth/sign-in';
@@ -229,6 +236,7 @@ const CreatePost = ({
   };
 
   const handleFileSelect = (e) => {
+
     const files = Array.from(e.target.files);
     const newImages = [];
     const newVideos = [];
@@ -307,11 +315,77 @@ const CreatePost = ({
     e.preventDefault();
     setIsLoading(true);
 
+    if(!formData.title){
+      setIsLoading(false);
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please enter a title',
+        heightAuto: false,
+        backdrop: true,
+        background: '#fff',
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
+      });
+    }
+
+    if(!formData.description){
+      setIsLoading(false);
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please enter a description',
+        heightAuto: false,
+        backdrop: true,
+        background: '#fff',
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
+      });
+    }
+
+    if(!formData.category_id){
+      setIsLoading(false);
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please select a category',
+        heightAuto: false,
+        backdrop: true,
+        background: '#fff',
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
+      });
+    }
+
     const formDataToSubmit = new FormData();
     
     formDataToSubmit.append('visibility', formData.visibility || 'public');
     formDataToSubmit.append('title', formData.title);
-    formDataToSubmit.append('description', formData.description);
+    if(selectedStyle){
+      const div = document.createElement('div');
+      div.style.background = selectedStyle.color;
+      div.style.color = selectedStyle.textColor;
+      div.style.fontSize = "18px";
+      div.style.textAlign = "center";
+      div.style.minHeight = "250px";
+      div.style.padding = "30px 20px";
+      div.innerHTML = formData.description;
+      formDataToSubmit.append('description', new XMLSerializer().serializeToString(div));
+    }else{
+      formDataToSubmit.append('description', formData.description);
+    }
     formDataToSubmit.append('selectedStyle', selectedStyle || null);
     formDataToSubmit.append('category_id', formData.category_id);
     
@@ -684,7 +758,7 @@ const CreatePost = ({
             </div>
           </div>
           <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
+            <Form.Label>Title *</Form.Label>
             <Form.Control
               type="text"
               name="title"
@@ -695,7 +769,7 @@ const CreatePost = ({
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Category</Form.Label>
+            <Form.Label>Category *</Form.Label>
             <br />
             <div className="d-flex gap-1 overflow-auto">
               {categories.map(category => (
@@ -717,7 +791,7 @@ const CreatePost = ({
             </div>
           </Form.Group>
           <div className="mb-3">
-
+          <Form.Label>Description *</Form.Label>
             <ReactQuill
               placeholder="Write something here..."
               value={formData.description}
@@ -730,13 +804,13 @@ const CreatePost = ({
 
           <div className="position-relative">
             <div className="d-flex gap-2">
-              <span className="border rounded bg-gradient color-plate" onClick={() => { setColorPanel(!colorPanel); resetStyles() }}>
+              <span className="border rounded bg-gradient color-plate" onClick={() => { setColorPanel(!colorPanel); resetStyles() }} >
                 <span class="material-symbols-outlined">
-                  {colorPanel ? "block" : ""}                  
+                  {colorPanel || (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0) ? "block" : ""}                  
                 </span>
               </span>
               <div className={`${colorPanel ? "d-flex" : "d-none"} gap-2 color-panel`}>
-                {styles.map((style, index) => (<span className={`border rounded color-plate`} style={{ background: style.color }} key={index} title="Click to Apply" onClick={() => handleStyleClick(style)}></span>))}
+                {styles.map((style, index) => (<span className={`border rounded color-plate`} style={{ background: style.color }} key={index} title="Click to Apply" onClick={() => (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0)? "" : handleStyleClick(style)}></span>))}
               </div>
             </div>
           </div>
@@ -754,15 +828,23 @@ const CreatePost = ({
                       ref={fileInputRef}
                       onChange={handleFileSelect}
                       accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                      disabled={selectedStyle}
                     />
                     <Button
+                    disabled={selectedStyle}
                       className=""
                       onClick={() => fileInputRef.current.click()}
                       style={uploadBtn}
                     >
+                      {!selectedStyle ?
                       <span class="material-symbols-outlined" style={uploadIcon}>
                         cloud_upload
                       </span>
+                      :
+                      <span class="material-symbols-outlined text-danger" style={uploadIcon}>
+                      block
+                      </span>
+                      }
                     </Button>
                   </div>
                 </div>
@@ -816,7 +898,7 @@ const CreatePost = ({
             variant="primary"
             onClick={handleSubmit}
             className="mt-3 w-100"
-            disabled={isLoading || !formData.category_id || (!formData.description.trim() && !Object.values(selectedFiles).some(files => files.length > 0))}
+            disabled={isLoading}
           >
             {isLoading ? (
               <>

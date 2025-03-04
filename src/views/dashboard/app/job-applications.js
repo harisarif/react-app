@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Tabs, Tab, Badge } from "react-bootstrap";
+import { Container, Button, Tabs, Tab, Badge, Dropdown } from "react-bootstrap";
 import axios from '../../../utils/axios';
 import Swal from 'sweetalert2';
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const JobApplications = () => {
   const { userData } = useContext(UserContext);
-  const isAdmin = userData?.role === 'admin';
+  const isAdmin = userData?.permissions[0]?.can_create_jobs == 1;
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
@@ -59,6 +59,49 @@ const JobApplications = () => {
     return applications.filter(app => app.status === status);
   };
 
+const viewApplicantDetails = (application) => {
+  Swal.fire({
+    title: 'Applicant Details',
+    html: `
+      <div class="text-start">
+        <p><strong>Name:</strong> ${application.first_name} ${application.last_name}</p>
+        <p><strong>Email:</strong> ${application.email}</p>
+        <p><strong>Country:</strong> ${application.country}</p>
+        <p><strong>Company:</strong> ${application.company || 'N/A'}</p>
+        <p><strong>Job Title:</strong> ${application.job_title || 'N/A'}</p>
+        <p><strong>Application Status:</strong> ${application.status}</p>
+      </div>
+    `,
+    showCloseButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'View Profile',
+    cancelButtonText: 'View CV',
+    cancelButtonColor: '#3085d6',
+    confirmButtonColor: '#28a745',
+    preConfirm: () => {
+      // Redirect to user profile
+      window.location.href = `/profile/${application.user_id}`;
+      return false; // Prevent modal from closing
+    },
+    didRender: () => {
+      // Add event listener to cancel button (View CV)
+      const cancelButton = Swal.getCancelButton();
+      cancelButton.addEventListener('click', () => {
+        if (application.cv_file_path) {
+          // Open CV in new tab
+          window.open(`${process.env.REACT_APP_BACKEND_BASE_URL}/${application.cv_file_path}`, '_blank');
+        } else {
+          Swal.fire({
+            icon: 'info',
+            title: 'No CV Uploaded',
+            text: 'This applicant has not uploaded a CV.'
+          });
+        }
+      });
+    }
+  });
+};
+
   const ApplicationCard = ({ application }) => (
     <div className="card mb-3">
       <div className="card-body">
@@ -75,30 +118,60 @@ const JobApplications = () => {
             >
               View Job Details
             </Link>
+            &nbsp;&nbsp;
+            <button 
+              onClick={() => viewApplicantDetails(application)}
+              className="btn btn-info btn-sm"
+            >
+              View Applicant Details
+            </button>
           </div>
-          {isAdmin && application.status === 'pending' && (
-            <div>
-              <Button
-                variant="success"
-                className="me-2"
-                onClick={() => handleStatusUpdate(application.id, 'accepted')}
-              >
-                Accept
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => handleStatusUpdate(application.id, 'rejected')}
-              >
-                Reject
-              </Button>
-            </div>
-          )}
           <Badge bg={
             application.status === 'accepted' ? 'success' :
             application.status === 'rejected' ? 'danger' : 'warning'
           }>
             {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
           </Badge>
+          {isAdmin && (application.status === 'accepted' || application.status === 'pending' || application.status === 'rejected') && (
+  <Dropdown>
+    <Dropdown.Toggle variant="light" id="dropdown-basic" className="p-0 border-0 bg-transparent">
+      <i className="ri-more-2-fill"></i>
+    </Dropdown.Toggle>
+
+    <Dropdown.Menu>
+    {application.status === 'pending' && (
+        <>
+          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'accepted')}>
+            Accept
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'rejected')}>
+            Reject
+          </Dropdown.Item>
+        </>
+      )}
+      {application.status === 'accepted' && (
+        <>
+          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'pending')}>
+            Move to Pending
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'rejected')}>
+            Reject
+          </Dropdown.Item>
+        </>
+      )}
+      {application.status === 'rejected' && (
+        <>
+          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'pending')}>
+            Move to Pending
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'accepted')}>
+            Accept
+          </Dropdown.Item>
+        </>
+      )}
+    </Dropdown.Menu>
+  </Dropdown>
+)}
         </div>
       </div>
     </div>
