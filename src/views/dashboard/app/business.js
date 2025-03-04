@@ -22,6 +22,9 @@ import CustomToggle from "../../../components/dropdowns";
 import ReactFsLightbox from "fslightbox-react";
 import Doteddropdown from "../../../components/custom/Doted_dropdown";
 import NoDataFound from '../../../components/NoDataFound';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 // images
 import img1 from "../../../assets/images/page-img/fun.webp";
@@ -71,6 +74,7 @@ import g7 from "../../../assets/images/page-img/g7.jpg";
 import g8 from "../../../assets/images/page-img/g8.jpg";
 import g9 from "../../../assets/images/page-img/g9.jpg";
 import loader from "../../../assets/images/page-img/page-load-loader.gif";
+import sliderImg from "../../../assets/images/page-img/sliderImg.png"
 import img51 from "../../../assets/images/page-img/51.jpg";
 import img52 from "../../../assets/images/page-img/52.jpg";
 import img53 from "../../../assets/images/page-img/53.jpg";
@@ -192,6 +196,14 @@ const FollowButton = styled.button`
 `;
 
 const UserFeeds = () => {
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   const { userData, setUserData } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -476,7 +488,30 @@ const UserFeeds = () => {
 
               {(userData && userCanCreatePostCategories?.some(category => [1].includes(category)) &&
                 <Row>
-                  <Col sm={12}>
+                <Col sm={12} className="incoming-slider">
+                <Slider {...settings}>
+      <div className="img-wrapper">
+      <img src={sliderImg} alt="loader" style={{ height: "250px" , width:"100%"}} />
+      </div>
+      <div className="img-wrapper">
+      <img src={sliderImg} alt="loader" style={{ height: "250px", width:"100%" }} /> 
+      </div>
+      <div className="img-wrapper">
+      <img src={sliderImg} alt="loader" style={{ height: "250px", width:"100%" }} /> 
+      </div>
+      <div className="img-wrapper">
+      <img src={sliderImg} alt="loader" style={{ height: "250px", width:"100%" }} /> 
+      </div>
+      <div className="img-wrapper">
+      <img src={sliderImg} alt="loader" style={{ height: "250px" , width:"100%"}} /> 
+      </div>
+      <div className="img-wrapper">
+      <img src={sliderImg} alt="loader" style={{ height: "250px" , width:"100%"}} /> 
+       
+      </div>
+    </Slider>
+                </Col>
+                  <Col sm={12}  className="mt-5">
                     <CreatePost
                       className="card-block card-stretch card-height"
                       setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../../../../context/UserContext';
 //router
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -25,7 +25,8 @@ import { MdOutlineTurnedIn } from "react-icons/md";
 
 function CustomToggle({ children, eventKey, onClick, to }) {
 
-
+    useEffect(() => { 
+      }, []);
     const { activeEventKey } = useContext(AccordionContext);
     const decoratedOnClick = useAccordionButton(eventKey, (active) => onClick({ state: !active, eventKey: eventKey }));
     const isCurrentEventKey = activeEventKey === eventKey;

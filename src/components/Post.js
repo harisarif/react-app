@@ -17,8 +17,10 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { FaComment } from "react-icons/fa6";
-import { LiaTelegram } from "react-icons/lia";
-
+import { LiaTelegram } from "react-icons/lia"; 
+import { FiSmile } from "react-icons/fi";
+import { FaCamera } from "react-icons/fa";
+import { FaPaperclip } from "react-icons/fa";
 const FollowButton = styled.button`
   border: none;
   padding: 6px 16px;
@@ -468,7 +470,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                     Un-lock Content
                 </span>
             )}
-                    {post.user?.id !== userData?.id && (
+                    {/* {post.user?.id !== userData?.id && (
                       <FollowButton
                         className={`ms-2 ${post?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
                         onClick={() => handleFollow(post.user?.id)}
@@ -485,7 +487,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                           </>
                         )}
                       </FollowButton>
-                    )}
+                    )} */}
 
 
                   </div>
@@ -673,7 +675,26 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               <span className="m-1 fw-bold">{likes.length} Likes</span>
             </div>
 
+<div className="leave-comment-area d-flex align-items-center" >
+<div className="input-wrap w-100">
+<input
+                        type="text"
+                        className="w-100" 
+                        placeholder="Write a comment"
+                      />
 
+</div>
+ <div className="input-inner-icon d-flex align-items-center gap-2">
+ <FaPaperclip size={20}  />
+ <FaCamera size={20}  />
+ <FiSmile size={20}   />
+ </div>
+
+                           <div className="icon-wrap"> 
+                            <LiaTelegram size={'1.75rem'} /> 
+                          
+                            </div>
+</div>
             <Collapse in={showComments}>
               <div className="comments-section mt-0">
                 <form onSubmit={handleComment} className="mt-2 mb-3">

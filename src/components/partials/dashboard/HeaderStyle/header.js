@@ -58,8 +58,13 @@ const Header = () => {
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
   };
-
-
+  useEffect(() => {
+    const sidebar = document.getElementById("rightSidebar");
+    if (sidebar) {
+      sidebar.classList.add("right-sidebar");
+    }
+  }, []);
+  
   useEffect(() => {
     if (notifications) {
       fetchData();
@@ -68,12 +73,12 @@ const Header = () => {
 
   const fetchData = async () => {
     try {
-      const [ unread] = await Promise.all([
+      const [unread] = await Promise.all([
         axios.get('/api/messages/unread-count')
       ]);
-        setUnreadCount(unread.data.total_count);
-        setConversationUnreadCounts(unread.data.conversation_counts || {});
-      
+      setUnreadCount(unread.data.total_count);
+      setConversationUnreadCounts(unread.data.conversation_counts || {});
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -175,19 +180,19 @@ const Header = () => {
         >
           {/* <Navbar className="iq-navbar p-lg-0" sticky="top"> */}
           <Container fluid className="navbar-inner">
-             <Link
-                className=""
-                id="sidebar-toggle-icon"
-                data-toggle="sidebar"
-                data-active="true"
-                onClick={minisidebar}
-                to="#"
-              >
-                <div className="icon material-symbols-outlined iq-burger-menu">
-                  {" "}
-                  menu{" "}
-                </div>
-              </Link>
+            <Link
+              className=""
+              id="sidebar-toggle-icon"
+              data-toggle="sidebar"
+              data-active="true"
+              onClick={minisidebar}
+              to="#"
+            >
+              <div className="icon material-symbols-outlined iq-burger-menu">
+                {" "}
+                menu{" "}
+              </div>
+            </Link>
             <div className="d-flex align-items-center pb-2 pb-lg-0 header-logo">
               <Link
                 to="/home"
@@ -195,7 +200,7 @@ const Header = () => {
               >
                 <img src={equity} class="brand-logo" alt="#" />
               </Link>
-             
+
             </div>
 
             <div className="d-flex align-items-center header-link  bussiness-crypto-main-web-wrapper">
@@ -606,17 +611,17 @@ const Header = () => {
                   className=" d-flex align-items-center header-message-icon"
                   id="mail-drop"
                   onClick={() => {
-                      document.getElementById("rightSidebar").classList.toggle("right-sidebar");
-                      // document.body.classList.toggle("right-sidebar-close");
+                    document.getElementById("rightSidebar").classList.toggle("right-sidebar");
+                    // document.body.classList.toggle("right-sidebar-close");
                   }}
                 >
                   <i className="material-symbols-outlined">chat</i>
                   {unreadCount > 0 && (
-                  <span className="position-absolute      badge rounded-pill bg-danger chat-notification-bar">
-                    {unreadCount}
-                    <span className="visually-hidden">unread messages</span>
-                  </span>
-                )}
+                    <span className="position-absolute      badge rounded-pill bg-danger chat-notification-bar">
+                      {unreadCount}
+                      <span className="visually-hidden">unread messages</span>
+                    </span>
+                  )}
                   <span className="mobile-text d-none ms-3">Message</span>
                 </Dropdown.Toggle>
               </Dropdown>

@@ -585,7 +585,7 @@ const RightSidebar = () => {
       {/* <div className="mt-30-imp right-sidebar-toggle bg-primary text-white mt-3 d-flex" style={{ marginTop: "30px !important" }} onClick={minirightsidebar}>
         <span className="material-symbols-outlined">chat</span>
       </div> */}
-      <Dropdown as="li" className="nav-item" >
+      <Dropdown as="li" className="nav-item d-none" >
           <Link className="d-flex text-body align-items-center" to="#" onClick={minirightsidebar}>
             <span className="material-symbols-outlined">chat</span>
           </Link>
