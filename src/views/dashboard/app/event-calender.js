@@ -37,7 +37,7 @@ const EventCalender = () => {
     event_date: '',
     start_time: '',
     end_time: '',
-    type: 'conference',
+    type: '',
     is_active: true
   });
 
@@ -138,13 +138,14 @@ const EventCalender = () => {
   const handleAddNew = () => {
     setSelectedEvent(null);
     setFormData({
+      main_image:'',
       title: '',
       subtitle: '',
       description: '',
       event_date: '',
       start_time: '',
       end_time: '',
-      type: 'conference',
+      type: '',
       is_active: true
     });
     setShowModal(true);
@@ -218,9 +219,13 @@ const EventCalender = () => {
                  <Modal.Title>{selectedEventDetail?.title}</Modal.Title>
                </Modal.Header>
                <Modal.Body>
+                <img src={process.env.REACT_APP_BACKEND_BASE_URL +'/'+ selectedEventDetail?.main_image} alt={selectedEventDetail?.title} width="100%" />
+                <br></br><br></br>
                  <p><strong>Short Description:</strong> {selectedEventDetail?.subtitle}</p>
                  <p dangerouslySetInnerHTML={{ __html: selectedEventDetail?.description }} />
                  <p><strong>Event Date:</strong> {moment(selectedEventDetail?.event_date).format('DD MMMM')}</p>
+                 <p><strong>Start Time:</strong> {moment(selectedEventDetail?.start_time).format('hh:mm A')}</p>
+                 <p><strong>End Time:</strong> {moment(selectedEventDetail?.end_time).format('hh:mm A')}</p>
                  <p><strong>Event Type:</strong> {selectedEventDetail?.type}</p>
                </Modal.Body>
                <Modal.Footer>
@@ -241,6 +246,26 @@ const EventCalender = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+    <Form.Label>Main Image</Form.Label>
+    <Form.Control
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (ev) => {
+                setFormData({
+                  ...formData,
+                  main_image: ev.target.result
+                });
+              };
+              reader.readAsDataURL(file);
+            }
+        }}
+    />
+</Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Title</Form.Label>
               <Form.Control
@@ -316,19 +341,19 @@ const EventCalender = () => {
               </Col>
             </Row>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Type</Form.Label>
-              <Form.Select
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-              >
-                <option value="conference">Conference</option>
-                <option value="workshop">Workshop</option>
-                <option value="talk">Talk</option>
-                <option value="seminar">Seminar</option>
-              </Form.Select>
-            </Form.Group>
+<Form.Group className="mb-3">
+    <Form.Label>Type</Form.Label>
+    <Form.Select
+        name="type"
+        value={formData.type}
+        onChange={handleInputChange}
+        required // Add required if you want to enforce selection
+    >
+        <option value="">Select Type</option> {/* Placeholder option */}
+        <option value="in-person">In person</option>
+        <option value="virtual">Virtual</option>
+    </Form.Select>
+</Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Check

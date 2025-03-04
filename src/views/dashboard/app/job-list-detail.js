@@ -27,66 +27,61 @@ const JobDetail = () => {
     fetchJob();
   }, [id]);
 
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    country: '',
-    company: '',
-    job_title: ''
-  })
+const [formData, setFormData] = useState({
+  job_id:id,
+  first_name: '',
+  last_name: '',
+  email: '',
+  country: '',
+  company: '',
+  job_title: '',
+  cv: null, // New field for CV upload
+});
   const [submitLoading, setSubmitLoading] = useState(false)
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
+const handleInputChange = (e) => {
+  const { name, value, files } = e.target;
+  setFormData(prevState => ({
+    ...prevState,
+    [name]: files ? files[0] : value
+  }));
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setSubmitLoading(true)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitLoading(true);
 
-    try {
-      const response = await axios.post('/api/job-applications', {
-        ...formData,
-        job_id: id // Assuming you have the job id from URL or props
-      })
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: 'Your job application has been submitted successfully.',
-        confirmButtonColor: '#3085d6'
-      })
-
-      // Reset form
-      setFormData({
-        first_name: '',
-        last_name: '',
-        email: '',
-        country: '',
-        company: '',
-        job_title: ''
-      })
-
-    } catch (error) {
-      const errorMessage = error.response?.data?.errors 
-        ? Object.values(error.response.data.errors).flat().join('\n')
-        : 'Something went wrong. Please try again.'
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Error!',
-        text: errorMessage,
-        confirmButtonColor: '#d33'
-      })
-    } finally {
-      setSubmitLoading(false)
+  // Create FormData for file upload
+  const formDataToSubmit = new FormData();
+  Object.keys(formData).forEach(key => {
+    if (formData[key] !== null && formData[key] !== '') {
+      formDataToSubmit.append(key, formData[key]);
     }
+  });
+
+  try {
+    const response = await axios.post('/api/job-application', formDataToSubmit, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Job application submitted successfully!',
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Failed to submit job application',
+    });
+  } finally {
+    window.location.href = '/job-list';
+    setSubmitLoading(false);
   }
+};
 
   if (loading) {
     return (
@@ -444,6 +439,19 @@ const JobDetail = () => {
                   onChange={handleInputChange}
                 />
               </div>
+              <div className="form-group text-start">
+  <h6 htmlFor="cv" className="form-label fw-bold">
+    Upload CV (PDF only)
+  </h6>
+  <input
+    id="cv"
+    type="file"
+    name="cv"
+    accept=".pdf"
+    className="form-control mb-0"
+    onChange={handleInputChange}
+  />
+</div>
               <div className="form-group text-start">
                 <h6 htmlFor="email" className="form-label fw-bold">
                   Job Title
