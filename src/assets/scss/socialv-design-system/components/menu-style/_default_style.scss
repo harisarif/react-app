@@ -3,10 +3,12 @@
     &.sidebar-default {
         .nav-link {
             &:not(.static-item){
-                --shadow-dark-color: var(--#{$variable-prefix}primary-rgb);
+                // --shadow-dark-color: var(--#{$variable-prefix}primary-rgb);
+                
                 &.active, &[aria-expanded=true] {
-                    background: var(--#{$variable-prefix}primary);
-                    color: var(--bs-white);
+                    // background: var(--#{$variable-prefix}primary);
+                    // color: var(--bs-white);
+                    color: var(--purpule-color);
                     // box-shadow: 0 10px 20px -10px rgba(var(--shadow-dark-color), 38%);
                     .icon {
                         color: var(--bs-white);

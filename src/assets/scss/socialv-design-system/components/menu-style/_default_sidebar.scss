@@ -167,7 +167,8 @@
       text-transform: capitalize;
       &:not(.disabled) {
         .right-icon {
-          color: rgba(var(--bs-gray-rgb), 0.3);
+          color: rgba(var(--black-color), 0.3);
+          // color: #000000 !important;
           transition: var(--sidebar-transition);
           transition-duration: var(--sidebar-transition-duration);
           transition-timing-function: var(
