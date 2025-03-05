@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.af588b6a.css",
-    "main.js": "/static/js/main.cc8519dd.js",
+    "main.css": "/static/css/main.7b970a6e.css",
+    "main.js": "/static/js/main.0ffb1aac.js",
     "static/media/Banner.jpg": "/static/media/Banner.7eb802b56b4dc864425e.jpg",
     "static/media/video-2.mp4": "/static/media/video-2.40a85315bf4af5fbcd2b.mp4",
     "static/media/video-3.mp4": "/static/media/video-3.37562dfa01c4e7d7a734.mp4",
@@ -111,11 +111,11 @@
     "static/media/ads.jpg": "/static/media/ads.528a73823ad85c175374.jpg",
     "static/media/pizza.webp": "/static/media/pizza.61da3f5df9a5f163c264.webp",
     "index.html": "/index.html",
-    "main.af588b6a.css.map": "/static/css/main.af588b6a.css.map",
-    "main.cc8519dd.js.map": "/static/js/main.cc8519dd.js.map"
+    "main.7b970a6e.css.map": "/static/css/main.7b970a6e.css.map",
+    "main.0ffb1aac.js.map": "/static/js/main.0ffb1aac.js.map"
   },
   "entrypoints": [
-    "static/css/main.af588b6a.css",
-    "static/js/main.cc8519dd.js"
+    "static/css/main.7b970a6e.css",
+    "static/js/main.0ffb1aac.js"
   ]
 }

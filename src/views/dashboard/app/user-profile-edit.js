@@ -882,7 +882,7 @@ const UserProfileEdit = () => {
                     </Tab.Container>
                 </Container>
             </div>
-            <div className="header-for-bg">
+            {/* <div className="header-for-bg">
                 <div className="background-header position-relative">
                     <img src={getBackgroundProfileImageUrl(userData) } className="img-fluid w-100" alt="header-bg" />
                     <div className="change-background-button">
@@ -899,7 +899,7 @@ const UserProfileEdit = () => {
                         </label>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <Modal show={showCropper} onHide={() => !isSaving && setShowCropper(false)} size="lg" centered>
                 <Modal.Header closeButton={!isSaving}>
                     <Modal.Title>Crop Profile Photo</Modal.Title>

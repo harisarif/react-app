@@ -1,10 +1,27 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Row, Col, Container, Button, Modal, Form } from "react-bootstrap";
 import { UserContext } from "../../../context/UserContext";
+import {
+  Row,
+  Col,
+  Container,
+  Dropdown,
+  Nav,
+  Tab,
+  OverlayTrigger,
+  Tooltip,
+  Button,
+  Modal,
+  Card,
+  Collapse,
+  Form
+} from "react-bootstrap";
 import axios from "../../../utils/axios";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Swal from "sweetalert2";
+import ReactCrop from 'react-image-crop'
+import { getProfileImageUrl, getBackgroundProfileImageUrl } from '../../../utils/helpers';
+
 import moment from "moment";
 import NoDataFound from '../../../components/NoDataFound';
 
@@ -25,12 +42,15 @@ const EventCalender = () => {
       ['clean']
     ],
   };
-
+  const [croppedGETImageBlob,setCroppedImageBlob] = useState(null);
   const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { userData } = useContext(UserContext);
   const [formData, setFormData] = useState({
+    organizer_id:'',
+    banner_image: '',
+    main_image: '',
     title: '',
     subtitle: '',
     description: '',
@@ -41,10 +61,35 @@ const EventCalender = () => {
     is_active: true
   });
 
+  const [isDirty, setIsDirty] = useState(false);
+const [showDiscardModal, setShowDiscardModal] = useState(false);
+
+const initialData = JSON.stringify(formData); // Store initial state
+
+useEffect(() => {
+    if (JSON.stringify(formData) !== initialData) {
+        setIsDirty(true);
+    } else {
+        setIsDirty(false);
+    }
+}, [formData]);
+
   useEffect(() => {
     fetchEvents();
   }, []);
+  const [admins, setAdmins] = useState();
 
+  const [searchQuery, setSearchQuery] = useState('');
+  useEffect(() => {
+    axios.get(`/api/get-admins?search=${searchQuery}`)
+      .then(response => {
+        setAdmins(response.data.users);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [searchQuery]);
+  
   const fetchEvents = async () => {
     try {
       const response = await axios.get('/api/events');
@@ -68,13 +113,12 @@ const EventCalender = () => {
     try {
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
-        if (formData[key] !== null) {
+
           if (key === 'is_active') {
             formDataToSend.append(key, formData[key] ? 1 : 0);
           } else {
             formDataToSend.append(key, formData[key]);
           }
-        }
       });
 
       if (selectedEvent) {
@@ -87,13 +131,25 @@ const EventCalender = () => {
       fetchEvents();
       Swal.fire({
         icon: 'success',
-        title: `Event ${selectedEvent ? 'updated' : 'created'} successfully!`
+        title: `Event ${selectedEvent ? 'updated' : 'created'} successfully!`,
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
       });
     } catch (error) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: error.response?.data?.message || 'Something went wrong'
+        text: error.response?.data?.message || 'Something went wrong',
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
       });
     }
   };
@@ -101,6 +157,8 @@ const EventCalender = () => {
   const handleEdit = (event) => {
     setSelectedEvent(event);
     setFormData({
+      organizer_id:event.organizer_id,
+      banner_image:event.banner_image,
       title: event.title,
       subtitle: event.subtitle || '',
       description: event.description || '',
@@ -137,7 +195,11 @@ const EventCalender = () => {
 
   const handleAddNew = () => {
     setSelectedEvent(null);
+    setSelectedAdmin(null);
+    setCroppedImageBlob(null);
     setFormData({
+      organizer_id:'',
+      banner_image: '',
       main_image:'',
       title: '',
       subtitle: '',
@@ -150,6 +212,213 @@ const EventCalender = () => {
     });
     setShowModal(true);
   };
+
+  const handleModalClose = () => {
+    if (isDirty) {
+      setShowDiscardModal(true);
+  } else {
+      // Directly close without confirmation
+      setShowModal(false);
+  }
+  };
+
+
+  const [completedCrop, setCompletedCrop] = useState(null);
+const [isSaving, setIsSaving] = useState(false);
+const imgRef = React.useRef(null);
+const previewCanvasRef = React.useRef(null);
+
+const [showBackgroundCropper, setShowBackgroundCropper] = useState(false);
+const [backgroundImage, setBackgroundImage] = useState(null);
+
+const [backgroundCrop, setBackgroundCrop] = useState({
+  unit: '%', // Use '%' for a percentage-based crop
+  x: 10, // Start crop 10% from the left
+  y: 10, // Start crop 10% from the top
+  width: 80, // Crop width 80% of the image
+  height: 50, // Crop height 50% of the image
+  aspect: 2.5, // Maintain aspect ratio
+});
+const [completedBackgroundCrop, setCompletedBackgroundCrop] = useState(null);
+const backgroundImgRef = React.useRef(null);
+
+
+const onLoad = (img) => {
+  imgRef.current = img;
+  const aspectRatio = 2.5; 
+  const cropWidth = img.width * 0.8; 
+  const cropHeight = cropWidth / aspectRatio; 
+
+  const defaultCrop = {
+      unit: 'px',
+      x: (img.width - cropWidth) / 2,
+      y: (img.height - cropHeight) / 2,
+      width: cropWidth,
+      height: cropHeight,
+      aspect: aspectRatio,
+  };
+
+  setBackgroundCrop(defaultCrop);
+
+  // 🔹 Manually trigger crop complete to store crop data
+  handleBackgroundCropComplete(defaultCrop);
+};
+
+const handleCroppedImage = async (croppedImageBlob) => {
+  // Convert the Blob to a base64 string
+  const reader = new FileReader();
+  reader.onloadend = () => {
+      const base64data = reader.result; // This is the base64 string
+      setFormData(prevFormData => ({
+          ...prevFormData,
+          banner_image: base64data // Add the base64 string to formData
+      }));
+  };
+  reader.readAsDataURL(croppedImageBlob); // Read the Blob as a data URL
+};
+  const handleSaveBackgroundCrop = async () => {
+    try {
+        setIsSaving(true);
+        console.log('Starting background crop save...');
+        if (!completedBackgroundCrop || !backgroundImgRef.current) {
+            console.error('No crop or image reference available');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please select an area to crop'
+            });
+            setIsSaving(false);
+            return;
+        }
+
+        const croppedImageBlob = await generateBackgroundCroppedImage(completedBackgroundCrop);
+        console.log('Generated cropped background image blob:', croppedImageBlob);
+        if (croppedImageBlob) {
+          handleCroppedImage(croppedImageBlob); // Call the function to handle conversion
+          setCroppedImageBlob(croppedImageBlob);
+
+        // alert();
+        // Close modal and update image
+        setShowBackgroundCropper(false);
+        setBackgroundImage(null);
+        setIsSaving(false);
+        
+        // Show success message
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'banner image cropped successfully!',
+            customClass: {
+              popup: 'custom-swal-z-index',
+              container: 'custom-swal-container'
+            },
+            position: 'center',
+            showConfirmButton: true
+        });
+        
+    }
+
+    } catch (error) {
+        setIsSaving(false);
+        console.error('Error in handleSaveBackgroundCrop:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.response?.data?.message || 'Failed to update background image',
+            backdrop: true,
+            background: '#fff',
+            customClass: {
+              popup: 'custom-swal-z-index',
+              container: 'custom-swal-container'
+            },
+            position: 'center',
+            showConfirmButton: true
+        });
+    }
+};
+
+const handleBackgroundCropComplete = (crop) => {
+  setCompletedBackgroundCrop(crop);
+};
+
+const [selectedAdmin, setSelectedAdmin] = useState(null);
+const handleAdminSelect = (id) =>{
+  setFormData({
+    ...formData,
+    organizer_id: id
+});
+  setSelectedAdmin(id);
+};
+
+const generateBackgroundCroppedImage = async (crop) => {
+  if (!crop || !backgroundImgRef.current) {
+      console.error('No crop or image reference');
+      return null;
+  }
+
+  const canvas = document.createElement('canvas');
+  const scaleX = backgroundImgRef.current.naturalWidth / backgroundImgRef.current.width;
+  const scaleY = backgroundImgRef.current.naturalHeight / backgroundImgRef.current.height;
+  const pixelRatio = window.devicePixelRatio;
+  
+  canvas.width = crop.width * pixelRatio;
+  canvas.height = crop.height * pixelRatio;
+  
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+      console.error('No 2d context');
+      return null;
+  }
+
+  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  ctx.imageSmoothingQuality = 'high';
+
+  try {
+      ctx.drawImage(
+          backgroundImgRef.current,
+          crop.x * scaleX,
+          crop.y * scaleY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          crop.width,
+          crop.height
+      );
+
+      return new Promise((resolve) => {
+          canvas.toBlob(
+              (blob) => {
+                  if (!blob) {
+                      console.error('Canvas to Blob conversion failed');
+                      resolve(null);
+                      return;
+                  }
+                  console.log('Generated background blob:', blob);
+                  resolve(blob);
+              },
+              'image/jpeg',
+              1
+          );
+      });
+  } catch (error) {
+      console.error('Error generating cropped background image:', error);
+      return null;
+  }
+};
+
+const handleBackgroundImageChange = (e) => {
+  if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+          setBackgroundImage(reader.result);
+          setShowBackgroundCropper(true);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+  }
+};
+
+
 
   return (
     <div id="content-page" className="content-inner">
@@ -213,7 +482,23 @@ const EventCalender = () => {
                  </div>
                </div>
              </Col>
-             
+             <Modal show={showDiscardModal} onHide={() => setShowDiscardModal(false)} centered>
+    <Modal.Header closeButton>
+        <Modal.Title>Discard Changes?</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        You have unsaved changes. Are you sure you want to discard them?
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowDiscardModal(false)}>
+            Cancel
+        </Button>
+        <Button variant="danger" onClick={() => setShowModal(false)}>
+            Discard Changes
+        </Button>
+    </Modal.Footer>
+</Modal>
+
              <Modal show={showModalDetail} onHide={() => setShowModalDetail(false)}>
                <Modal.Header closeButton>
                  <Modal.Title>{selectedEventDetail?.title}</Modal.Title>
@@ -227,6 +512,7 @@ const EventCalender = () => {
                  <p><strong>Start Time:</strong> {moment(selectedEventDetail?.start_time).format('hh:mm A')}</p>
                  <p><strong>End Time:</strong> {moment(selectedEventDetail?.end_time).format('hh:mm A')}</p>
                  <p><strong>Event Type:</strong> {selectedEventDetail?.type}</p>
+                 <p><strong>Organizer:</strong> {selectedEventDetail?.organizer?.name}</p>
                </Modal.Body>
                <Modal.Footer>
                  <Button variant="secondary" onClick={() => setShowModalDetail(false)}>
@@ -239,33 +525,200 @@ const EventCalender = () => {
           )}
         </Row>
       </div>
-
-      <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+      <Modal show={showBackgroundCropper} onHide={() => !isSaving && setShowBackgroundCropper(false)} size="lg" centered>
+                <Modal.Header closeButton={!isSaving}>
+                    <Modal.Title>Crop Background Photo</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {backgroundImage && (
+                        <div className="crop-container">
+                            <ReactCrop
+                                crop={backgroundCrop}
+                                onChange={(c) => setBackgroundCrop(c)}
+                                onComplete={handleBackgroundCropComplete}
+                                aspect={2.5}
+                            >
+                                <img
+                                    ref={backgroundImgRef}
+                                    alt="Crop me"
+                                    src={backgroundImage}
+                                    style={{ maxWidth: '100%' }}
+                                    onLoad={(e) => onLoad(e.target)}
+                                />
+                            </ReactCrop>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button 
+                        variant="secondary" 
+                        onClick={() => setShowBackgroundCropper(false)}
+                        disabled={isSaving}
+                    >
+                        Cancel
+                    </Button>
+                    <Button 
+                        variant="primary" 
+                        onClick={handleSaveBackgroundCrop}
+                        disabled={isSaving}
+                    >
+                        {isSaving ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Saving...
+                            </>
+                        ) : (
+                            'Save Changes'
+                        )}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+      <Modal show={showModal} onHide={() => handleModalClose()} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>{selectedEvent ? 'Edit Event' : 'Create New Event'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
+        <Form.Group className="mb-3">
+        <Form.Label>Banner Image</Form.Label>
+          <div className="profile-header" style={{
+                                                   backgroundImage: `url(${croppedGETImageBlob ? URL.createObjectURL(croppedGETImageBlob) : process.env.REACT_APP_BACKEND_BASE_URL +'/'+ selectedEvent?.banner_image})`,
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center',
+                                                    borderRadius: '0.25rem',
+                                                    padding: '7rem',
+                                                    position: 'relative',
+                                                    marginBottom: '2rem'
+                                                }}>
+                                                    <div className="position-relative">
+                                                        
+                                                        <div className="upload-background-button" style={{
+                                                            position: 'absolute',
+                                                            top: '10px',
+                                                            right: '10px',
+                                                            zIndex: 1
+                                                        }}>
+                                                            <input 
+                                                                type="file" 
+                                                                id="background-upload"
+                                                                className="file-upload" 
+                                                                accept="image/*" 
+                                                                onChange={handleBackgroundImageChange}
+                                                                style={{ display: 'none' }}
+                                                            />
+                                                            <label htmlFor="background-upload" className="btn btn-primary btn-sm">
+                                                                <svg width="14" height="14" viewBox="0 0 24 24" className="me-2">
+                                                                    <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                                                                </svg>
+                                                                Add Banner Image
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+        </Form.Group>
+<Form.Group className="mb-3">
     <Form.Label>Main Image</Form.Label>
-    <Form.Control
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-            const file = e.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = (ev) => {
-                setFormData({
-                  ...formData,
-                  main_image: ev.target.result
-                });
-              };
-              reader.readAsDataURL(file);
-            }
+    <div 
+        style={{
+            width: '100%',
+            height: '200px',
+            border: '2px dashed #ccc',
+            borderRadius: '8px',
+            position: 'relative',
+            backgroundImage: formData?.main_image ? `url(${formData?.main_image})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            cursor: 'pointer'
         }}
-    />
+        onClick={() => document.getElementById('main-image-input').click()}
+    >
+        {!formData?.main_image && (
+            <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                textAlign: 'center',
+                color: '#aaa'
+            }}>
+                <span className="material-icons" style={{ fontSize: '48px' }}>add_a_photo</span>
+                <p>Select Image</p>
+            </div>
+        )}
+        <input
+            type="file"
+            id="main-image-input"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        setFormData({
+                            ...formData,
+                            main_image: ev.target.result
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }}
+        />
+    </div>
 </Form.Group>
+<Form.Group>
+  <Form.Label>Select Organizer (optional)</Form.Label>
+  <div>
+    <div className="mb-2">
+      <Form.Control
+        type="text"
+        placeholder="Search Users..."
+        value={searchQuery}
+        onChange={(e) => {
+          const searchQuery = e.target.value;
+          axios.get(`/api/get-admins?search=${searchQuery}`)
+            .then(response => {
+              setAdmins(response.data.users);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+          setSearchQuery(searchQuery);
+        }}
+      />
+    </div>
+    
+    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+      {admins && admins?.slice(0, 3)?.map((admin) => (
+        <Card 
+          key={admin.id} 
+          className="mb-2 p-2" 
+          style={{ cursor: 'pointer', fontSize: '14px' }}
+          onClick={() => handleAdminSelect(admin.id)}
+        >
+          <Card.Body className="d-flex justify-content-between align-items-center p-2">
+            <div className="d-flex align-items-center">
+              <img
+                src={getProfileImageUrl(admin)}
+                alt={admin.name}
+                className="rounded-circle me-2"
+                style={{ width: '35px', height: '35px' }}
+              />
+              <div>
+                <h6 className="mb-0">{admin?.name}</h6>
+                <p className="mb-0 text-muted" style={{ fontSize: '12px' }}>{admin?.email}</p>
+              </div>
+            </div>
+            {admin?.id === selectedAdmin && (
+              <i className="fas fa-check text-success"></i>
+            )}
+          </Card.Body>
+        </Card>
+      ))}
+    </div>
+  </div>
+</Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Title</Form.Label>
               <Form.Control
@@ -356,16 +809,15 @@ const EventCalender = () => {
 </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Check
-                type="checkbox"
-                label="Active"
+              <Form.Label>Visibility</Form.Label>
+              <Form.Select
                 name="is_active"
-                checked={formData.is_active}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  is_active: e.target.checked
-                }))}
-              />
+                value={formData.is_active}
+                onChange={handleInputChange}
+              >
+                <option value="1">Public</option>
+                <option value="0">Private</option>
+              </Form.Select>
             </Form.Group>
 
             <div className="text-end">
