@@ -673,7 +673,7 @@ const CreatePost = ({
               <img
                 src={getProfileImageUrl(userData)}
                 alt="userimg"
-                className="avatar-50 rounded-circle"
+                className="avatar-60 rounded-circle"
               />
             </div>
             <div className="post-text ms-2 w-100" onClick={handleShow}>
@@ -686,23 +686,19 @@ const CreatePost = ({
               />
             </div>
           </div>
-          <div className="d-flex align-items-center justify-content-between create-post-icons-main">
+          <div className="d-flex align-items-center justify-content-around create-post-icons-main">
 
             <div className="d-flex align-items-center photo-with-icon" onClick={handleShow} style={{ cursor: "pointer" }}>
               <span class="material-symbols-outlined">
                 photo_library
               </span>
-              <span>Photo/video</span>
+              <span>Photos</span>
             </div>
-            <div 
-              className="d-flex align-items-center event-with-icon" 
-              onClick={() => setShowEventModal(true)}
-              style={{ cursor: 'pointer' }}
-            >
-              <span className="material-symbols-outlined">
-                event
+            <div className="d-flex align-items-center photo-with-icon" onClick={handleShow} style={{ cursor: "pointer" }}>
+              <span class="material-symbols-outlined">
+                videocam
               </span>
-              <span>Events</span>
+              <span>Videos</span>
             </div>
             <div 
               className="d-flex align-items-center jobs-with-icon"
@@ -714,6 +710,17 @@ const CreatePost = ({
               </span>
               <span>Jobs</span>
             </div>
+            <div 
+              className="d-flex align-items-center event-with-icon" 
+              onClick={() => setShowEventModal(true)}
+              style={{ cursor: 'pointer' }}
+            >
+              <span className="material-symbols-outlined">
+                event
+              </span>
+              <span>Events</span>
+            </div>
+            
           </div>
         </Card.Body>
       </Card>
