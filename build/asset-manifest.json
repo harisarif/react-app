@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.7b970a6e.css",
-    "main.js": "/static/js/main.0ffb1aac.js",
+    "main.css": "/static/css/main.4e70c40e.css",
+    "main.js": "/static/js/main.de98bd17.js",
     "static/media/Banner.jpg": "/static/media/Banner.7eb802b56b4dc864425e.jpg",
     "static/media/video-2.mp4": "/static/media/video-2.40a85315bf4af5fbcd2b.mp4",
     "static/media/video-3.mp4": "/static/media/video-3.37562dfa01c4e7d7a734.mp4",
@@ -24,6 +24,7 @@
     "static/media/la-solid-900.ttf": "/static/media/la-solid-900.279f38601f1d1655255f.ttf",
     "static/media/fa-solid-900.eot": "/static/media/fa-solid-900.dfaa060a451d978c2565.eot",
     "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.a480ec972cb6bce30533.ttf",
+    "static/media/sliderImg.png": "/static/media/sliderImg.0564a5766a9445cd7c7e.png",
     "static/media/gym(4).jpg": "/static/media/gym(4).ea3084823e923fbf6bc7.jpg",
     "static/media/remixicon.woff?t=1590207869815": "/static/media/remixicon.8d09fa11700ed63cf96e.woff",
     "static/media/la-brands-400.eot": "/static/media/la-brands-400.908ce19d18187969b32f.eot",
@@ -110,12 +111,16 @@
     "static/media/11.png": "/static/media/11.a318847c3cbd07283c71.png",
     "static/media/ads.jpg": "/static/media/ads.528a73823ad85c175374.jpg",
     "static/media/pizza.webp": "/static/media/pizza.61da3f5df9a5f163c264.webp",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
-    "main.7b970a6e.css.map": "/static/css/main.7b970a6e.css.map",
-    "main.0ffb1aac.js.map": "/static/js/main.0ffb1aac.js.map"
+    "main.4e70c40e.css.map": "/static/css/main.4e70c40e.css.map",
+    "main.de98bd17.js.map": "/static/js/main.de98bd17.js.map"
   },
   "entrypoints": [
-    "static/css/main.7b970a6e.css",
-    "static/js/main.0ffb1aac.js"
+    "static/css/main.4e70c40e.css",
+    "static/js/main.de98bd17.js"
   ]
 }
