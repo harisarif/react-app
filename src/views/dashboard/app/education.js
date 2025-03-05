@@ -523,13 +523,14 @@ const Education = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Video URL</Form.Label>
+              <Form.Label>Video URL *</Form.Label>
               <Form.Control
                 type="url"
                 name="video_url"
                 value={formData.video_url}
                 onChange={handleInputChange}
                 placeholder="https://..."
+                required
               />
             </Form.Group>
 
