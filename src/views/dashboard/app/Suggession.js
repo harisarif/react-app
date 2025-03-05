@@ -447,8 +447,8 @@ const Suggession = () => {
                       className="rounded-circle avatar-50 me-3"
                     />
                       <div className="d-flex flex-column gap-0">
-                    <h6 className="mb-0">{admin?.name}</h6>
-                    <p className="mb-0 text-muted suggestion-user-name">{admin?.email}</p>
+                    <h6 className="mb-0 suggestion-user-name">{admin?.name}</h6>
+                    <p className="mb-0 text-muted suggestion-user-email">{admin?.email}</p>
                   </div>
                     </div>
                     <FollowButton
