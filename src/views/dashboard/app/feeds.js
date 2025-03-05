@@ -13,6 +13,7 @@ import {
   Collapse,
   Form
 } from "react-bootstrap";
+import EventSlider from '../../../components/event-slider';
 import { Link } from "react-router-dom";
 import Card from "../../../components/Card";
 import Post from "../../../components/Post";
@@ -477,6 +478,7 @@ const UserFeeds = () => {
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                 {userData && userCanCreatePostCategories?.some(category => [1, 2, 3, 4, 5].includes(category)) && (
                   <Row  >
+                    <EventSlider/>
                     <Col sm={12}>
                       <CreatePost
                         setPosts={setPosts}

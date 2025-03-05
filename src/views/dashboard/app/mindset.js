@@ -13,6 +13,7 @@ import {
   Collapse,
   Form
 } from "react-bootstrap";
+import EventSlider from '../../../components/event-slider';
 import { Link } from "react-router-dom";
 import Card from "../../../components/Card";
 import Post from "../../../components/Post";
@@ -471,7 +472,8 @@ const UserFeeds = () => {
               
             {(userData && userCanCreatePostCategories?.some(category => [5].includes(category)) &&
                 <Row>
-                  <Col sm={12}>
+                  <EventSlider/>
+                  <Col sm={12 } className="mt-5 ">
                     <CreatePost 
                       className="card-block card-stretch card-height"
                       setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}

@@ -1215,7 +1215,7 @@
 
 #first-tour {
     top: 80px;
-    margin-left: 100px;
+    /* margin-left: 100px; */
 }
 
 .iq-nav-menu .nav-item>.nav-link:hover {
@@ -1507,7 +1507,7 @@ padding: 0 15px 0 75px;
 .suggestions-div {
     position: fixed;
     max-width: 350px;
-    margin-right: 100px;
+    /* margin-right: 100px; */
     width: 100%;
     right: 0px;
     top: 80px;
@@ -1606,7 +1606,7 @@ padding: 0 15px 0 75px;
     .slick-slider {
         .slick-prev {
 
-            left: -10px !important;
+            left: -19px !important;
             /* background-color: red; */
             z-index: 1 !important;
 
@@ -1618,7 +1618,7 @@ padding: 0 15px 0 75px;
 
         .slick-next {
 
-            right: -8px !important;
+            right: -5px !important;
             z-index: 1 !important;
 
             &::before {
@@ -1650,29 +1650,83 @@ padding: 0 15px 0 75px;
     bottom: 37px;
     }
 }
-
-/* .sidebar-body{
-    .scroll-content{
-        .sidebar-list{
-            #sidebar-menu{
-                border-radius: 10px;
-
-                & li{
-                    border-radius: 10px;
-                    box-shadow: 0 0 10px 0 var(--shadow-brown-color);
-                    .nav-link{
-                        background-color: white;
-
-                    }
-                    .active.nav-link{
-                     background-color: transparent;
-                     box-shadow: 0 0 0 0 transparent !important;
-                    } 
-                
-
-                }
+.slick-dots li.slick-active{
+margin: 0 20px 0 0;
+}
+.slick-dots li.slick-active button:before {
+    content: "" !important;
+    display: inline-block;
+    width: 30px !important;  /* Increase width */
+    height: 13px !important; /* Adjust height */
+    background-color: rgba(136, 104, 255, 0.8); /* Light purple */
+    border-radius: 50px; /* Make it pill-shaped */
+    box-shadow: 0 0 10px rgba(136, 104, 255, 0.8), 
+                0 0 20px rgba(136, 104, 255, 0.5); /* Glow effect */
+                /* top: 3px; */
+}
+.slick-dots li button:before {
+    content: "" !important;
+    display: inline-block;
+    width: 13px !important;  /* Increase width */
+    height: 13px !important; /* Adjust height */
+    background-color: rgba(136, 104, 255, 0.8); /* Light purple */
+    border-radius: 50px; /* Make it pill-shaped */
+    box-shadow: 0 0 10px rgba(136, 104, 255, 0.8), 
+                0 0 20px rgba(136, 104, 255, 0.5); /* Glow effect */
+}
+.incoming-slider {
+    & .slick-slider {
+        & .slick-prev {
+            &::before { 
+                font-size: 30px;
             }
         }
     }
-} */
+}
+.incoming-slider {
+    & .slick-slider {
+        & .slick-next {
+            &::before { 
+                font-size: 30px;
+            }
+        }
+    }
+}
 
+.feed-parent-div::before {
+    content: "" !important;
+    width: 2px !important;
+    height: 176px !important;
+    background-color: rgba(136, 104, 255, 0.8) !important;
+    position: absolute !important;
+    top: 40px !important;
+    left: 50px !important;
+    border-radius: 50px !important;
+    /* box-shadow: 0 0 10px rgba(136, 104, 255, 0.8), 0 0 20px rgba(136, 104, 255, 0.5) !important; */
+    z-index: -1;
+}
+.sub-nav.feed-sub-menu{
+    margin-left: 30px  ;
+}
+.feed-sub-menu .item-name::before {
+    content: "" !important;
+    width: 23px !important;
+    height: 35px !important;
+    /* background-color: rgba(136, 104, 255, 0.8) !important; */
+    position: absolute !important;
+    top: -22px !important;
+    left: -27px !important;
+    /* border-radius: 20px !important; */
+    /* box-shadow: 0 0 10px rgba(136, 104, 255, 0.8), 0 0 20px rgba(136, 104, 255, 0.5) !important; */
+    z-index: -1;
+    border-left: 2px solid rgba(136, 104, 255, 0.8);
+    /* border-top-left-radius: 20px !important; */
+    border-bottom-left-radius: 15px !important;
+    border-bottom: 2px solid rgba(136, 104, 255, 0.8);
+}
+
+@media (max-width: 1602px){
+    .feed-parent-div::before { 
+        left: 46px !important; 
+    }
+}

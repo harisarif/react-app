@@ -25,8 +25,39 @@ import { MdOutlineTurnedIn } from "react-icons/md";
 
 function CustomToggle({ children, eventKey, onClick, to }) {
 
-    useEffect(() => { 
-      }, []);
+    // useEffect(() => { 
+    //     let navUl = document.getElementById("sidebar-menu");
+    //     let navFirstLi = document.querySelector(".nav-first-li");
+    //     let navSecondLi = document.querySelector(".nav-second-li"); 
+    //     let navThirdLi = document.querySelector(".nav-third-li"); 
+    //     let navFourthLi = document.querySelector(".nav-fourth-li"); 
+    //     let navFifthLi = document.querySelector(".nav-fifth-li"); 
+    //     let navSixthLi = document.querySelector(".nav-sixth-li");
+    //     let navSeventhLi = document.querySelector(".nav-seventh-li");
+    //     let navEigthLi = document.querySelector(".nav-eigth-li");
+    //     let navninthLi = document.querySelector(".nav-ninth-li");
+    //     let navtenthLi = document.querySelector(".nav-tenth-li");
+    //     let navCommonClass = document.querySelectorAll(".nav-common-class");
+    //     navCommonClass.forEach( nav =>{
+    //         nav.addEventListener("click", ()=>{
+    //             navCommonClass.forEach(nav => {
+    //                 nav.classList.remove('active');
+    //                 this.classList.add('active');
+    //               })
+    //         })
+    //     })
+      
+    //         if (navThirdLi.classList.contains("active")) {
+    //         let newDiv = document.createElement("div");
+    //         newDiv.className = "hamid";
+    //         newDiv.appendChild(navSixthLi);
+            
+    //       } else {
+    //         console.error("navSecondLi not found in the DOM!");
+    //       }
+
+       
+    //   }, []);
     const { activeEventKey } = useContext(AccordionContext);
     const decoratedOnClick = useAccordionButton(eventKey, (active) => onClick({ state: !active, eventKey: eventKey }));
     const isCurrentEventKey = activeEventKey === eventKey;
@@ -72,14 +103,14 @@ const VerticalNav = React.memo(() => {
     return (
         <React.Fragment>
             <Accordion as="ul" className="navbar-nav iq-main-menu" id="sidebar-menu">
-                <li className="nav-item static-item">
+                <li className="nav-item static-item nav-first-li nav-common-class">
                     <Link className="nav-link static-item disabled" to="#" tabIndex="-1">
                         <span className="default-icon">Main</span>
                         <span className="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
                     </Link>
                 </li>
                 <div className="nav-top-child">
-                <li className={`${location.pathname === '/' ? 'active' : ''} nav-item `}>
+                <li className={`${location.pathname === '/' ? 'active' : ''} nav-item nav-second-li nav-common-class` }>
                     <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Home</Tooltip>}>
                             <GrHomeRounded size={'1.5rem'} />
@@ -90,7 +121,7 @@ const VerticalNav = React.memo(() => {
 
                 {userData && (
 
-                    <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item `}>
+                    <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item nav-third-li nav-common-class`}>
                         <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile"
                             onClick={() => setActive("profile")}>
                             <OverlayTrigger placement="right" overlay={<Tooltip>Profiles</Tooltip>}>
@@ -113,28 +144,31 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Feeds</span>
                     </Link>
                 </li> */}
-                <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item">
-                    <CustomToggle
+                <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item" className='nav-fourth-li nav-common-class'>
+                   <div className="feed-parent-div">
+                   <CustomToggle
+                        className="feed-parent-div"
                         eventKey="utilities-error"
                         active={activeMenu === 'utilities-error' ? true : false}
                         onClick={(activeKey) => setActiveMenu(activeKey)}
                         to="/home"
                     >
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
+                        <OverlayTrigger  placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             {location.pathname === '/home' ? <MdOutlineTurnedIn size={'1.5rem'} /> : <MdOutlineTurnedInNot size={'1.5rem'} />}
                         </OverlayTrigger>
                         <span className="item-name">Feeds</span>
-                        <i className="right-icon material-symbols-outlined">chevron_right</i>
+                        <i className="right-icon material-symbols-outlined" style={{ color: 'black' }}>chevron_right</i>
                     </CustomToggle>
+                   </div>
                     <Accordion.Collapse eventKey="utilities-error" className={location.pathname == "/fitness" || location.pathname == "/business" || location.pathname == "/crypto" || location.pathname == "/mindset" ? "show" : ""}>
-                        <ul className="sub-nav">
+                        <ul className="sub-nav feed-sub-menu">
                             <Nav.Item as="li">
                                 <Link className={`${location.pathname === '/business' ? 'active' : ''} nav-link`} to="/business">
                                     <OverlayTrigger placement="right" overlay={<Tooltip>Business Management</Tooltip>}>
                                         <i className="sidenav-mini-icon"> E  </i>
                                     </OverlayTrigger>
-                                    <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
-                                    <span className="item-name">Business Management</span>
+                                    {/* <i className="icon material-symbols-outlined filled">fiber_manual_record</i> */}
+                                    <span className="item-name feed-sub-menu-item">Business Management</span>
                                 </Link>
                             </Nav.Item>
                             <Nav.Item as="li">
@@ -142,8 +176,8 @@ const VerticalNav = React.memo(() => {
                                     <OverlayTrigger placement="right" overlay={<Tooltip>Fitness</Tooltip>}>
                                         <i className="sidenav-mini-icon"> E  </i>
                                     </OverlayTrigger>
-                                    <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
-                                    <span className="item-name">Fitness</span>
+                                    {/* <i className="icon material-symbols-outlined filled">fiber_manual_record</i> */}
+                                    <span className="item-name feed-sub-menu-item">Fitness</span>
                                 </Link>
                             </Nav.Item>
                             <Nav.Item as="li">
@@ -151,8 +185,8 @@ const VerticalNav = React.memo(() => {
                                     <OverlayTrigger placement="right" overlay={<Tooltip>crypto</Tooltip>}>
                                         <i className="sidenav-mini-icon"> M  </i>
                                     </OverlayTrigger>
-                                    <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
-                                    <span className="item-name">crypto</span>
+                                    {/* <i className="icon material-symbols-outlined filled">fiber_manual_record</i> */}
+                                    <span className="item-name feed-sub-menu-item"  style={{ marginleft: '50px !important' }}>crypto</span>
                                 </Link>
                             </Nav.Item>
                             <Nav.Item as="li">
@@ -160,8 +194,8 @@ const VerticalNav = React.memo(() => {
                                     <OverlayTrigger placement="right" overlay={<Tooltip>Mindset</Tooltip>}>
                                         <i className="sidenav-mini-icon"> M  </i>
                                     </OverlayTrigger>
-                                    <i className="icon material-symbols-outlined filled">fiber_manual_record</i>
-                                    <span className="item-name">Mindset</span>
+                                    {/* <i className="icon material-symbols-outlined filled">fiber_manual_record</i> */}
+                                    <span className="item-name feed-sub-menu-item">Mindset</span>
                                 </Link>
                             </Nav.Item>
                         </ul>
@@ -169,7 +203,7 @@ const VerticalNav = React.memo(() => {
                 </Accordion.Item>
 
                 <div className="nav-bottom-childs">
-                <li className={`${location.pathname === '/education' ? 'active' : ''} nav-item `}>
+                <li className={`${location.pathname === '/education' ? 'active' : '' } nav-item nav-fifth-li nav-common-class`}>
                     <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Education</Tooltip>}>
                             {location.pathname === '/education' ? <IoSchool size={'1.5rem'} /> : <MdOutlineSchool size={'1.5rem'} />}
@@ -177,7 +211,7 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Education</span>
                     </Link>
                 </li>
-                <li className={`${location.pathname === '/job-list' ? 'active' : ''} nav-item `}>
+                <li className={`${location.pathname === '/job-list' ? 'active' : ''} nav-item nav-sixth-li nav-common-class`}>
                     <Link className={`${location.pathname === '/job-list' ? 'active' : ''} nav-link `} aria-current="page" to="/job-list">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Job List</Tooltip>}>
                             {location.pathname === '/job-list' ? <BsSuitcaseLgFill size={'1.5rem'} /> : <BsSuitcaseLg size={'1.5rem'} />}
@@ -186,7 +220,7 @@ const VerticalNav = React.memo(() => {
                     </Link>
                 </li>
                 {userData && userData?.permissions[0]?.can_create_jobs == 1 && (
-                    <li className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-item `}>
+                    <li className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-item nav-seventh-li nav-common-class`}>
                         <Link className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-link `} aria-current="page" to="/job-applications">
                             <OverlayTrigger placement="right" overlay={<Tooltip>Job Applications</Tooltip>}>
                                 <i className="icon material-symbols-outlined">
@@ -197,7 +231,7 @@ const VerticalNav = React.memo(() => {
                         </Link>
                     </li>
                 )}
-                <li className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-item `}>
+                <li className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-item nav-eigth-li nav-common-class`}>
                     <Link className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-link `} aria-current="page" to="/event-calender">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Events Calender</Tooltip>}>
                             {location.pathname === '/event-calender' ? <BsFillCalendar2WeekFill size={'1.5rem'} /> : <BsCalendarWeek size={'1.5rem'} />}
@@ -205,7 +239,7 @@ const VerticalNav = React.memo(() => {
                         <span className="item-name">Events Calender</span>
                     </Link>
                 </li>
-                <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item `}>
+                <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
                     <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">
                         <OverlayTrigger placement="right" overlay={<Tooltip>Notifications</Tooltip>}>
                             {location.pathname === '/notification' ? <MdNotificationsActive size={'1.5rem'} /> : <MdOutlineNotificationsActive size={'1.5rem'} />}
@@ -215,7 +249,7 @@ const VerticalNav = React.memo(() => {
                 </li>
 
                 {userData && userData?.permissions[0]?.can_manage_users == 1 && (
-                    <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item `}>
+                    <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item nav-tenth-li nav-common-class`}>
                         <Link className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-link `} aria-current="page" to="/manage-users">
                             <OverlayTrigger placement="right" overlay={<Tooltip>Manage Users</Tooltip>}>
                                 {location.pathname === '/manage-users' ? <HiMiniUserGroup size={'1.5rem'} /> : <HiOutlineUserGroup size={'1.5rem'} />}
