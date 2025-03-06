@@ -509,7 +509,7 @@ const UserFeeds = () => {
                
               </div>
             </div>
-            <div>
+            {/* <div>
                   <div className="mb-3">
                     <Form.Control
                       type="text"
@@ -563,7 +563,7 @@ const UserFeeds = () => {
                       </Card>
                     );
                   })}
-                </div>
+                </div> */}
           </Tab.Container>
         </div>
       </Container>

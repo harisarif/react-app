@@ -440,11 +440,11 @@ const Suggession = () => {
 
                 <div className="d-flex flex-column gap-2">
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex justify-content-start align-items-center"> 
+                    <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{width: '235px'}}> 
                     <img
                       src={getProfileImageUrl(admin)}
                       alt={admin.name}
-                      className="rounded-circle avatar-50 me-3"
+                      className="rounded-circle avatar-60 me-2"
                     />
                       <div className="d-flex flex-column gap-0">
                     <h6 className="mb-0 suggestion-user-name">{admin?.name}</h6>
