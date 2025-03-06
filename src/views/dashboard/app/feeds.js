@@ -479,7 +479,7 @@ const UserFeeds = () => {
                 {userData && userCanCreatePostCategories?.some(category => [1, 2, 3, 4, 5].includes(category)) && (
                   <Row  >
                     <EventSlider/>
-                    <Col sm={12}>
+                    <Col sm={12} className="mt-5 ">
                       <CreatePost
                         setPosts={setPosts}
                         posts={posts}
@@ -492,7 +492,7 @@ const UserFeeds = () => {
                   </Row>
                 )}
                 <Row className="special-post-container">
-                  <Col lg={12}>
+                  <Col lg={12} >
                     {loadContent ? (
                       <div className="col-sm-12 text-center">
                         <img src={loader} alt="loader" style={{ height: "100px" }} />

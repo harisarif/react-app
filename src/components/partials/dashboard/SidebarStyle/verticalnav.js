@@ -21,6 +21,7 @@ import { HiOutlineUserGroup } from "react-icons/hi2";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { MdOutlineTurnedInNot } from "react-icons/md";
 import { MdOutlineTurnedIn } from "react-icons/md";
+import feedSvg from "../../../../assets/images/svg/feeds.svg";
 
 
 function CustomToggle({ children, eventKey, onClick, to }) {
@@ -153,9 +154,10 @@ const VerticalNav = React.memo(() => {
                         onClick={(activeKey) => setActiveMenu(activeKey)}
                         to="/home"
                     >
-                        <OverlayTrigger  placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
+                        {/* <OverlayTrigger  placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             {location.pathname === '/home' ? <MdOutlineTurnedIn size={'1.5rem'} /> : <MdOutlineTurnedInNot size={'1.5rem'} />}
-                        </OverlayTrigger>
+                        </OverlayTrigger> */}
+                        <img src={feedSvg} alt="User Icon" />
                         <span className="item-name">Feeds</span>
                         <i className="right-icon material-symbols-outlined" style={{ color: 'black' }}>chevron_right</i>
                     </CustomToggle>
@@ -168,7 +170,7 @@ const VerticalNav = React.memo(() => {
                                         <i className="sidenav-mini-icon"> E  </i>
                                     </OverlayTrigger>
                                     {/* <i className="icon material-symbols-outlined filled">fiber_manual_record</i> */}
-                                    <span className="item-name feed-sub-menu-item">Business Management</span>
+                                    <span className="item-name feed-sub-menu-item">Business </span>
                                 </Link>
                             </Nav.Item>
                             <Nav.Item as="li">

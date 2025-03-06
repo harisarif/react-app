@@ -80,15 +80,19 @@ useEffect(() => {
   const [admins, setAdmins] = useState();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedAdmin, setSelectedAdmin] = useState();
   useEffect(() => {
     axios.get(`/api/get-admins?search=${searchQuery}`)
-      .then(response => {
-        setAdmins(response.data.users);
+    .then(response => {
+      const adminsArray = response.data.users || []; // Ensure it's an array
+      const userArray = userData ? [userData] : []; // Wrap userData in an array if it exists
+      setSelectedAdmin(userData?.id);
+        setAdmins([...userArray, ...adminsArray].filter((v, i, a) => a.findIndex(v2 => (v2.id === v.id)) === i));
       })
       .catch(error => {
         console.log(error);
       });
-  }, [searchQuery]);
+  }, [searchQuery,userData]);
   
   const fetchEvents = async () => {
     try {
@@ -195,7 +199,7 @@ useEffect(() => {
 
   const handleAddNew = () => {
     setSelectedEvent(null);
-    setSelectedAdmin(null);
+    // setSelectedAdmin(null);
     setCroppedImageBlob(null);
     setFormData({
       organizer_id:'',
@@ -341,7 +345,7 @@ const handleBackgroundCropComplete = (crop) => {
   setCompletedBackgroundCrop(crop);
 };
 
-const [selectedAdmin, setSelectedAdmin] = useState(null);
+
 const handleAdminSelect = (id) =>{
   setFormData({
     ...formData,
@@ -349,6 +353,10 @@ const handleAdminSelect = (id) =>{
 });
   setSelectedAdmin(id);
 };
+
+const [showDropdown,setShowDropdown] = useState();
+
+
 
 const generateBackgroundCroppedImage = async (crop) => {
   if (!crop || !backgroundImgRef.current) {
@@ -616,7 +624,7 @@ const handleBackgroundImageChange = (e) => {
                                                     </div>
                                                 </div>
         </Form.Group>
-<Form.Group className="mb-3">
+{/* <Form.Group className="mb-3">
     <Form.Label>Main Image</Form.Label>
     <div 
         style={{
@@ -665,59 +673,99 @@ const handleBackgroundImageChange = (e) => {
             }}
         />
     </div>
-</Form.Group>
+</Form.Group> */}
 <Form.Group>
   <Form.Label>Select Organizer (optional)</Form.Label>
   <div>
-    <div className="mb-2">
-      <Form.Control
-        type="text"
-        placeholder="Search Users..."
-        value={searchQuery}
-        onChange={(e) => {
-          const searchQuery = e.target.value;
-          axios.get(`/api/get-admins?search=${searchQuery}`)
-            .then(response => {
-              setAdmins(response.data.users);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-          setSearchQuery(searchQuery);
-        }}
-      />
+    {/* Selected Admin Display (Clickable) */}
+    <div 
+      className="d-flex align-items-center justify-content-between border rounded p-2 mb-2"
+      style={{ cursor: "pointer", background: "#fff" }}
+      onClick={() => setShowDropdown(!showDropdown)}
+    >
+      <div className="d-flex align-items-center">
+        {selectedAdmin ? (
+          <>
+            <img
+              src={getProfileImageUrl(admins.find(a => a.id === selectedAdmin))}
+              alt={admins.find(a => a.id === selectedAdmin)?.name}
+              className="rounded-circle me-2"
+              style={{ width: "30px", height: "30px" }}
+            />
+            <h6 className="mb-0">
+              {admins.find(a => a.id === selectedAdmin)?.name || "Select Organizer"}
+            </h6>
+          </>
+        ) : (
+          <h6 className="mb-0 text-muted">Select Organizer</h6>
+        )}
+      </div>
+      <i className={`fas fa-chevron-${showDropdown ? "up" : "down"}`}></i>
     </div>
-    
-    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-      {admins && admins?.slice(0, 3)?.map((admin) => (
-        <Card 
-          key={admin.id} 
-          className="mb-2 p-2" 
-          style={{ cursor: 'pointer', fontSize: '14px' }}
-          onClick={() => handleAdminSelect(admin.id)}
-        >
-          <Card.Body className="d-flex justify-content-between align-items-center p-2">
-            <div className="d-flex align-items-center">
-              <img
-                src={getProfileImageUrl(admin)}
-                alt={admin.name}
-                className="rounded-circle me-2"
-                style={{ width: '35px', height: '35px' }}
-              />
-              <div>
-                <h6 className="mb-0">{admin?.name}</h6>
-                <p className="mb-0 text-muted" style={{ fontSize: '12px' }}>{admin?.email}</p>
-              </div>
-            </div>
-            {admin?.id === selectedAdmin && (
-              <i className="fas fa-check text-success"></i>
-            )}
-          </Card.Body>
-        </Card>
-      ))}
-    </div>
+
+    {/* Dropdown Container */}
+    {showDropdown && (
+      <div 
+        className="border rounded p-2 position-absolute bg-white shadow"
+        style={{ maxHeight: "250px", width: "100%", overflowY: "auto", zIndex: 1000 }}
+      >
+        {/* Search Field */}
+        <Form.Control
+          type="text"
+          placeholder="Search Users..."
+          value={searchQuery}
+          onChange={(e) => {
+            const query = e.target.value;
+            axios.get(`/api/get-admins?search=${query}`)
+              .then(response => {
+                const adminsArray = response.data.users || [];
+                const userArray = userData ? [userData] : [];
+                setAdmins([...userArray, ...adminsArray].filter((v, i, a) => a.findIndex(v2 => v2.id === v.id) === i));
+              })
+              .catch(error => console.log(error));
+            setSearchQuery(query);
+          }}
+          autoFocus
+        />
+
+        {/* Admin List */}
+        <div className="mt-2">
+          {admins?.length > 0 ? (
+            admins.slice(0, 3).map((admin) => (
+              <Card 
+                key={admin.id} 
+                className={`mb-1 p-2 ${selectedAdmin === admin.id ? "bg-light" : ""}`} 
+                style={{ cursor: "pointer", fontSize: "14px" }}
+                onClick={() => {
+                  handleAdminSelect(admin.id);
+                  setShowDropdown(false);
+                }}
+              >
+                <Card.Body className="d-flex justify-content-between align-items-center p-2">
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={getProfileImageUrl(admin)}
+                      alt={admin.name}
+                      className="rounded-circle me-2"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                    <h6 className="mb-0">{admin.name}</h6>
+                  </div>
+                  {selectedAdmin === admin.id && <i className="fas fa-check text-success"></i>}
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <p className="text-muted text-center">No admins found</p>
+          )}
+        </div>
+      </div>
+    )}
   </div>
 </Form.Group>
+
+
+
 
             <Form.Group className="mb-3">
               <Form.Label>Title</Form.Label>
