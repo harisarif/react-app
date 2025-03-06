@@ -1386,7 +1386,7 @@
 .create-post-icons-main {
     /* border-top: 1px solid rgb(185, 185, 182); */
     margin-top: 12px;
-padding: 0 4px 0 72px;
+    padding: 0 4px 0 72px;
 
     .jobs-with-icon span:nth-of-type(1) {
         color: rgb(154 165 4);
@@ -1618,7 +1618,7 @@ padding: 0 4px 0 72px;
 }
 
 .card-block.card-stretch.card-height.card {
-    border-radius: 24px;
+    border-radius: 16px;
 }
 
 
@@ -1726,7 +1726,7 @@ margin: 0 20px 0 0;
 
 .nav-bottom-childs,
 .nav-top-child{
-    border-radius: 24px !important;
+    border-radius: 16px !important;
 }
 
 .sidebar .sidebar-body{
