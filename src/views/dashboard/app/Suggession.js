@@ -141,27 +141,30 @@ const FollowButton = styled.button`
   gap: 6px;
   
   &.follow-btn {
-    background: linear-gradient(45deg, #007bff, #6610f2);
-    color: white;
+    // background: linear-gradient(45deg, #007bff, #6610f2);
+    color: #1BA9DC;
+    background: transparent;
     
     &:hover {
-      background: linear-gradient(45deg, #0056b3, #520dc2);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+      // background: linear-gradient(45deg, #0056b3, #520dc2);
+      // transform: translateY(-2px);
+      // box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    color:rgb(0, 94, 128);
+
     }
   }
   
   &.unfollow-btn {
     // background: #f8f9fa;
-    color:#1BA9DC;
+    color: #DD2323;
     background: transparent;
     // border: 1px solid #dc3545;
     
     &:hover {
-      background: #dc3545;
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+      // background: #dc3545;
+      color: color:rgb(138, 0, 0) !important;
+      // transform: translateY(-2px);
+      // box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
     }
   }
   
@@ -462,7 +465,7 @@ const Suggession = () => {
                         </>
                       ) : (
                         <>
-                          <i className="ri-user-follow-line"></i>
+                          {/* <i className="ri-user-follow-line"></i> */}
                           Follow
                         </>
                       )}

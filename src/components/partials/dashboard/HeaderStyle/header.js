@@ -33,7 +33,10 @@ import * as SettingSelector from "../../../../store/setting/selectors";
 // Redux Selector / Action
 import { useSelector, useDispatch } from "react-redux";
 import SearchModal from "../../../search-modal";
-
+import bussinessSvg from "../../../../assets/images/svg/bussiness.svg";
+import cryptoSvg from "../../../../assets/images/svg/crypto.svg";
+import fitnessSvg from "../../../../assets/images/svg/fitness.svg";
+import mindsetSvg from "../../../../assets/images/svg/mindset.svg";
 const Header = () => {
 
   const [unreadCount, setUnreadCount] = useState(0);
@@ -64,7 +67,7 @@ const Header = () => {
       sidebar.classList.add("right-sidebar");
     }
   }, []);
-  
+
   useEffect(() => {
     if (notifications) {
       fetchData();
@@ -217,9 +220,10 @@ const Header = () => {
                           to="/business"
                           onClick={() => setActive("business")}
                         >
-                          <span class="material-symbols-outlined me-2">
+                          <img src={bussinessSvg} alt="User Icon" />
+                          {/* <span class="material-symbols-outlined me-2">
                             store
-                          </span>
+                          </span> */}
                           <span className="nav-text">Business</span>
                         </Link>
                       </li>
@@ -229,9 +233,11 @@ const Header = () => {
                           to="/fitness"
                           onClick={() => setActive("fitness")}
                         >
-                          <span class="material-symbols-outlined me-2">
+                          {/* <span class="material-symbols-outlined me-2">
                             exercise
-                          </span>
+                          </span> */}
+                          <img src={cryptoSvg} alt="User Icon" />
+
                           <span className="nav-text">Fitness</span>
                         </Link>
                       </li>
@@ -241,9 +247,11 @@ const Header = () => {
                           to="/crypto"
                           onClick={() => setActive("crypto")}
                         >
-                          <span class="material-symbols-outlined">
+                          {/* <span class="material-symbols-outlined">
                             currency_bitcoin
-                          </span>
+                          </span> */}
+                          <img src={fitnessSvg} alt="User Icon" />
+
                           <span className="nav-text">Crypto</span>
                         </Link>
                       </li>
@@ -253,9 +261,11 @@ const Header = () => {
                           to="/mindset"
                           onClick={() => setActive("mindset")}
                         >
-                          <span class="material-symbols-outlined">
+                          {/* <span class="material-symbols-outlined">
                             self_improvement
-                          </span>
+                          </span> */}
+                          <img src={mindsetSvg} alt="User Icon" />
+
                           <span className="nav-text">Mindset</span>
                         </Link>
                       </li>
@@ -605,7 +615,7 @@ const Header = () => {
                 </Dropdown.Menu>
               </Dropdown> */}
 
-              <Dropdown as="li" className="nav-item">
+              {/* <Dropdown as="li" className="nav-item">
                 <Dropdown.Toggle as="a"
                   to="#"
                   className=" d-flex align-items-center header-message-icon"
@@ -624,9 +634,9 @@ const Header = () => {
                   )}
                   <span className="mobile-text d-none ms-3">Message</span>
                 </Dropdown.Toggle>
-              </Dropdown>
+              </Dropdown> */}
 
-              <Dropdown
+              {/* <Dropdown
                 as="li"
                 className="nav-item"
                 show={showNotifications}
@@ -656,14 +666,7 @@ const Header = () => {
                           {totalUnread > 0 && ` (${totalUnread} new)`}
                         </h5>
                       </div>
-                      {/* {totalUnread > 0 && (
-                        // <button
-                        //   className="btn btn-link text-white p-0 border-0"
-                        //   onClick={handleMarkAllAsRead}
-                        // >
-                        //   Mark all as read
-                        // </button>
-                      )} */}
+                    
                     </Card.Header>
                     <Card.Body className="p-0">
                       <div className="notification-list">
@@ -719,7 +722,7 @@ const Header = () => {
                     </Card.Body>
                   </Card>
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
 
               <Nav.Item className="nav-item d-none d-lg-none">
                 <Link

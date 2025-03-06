@@ -21,7 +21,7 @@ import { HiOutlineUserGroup } from "react-icons/hi2";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { MdOutlineTurnedInNot } from "react-icons/md";
 import { MdOutlineTurnedIn } from "react-icons/md";
-import feedSvg from "../../../../assets/images/svg/Vector.svg";
+import feedSvg from "../../../../assets/images/svg/feeds.svg";
 
 
 function CustomToggle({ children, eventKey, onClick, to }) {

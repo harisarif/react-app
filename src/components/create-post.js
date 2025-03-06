@@ -680,7 +680,7 @@ const CreatePost = ({
               <input
                 type="text"
                 className="form-control create-post-form-cntrl "
-                placeholder={isEditing ? "Edit Post" : "Let's Post Something..."}
+                placeholder={isEditing ? "Edit Post" : "Create a post!"}
                 style={{ cursor: "pointer" }}
                 readOnly
               />

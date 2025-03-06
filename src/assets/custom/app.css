@@ -1571,14 +1571,14 @@ padding: 0 4px 0 72px;
     }
 
     .suggestion-user-email {
-
-        overflow: hidden;
-        /* Hide overflowing text */
-        text-overflow: ellipsis;
-        /* Show ellipsis (...) */
-        
-        font-size: 13px !important;
-    }
+        overflow: hidden;          /* Hide overflowed text */
+        text-overflow: ellipsis;   /* Add ellipsis (...) */
+        white-space: nowrap;       /* Prevent text from wrapping to the next line */
+        font-size: 13px !important; /* Font size with !important */
+        display: block;            /* Ensure the element behaves like a block-level element */
+        width: 142px;               /* Optional: Define a fixed width if necessary */
+      }
+      
 
     .suggestion-user-name {
         color: var(--black-color) !important;
@@ -1785,3 +1785,28 @@ aside .sidebar-body{
     max-width: 350px;
     width: 100%;
 }
+
+
+  .offcanvas-body .iq-nav-menu .nav-item.active {
+                    border-bottom: 3px solid #896aff !important;
+                    /* border-radius: 5px; */
+                
+                    
+  }
+
+  .offcanvas-body .iq-nav-menu .nav-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background-color: #896aff;
+    transition: all 0.4s ease;
+    transform: translateX(-50%);
+  }
+  
+  .offcanvas-body .iq-nav-menu .nav-item:hover::after {
+    width: 100%;
+  }
+ 
