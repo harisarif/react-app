@@ -21,6 +21,9 @@ import { LiaTelegram } from "react-icons/lia";
 import { FiSmile } from "react-icons/fi";
 import { FaCamera } from "react-icons/fa";
 import { FaPaperclip } from "react-icons/fa";
+import { AiOutlineLink } from "react-icons/ai";
+import { MdOutlineCameraAlt } from "react-icons/md";
+import { BsEmojiSmile } from "react-icons/bs";
 const FollowButton = styled.button`
   border: none;
   padding: 6px 16px;
@@ -438,6 +441,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       }
   };
 
+
   return (
     <>
       <Card className="card-block card-stretch card-height">
@@ -675,19 +679,19 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               <span className="m-1 fw-bold">{likes.length} Likes</span>
             </div>
 
-<div className="leave-comment-area d-flex align-items-center" >
-<div className="input-wrap w-100">
+<div className="leave-comment-area d-flex align-items-center gap-2" >
+<div className="input-wrap w-100 d-flex align-items-center">
 <input
                         type="text"
                         className="w-100" 
                         placeholder="Write a comment"
                       />
 
-</div>
- <div className="input-inner-icon d-flex align-items-center gap-2">
- <FaPaperclip size={20}  />
- <FaCamera size={20}  />
- <FiSmile size={20}   />
+  
+   <AiOutlineLink size={25} className='ms-2  bold-icon'/>
+   <BsEmojiSmile size={25} className='ms-2  bold-icon' />
+   <MdOutlineCameraAlt size={25}  className='ms-2 me-3 bold-icon' /> 
+ 
  </div>
 
                            <div className="icon-wrap"> 

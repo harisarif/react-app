@@ -358,10 +358,10 @@ const UserFeeds = () => {
       });
 
       if (response.data.status == 'success') {
-          console.log("follow")
-          setHasMore(false);
-          setIsLoading(false);
-          fetchPosts(1);
+        console.log("follow")
+        setHasMore(false);
+        setIsLoading(false);
+        fetchPosts(1);
 
 
         // setPosts(posts.map(p => {
@@ -374,14 +374,14 @@ const UserFeeds = () => {
         //   return p;
         // }));
 
-        setAdmins(admins.map(a =>{
-          if(a.id == userId){
-          return {
-            ...a,
-            is_following: !a.is_following
-          };
-        }
-        return a; // Return unchanged admin if id doesn't match
+        setAdmins(admins.map(a => {
+          if (a.id == userId) {
+            return {
+              ...a,
+              is_following: !a.is_following
+            };
+          }
+          return a; // Return unchanged admin if id doesn't match
         }));
 
         // Show success message
@@ -475,42 +475,42 @@ const UserFeeds = () => {
 
                 {(userData && userCanCreatePostCategories?.some(category => [3].includes(category)) &&
                   <Row className="special-post-container">
-                    <EventSlider/>
+                    <EventSlider />
                     <Col sm={12} className="mt-5 ">
                       <CreatePost
                         className="card-block card-stretch card-height"
                         setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}
                       />
-                      
+
 
                     </Col>
-                   
+
                   </Row>
                 )}
                 <Col sm={12}>
-                {loadContent ? (
-                        <div className="col-sm-12 text-center">
-                          <img src={loader} alt="loader" style={{ height: "100px" }} />
-                        </div>
-                      ) : posts.length === 0 ? (
-                        <Col sm={12}>
-                          <NoDataFound
-                            message="No posts available in your feed."
-                            containerClassName="text-center py-5"
-                          />
-                        </Col>
-                      ) : (
-                        posts.map((post) => (
-                          <Col sm={12} key={post.id} className="special-post">
-                            <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
-                          </Col>
-                        ))
+                  {loadContent ? (
+                    <div className="col-sm-12 text-center">
+                      <img src={loader} alt="loader" style={{ height: "100px" }} />
+                    </div>
+                  ) : posts.length === 0 ? (
+                    <Col sm={12}>
+                      <NoDataFound
+                        message="No posts available in your feed."
+                        containerClassName="text-center py-5"
+                      />
+                    </Col>
+                  ) : (
+                    posts.map((post) => (
+                      <Col sm={12} key={post.id} className="special-post">
+                        <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
+                      </Col>
+                    ))
 
 
-                      )}
+                  )}
                 </Col>
 
-                 
+
               </div>
               {/* <div>
                     <div className="mb-3">

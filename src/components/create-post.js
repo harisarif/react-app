@@ -673,7 +673,7 @@ const CreatePost = ({
               <img
                 src={getProfileImageUrl(userData)}
                 alt="userimg"
-                className="avatar-60 rounded-circle"
+                className="avatar-50 rounded-circle"
               />
             </div>
             <div className="post-text ms-2 w-100" onClick={handleShow}>

@@ -438,16 +438,16 @@ const Suggession = () => {
         </div>
         {admins && admins.length > 0 && admins.map((admin) => {
           return (
-            <Card className="mb-3">
-              <Card.Body className="p-3">
+            <Card className="mb-2">
+              <Card.Body className="p-3 py-2">
 
                 <div className="d-flex flex-column gap-2">
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{width: '235px'}}> 
+                    <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{width: '300px'}}> 
                     <img
                       src={getProfileImageUrl(admin)}
                       alt={admin.name}
-                      className="rounded-circle avatar-60 me-2"
+                      className="rounded-circle avatar-40 me-2"
                     />
                       <div className="d-flex flex-column gap-0">
                     <h6 className="mb-0 suggestion-user-name">{admin?.name}</h6>
@@ -478,6 +478,7 @@ const Suggession = () => {
             </Card>
           );
         })}
+        <div class="mb-3"></div>
        </div>
       </div>
     </>
