@@ -1,6 +1,6 @@
 .sidebar {
   display: block;
-  position: fixed;
+  position: sticky;
   width: 100%;
   max-width: var(--sidebar-width);
   top: 66px;
@@ -179,7 +179,7 @@
         .icon {
           display: flex;
         }
-        color: $gray-600;
+        color: #000;
         &.active,
         &[aria-expanded="true"] {
           .right-icon {

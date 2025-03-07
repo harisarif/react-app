@@ -17,7 +17,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { FaComment } from "react-icons/fa6";
-import { LiaTelegram } from "react-icons/lia"; 
+import { LiaTelegram } from "react-icons/lia";
 import { FiSmile } from "react-icons/fi";
 import { FaCamera } from "react-icons/fa";
 import { FaPaperclip } from "react-icons/fa";
@@ -416,29 +416,29 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const [loading, setLoading] = useState(false);
 
   const unlockContent = async () => {
-      setLoading(true);
-      try {
-          const response = await axios.post('/api/post/unlock', {
-              id: post.id,
-              password: password,
-          });
-          setPosts(prevPosts =>
-            prevPosts.map(p => p.id === post.id ? response.data.post : p)
-          );
-          setPassword('');
-      } catch (error) {
-          console.error('Error unlocking content:', error);
-          Swal.fire({
-            title: 'Error',
-            text: 'Error unlocking content',
-            icon: 'error',
-            timer: 3000,
-            showConfirmButton: false
-          });
-      } finally {
-          setLoading(false);
-          setModalIsOpen(false); // Close modal after submission
-      }
+    setLoading(true);
+    try {
+      const response = await axios.post('/api/post/unlock', {
+        id: post.id,
+        password: password,
+      });
+      setPosts(prevPosts =>
+        prevPosts.map(p => p.id === post.id ? response.data.post : p)
+      );
+      setPassword('');
+    } catch (error) {
+      console.error('Error unlocking content:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Error unlocking content',
+        icon: 'error',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    } finally {
+      setLoading(false);
+      setModalIsOpen(false); // Close modal after submission
+    }
   };
 
 
@@ -459,21 +459,21 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                 <div className="d-flex align-items-center justify-content-between">
                   <div>
                     <div className="user-profile-info d-flex justify-content-center flex-column g-0">
-                      <h6 className="mb-0 me-2">{post.user?.name || 'Anonymous'}</h6>
-                      <p className="mb-0">
+                      <h6 className="mb-0 me-2 text-dark">{post.user?.name || 'Anonymous'}</h6>
+                      <p className="mb-0 mt-n-1 fs-12">
                         {moment(post.created_at).fromNow()}
                         {' '}
                         {moment(post.created_at).format('h:mm a')}
                       </p>
                     </div>
-                    {post.visibility === 'private' && (
+                    {/* {post.visibility === 'private' && (
                       <span className="badge  bg-danger text-white ms-2">Private</span>
                     )}
-            {post.visibility === 'password_protected' && (
-                <span className="badge bg-warning text-white ms-2" onClick={() => setModalIsOpen(true)}>
-                    Un-lock Content
-                </span>
-            )}
+                    {post.visibility === 'password_protected' && (
+                      <span className="badge bg-warning text-white ms-2" onClick={() => setModalIsOpen(true)}>
+                        Un-lock Content
+                      </span>
+                    )} */}
                     {/* {post.user?.id !== userData?.id && (
                       <FollowButton
                         className={`ms-2 ${post?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
@@ -495,7 +495,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
 
                   </div>
- 
+
                   <div>
                     <div className='d-flex align-items-center justify-content-between'>
                       <span className={badge.className}>{badge.text}</span>
@@ -569,11 +569,11 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               </div>
             </div>
           </div>
-          <div className="mt-4">
-            <div className="m-0" dangerouslySetInnerHTML={{ __html: post.title }} />
+          <div className="mt-2 px-2">
+            <div className="m-0 text-dark" dangerouslySetInnerHTML={{ __html: post.title }} />
           </div>
-          <div className="mt-4">
-            <div className="m-0" dangerouslySetInnerHTML={{ __html: post.description }} />
+          <div className="mt-2 px-2">
+            <div className="m-0 text-dark" dangerouslySetInnerHTML={{ __html: post.description }} />
           </div>
           {post.media && post.media.length > 0 && (
             <div className={`media-grid media-grid-${Math.min(post.media.length, 5)}`}>
@@ -676,29 +676,29 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
             </div>
 
             <div className="w-100 d-flex">
-              <span className="m-1 fw-bold">{likes.length} Likes</span>
+              <span className="m-1 fw-bold text-dark">{likes.length} Likes</span>
             </div>
 
-<div className="leave-comment-area d-flex align-items-center gap-2" >
-<div className="input-wrap w-100 d-flex align-items-center">
-<input
-                        type="text"
-                        className="w-100" 
-                        placeholder="Write a comment"
-                      />
+            <div className="leave-comment-area d-flex align-items-center gap-2" >
+              <div className="input-wrap w-100 d-flex align-items-center">
+                <input
+                  type="text"
+                  className="w-100"
+                  placeholder="Write a comment"
+                />
 
-  
-   <AiOutlineLink size={25} className='ms-2  bold-icon'/>
-   <BsEmojiSmile size={25} className='ms-2  bold-icon' />
-   <MdOutlineCameraAlt size={25}  className='ms-2 me-3 bold-icon' /> 
- 
- </div>
 
-                           <div className="icon-wrap"> 
-                            <LiaTelegram size={'1.75rem'} /> 
-                          
-                            </div>
-</div>
+                <AiOutlineLink size={25} className='ms-2  bold-icon' />
+                <BsEmojiSmile size={25} className='ms-2  bold-icon' />
+                <MdOutlineCameraAlt size={25} className='ms-2 me-3 bold-icon' />
+
+              </div>
+
+              <div className="icon-wrap">
+                <LiaTelegram size={'1.75rem'} />
+
+              </div>
+            </div>
             <Collapse in={showComments}>
               <div className="comments-section mt-0">
                 <form onSubmit={handleComment} className="mt-2 mb-3">
@@ -884,27 +884,27 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
           className="d-none"  // Hide the create post card
         />
       )}
-            <Modal show={modalIsOpen} onHide={() => setModalIsOpen(false)}>
-                <Modal.Header>
-                    <Modal.Title>Enter Password</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter password"
-                    />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setModalIsOpen(false)}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={unlockContent} disabled={loading}>
-                        {loading ? 'Loading...' : 'Submit'}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+      <Modal show={modalIsOpen} onHide={() => setModalIsOpen(false)}>
+        <Modal.Header>
+          <Modal.Title>Enter Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter password"
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setModalIsOpen(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={unlockContent} disabled={loading}>
+            {loading ? 'Loading...' : 'Submit'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

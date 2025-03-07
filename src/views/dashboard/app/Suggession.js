@@ -417,9 +417,26 @@ const Suggession = () => {
   return (
     <>
       <div className="suggestions-div">
-       <div className="inner-wrapper bg-white">
-       <div className="mb-3">
-          {/* <Form.Control
+        <div className="inner-wrapper bg-white">
+          <div className="card mb-2 mt-3">
+            <div className="card-body p-3 py-2">
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{width: '300px'}}>
+                    <img src="https://lh3.googleusercontent.com/a/ACg8ocLPGKVqEKPajazLWMrOyxndomwsMjPicTy_-SXnHzcRy3PdJ-U=s96-c" alt="Mubashar Ahmad" className="rounded-circle avatar-40 me-2" />
+                      <div className="d-flex flex-column gap-0">
+                        <h6 className="mb-0 suggestion-user-name">Mubashar Ahmad</h6>
+                        <p className="mb-0 text-muted suggestion-user-email">mubashardev0204@gmail.com</p>
+                      </div>
+                  </div>
+                  <button className="ms-2 switch-account">Switch</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="my-3">
+            <h4 className="sugession-title">Suggested For you</h4>
+            {/* <Form.Control
             type="text"
             placeholder="Search Users..."
             value={searchQuery}
@@ -435,51 +452,99 @@ const Suggession = () => {
               setSearchQuery(searchQuery);
             }}
           /> */}
-        </div>
-        {admins && admins.length > 0 && admins.map((admin) => {
-          return (
-            <Card className="mb-2">
-              <Card.Body className="p-3 py-2">
+          </div>
+          {admins && admins.length > 0 && admins.map((admin) => {
+            return (
+              <Card className="mb-2">
+                <Card.Body className="p-3 py-2">
 
-                <div className="d-flex flex-column gap-2">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{width: '300px'}}> 
-                    <img
-                      src={getProfileImageUrl(admin)}
-                      alt={admin.name}
-                      className="rounded-circle avatar-40 me-2"
-                    />
-                      <div className="d-flex flex-column gap-0">
-                    <h6 className="mb-0 suggestion-user-name">{admin?.name}</h6>
-                    <p className="mb-0 text-muted suggestion-user-email">{admin?.email}</p>
-                  </div>
+                  <div className="d-flex flex-column gap-2">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{ width: '300px' }}>
+                        <img
+                          src={getProfileImageUrl(admin)}
+                          alt={admin.name}
+                          className="rounded-circle avatar-40 me-2"
+                        />
+                        <div className="d-flex flex-column gap-0">
+                          <h6 className="mb-0 suggestion-user-name">{admin?.name}</h6>
+                          <p className="mb-0 text-muted suggestion-user-email">{admin?.email}</p>
+                        </div>
+                      </div>
+                      <FollowButton
+                        className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
+                        onClick={() => handleFollow(admin?.id)}
+                      >
+                        {admin?.is_following ? (
+                          <>
+                            <i className="ri-user-unfollow-line"></i>
+                            Unfollow
+                          </>
+                        ) : (
+                          <>
+                            {/* <i className="ri-user-follow-line"></i> */}
+                            Follow
+                          </>
+                        )}
+                      </FollowButton>
                     </div>
-                    <FollowButton
-                      className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
-                      onClick={() => handleFollow(admin?.id)}
-                    >
-                      {admin?.is_following ? (
-                        <>
-                          <i className="ri-user-unfollow-line"></i>
-                          Unfollow
-                        </>
-                      ) : (
-                        <>
-                          {/* <i className="ri-user-follow-line"></i> */}
-                          Follow
-                        </>
-                      )}
-                    </FollowButton>
-                  </div>
-                
-                </div>
 
-              </Card.Body>
-            </Card>
-          );
-        })}
-        <div class="mb-3"></div>
-       </div>
+                  </div>
+
+                </Card.Body>
+              </Card>
+            );
+          })}
+          <div className="mb-3"></div>
+        </div>
+        <div className="inner-wrapper bg-white">
+          <div className="my-3">
+            <h4 className="sugession-title">Following</h4>
+          </div>
+          {admins && admins.length > 0 && admins.map((admin) => {
+            return (
+              <Card className="mb-2">
+                <Card.Body className="p-3 py-2">
+
+                  <div className="d-flex flex-column gap-2">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{ width: '300px' }}>
+                        <img
+                          src={getProfileImageUrl(admin)}
+                          alt={admin.name}
+                          className="rounded-circle avatar-40 me-2"
+                        />
+                        <div className="d-flex flex-column gap-0">
+                          <h6 className="mb-0 suggestion-user-name">{admin?.name}</h6>
+                          <p className="mb-0 text-muted suggestion-user-email">{admin?.email}</p>
+                        </div>
+                      </div>
+                      <FollowButton
+                        className={`ms-2 ${admin?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
+                        onClick={() => handleFollow(admin?.id)}
+                      >
+                        {admin?.is_following ? (
+                          <>
+                            <i className="ri-user-unfollow-line"></i>
+                            Unfollow
+                          </>
+                        ) : (
+                          <>
+                            {/* <i className="ri-user-follow-line"></i> */}
+                            Follow
+                          </>
+                        )}
+                      </FollowButton>
+                    </div>
+
+                  </div>
+
+                </Card.Body>
+              </Card>
+            );
+          })}
+          <div className="mb-3"></div>
+        </div>
       </div>
     </>
   );
