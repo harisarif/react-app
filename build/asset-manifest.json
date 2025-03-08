@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.c596fc6d.css",
-    "main.js": "/static/js/main.4a543afd.js",
+    "main.css": "/static/css/main.86a6c995.css",
+    "main.js": "/static/js/main.585e3956.js",
     "static/media/Banner.jpg": "/static/media/Banner.7eb802b56b4dc864425e.jpg",
     "static/media/video-2.mp4": "/static/media/video-2.40a85315bf4af5fbcd2b.mp4",
     "static/media/video-3.mp4": "/static/media/video-3.37562dfa01c4e7d7a734.mp4",
@@ -37,7 +37,6 @@
     "static/media/remixicon.woff2?t=1590207869815": "/static/media/remixicon.90668f6f9b3c2c18a090.woff2",
     "static/media/img-success.png": "/static/media/img-success.06a0ae13f6e84d9ce62c.png",
     "static/media/la-regular-400.svg": "/static/media/la-regular-400.5b8ad6f4ffe812a4eb26.svg",
-    "static/media/Equity_Circle.png": "/static/media/Equity_Circle.ad951b4d0c6fa2c52be3.png",
     "static/media/Equity_Circle_full.png": "/static/media/Equity_Circle_full.ad951b4d0c6fa2c52be3.png",
     "static/media/fa-solid-900.woff": "/static/media/fa-solid-900.22aa6d4357cf74671bc4.woff",
     "static/media/la-brands-400.woff": "/static/media/la-brands-400.925b340f49e65e8bab10.woff",
@@ -121,11 +120,11 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "static/media/bussiness.svg": "/static/media/bussiness.fd8c8298e210f9ebdcf03e67df913279.svg",
-    "main.c596fc6d.css.map": "/static/css/main.c596fc6d.css.map",
-    "main.4a543afd.js.map": "/static/js/main.4a543afd.js.map"
+    "main.86a6c995.css.map": "/static/css/main.86a6c995.css.map",
+    "main.585e3956.js.map": "/static/js/main.585e3956.js.map"
   },
   "entrypoints": [
-    "static/css/main.c596fc6d.css",
-    "static/js/main.4a543afd.js"
+    "static/css/main.86a6c995.css",
+    "static/js/main.585e3956.js"
   ]
 }

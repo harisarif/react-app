@@ -662,7 +662,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               <button
                 className="btn btn-link text-body p-0"
                 onClick={() => setShowComments(!showComments)}
-              >
+              >  
                 <FaRegComment size={'1.65rem'} />
                 {/* <span className="ms-1">{comments.length} Comments</span> */}
               </button>
