@@ -686,7 +686,7 @@ const CreatePost = ({
               />
             </div>
           </div>
-          <div className="d-flex align-items-center justify-content-around create-post-icons-main">
+          <div className="create-post-icons-main">
 
             <div className="d-flex align-items-center photo-with-icon" onClick={handleShow} style={{ cursor: "pointer" }}>
               <span class="material-symbols-outlined">

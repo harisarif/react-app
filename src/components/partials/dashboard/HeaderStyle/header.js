@@ -10,7 +10,7 @@ import { getRelativeTime } from '../../../../utils/dateUtils';
 import { getNotificationUrl } from '../../../../utils/notificationHelpers';
 import moment from 'moment';
 import './header.css';
-import { LuSearch } from "react-icons/lu";
+import SearchBar from '../SearchBar/SearchBar';
 
 
 import SettingOffCanvas from "../../../setting/SettingOffCanvas";
@@ -136,11 +136,11 @@ const Header = () => {
 
   const minisidebar = () => {
     const sidebarMini = document.getElementsByTagName("ASIDE")[0];
-    if (sidebarMini.classList.contains('sidebar-mini')) {
-      sidebarMini.classList.remove('sidebar-mini')
+    if (sidebarMini.classList.contains('active')) {
+      sidebarMini.classList.remove('active')
     }
     else {
-      sidebarMini.classList.add('sidebar-mini')
+      sidebarMini.classList.add('active')
     }
   };
 
@@ -158,20 +158,20 @@ const Header = () => {
     window.location.href = '/auth/sign-in';
   }
 
-  useEffect(() => {
-    const sideBarIconFixed = document.getElementById('first-tour');
-    const observer = new MutationObserver(() => {
-      if (sideBarIconFixed.classList.contains('sidebar-mini')) {
-        document.getElementById("sidebar-toggle-icon").style.left = "0px";
-        document.getElementById("sidebar-toggle-icon").style.transition = "left 0.1s ease-in-out";
-      } else {
-        document.getElementById("sidebar-toggle-icon").style.left = "220px";
-        document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s ease-in-out";
-      }
-    });
-    observer.observe(sideBarIconFixed, { attributes: true });
-    return () => observer.disconnect();
-  }, []);
+  // useEffect(() => {
+  //   const sideBarIconFixed = document.getElementById('first-tour');
+    // const observer = new MutationObserver(() => {
+    //   if (sideBarIconFixed.classList.contains('sidebar-mini')) {
+    //     document.getElementById("sidebar-toggle-icon").style.left = "0px";
+    //     document.getElementById("sidebar-toggle-icon").style.transition = "left 0.1s ease-in-out";
+    //   } else {
+    //     document.getElementById("sidebar-toggle-icon").style.left = "220px";
+    //     document.getElementById("sidebar-toggle-icon").style.transition = "left 0.3s ease-in-out";
+    //   }
+    // });
+    // observer.observe(sideBarIconFixed, { attributes: true });
+    // return () => observer.disconnect();
+  // }, []);
 
   return (
     <>
@@ -754,13 +754,8 @@ const Header = () => {
                 </Link>
               </Nav.Item>
 
-              <Nav.Item className="nav-item d-none d-lg-block">
-                <Form>
-                  <Form.Group className="d-flex align-items-center gap-0 px-0 position-relative" controlId="" style={{background: '#EBEAF0', borderRadius: '14px', width: '350px'}}>
-                    <LuSearch size={24} style={{position: 'absolute', left: '16px'}} />
-                    <Form.Control type="text" className="border-0 bg-transparent" placeholder="Search for users" style={{paddingLeft: '50px'}} />
-                  </Form.Group>
-                </Form>
+              <Nav.Item className="nav-item">
+                <SearchBar page="headerSearch" />
               </Nav.Item>
 
               <Dropdown as="li" className="nav-item user-dropdown">
@@ -804,19 +799,6 @@ const Header = () => {
                           </div>
                         </div>
                       )}
-                      {/* <div className="d-flex align-items-center iq-sub-card border-0">
-                        <span className="material-symbols-outlined">
-                          line_style
-                        </span>
-                        <div className="ms-3">
-                          <Link
-                            to="/dashboard/app/profile"
-                            className="mb-0 h6"
-                          >
-                            My Profile
-                          </Link>
-                        </div>
-                      </div> */}
                       {userData && (
                         <div className="d-flex align-items-center iq-sub-card">
                           <span className="material-symbols-outlined">
@@ -829,16 +811,6 @@ const Header = () => {
                           </div>
                         </div>
                       )}
-                      {/* <div className="d-flex align-items-center iq-sub-card border-0">
-                        <span className="material-symbols-outlined">
-                          edit_note
-                        </span>
-                        <div className="ms-3">
-                          <Link to="/dashboard/app/user-profile-edit" className="mb-0 h6">
-                            Edit Profile
-                          </Link>
-                        </div>
-                      </div> */}
                       {userData && (
                         <div className="d-flex align-items-center iq-sub-card border-0">
                           <span className="material-symbols-outlined">
@@ -937,12 +909,8 @@ const Header = () => {
       </div >
 
 
-      <div
-        className="offcanvas offcanvas-end shadow-none iq-product-menu-responsive d-xl-block nav-for-mobile"
-        tabIndex="-1"
-        id="offcanvasBottomNav">
-        <div className="offcanvas-body h-100">
-          <ul className="iq-nav-menu list-unstyled h-100">
+      <div className="nav-for-mobile shadow">
+        <ul className="iq-nav-menu list-unstyled h-100">
             <li className={`${location.pathname === '/business' ? 'active' : ''} nav-item`}>
               <Link
                 className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2  mx-1`}
@@ -952,19 +920,7 @@ const Header = () => {
                 <span class="material-symbols-outlined me-2">
                   trending_up
                 </span>
-                <span className="nav-text">Business Management</span>
-              </Link>
-            </li>
-            <li className={`${location.pathname === '/fitness' ? 'active' : ''} nav-item`}>
-              <Link
-                className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
-                to="/fitness"
-                onClick={() => setActive("fitness")}
-              >
-                <span class="material-symbols-outlined me-2">
-                  exercise
-                </span>
-                <span className="nav-text">Fitness</span>
+                <span className="nav-text">Business</span>
               </Link>
             </li>
             <li className={`${location.pathname === '/crypto' ? 'active' : ''} nav-item`}>
@@ -979,6 +935,30 @@ const Header = () => {
                 <span className="nav-text">Crypto</span>
               </Link>
             </li>
+            <li className={`nav-item`}>
+              <Link
+                className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                to="#"
+              >
+                <span class="material-symbols-outlined">
+                  add_box
+                </span>
+                <span className="nav-text">Post</span>
+              </Link>
+            </li>
+            <li className={`${location.pathname === '/fitness' ? 'active' : ''} nav-item`}>
+              <Link
+                className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
+                to="/fitness"
+                onClick={() => setActive("fitness")}
+              >
+                <span class="material-symbols-outlined me-2">
+                  exercise
+                </span>
+                <span className="nav-text">Fitness</span>
+              </Link>
+            </li>
+            
             <li className={`${location.pathname === '/mindset' ? 'active' : ''} nav-item`}>
               <Link
                 className={`nav-link menu-arrow justify-content-start h-100 p-0 px-2 mx-1`}
@@ -992,34 +972,11 @@ const Header = () => {
               </Link>
             </li>
           </ul>
-        </div>
       </div>
-
-
-
-
-
-
-      {/* </div> */}
-
-      {/* <div
-        className={`modal-backdrop fade ${show ? "show" : "d-none"}`}
-        onClick={handleClose}
-      ></div> */}
-
 
     </>
   );
 };
-
-
-
-
-
-
-
-
-
 
 
 export default Header;

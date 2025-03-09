@@ -114,7 +114,7 @@ import pro1 from "../../../assets/images/page-img/pro(1).jpg";
 import pro2 from "../../../assets/images/page-img/pro(2).jpg";
 import pro3 from "../../../assets/images/page-img/pro(3).jpg";
 
-
+import SearchBar from '../../../components/partials/dashboard/SearchBar/SearchBar';
 
 import coin from "../../../assets/images/gamipress/coin.svg";
 import credit from "../../../assets/images/gamipress/credit.svg";
@@ -472,6 +472,8 @@ const UserFeeds = () => {
           <div>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
               <div>
+
+                <SearchBar page="bodySearch" />
 
                 {(userData && userCanCreatePostCategories?.some(category => [3].includes(category)) &&
                   <Row className="special-post-container">

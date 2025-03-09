@@ -25,40 +25,6 @@ import feedSvg from "../../../../assets/images/svg/feeds.svg";
 
 
 function CustomToggle({ children, eventKey, onClick, to }) {
-
-    // useEffect(() => { 
-    //     let navUl = document.getElementById("sidebar-menu");
-    //     let navFirstLi = document.querySelector(".nav-first-li");
-    //     let navSecondLi = document.querySelector(".nav-second-li"); 
-    //     let navThirdLi = document.querySelector(".nav-third-li"); 
-    //     let navFourthLi = document.querySelector(".nav-fourth-li"); 
-    //     let navFifthLi = document.querySelector(".nav-fifth-li"); 
-    //     let navSixthLi = document.querySelector(".nav-sixth-li");
-    //     let navSeventhLi = document.querySelector(".nav-seventh-li");
-    //     let navEigthLi = document.querySelector(".nav-eigth-li");
-    //     let navninthLi = document.querySelector(".nav-ninth-li");
-    //     let navtenthLi = document.querySelector(".nav-tenth-li");
-    //     let navCommonClass = document.querySelectorAll(".nav-common-class");
-    //     navCommonClass.forEach( nav =>{
-    //         nav.addEventListener("click", ()=>{
-    //             navCommonClass.forEach(nav => {
-    //                 nav.classList.remove('active');
-    //                 this.classList.add('active');
-    //               })
-    //         })
-    //     })
-      
-    //         if (navThirdLi.classList.contains("active")) {
-    //         let newDiv = document.createElement("div");
-    //         newDiv.className = "hamid";
-    //         newDiv.appendChild(navSixthLi);
-            
-    //       } else {
-    //         console.error("navSecondLi not found in the DOM!");
-    //       }
-
-       
-    //   }, []);
     const { activeEventKey } = useContext(AccordionContext);
     const decoratedOnClick = useAccordionButton(eventKey, (active) => onClick({ state: !active, eventKey: eventKey }));
     const isCurrentEventKey = activeEventKey === eventKey;
@@ -89,17 +55,8 @@ const VerticalNav = React.memo(() => {
     const { userData, setUserData } = useContext(UserContext);
     const [activeMenu, setActiveMenu] = useState(false)
     const [active, setActive] = useState('')
-    //location
     window.scrollTo(0, 0);
     let location = useLocation();
-    // console.log(document);
-
-    // let headerNav = document.querySelector('.iq-nav-menu').querySelectorAll('.nav-item');
-    // headerNav.forEach(item =>{
-    //     item.addEventListener('click', function(){
-
-    //     })
-    // })
     const [show, setShow] = useState(false);
     return (
         <React.Fragment>
@@ -111,57 +68,46 @@ const VerticalNav = React.memo(() => {
                     </Link>
                 </li>
                 <div className="nav-top-child">
-                <li className={`${location.pathname === '/' ? 'active' : ''} nav-item nav-second-li nav-common-class` }>
-                    <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Home</Tooltip>}>
-                            <GrHomeRounded size={'1.5rem'} />
-                        </OverlayTrigger>
-                        <span className="item-name">Home</span>
-                    </Link>
-                </li>
-
-                {userData && (
-
-                    <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item nav-third-li nav-common-class`}>
-                        <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile"
-                            onClick={() => setActive("profile")}>
-                            <OverlayTrigger placement="right" overlay={<Tooltip>Profiles</Tooltip>}>
-                                {location.pathname === '/profile' ? <FaUser size={'1.5rem'} /> : <FaRegUser size={'1.5rem'} />}
+                    <li className={`${location.pathname === '/' ? 'active' : ''} nav-item nav-second-li nav-common-class`}>
+                        <Link className={`${location.pathname === '/' ? 'active' : ''} nav-link `} aria-current="page" to="/">
+                            <OverlayTrigger placement="right" overlay={<Tooltip>Home</Tooltip>}>
+                                <GrHomeRounded size={'1.5rem'} />
                             </OverlayTrigger>
-                            <span className="item-name">Profiles</span>
+                            <span className="item-name">Home</span>
                         </Link>
                     </li>
-                )}
+
+                    {userData && (
+
+                        <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item nav-third-li nav-common-class`}>
+                            <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile"
+                                onClick={() => setActive("profile")}>
+                                <OverlayTrigger placement="right" overlay={<Tooltip>Profiles</Tooltip>}>
+                                    {location.pathname === '/profile' ? <FaUser size={'1.5rem'} /> : <FaRegUser size={'1.5rem'} />}
+                                </OverlayTrigger>
+                                <span className="item-name">Profiles</span>
+                            </Link>
+                        </li>
+                    )}
                 </div>
 
-                {/* <li className={`${location.pathname === '/feeds' ? 'active' : ''} nav-item `}>
-                    <Link className={`${location.pathname === '/feeds' ? 'active' : ''} nav-link `} aria-current="page" to="/feeds"
-                          onClick={() => setActive("feeds")}>
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
-                            <i className="icon material-symbols-outlined">
-                            turned_in_not
-                            </i>
-                        </OverlayTrigger>
-                        <span className="item-name">Feeds</span>
-                    </Link>
-                </li> */}
                 <Accordion.Item as="li" eventKey="utilities-error" bsPrefix="nav-item" className='nav-fourth-li nav-common-class'>
-                   <div className="feed-parent-div">
-                   <CustomToggle
-                        className="feed-parent-div"
-                        eventKey="utilities-error"
-                        active={activeMenu === 'utilities-error' ? true : false}
-                        onClick={(activeKey) => setActiveMenu(activeKey)}
-                        to="/home"
-                    >
-                        {/* <OverlayTrigger  placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
+                    <div className="feed-parent-div">
+                        <CustomToggle
+                            className="feed-parent-div"
+                            eventKey="utilities-error"
+                            active={activeMenu === 'utilities-error' ? true : false}
+                            onClick={(activeKey) => setActiveMenu(activeKey)}
+                            to="/home"
+                        >
+                            {/* <OverlayTrigger  placement="right" overlay={<Tooltip>Feeds</Tooltip>}>
                             {location.pathname === '/home' ? <MdOutlineTurnedIn size={'1.5rem'} /> : <MdOutlineTurnedInNot size={'1.5rem'} />}
                         </OverlayTrigger> */}
-                        <img src={feedSvg} alt="User Icon" />
-                        <span className="item-name">Feeds</span>
-                        <i className="right-icon material-symbols-outlined" style={{ color: 'black' }}>chevron_right</i>
-                    </CustomToggle>
-                   </div>
+                            <img src={feedSvg} alt="User Icon" />
+                            <span className="item-name">Feeds</span>
+                            <i className="right-icon material-symbols-outlined" style={{ color: 'black' }}>chevron_right</i>
+                        </CustomToggle>
+                    </div>
                     <Accordion.Collapse eventKey="utilities-error" className={location.pathname == "/fitness" || location.pathname == "/business" || location.pathname == "/crypto" || location.pathname == "/mindset" ? "show" : ""}>
                         <ul className="sub-nav feed-sub-menu">
                             <Nav.Item as="li">
@@ -188,7 +134,7 @@ const VerticalNav = React.memo(() => {
                                         <i className="sidenav-mini-icon"> M  </i>
                                     </OverlayTrigger>
                                     {/* <i className="icon material-symbols-outlined filled">fiber_manual_record</i> */}
-                                    <span className="item-name feed-sub-menu-item"  style={{ marginleft: '50px !important' }}>crypto</span>
+                                    <span className="item-name feed-sub-menu-item" style={{ marginleft: '50px !important' }}>crypto</span>
                                 </Link>
                             </Nav.Item>
                             <Nav.Item as="li">
@@ -205,61 +151,61 @@ const VerticalNav = React.memo(() => {
                 </Accordion.Item>
 
                 <div className="nav-bottom-childs">
-                <li className={`${location.pathname === '/education' ? 'active' : '' } nav-item nav-fifth-li nav-common-class`}>
-                    <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Education</Tooltip>}>
-                            {location.pathname === '/education' ? <IoSchool size={'1.5rem'} /> : <MdOutlineSchool size={'1.5rem'} />}
-                        </OverlayTrigger>
-                        <span className="item-name">Education</span>
-                    </Link>
-                </li>
-                <li className={`${location.pathname === '/job-list' ? 'active' : ''} nav-item nav-sixth-li nav-common-class`}>
-                    <Link className={`${location.pathname === '/job-list' ? 'active' : ''} nav-link `} aria-current="page" to="/job-list">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Job List</Tooltip>}>
-                            {location.pathname === '/job-list' ? <BsSuitcaseLgFill size={'1.5rem'} /> : <BsSuitcaseLg size={'1.5rem'} />}
-                        </OverlayTrigger>
-                        <span className="item-name">Job List</span>
-                    </Link>
-                </li>
-                {userData && userData?.permissions[0]?.can_create_jobs == 1 && (
-                    <li className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-item nav-seventh-li nav-common-class`}>
-                        <Link className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-link `} aria-current="page" to="/job-applications">
-                            <OverlayTrigger placement="right" overlay={<Tooltip>Job Applications</Tooltip>}>
-                                <i className="icon material-symbols-outlined">
-                                    app_registration
-                                </i>
+                    <li className={`${location.pathname === '/education' ? 'active' : ''} nav-item nav-fifth-li nav-common-class`}>
+                        <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
+                            <OverlayTrigger placement="right" overlay={<Tooltip>Education</Tooltip>}>
+                                {location.pathname === '/education' ? <IoSchool size={'1.5rem'} /> : <MdOutlineSchool size={'1.5rem'} />}
                             </OverlayTrigger>
-                            <span className="item-name">Job Applications</span>
+                            <span className="item-name">Education</span>
                         </Link>
                     </li>
-                )}
-                <li className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-item nav-eigth-li nav-common-class`}>
-                    <Link className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-link `} aria-current="page" to="/event-calender">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Events Calender</Tooltip>}>
-                            {location.pathname === '/event-calender' ? <BsFillCalendar2WeekFill size={'1.5rem'} /> : <BsCalendarWeek size={'1.5rem'} />}
-                        </OverlayTrigger>
-                        <span className="item-name">Events Calender</span>
-                    </Link>
-                </li>
-                <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
-                    <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">
-                        <OverlayTrigger placement="right" overlay={<Tooltip>Notifications</Tooltip>}>
-                            {location.pathname === '/notification' ? <MdNotificationsActive size={'1.5rem'} /> : <MdOutlineNotificationsActive size={'1.5rem'} />}
-                        </OverlayTrigger>
-                        <span className="item-name">Notifications</span>
-                    </Link>
-                </li>
+                    <li className={`${location.pathname === '/job-list' ? 'active' : ''} nav-item nav-sixth-li nav-common-class`}>
+                        <Link className={`${location.pathname === '/job-list' ? 'active' : ''} nav-link `} aria-current="page" to="/job-list">
+                            <OverlayTrigger placement="right" overlay={<Tooltip>Job List</Tooltip>}>
+                                {location.pathname === '/job-list' ? <BsSuitcaseLgFill size={'1.5rem'} /> : <BsSuitcaseLg size={'1.5rem'} />}
+                            </OverlayTrigger>
+                            <span className="item-name">Job List</span>
+                        </Link>
+                    </li>
+                    {userData && userData?.permissions[0]?.can_create_jobs == 1 && (
+                        <li className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-item nav-seventh-li nav-common-class`}>
+                            <Link className={`${location.pathname === '/job-applications' ? 'active' : ''} nav-link `} aria-current="page" to="/job-applications">
+                                <OverlayTrigger placement="right" overlay={<Tooltip>Job Applications</Tooltip>}>
+                                    <i className="icon material-symbols-outlined">
+                                        app_registration
+                                    </i>
+                                </OverlayTrigger>
+                                <span className="item-name">Job Applications</span>
+                            </Link>
+                        </li>
+                    )}
+                    <li className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-item nav-eigth-li nav-common-class`}>
+                        <Link className={`${location.pathname === '/event-calender' ? 'active' : ''} nav-link `} aria-current="page" to="/event-calender">
+                            <OverlayTrigger placement="right" overlay={<Tooltip>Events Calender</Tooltip>}>
+                                {location.pathname === '/event-calender' ? <BsFillCalendar2WeekFill size={'1.5rem'} /> : <BsCalendarWeek size={'1.5rem'} />}
+                            </OverlayTrigger>
+                            <span className="item-name">Events Calender</span>
+                        </Link>
+                    </li>
+                    <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
+                        <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">
+                            <OverlayTrigger placement="right" overlay={<Tooltip>Notifications</Tooltip>}>
+                                {location.pathname === '/notification' ? <MdNotificationsActive size={'1.5rem'} /> : <MdOutlineNotificationsActive size={'1.5rem'} />}
+                            </OverlayTrigger>
+                            <span className="item-name">Notifications</span>
+                        </Link>
+                    </li>
 
-                {userData && userData?.permissions[0]?.can_manage_users == 1 && (
-                    <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item nav-tenth-li nav-common-class`}>
-                        <Link className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-link `} aria-current="page" to="/manage-users">
-                            <OverlayTrigger placement="right" overlay={<Tooltip>Manage Users</Tooltip>}>
-                                {location.pathname === '/manage-users' ? <HiMiniUserGroup size={'1.5rem'} /> : <HiOutlineUserGroup size={'1.5rem'} />}
-                            </OverlayTrigger>
-                            <span className="item-name">Manage Users</span>
-                        </Link>
-                    </li>
-                )}
+                    {userData && userData?.permissions[0]?.can_manage_users == 1 && (
+                        <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item nav-tenth-li nav-common-class`}>
+                            <Link className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-link `} aria-current="page" to="/manage-users">
+                                <OverlayTrigger placement="right" overlay={<Tooltip>Manage Users</Tooltip>}>
+                                    {location.pathname === '/manage-users' ? <HiMiniUserGroup size={'1.5rem'} /> : <HiOutlineUserGroup size={'1.5rem'} />}
+                                </OverlayTrigger>
+                                <span className="item-name">Manage Users</span>
+                            </Link>
+                        </li>
+                    )}
                 </div>
             </Accordion>
         </React.Fragment >

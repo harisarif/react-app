@@ -12,6 +12,8 @@ import Scrollbar from "smooth-scrollbar";
 
 import { Link } from "react-router-dom";
 
+import { RiCloseFill } from "react-icons/ri";
+
 
 
 const Sidebar = () => {
@@ -19,87 +21,55 @@ const Sidebar = () => {
   const sidebarMenuStyle = useSelector(SettingSelector.sidebar_menu_style);
   const appName = useSelector(SettingSelector.app_name);
 
- 
- 
+
+
   useEffect(() => {
 
     function toggleSidebarMini() {
       const element = document.getElementById("first-tour");
       if (window.matchMedia("(max-width: 1200px)").matches) {
-          element.classList.add("sidebar-mini");  // Add class if screen is ≤ 700px
-          
+        element.classList.remove("sidebar-mini");  // Add class if screen is ≤ 700px
+
       } else {
-          element.classList.remove("sidebar-mini"); // Remove class if screen is > 700px
+        element.classList.remove("sidebar-mini"); // Remove class if screen is > 700px
       }
-  }
-  
-  // Run on page load
-  toggleSidebarMini();
-  
-  // Listen for screen size changes
-  window.addEventListener("resize", toggleSidebarMini);
+    }
 
-    Scrollbar.init(document.querySelector(".data-scrollbar"));
+    // Run on page load
+    toggleSidebarMini();
 
-    window.addEventListener("resize", () => {
-      const tabs = document.querySelectorAll(".nav");
-      const sidebarResponsive = document.querySelector(
-        '[data-sidebar="responsive"]'
-      );
-      // if (window.innerWidth < 1025) {
-      //   Array.from(tabs, (elem) => {
-      //     if (
-      //       !elem.classList.contains("flex-column") &&
-      //       elem.classList.contains("nav-tabs") &&
-      //       elem.classList.contains("nav-pills")
-      //     ) {
-      //       elem.classList.add("flex-column", "on-resize");
-      //     }
-      //     return elem.classList.add("flex-column", "on-resize");
-      //   });
-      //   if (sidebarResponsive !== null) {
-      //     if (!sidebarResponsive.classList.contains("sidebar-mini")) {
-      //       sidebarResponsive.classList.add("sidebar-mini", "on-resize");
-      //     }
-      //   }
-      // } else {
-      //   Array.from(tabs, (elem) => {
-      //     if (elem.classList.contains("on-resize")) {
-      //       elem.classList.remove("flex-column", "on-resize");
-      //     }
-      //     return elem.classList.remove("flex-column", "on-resize");
-      //   });
-      //   if (sidebarResponsive !== null) {
-      //     if (
-      //       sidebarResponsive.classList.contains("sidebar-mini") &&
-      //       sidebarResponsive.classList.contains("on-resize")
-      //     ) {
-      //       sidebarResponsive.classList.remove("sidebar-mini", "on-resize");
-      //     }
-      //   }
-      // }
-      if (window.innerWidth < 1025) {
+    // Listen for screen size changes
+    // window.addEventListener("resize", toggleSidebarMini);
 
-        if (sidebarResponsive !== null) {
-          if (!sidebarResponsive.classList.contains("sidebar-mini")) {
-            sidebarResponsive.classList.add("sidebar-mini", "on-resize");
-          }
-        }
-      } else {
-        if (sidebarResponsive !== null) {
-          if (
-            sidebarResponsive.classList.contains("sidebar-mini") &&
-            sidebarResponsive.classList.contains("on-resize")
-          ) {
-            sidebarResponsive.classList.remove("sidebar-mini", "on-resize");
-          }
-        }
-      }
-    });
+    // Scrollbar.init(document.querySelector(".data-scrollbar"));
+
+    // window.addEventListener("resize", () => {
+    //   const tabs = document.querySelectorAll(".nav");
+    //   const sidebarResponsive = document.querySelector(
+    //     '[data-sidebar="responsive"]'
+    //   );
+    //   if (window.innerWidth < 1025) {
+
+    //     if (sidebarResponsive !== null) {
+    //       if (!sidebarResponsive.classList.contains("sidebar-mini")) {
+    //         sidebarResponsive.classList.add("sidebar-mini", "on-resize");
+    //       }
+    //     }
+    //   } else {
+    //     if (sidebarResponsive !== null) {
+    //       if (
+    //         sidebarResponsive.classList.contains("sidebar-mini") &&
+    //         sidebarResponsive.classList.contains("on-resize")
+    //       ) {
+    //         sidebarResponsive.classList.remove("sidebar-mini", "on-resize");
+    //       }
+    //     }
+    //   }
+    // });
   });
 
   const minisidebar = () => {
-    document.getElementsByTagName("ASIDE")[0].classList.toggle("sidebar-mini");
+    document.getElementsByTagName("ASIDE")[0].classList.toggle("active");
   };
 
   return (
@@ -132,6 +102,17 @@ const Sidebar = () => {
             </span>
           </div>
         </div> */}
+        <div className="sidebar-logo">
+          <Link
+            to="/"
+            className="d-flex align-items-center gap-2 iq-header-logo"
+          >
+            <img src={equity} class="brand-logo" alt="#" />
+          </Link>
+          <span onClick={minisidebar}>
+            <RiCloseFill size={24} color={'#000'} />
+          </span>
+        </div>
         <div className="sidebar-body pt-0 data-scrollbar">
           <div className="sidebar-list">
             <Verticalnav />

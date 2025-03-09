@@ -416,7 +416,7 @@ const Suggession = () => {
 
   return (
     <>
-      <div className="suggestions-div">
+      <div className="suggestions-div pb-3" id="suggestions-div">
         <div className="inner-wrapper bg-white">
           <div className="card mb-2 mt-3">
             <div className="card-body p-3 py-2">
