@@ -180,6 +180,7 @@ export default function SearchBar(props) {
             style={{ paddingLeft: "50px" }}
             value={searchQuery}
             onFocus={() => setShowDropdown(true)}
+            onBlur={() => setShowDropdown(false)}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </Form.Group>
@@ -206,6 +207,7 @@ export default function SearchBar(props) {
               key={admin.id}
               className="dropdown-item p-2 d-flex align-items-center"
               onMouseDown={(e) => e.preventDefault()} // Prevents closing on click
+              onClick={() => window.location.href = `/profile/${admin.id}`}
             >
               <img
                 src={getProfileImageUrl(admin)}
