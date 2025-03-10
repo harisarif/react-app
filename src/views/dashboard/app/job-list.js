@@ -43,7 +43,7 @@ const JobList = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <div className="container">
+        <div className="custom-conatiner container">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="mb-0">Job Listings</h2>
             {userData && userData?.permissions[0]?.can_create_jobs == 1 &&(

@@ -114,7 +114,7 @@ import pro1 from "../../../assets/images/page-img/pro(1).jpg";
 import pro2 from "../../../assets/images/page-img/pro(2).jpg";
 import pro3 from "../../../assets/images/page-img/pro(3).jpg";
 
-
+import SearchBar from '../../../components/partials/dashboard/SearchBar/SearchBar';
 
 import coin from "../../../assets/images/gamipress/coin.svg";
 import credit from "../../../assets/images/gamipress/credit.svg";
@@ -128,7 +128,7 @@ const FsLightbox = ReactFsLightbox.default
   ? ReactFsLightbox.default
   : ReactFsLightbox;
 
-  const FollowButton = styled.button`
+const FollowButton = styled.button`
   border: none;
   padding: 6px 16px;
   border-radius: 20px;
@@ -217,18 +217,18 @@ const UserFeeds = () => {
 
   const fetchPosts = async (pageNumber) => {
     if (isLoading || !hasMore) return;
-    
+
     setIsLoading(true);
     try {
       const response = await axios.get(`/api/posts?page=${pageNumber}&category=4`);
       console.log('Fetched posts:', response.data);
-      
+
       if (pageNumber === 1) {
         setPosts(response.data.data);
       } else {
         setPosts(prevPosts => [...prevPosts, ...response.data.data]);
       }
-      
+
       setHasMore(response.data.has_more);
       setLoadContent(false);
     } catch (error) {
@@ -358,10 +358,10 @@ const UserFeeds = () => {
 
       if (response.data.status == 'success') {
         // Update the post's is_following status
-          console.log("follow")
-          setHasMore(false);
-          setIsLoading(false);
-          fetchPosts(1);
+        console.log("follow")
+        setHasMore(false);
+        setIsLoading(false);
+        fetchPosts(1);
 
         // setPosts(posts.map(p => {
         //   if (p.user?.id === userId) {
@@ -373,14 +373,14 @@ const UserFeeds = () => {
         //   return p;
         // }));
 
-        setAdmins(admins.map(a =>{
-          if(a.id == userId){
-          return {
-            ...a,
-            is_following: !a.is_following
-          };
-        }
-        return a; // Return unchanged admin if id doesn't match
+        setAdmins(admins.map(a => {
+          if (a.id == userId) {
+            return {
+              ...a,
+              is_following: !a.is_following
+            };
+          }
+          return a; // Return unchanged admin if id doesn't match
         }));
 
         // Show success message
@@ -468,48 +468,50 @@ const UserFeeds = () => {
         <Container className="custom-conatiner">
           <div>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-            <div>
-              
-            {(userData && userCanCreatePostCategories?.some(category => [5].includes(category)) &&
-                <Row>
-                  <EventSlider/>
-                  <Col sm={12 } className="mt-5 ">
-                    <CreatePost 
-                      className="card-block card-stretch card-height"
-                      setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}
-                    />
-                  </Col>
-                </Row>
-                  )}
+              <div>
 
-<div className="special-post-container">
-                <div>
-                {loadContent ? (
-                  <div className="col-sm-12 text-center">
-                    <img src={loader} alt="loader" style={{ height: "100px" }} />
-                  </div>
-                ) : posts.length === 0 ? (
-                  <Col sm={12}>
-                    <NoDataFound 
-                      message="No posts available in your feed."
-                      containerClassName="text-center py-5"
-                    />
-                  </Col>
-                ) : (
-                  posts.map((post) => (
-                    <Col sm={12} key={post.id} className="special-post">
-                      <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
+                <SearchBar page="bodySearch" />
+
+                {(userData && userCanCreatePostCategories?.some(category => [5].includes(category)) &&
+                  <Row>
+                    <EventSlider />
+                    <Col sm={12} className="mt-5 ">
+                      <CreatePost
+                        className="card-block card-stretch card-height"
+                        setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}
+                      />
                     </Col>
-                  ))
-                  
-                  
+                  </Row>
                 )}
-                
+
+                <div className="special-post-container">
+                  <div>
+                    {loadContent ? (
+                      <div className="col-sm-12 text-center">
+                        <img src={loader} alt="loader" style={{ height: "100px" }} />
+                      </div>
+                    ) : posts.length === 0 ? (
+                      <Col sm={12}>
+                        <NoDataFound
+                          message="No posts available in your feed."
+                          containerClassName="text-center py-5"
+                        />
+                      </Col>
+                    ) : (
+                      posts.map((post) => (
+                        <Col sm={12} key={post.id} className="special-post">
+                          <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
+                        </Col>
+                      ))
+
+
+                    )}
+
+                  </div>
+
                 </div>
-               
               </div>
-            </div>
-            {/* <div>
+              {/* <div>
                   <div className="mb-3">
                     <Form.Control
                       type="text"
@@ -564,11 +566,11 @@ const UserFeeds = () => {
                     );
                   })}
                 </div> */}
-          </Tab.Container>
-        </div>
-      </Container>
-    </div>
-  </>);
+            </Tab.Container>
+          </div>
+        </Container>
+      </div>
+    </>);
 };
 
 export default UserFeeds;

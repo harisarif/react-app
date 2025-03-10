@@ -19,7 +19,7 @@ import ed3 from "../../../assets/images/page-img/edu-card-3.png";
 import ed4 from "../../../assets/images/page-img/edu-card.png";
 //profile-header
 import ProfileHeader from "../../../components/profile-header";
-
+import { MdOutlineSchool } from "react-icons/md";
 //swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -285,8 +285,8 @@ const Education = () => {
 
   return (
     <div id="content-page" className="content-inner">
-      <div className="container">
-        <div className="custom-container-card">
+      <div className="custom-conatiner container">
+        <div className="custom-main-container">
           <div id="content">
             <div className="d-flex justify-content-between mb-3">
               <h2>Education Content</h2>
@@ -306,7 +306,7 @@ const Education = () => {
               <div className="row g-3">
                 {educationContents.length > 0 ? (
                   educationContents.map((content) => (
-                    <div key={content.id} className="col-sm-6 col-lg-4">
+                    <div key={content.id} className="col-sm-6 col-lg-6">
 
                       <div className="card h-100">
                         <div className="edu-card-img">
@@ -356,8 +356,11 @@ const Education = () => {
                         </div>
 
                         <div className="card-body">
-                          <h4 className="card-title turncate-2">{content.title}</h4>
-                          <p className="card-text turncate-3 paragraph-holder">{content.short_description}</p>
+                          <div className="d-flex gap-2">
+                          <MdOutlineSchool size={35} color={'#000'} />
+                          <h4 className="card-title turncate-2 elipsis-1">{content.title}</h4>
+                          </div>
+                          <p className="card-text turncate-3 paragraph-holder elipsis-3">{content.short_description}</p>
                           <div className="d-flex gap-2">
                             <Button
                               className="btn btn-primary flex-grow-1"

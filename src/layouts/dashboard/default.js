@@ -21,10 +21,10 @@ import { Outlet } from "react-router-dom";
 const Default = () => {
   return (
     <>
-      <Sidebar />
+      <Header />
       <div className="main-content">
-        <div className="position-relative">
-          <Header />
+        <div className="position-relative main-content-inner-div">
+          <Sidebar />
           <Outlet />
           <Suggession />
         </div>

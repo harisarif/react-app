@@ -40,7 +40,7 @@ const ManageUsers = () => {
   return (
     <>
       <div id="content-page" className="content-inner">
-        <div className="container">
+        <div className="custom-conatiner container">
           <h2 className="mb-4">Manage Users</h2>
           <input
             type="text"

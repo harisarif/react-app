@@ -1,9 +1,9 @@
 .sidebar {
   display: block;
-  position: fixed;
+  position: sticky;
   width: 100%;
   max-width: var(--sidebar-width);
-  top: 66px;
+  top: 80px;
   bottom: 0;
   transition: var(--sidebar-transition);
   transition-duration: var(--sidebar-transition-duration);
@@ -11,14 +11,14 @@
   z-index: 910;
   // background-color: var(--bs-gray-900);
   color: var(--bs-primary);
-  height: calc(100% - 80px) !important;
+  // height: calc(100% - 80px);
   .sidebar-body {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
-    overflow: hidden;
+    // overflow: hidden;
   }
   .data-scrollbar {
-    max-height: 92vh;
+    // max-height: 92vh;
   }
   .sidebar-header {
     border-bottom: $border-width solid var(--bs-border-color);
@@ -179,7 +179,7 @@
         .icon {
           display: flex;
         }
-        color: $gray-600;
+        color: #000;
         &.active,
         &[aria-expanded="true"] {
           .right-icon {
@@ -240,7 +240,7 @@ body {
 
 @media (max-width: 1199px) {
   .sidebar {
-    z-index: 99;
+    z-index: 999;
     .sidebar-toggle {
       // background: var(--#{$prefix}primary);
       transform: rotate(0);
