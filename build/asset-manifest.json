@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.2ef8161d.css",
-    "main.js": "/static/js/main.ed2e0369.js",
+    "main.css": "/static/css/main.5dd00f5d.css",
+    "main.js": "/static/js/main.24472541.js",
     "static/media/Banner.jpg": "/static/media/Banner.7eb802b56b4dc864425e.jpg",
     "static/media/video-2.mp4": "/static/media/video-2.40a85315bf4af5fbcd2b.mp4",
     "static/media/video-3.mp4": "/static/media/video-3.37562dfa01c4e7d7a734.mp4",
@@ -111,16 +111,21 @@
     "static/media/11.png": "/static/media/11.a318847c3cbd07283c71.png",
     "static/media/ads.jpg": "/static/media/ads.528a73823ad85c175374.jpg",
     "static/media/pizza.webp": "/static/media/pizza.61da3f5df9a5f163c264.webp",
+    "static/media/mindset.svg": "/static/media/mindset.58319c4e26bd2e5860e5e4c7887225fc.svg",
+    "static/media/feeds.svg": "/static/media/feeds.daf4847508a19b65a1a033353b502d75.svg",
+    "static/media/fitness.svg": "/static/media/fitness.a377a788ef140bf67ef84dd2be3049a3.svg",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/crypto.svg": "/static/media/crypto.a826bebeca0f9517e6984e814a6a70ca.svg",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
-    "main.2ef8161d.css.map": "/static/css/main.2ef8161d.css.map",
-    "main.ed2e0369.js.map": "/static/js/main.ed2e0369.js.map"
+    "static/media/bussiness.svg": "/static/media/bussiness.fd8c8298e210f9ebdcf03e67df913279.svg",
+    "main.5dd00f5d.css.map": "/static/css/main.5dd00f5d.css.map",
+    "main.24472541.js.map": "/static/js/main.24472541.js.map"
   },
   "entrypoints": [
-    "static/css/main.2ef8161d.css",
-    "static/js/main.ed2e0369.js"
+    "static/css/main.5dd00f5d.css",
+    "static/js/main.24472541.js"
   ]
 }
