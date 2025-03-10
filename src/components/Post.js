@@ -24,6 +24,8 @@ import { FaPaperclip } from "react-icons/fa";
 import { AiOutlineLink } from "react-icons/ai";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import { BsEmojiSmile } from "react-icons/bs";
+import EmojiPicker  from 'emoji-picker-react';
+
 const FollowButton = styled.button`
   border: none;
   padding: 6px 16px;
@@ -441,6 +443,12 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     }
   };
 
+  const [showEmojiDropdown, setShowEmojiDropdown] = useState(false);
+
+  const handleEmojiSelect = (emoji) => {
+    setNewComment(newComment + emoji.emoji);
+    setShowEmojiDropdown(false);
+  };
 
   return (
     <>
@@ -718,6 +726,20 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         onChange={(e) => setNewComment(e.target.value)}
                         disabled={isCommentLoading}
                       />
+                      <button
+                        type="button"
+                        className="btn btn-light"
+                        onClick={() => setShowEmojiDropdown(!showEmojiDropdown)}
+                      >
+                        😀
+                      </button>
+                      {showEmojiDropdown && (
+                        <EmojiPicker
+                          onEmojiClick={handleEmojiSelect}
+                          disableSearchBar
+                          emojiStyle={{ width: '20px', height: '20px' }}
+                        />
+                      )}
                     </div>
                     <button
                       type="submit"
