@@ -826,6 +826,37 @@ const CreatePost = ({
             <div className="preview-section mt-3">
               <h6 className="mb-2">Attachments</h6>
               <div className="d-flex gap-2 overflow-auto">
+             <div className="position-relative">
+               <div className="file-upload-section">
+               <input
+  type="file"
+  multiple
+  hidden
+  ref={fileInputRef}
+  onChange={handleFileSelect}
+  accept="image/*,video/*"
+  capture="environment" // Opens back camera (use "user" for front camera)
+  disabled={selectedStyle}
+/>
+
+                 <Button
+                   disabled={selectedStyle}
+                   className=""
+                   onClick={() => fileInputRef.current.click()}
+                   style={uploadBtn}
+                 >
+                   {!selectedStyle ?
+                   <span className="material-symbols-outlined" style={uploadIcon}>
+                     Camera
+                   </span>
+                   :
+                   <span className="material-symbols-outlined text-danger" style={uploadIcon}>
+                     block
+                   </span>
+                   }
+                 </Button>
+               </div>
+             </div>
                 <div className="position-relative">
                   <div className="file-upload-section">
                     <input

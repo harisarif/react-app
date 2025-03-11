@@ -132,6 +132,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const { userData } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(post.liked || false);
   const [isLiking, setIsLiking] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showMediaModal, setShowMediaModal] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
@@ -277,22 +278,41 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     setIsCommentLoading(true);
 
     try {
+      setIsCommentLoading(true);
       const token = localStorage.getItem('access_token');
-
-      const response = await axios.post(`/api/posts/${post.id}/comment`, {
-        content: newComment
-      }, {
+    
+      const data = new FormData();
+      data.append('content', newComment);
+    
+      // Ensure selectedFiles is an array
+      if (selectedFiles && selectedFiles.length > 0) {
+        Array.from(selectedFiles).forEach((file, index) => {      
+          console.log(`Appending file: ${file.name}`);
+          data.append(`media[${index}]`, file);
+        });
+      }
+    
+      console.log("FormData before sending:");
+      for (let pair of data.entries()) {
+        console.log(pair[0], pair[1]); // Log FormData contents
+      }
+    
+      const response = await axios.post(`/api/posts/${post.id}/comment`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data", // Optional, axios usually sets this automatically
         },
       });
+    
       setComments([...comments, response.data.comment]);
       setNewComment('');
+      setSelectedFiles([]); // Reset selected files after upload
     } catch (error) {
       console.error('Error posting comment:', error);
     } finally {
       setIsCommentLoading(false);
     }
+    
   };
 
   const handleMediaClick = (mediaUrl, type, index) => {
@@ -449,6 +469,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     setNewComment(newComment + emoji.emoji);
     setShowEmojiDropdown(false);
   };
+
+
 
   return (
     <>
@@ -741,6 +763,29 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         />
                       )}
                     </div>
+                    <div className="d-flex gap-3">
+                    <input
+                        type="file"
+                        className="form-control"
+                        accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                        capture="environment" // This enables the camera for taking pictures
+                        onChange={(e) => setSelectedFiles([...selectedFiles, ...e.target.files])}
+                        multiple
+                      />
+                      <input
+                        type="file"
+                        className="form-control"
+                        onChange={(e) => setSelectedFiles([...selectedFiles, ...e.target.files])}
+                        multiple
+                      />
+                      <div>
+                        {Array.from(selectedFiles).map((file, index) => (
+                          <span key={index} className="badge bg-secondary me-1">
+                            {file.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                     <button
                       type="submit"
                       className="btn btn-primary"
@@ -762,10 +807,16 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         className="rounded-circle"
                         style={{ width: '40px', height: '40px' }}
                       />
-                      <div>
-                        <h6 className="m-0">{comment.user?.name || 'Anonymous'}</h6>
-                        <p className="m-0">{comment.content}</p>
-                      </div>
+<div>
+  <h6 className="m-0">{comment.user?.name || 'Anonymous'}</h6>
+  <p className="m-0">{comment.content}</p>
+  
+  {comment.media && (
+    JSON.parse(comment.media).map((mediaItem, index) => (
+      <img key={index} src={baseurl +'/'+ mediaItem} alt={`Media ${index}`} style={{ maxWidth: '200px' }} />
+    ))
+  )}
+</div>
                     </div>
                   </div>
                 ))}
