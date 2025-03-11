@@ -168,7 +168,7 @@ export default function SearchBar(props) {
   };
 
   return (
-<div style={{ position: "relative" }}>
+    <div style={{ position: "relative" }}>
       {/* Main Search Bar */}
       <Form>
         <Form.Group className={`SearchBar ${props.page}`} controlId="">
@@ -198,26 +198,29 @@ export default function SearchBar(props) {
             zIndex: 10,
             background: "white",
             boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-            borderRadius: "5px",
+            borderRadius: "16px",
             overflow: "hidden",
           }}
         >
           {admins.map((admin) => (
-            <Card
-              key={admin.id}
-              className="dropdown-item p-2 d-flex align-items-center"
-              onMouseDown={(e) => e.preventDefault()} // Prevents closing on click
-              onClick={() => window.location.href = `/profile/${admin.id}`}
-            >
-              <img
-                src={getProfileImageUrl(admin)}
-                alt={admin.name}
-                className="rounded-circle avatar-50 me-3"
-              />
-              <div>
-                <h6 className="mb-0">{admin?.name}</h6>
-                <p className="mb-0 text-muted">{admin?.email}</p>
-              </div>
+            <Card className="mb-2">
+              <Card.Body className="p-3 py-2">
+
+                <div className="d-flex flex-column gap-2">
+                  <div className="d-flex justify-content-start align-items-center overflow-hidden">
+                    <img
+                      src={getProfileImageUrl(admin)}
+                      alt={admin.name}
+                      className="rounded-circle avatar-40 me-2"
+                    />
+                    <div className="d-flex flex-column gap-0">
+                      <h6 className="mb-0 suggestion-user-name text-dark font-14">{admin?.name}</h6>
+                      <p className="mb-0 text-muted suggestion-user-email text-dark font-12 mt-n1">{admin?.email}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </Card.Body>
             </Card>
           ))}
         </div>
