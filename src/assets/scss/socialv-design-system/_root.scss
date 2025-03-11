@@ -34,11 +34,229 @@
     display: block;
   }
 
-  .form-control{
+  .form-control {
     &:hover:not(:disabled):not([readonly])::file-selector-button {
       color: var(--bs-gray-200);
       background-color: var(--bs-heading-color);
     }
   }
 
+  body {
+    background-color: var(--dark-black-theme);
+
+  }
+
+  .card {
+    background-color: var(--light-dark-theme);
+  }
+
+  #root {
+    .App {
+      .iq-top-navbar {
+        background-color: var(--light-dark-theme) !important;
+
+        .nav {
+          background-color: var(--light-dark-theme);
+
+        }
+      }
+    }
+  }
+
+  .main-content {
+    #sidebar-menu {
+      .nav-item {
+        .nav-link {
+          color: var(--white-color);
+        }
+      }
+
+      .nav-top-child,
+      .nav-bottom-childs {
+        background-color: var(--light-dark-theme);
+
+      }
+    }
+  }
+
+  #content-page {
+    .custom-conatiner {
+      .row {
+        .card-block {
+          background-color: var(--light-dark-theme);
+
+          .card-body {
+            .create-post-form-cntrl {
+              background-color: var(--dark-black-theme) !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .comment-area {
+    .leave-comment-area {
+      .input-wrap {
+        background-color: var(--dark-black-theme);
+        border: var(--bs-border-width) solid var(--bs-border-color);
+      }
+    }
+  }
+
+
+
+  .suggestions-div {
+    .sugession-title {
+      color: var(--white-color);
+
+    }
+
+    .inner-wrapper {
+      background-color: var(--light-dark-theme) !important;
+
+      .card {
+        background-color: var(--transparent-color);
+
+        .suggestion-user-name {
+          color: var(--white-color) !important;
+        }
+      }
+    }
+  }
+
+  .iq-nav-menu .nav-item .nav-link svg,
+  .iq-nav-menu .nav-item .nav-link svg {
+    fill: var(--white-color) !important;
+    stroke: var(--white-color) !important;
+
+  }
+
+  .iq-nav-menu .nav-item .nav-link span,
+  .iq-nav-menu .nav-item .nav-link span {
+    color: var(--white-color) !important;
+  }
+
+  .iq-top-navbar .nav .navbar-inner .bussiness-crypto-main-web-wrapper svg path {
+    stroke: var(--white-color) !important;
+  }
+
+  .feeds-svg path {
+    fill: var(--white-color) !important;
+    stroke: var(--white-color) !important;
+
+  }
+
+  .sidebar.sidebar-default .nav-link:not(.static-item).active {
+    color: var(--purpule-color) !important;
+  }
+
+  .create-post-form-cntrl {
+    background-color: var(--dark-black-theme);
+  }
+
+  .SearchBar {
+    background-color: var(--dark-black-theme) !important;
+
+    & input {
+      background-color: var(--dark-black-theme) !important;
+      border-radius: 12px;
+    }
+  }
+
+  .nav-fourth-li {
+    .nav-link {
+      .right-icon {
+        color: var(--white-color) !important;
+      }
+    }
+
+    .nav-link.active {
+      .item-name {
+        color: var(--purpule-color);
+      }
+
+      .feeds-svg path {
+        fill: var(--purpule-color) !important;
+        stroke: var(--purpule-color) !important;
+
+      }
+
+      .right-icon {
+        color: var(--purpule-color) !important;
+      }
+    }
+
+    [aria-expanded="true"] {
+      .item-name {
+        color: var(--purpule-color);
+      }
+
+      .feeds-svg path {
+        fill: var(--purpule-color) !important;
+        stroke: var(--purpule-color) !important;
+      }
+
+      .right-icon {
+        color: var(--purpule-color) !important;
+      }
+    }
+  }
+
+
+  .special-post .comment-area .btn svg path {
+    color: var(--white-color) !important;
+    stroke: var(--white-color) !important;
+    fill: var(--white-color);
+  }
+
+
+
+  .main-content:has(.feed-sub-item.active) .nav-fourth-li .item-name {
+    color: var(--purpule-color) !important;
+  }
+
+  .main-content:has(.feed-sub-item.active) .nav-fourth-li .right-icon {
+    color: var(--purpule-color) !important;
+  }
+
+  .main-content:has(.feed-sub-item.active) .nav-fourth-li svg path {
+    color: var(--purpule-color) !important;
+    fill: var(--purpule-color) !important;
+    stroke: var(--purpule-color) !important;
+  }
+
+  .nav-for-mobile svg path {
+    stroke: var(--white-color) !important;
+
+  }
+
+  .nav-for-mobile {
+    background-color: var(--light-dark-theme) !important;
+
+    .iq-nav-menu {
+      background-color: var(--light-dark-theme) !important;
+    }
+  }
+
+
+
+.light-logo{
+  display: none;
+}
+.dark-logo{
+  display: block;
+}
+
+
+@media (max-width: 1200px){
+  #first-tour{
+    background-color: var(--dark-black-theme) !important;
+    .sidebar-logo{
+      & svg{
+        color: var(--white-color) !important;
+      }
+    }
+  }
+}
 }

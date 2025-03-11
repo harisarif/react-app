@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 // Import selectors & action from setting store
 import * as SettingSelector from "../../../../store/setting/selectors";
 import equity from "../../../../assets/images/Equity_Circle.png";
+import equityLight from "../../../../assets/images/Equity-light.png";
 
 // Redux Selector / Action
 import { useSelector } from "react-redux";
@@ -107,7 +108,8 @@ const Sidebar = () => {
             to="/"
             className="d-flex align-items-center gap-2 iq-header-logo"
           >
-            <img src={equity} class="brand-logo" alt="#" />
+       <img src={equity} class="brand-logo light-logo" alt="#" />
+                       <img src={equityLight} class="brand-logo dark-logo" alt="#" />
           </Link>
           <span onClick={minisidebar}>
             <RiCloseFill size={24} color={'#000'} />

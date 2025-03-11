@@ -24,7 +24,7 @@ import { FaPaperclip } from "react-icons/fa";
 import { AiOutlineLink } from "react-icons/ai";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import { BsEmojiSmile } from "react-icons/bs";
-import EmojiPicker  from 'emoji-picker-react';
+// import EmojiPicker  from 'emoji-picker-react';
 
 const FollowButton = styled.button`
   border: none;
@@ -733,13 +733,13 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       >
                         😀
                       </button>
-                      {showEmojiDropdown && (
+                      {/* {showEmojiDropdown && (
                         <EmojiPicker
                           onEmojiClick={handleEmojiSelect}
                           disableSearchBar
                           emojiStyle={{ width: '20px', height: '20px' }}
                         />
-                      )}
+                      )} */}
                     </div>
                     <button
                       type="submit"

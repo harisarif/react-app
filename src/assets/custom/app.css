@@ -49,10 +49,10 @@
 
 @media(max-width: 1380px) {
     :root {
-        --page-width: 1120px;
+        --page-width: 1180px;
         --page-gap: 20px;
-        --left-side-width: 220px;
-        --sugession-width: 300px;
+        --left-side-width: 250px;
+        --sugession-width: 330px;
     }
 }
 
@@ -1131,16 +1131,16 @@ aside {
     height: calc(100vh - 80px) !important;
     overflow: hidden !important;
 
-    & .sidebar-logo{
+    & .sidebar-logo {
         display: none;
     }
 
-    & .sidebar-body.data-scrollbar{
+    & .sidebar-body.data-scrollbar {
         height: calc(100vh - 80px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
 
-        &::-webkit-scrollbar{
+        &::-webkit-scrollbar {
             width: 0px;
         }
     }
@@ -1273,16 +1273,21 @@ aside {
     .jobs-with-icon span:nth-of-type(2) {
         font-size: 16px;
         font-weight: 500;
+        margin-top: 10px;
+
     }
 
     .event-with-icon span:nth-of-type(2) {
         font-size: 16px;
         font-weight: 500;
+        margin-top: 9px;
+
     }
 
     .photo-with-icon span:nth-of-type(2) {
         font-size: 16px;
         font-weight: 500;
+        margin-top: 7px;
     }
 }
 
@@ -1590,7 +1595,10 @@ aside {
     padding-right: 0rem;
 }
 
-:root .nav-top-child, :root .nav-bottom-childs, [data-bs-theme=light] .nav-top-child, [data-bs-theme=light] .nav-bottom-childs {
+:root .nav-top-child,
+:root .nav-bottom-childs,
+[data-bs-theme=light] .nav-top-child,
+[data-bs-theme=light] .nav-bottom-childs {
     box-shadow: 0 0px 20px -3px #5243FF26;
 }
 
@@ -1751,6 +1759,8 @@ aside .sidebar-body {
     }
 }
 
+@media (min-width:1200px) and (max-width: 1380px) {}
+
 @media(max-width: 1340px) {
     .SearchBar.headerSearch {
         display: none;
@@ -1786,7 +1796,10 @@ aside .sidebar-body {
         display: none !important;
     }
 
-    :root .nav-top-child, :root .nav-bottom-childs, [data-bs-theme=light] .nav-top-child, [data-bs-theme=light] .nav-bottom-childs {
+    :root .nav-top-child,
+    :root .nav-bottom-childs,
+    [data-bs-theme=light] .nav-top-child,
+    [data-bs-theme=light] .nav-bottom-childs {
         box-shadow: none;
     }
 
@@ -1898,7 +1911,7 @@ aside .sidebar-body {
         z-index: 99;
     }
 
-    .main-content .content-inner{
+    .main-content .content-inner {
         padding: 85px 0 0 0 !important;
     }
 }
@@ -1965,12 +1978,12 @@ aside .sidebar-body {
         overflow: hidden;
     }
 
-    .iq-top-navbar{
+    .iq-top-navbar {
         position: fixed !important;
         border: none !important;
         background: #ebeaf0 !important;
 
-        & nav.nav{
+        & nav.nav {
             background: transparent !important;
         }
     }
@@ -1983,9 +1996,8 @@ aside .sidebar-body {
         top: 0px !important;
         height: calc(100vh - 00px) !important;
 
-        & .sidebar-logo{
-            display: flex
-;
+        & .sidebar-logo {
+            display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 4px;
@@ -2032,10 +2044,69 @@ aside .sidebar-body {
     }
 }
 
-#rightSidebar.right-sidebar{
+#rightSidebar.right-sidebar {
     display: none !important;
 }
 
-#suggestions-div.suggestions-div::-webkit-scrollbar{
+#suggestions-div.suggestions-div::-webkit-scrollbar {
     width: 0px;
 }
+
+.feeds-svg path {
+    fill: var(--black-color);
+}
+
+
+.nav-fourth-li {
+    .nav-link.active {
+        .feeds-svg path {
+            fill: var(--purpule-color) !important;
+        }
+
+        .right-icon {
+            color: var(--purpule-color) !important;
+        }
+    }
+
+    [aria-expanded="true"] {
+        .feeds-svg path {
+            fill: var(--purpule-color) !important;
+        }
+
+        .right-icon {
+            color: var(--purpule-color) !important;
+        }
+    }
+}
+
+
+:root .iq-nav-menu .nav-item:hover .nav-link svg path,
+:root .iq-nav-menu .nav-item.active .nav-link svg path,
+[data-bs-theme=light] .iq-nav-menu .nav-item:hover .nav-link svg,
+[data-bs-theme=light] .iq-nav-menu .nav-item.active .nav-link svg {
+    stroke: var(--purpule-color) !important;
+}
+.nav-for-mobile svg path{
+    stroke: var(--black-color) !important;
+
+}
+.iq-top-navbar .nav .navbar-inner .bussiness-crypto-main-web-wrapper svg path {
+    stroke: #282828;
+}
+
+.main-content:has(.feed-sub-item.active) .nav-fourth-li .item-name {
+    color: var(--purpule-color) !important;
+}
+
+.main-content:has(.feed-sub-item.active) .nav-fourth-li .right-icon {
+    color: var(--purpule-color) !important;
+}
+
+.main-content:has(.feed-sub-item.active) .nav-fourth-li svg path {
+    color: var(--purpule-color) !important;
+    fill: var(--purpule-color) !important;
+    stroke: var(--purpule-color) !important;
+}
+.dark-logo{
+    display: none;
+  }
