@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import Swal from 'sweetalert2';
 import ShareOffcanvasNew from './ShareOffcanvasNew';
+import CommentOffcanvasNew from './CommentOffcanvasNew';
 import axios from '../utils/axios';
 import user1 from "../assets/images/user/1.jpg";
 import { getProfileImageUrl } from '../utils/helpers';
@@ -24,7 +25,7 @@ import { FaPaperclip } from "react-icons/fa";
 import { AiOutlineLink } from "react-icons/ai";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import { BsEmojiSmile } from "react-icons/bs";
-// import EmojiPicker  from 'emoji-picker-react';
+import EmojiPicker from 'emoji-picker-react';
 
 const FollowButton = styled.button`
   border: none;
@@ -128,6 +129,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const [likes, setLikes] = useState(post.likes || []);
   const [showComments, setShowComments] = useState(false);
   const [showShareOffcanvas, setShowShareOffcanvas] = useState(false);
+  const [showCommentOffcanvas, setShowCommentOffcanvas] = useState(false);
   const [newComment, setNewComment] = useState('');
   const { userData } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(post.liked || false);
@@ -280,30 +282,30 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     try {
       setIsCommentLoading(true);
       const token = localStorage.getItem('access_token');
-    
+
       const data = new FormData();
       data.append('content', newComment);
-    
+
       // Ensure selectedFiles is an array
       if (selectedFiles && selectedFiles.length > 0) {
-        Array.from(selectedFiles).forEach((file, index) => {      
+        Array.from(selectedFiles).forEach((file, index) => {
           console.log(`Appending file: ${file.name}`);
           data.append(`media[${index}]`, file);
         });
       }
-    
+
       console.log("FormData before sending:");
       for (let pair of data.entries()) {
         console.log(pair[0], pair[1]); // Log FormData contents
       }
-    
+
       const response = await axios.post(`/api/posts/${post.id}/comment`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data", // Optional, axios usually sets this automatically
         },
       });
-    
+
       setComments([...comments, response.data.comment]);
       setNewComment('');
       setSelectedFiles([]); // Reset selected files after upload
@@ -312,7 +314,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     } finally {
       setIsCommentLoading(false);
     }
-    
+
   };
 
   const handleMediaClick = (mediaUrl, type, index) => {
@@ -471,6 +473,20 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   };
 
 
+  const [fileNames, setFileNames] = useState([]);
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files).map(file => file.name);
+    setFileNames(files);
+  };
+
+  const [link, setLink] = useState([]);
+
+  const handleLinkChange = (event) => {
+    const links = Array.from(event.target.files).map(file => file.name);
+    setLink(links);
+  };
+
 
   return (
     <>
@@ -593,6 +609,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                           )}
                         </Dropdown.Menu>
                       </Dropdown>
+
                     </div>
                   </div>
                 </div>
@@ -691,47 +708,84 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               </div>
               <button
                 className="btn btn-link text-body p-0"
-                onClick={() => setShowComments(!showComments)}
-              >  
+                // onClick={() => setShowComments(!showComments)}
+                onClick={() => setShowCommentOffcanvas(true)}
+              >
                 <FaRegComment size={'1.65rem'} />
-                {/* <span className="ms-1">{comments.length} Comments</span> */}
               </button>
               <button
                 className="btn btn-link text-body p-0"
                 onClick={() => setShowShareOffcanvas(true)}
               >
                 <LiaTelegram size={'1.75rem'} />
-                {/* <span className="ms-1">Share</span> */}
               </button>
             </div>
 
             <div className="w-100 d-flex">
               <span className="m-1 fw-bold text-dark">{likes.length} Likes</span>
             </div>
+            <Form onSubmit={handleComment} >
+              <div className="leave-comment-area d-flex align-items-center gap-2" >
+                <div className="input-wrap w-100 d-flex align-items-center">
+                  <input
+                    type="text"
+                    className="w-100"
+                    placeholder="Write a comment"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    disabled={isCommentLoading}
+                  />
 
-            <div className="leave-comment-area d-flex align-items-center gap-2" >
-              <div className="input-wrap w-100 d-flex align-items-center">
-                <input
-                  type="text"
-                  className="w-100"
-                  placeholder="Write a comment"
-                />
+                  <input
+                    type="file"
+                    id="cameraFile"
+                    className="d-none"
+                    onChange={handleFileChange}
+                    accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                    capture="environment"
+                  />
+
+                  <input
+                    type="file"
+                    id="linkFile"
+                    className="d-none"
+                    onChange={handleLinkChange}
+                  />
 
 
-                <AiOutlineLink size={25} className='ms-2  bold-icon' />
-                <BsEmojiSmile size={25} className='ms-2  bold-icon' />
-                <MdOutlineCameraAlt size={25} className='ms-2 me-3 bold-icon' />
+                  <AiOutlineLink size={25} onClick={() => document.getElementById("linkFile").click()} className='ms-2  bold-icon' style={{ cursor: 'pointer' }} />
+                  <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowCommentOffcanvas(true)} style={{ cursor: 'pointer' }} />
+                  <MdOutlineCameraAlt size={25} onClick={() => document.getElementById("cameraFile").click()} className='ms-2 me-3 bold-icon' style={{ cursor: 'pointer' }} />
 
+                </div>
+
+                <button
+                  type="submit"
+                  className="icon-wrap bg-transparent border-0"
+                  disabled={isCommentLoading}
+                >
+                  {isCommentLoading ? <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span> : <LiaTelegram size={'1.75rem'} />}
+                </button>
               </div>
-
-              <div className="icon-wrap">
-                <LiaTelegram size={'1.75rem'} />
-
+            </Form>
+            {showEmojiDropdown && (
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+                disableSearchBar
+                emojiStyle={{ width: '20px', height: '20px' }}
+              />
+            )}
+            <div className="d-flex gap--2">
+              <div className="mt-1 text-gray-700 text-dark text-sm px-1">
+                {fileNames.length > 0 ? fileNames.join(", ") : ""}
+              </div>
+              <div className="mt-1 text-gray-700 text-dark text-sm px-1">
+                {link.length > 0 ? link.join(", ") : ""}
               </div>
             </div>
             <Collapse in={showComments}>
               <div className="comments-section mt-0">
-                <form onSubmit={handleComment} className="mt-2 mb-3">
+                {/* <form onSubmit={handleComment} className="mt-2 mb-3">
                   <div className="d-flex gap-3">
                     <img
                       src={getProfileImageUrl(userData)}
@@ -755,16 +809,16 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       >
                         😀
                       </button>
-                      {/* {showEmojiDropdown && (
+                      {showEmojiDropdown && (
                         <EmojiPicker
                           onEmojiClick={handleEmojiSelect}
                           disableSearchBar
                           emojiStyle={{ width: '20px', height: '20px' }}
                         />
-                      )} */}
+                      )}
                     </div>
                     <div className="d-flex gap-3">
-                    <input
+                      <input
                         type="file"
                         className="form-control"
                         accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
@@ -797,7 +851,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       )}
                     </button>
                   </div>
-                </form>
+                </form> */}
                 {comments?.map((comment, index) => (
                   <div key={index} className="comment-item mb-3">
                     <div className="d-flex gap-3">
@@ -807,16 +861,16 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         className="rounded-circle"
                         style={{ width: '40px', height: '40px' }}
                       />
-<div>
-  <h6 className="m-0">{comment.user?.name || 'Anonymous'}</h6>
-  <p className="m-0">{comment.content}</p>
-  
-  {comment.media && (
-    JSON.parse(comment.media).map((mediaItem, index) => (
-      <img key={index} src={baseurl +'/'+ mediaItem} alt={`Media ${index}`} style={{ maxWidth: '200px' }} />
-    ))
-  )}
-</div>
+                      <div>
+                        <h6 className="m-0">{comment.user?.name || 'Anonymous'}</h6>
+                        <p className="m-0">{comment.content}</p>
+
+                        {comment.media && (
+                          JSON.parse(comment.media).map((mediaItem, index) => (
+                            <img key={index} src={baseurl + '/' + mediaItem} alt={`Media ${index}`} style={{ maxWidth: '200px' }} />
+                          ))
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -870,6 +924,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       </Modal>
 
       <ShareOffcanvasNew show={showShareOffcanvas} onHide={() => setShowShareOffcanvas(false)} />
+      <CommentOffcanvasNew show={showCommentOffcanvas} onHide={() => setShowCommentOffcanvas(false)} />
 
       {/* PDF Preview Modal */}
       <Modal

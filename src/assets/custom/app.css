@@ -1178,7 +1178,7 @@ aside {
         font-size: 25px !important;
     }
 
-    & svg{
+    & svg {
         width: 24px !important;
         height: 24px !important;
     }
@@ -1188,8 +1188,8 @@ aside {
     }
 }
 
-.sidebar.navs-rounded-all .sidebar-body .nav-item .nav-link{
-    & svg, & i{
+.sidebar.navs-rounded-all .sidebar-body .nav-item .nav-link {
+    & svg, & i {
         font-size: 24px !important;
     }
 }
@@ -1539,7 +1539,7 @@ aside {
     border-radius: 50px;
 }
 
-.slick-dots li{
+.slick-dots li {
     margin: 0 2px !important;
 }
 
@@ -1757,6 +1757,10 @@ aside .sidebar-body {
     fill: #000;
 }
 
+.comment-area .btn-link.like-button.liked svg path {
+    fill: #f80000;
+}
+
 .create-post-icons-main {
     display: flex !important;
     align-items: center !important;
@@ -1774,49 +1778,59 @@ aside .sidebar-body {
     .SearchBar.headerSearch {
         display: none;
     }
-    .suggestions-div{
+
+    .suggestions-div {
         & .suggestion-user-email {
             font-size: 11px !important;
         }
-    
+
         & .suggestion-user-name {
             font-size: 12px !important;
         }
     }
+
     .sugession-title {
         font-size: 16px;
         padding: 0px 20px;
     }
+
     :root .nav-item .item-name, [data-bs-theme=light] .nav-item .item-name {
         font-weight: 600 !important;
         font-size: 15px !important;
         margin-left: 16px !important;
     }
-    .brand-logo{
+
+    .brand-logo {
         width: 200px;
     }
+
     .iq-nav-menu li a {
         .nav-text {
             font-size: 14px !important;
         }
     }
-    .iq-nav-menu li.active > a {
+
+    .iq-nav-menu li.active>a {
         .nav-text {
             font-size: 14px !important;
         }
     }
-    .iq-top-navbar{
+
+    .iq-top-navbar {
         height: 72px !important;
     }
-    .main-content .content-inner{
+
+    .main-content .content-inner {
         padding-top: 28px !important;
     }
-    .suggestions-div{
+
+    .suggestions-div {
         height: calc(100vh - 72px) !important;
         top: 72px !important;
         padding-top: 26px !important;
     }
-    .sidebar{
+
+    .sidebar {
         top: 72px !important;
     }
 }
@@ -2140,10 +2154,12 @@ aside .sidebar-body {
 [data-bs-theme=light] .iq-nav-menu .nav-item.active .nav-link svg {
     stroke: var(--purpule-color) !important;
 }
-.nav-for-mobile svg path{
+
+.nav-for-mobile svg path {
     stroke: var(--black-color) !important;
 
 }
+
 .iq-top-navbar .nav .navbar-inner .bussiness-crypto-main-web-wrapper svg path {
     stroke: #282828;
 }
@@ -2161,6 +2177,11 @@ aside .sidebar-body {
     fill: var(--purpule-color) !important;
     stroke: var(--purpule-color) !important;
 }
-.dark-logo{
+
+.dark-logo {
     display: none;
-  }
+}
+
+.header-search-result:hover{
+    background: #dadada;
+}

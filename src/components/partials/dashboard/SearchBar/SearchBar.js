@@ -203,7 +203,7 @@ export default function SearchBar(props) {
           }}
         >
           {admins.map((admin) => (
-            <Card className="mb-2">
+            <Card className="mb-2 header-search-result">
               <Card.Body className="p-3 py-2">
 
                 <div className="d-flex flex-column gap-2">
