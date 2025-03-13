@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import Swal from 'sweetalert2';
 import ShareOffcanvasNew from './ShareOffcanvasNew';
+import CommentOffcanvasNew from './CommentOffcanvasNew';
 import axios from '../utils/axios';
 import user1 from "../assets/images/user/1.jpg";
 import { getProfileImageUrl } from '../utils/helpers';
@@ -128,6 +129,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const [likes, setLikes] = useState(post.likes || []);
   const [showComments, setShowComments] = useState(false);
   const [showShareOffcanvas, setShowShareOffcanvas] = useState(false);
+  const [showCommentOffcanvas, setShowCommentOffcanvas] = useState(false);
   const [newComment, setNewComment] = useState('');
   const { userData } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(post.liked || false);
@@ -471,6 +473,20 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   };
 
 
+  const [fileNames, setFileNames] = useState([]);
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files).map(file => file.name);
+    setFileNames(files);
+  };
+
+  const [link, setLink] = useState([]);
+
+  const handleLinkChange = (event) => {
+    const links = Array.from(event.target.files).map(file => file.name);
+    setLink(links);
+  };
+
 
   return (
     <>
@@ -593,6 +609,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                           )}
                         </Dropdown.Menu>
                       </Dropdown>
+
                     </div>
                   </div>
                 </div>
@@ -691,87 +708,84 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               </div>
               <button
                 className="btn btn-link text-body p-0"
-                onClick={() => setShowComments(!showComments)}
+                // onClick={() => setShowComments(!showComments)}
+                onClick={() => setShowCommentOffcanvas(true)}
               >
                 <FaRegComment size={'1.65rem'} />
-                {/* <span className="ms-1">{comments.length} Comments</span> */}
               </button>
               <button
                 className="btn btn-link text-body p-0"
                 onClick={() => setShowShareOffcanvas(true)}
               >
                 <LiaTelegram size={'1.75rem'} />
-                {/* <span className="ms-1">Share</span> */}
               </button>
             </div>
 
             <div className="w-100 d-flex">
               <span className="m-1 fw-bold text-dark">{likes.length} Likes</span>
             </div>
-
-            <Form onSubmit={handleComment}>
+            <Form onSubmit={handleComment} >
               <div className="leave-comment-area d-flex align-items-center gap-2" >
                 <div className="input-wrap w-100 d-flex align-items-center">
-
                   <input
                     type="text"
+                    className="w-100"
+                    placeholder="Write a comment"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    className="form-control w-100"
-                    placeholder="Write a comment"
                     disabled={isCommentLoading}
                   />
 
+                  <input
+                    type="file"
+                    id="cameraFile"
+                    className="d-none"
+                    onChange={handleFileChange}
+                    accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                    capture="environment"
+                  />
 
-                  <AiOutlineLink size={25} className='ms-2  bold-icon' />
-                  {/* <BsEmojiSmile size={25} onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} className='ms-2  bold-icon' /> */}
-                  <Dropdown>
-                    <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
-                    <BsEmojiSmile size={25} className='ms-2  bold-icon' />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu align="end" className="shadow-sm">
-                      <Dropdown.Item
-                        className="d-flex align-items-center"
+                  <input
+                    type="file"
+                    id="linkFile"
+                    className="d-none"
+                    onChange={handleLinkChange}
+                  />
 
-                      >
-                        <EmojiPicker
-                          onEmojiClick={handleEmojiSelect}
-                          disableSearchBar
-                          emojiStyle={{ width: '20px', height: '20px' }}
-                        />
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <MdOutlineCameraAlt as={'input'} type='file' size={25} onChange={(e) => setSelectedFiles([...selectedFiles, ...e.target.files])} className='ms-2 me-3 bold-icon' />
+
+                  <AiOutlineLink size={25} onClick={() => document.getElementById("linkFile").click()} className='ms-2  bold-icon' style={{ cursor: 'pointer' }} />
+                  <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowCommentOffcanvas(true)} style={{ cursor: 'pointer' }} />
+                  <MdOutlineCameraAlt size={25} onClick={() => document.getElementById("cameraFile").click()} className='ms-2 me-3 bold-icon' style={{ cursor: 'pointer' }} />
 
                 </div>
-
-                {showEmojiDropdown && (
-                  <EmojiPicker
-                    onEmojiClick={handleEmojiSelect}
-                    disableSearchBar
-                    emojiStyle={{ width: '20px', height: '20px' }}
-                  />
-                )}
 
                 <button
                   type="submit"
                   className="icon-wrap bg-transparent border-0"
                   disabled={isCommentLoading}
                 >
-                  {isCommentLoading ? (
-                    <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
-                  ) :
-                    <LiaTelegram size={'1.75rem'} />}
+                  {isCommentLoading ? <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span> : <LiaTelegram size={'1.75rem'} />}
                 </button>
-
               </div>
             </Form>
-
-
+            {showEmojiDropdown && (
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+                disableSearchBar
+                emojiStyle={{ width: '20px', height: '20px' }}
+              />
+            )}
+            <div className="d-flex gap--2">
+              <div className="mt-1 text-gray-700 text-dark text-sm px-1">
+                {fileNames.length > 0 ? fileNames.join(", ") : ""}
+              </div>
+              <div className="mt-1 text-gray-700 text-dark text-sm px-1">
+                {link.length > 0 ? link.join(", ") : ""}
+              </div>
+            </div>
             <Collapse in={showComments}>
               <div className="comments-section mt-0">
-                <form onSubmit={handleComment} className="mt-2 mb-3">
+                {/* <form onSubmit={handleComment} className="mt-2 mb-3">
                   <div className="d-flex gap-3">
                     <img
                       src={getProfileImageUrl(userData)}
@@ -794,7 +808,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                           disableSearchBar
                           emojiStyle={{ width: '20px', height: '20px' }}
                         />
-                      )} */}
+                      )}
                     </div>
                     <div className="d-flex gap-3">
                       <input
@@ -819,7 +833,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       </div>
                     </div>
                   </div>
-                </form>
+                </form> */}
                 {comments?.map((comment, index) => (
                   <div key={index} className="comment-item mb-3">
                     <div className="d-flex gap-3">
@@ -892,6 +906,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       </Modal>
 
       <ShareOffcanvasNew show={showShareOffcanvas} onHide={() => setShowShareOffcanvas(false)} />
+      <CommentOffcanvasNew show={showCommentOffcanvas} onHide={() => setShowCommentOffcanvas(false)} />
 
       {/* PDF Preview Modal */}
       <Modal
