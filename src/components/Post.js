@@ -794,15 +794,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       style={{ width: '40px', height: '40px' }}
                     />
                     <div className="flex-grow-1">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Write a comment..."
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        disabled={isCommentLoading}
-                      />
-                      <button
+
+                      {/* <button
                         type="button"
                         className="btn btn-light"
                         onClick={() => setShowEmojiDropdown(!showEmojiDropdown)}
@@ -830,7 +823,6 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         type="file"
                         className="form-control"
                         onChange={(e) => setSelectedFiles([...selectedFiles, ...e.target.files])}
-                        multiple
                       />
                       <div>
                         {Array.from(selectedFiles).map((file, index) => (
@@ -840,16 +832,6 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         ))}
                       </div>
                     </div>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={isCommentLoading}
-                    >
-                      Post
-                      {isCommentLoading && (
-                        <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
-                      )}
-                    </button>
                   </div>
                 </form> */}
                 {comments?.map((comment, index) => (

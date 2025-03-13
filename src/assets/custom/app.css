@@ -66,7 +66,13 @@
         --left-side-expand: 300px;
     }
 }
-
+/* @media(max-width: 1100px) {
+    .main-content{
+        .notification-page{
+            margin-top: 85px !important;
+        }
+    }
+} */
 @media(max-width: 1060px) {
     :root {
         --page-width: 760px;
@@ -75,6 +81,16 @@
         --sugession-width: 280px;
         --left-side-mini: 60px;
         --left-side-expand: 300px;
+    }
+    .tab-content{
+        #content-page{
+            padding: 10px !important;
+        }
+    }
+    .main-content{
+        .notification-page{
+            margin-top: 85px !important;
+        }
     }
 }
 
@@ -1130,7 +1146,7 @@
     border: unset !important;
 }
 
-aside {
+#first-tour{
     top: 80px;
     height: calc(100vh - 80px) !important;
     overflow: hidden !important;
@@ -1766,18 +1782,24 @@ aside .sidebar-body {
     align-items: center !important;
     justify-content: space-around !important;
 }
-
+.notification-type-btn{
+    position: absolute;
+    left: 47px;
+    top: 54px;
+    border-radius: 50%;
+}
 
 @media (max-width: 1602px) {
     .feed-parent-div::before {
         left: 46px !important;
     }
+    .notification-type-btn{ 
+        top: 45px; 
+    }
 }
 
 @media(max-width: 1367px) {
-    .SearchBar.headerSearch {
-        display: none;
-    }
+ 
 
     .suggestions-div {
         & .suggestion-user-email {
@@ -1836,6 +1858,9 @@ aside .sidebar-body {
 }
 
 @media (max-width: 1200px) {
+    .SearchBar.headerSearch {
+        display: none;
+    }
     #sidebar-toggle-icon {
         display: block;
     }
@@ -1920,7 +1945,15 @@ aside .sidebar-body {
 }
 
 @media (max-width: 991px) {
-
+    .notification-type-btn{ 
+        left: 36px;
+        top: 36px; 
+    }
+    .main-content{
+        .notification-page{
+            margin-top: 73px !important;
+        }
+    }
     .searchbo,
     .group-icon,
     .header-message-icon {
@@ -2052,7 +2085,7 @@ aside .sidebar-body {
         background: #ebeaf0 !important;
 
         & nav.nav {
-            background: transparent !important;
+            /* background: transparent !important; */
         }
     }
 
@@ -2184,4 +2217,28 @@ aside .sidebar-body {
 
 .header-search-result:hover{
     background: #dadada;
+}
+.tab-content{
+    #content-page{
+        width: 100% !important;
+    }
+}
+.notification-page{
+    width: 100% !important;
+margin-top: 30px;
+    #controlled-tabs{
+        width: 100% !important;
+    }
+}
+
+.total-ntf-counter{
+    background-color: #389ea1;
+    padding: 2px 5px;
+    border-radius: 50%;
+    position: absolute;
+    left: 47px;
+    top: 60px;
+    color: white;
+    z-index: 9;
+    font-size: 10px;
 }

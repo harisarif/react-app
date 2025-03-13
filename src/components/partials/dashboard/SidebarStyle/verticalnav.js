@@ -190,6 +190,7 @@ const VerticalNav = React.memo(() => {
                             </OverlayTrigger>
                             <span className="item-name">Events Calender</span>
                         </Link>
+                        <div className="total-ntf-counter">2</div>
                     </li>
                     <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
                         <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">
