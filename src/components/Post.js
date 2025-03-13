@@ -24,7 +24,7 @@ import { FaPaperclip } from "react-icons/fa";
 import { AiOutlineLink } from "react-icons/ai";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import { BsEmojiSmile } from "react-icons/bs";
-// import EmojiPicker  from 'emoji-picker-react';
+import EmojiPicker from 'emoji-picker-react';
 
 const FollowButton = styled.button`
   border: none;
@@ -280,30 +280,30 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     try {
       setIsCommentLoading(true);
       const token = localStorage.getItem('access_token');
-    
+
       const data = new FormData();
       data.append('content', newComment);
-    
+
       // Ensure selectedFiles is an array
       if (selectedFiles && selectedFiles.length > 0) {
-        Array.from(selectedFiles).forEach((file, index) => {      
+        Array.from(selectedFiles).forEach((file, index) => {
           console.log(`Appending file: ${file.name}`);
           data.append(`media[${index}]`, file);
         });
       }
-    
+
       console.log("FormData before sending:");
       for (let pair of data.entries()) {
         console.log(pair[0], pair[1]); // Log FormData contents
       }
-    
+
       const response = await axios.post(`/api/posts/${post.id}/comment`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data", // Optional, axios usually sets this automatically
         },
       });
-    
+
       setComments([...comments, response.data.comment]);
       setNewComment('');
       setSelectedFiles([]); // Reset selected files after upload
@@ -312,7 +312,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     } finally {
       setIsCommentLoading(false);
     }
-    
+
   };
 
   const handleMediaClick = (mediaUrl, type, index) => {
@@ -692,7 +692,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               <button
                 className="btn btn-link text-body p-0"
                 onClick={() => setShowComments(!showComments)}
-              >  
+              >
                 <FaRegComment size={'1.65rem'} />
                 {/* <span className="ms-1">{comments.length} Comments</span> */}
               </button>
@@ -709,26 +709,66 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               <span className="m-1 fw-bold text-dark">{likes.length} Likes</span>
             </div>
 
-            <div className="leave-comment-area d-flex align-items-center gap-2" >
-              <div className="input-wrap w-100 d-flex align-items-center">
-                <input
-                  type="text"
-                  className="w-100"
-                  placeholder="Write a comment"
-                />
+            <Form onSubmit={handleComment}>
+              <div className="leave-comment-area d-flex align-items-center gap-2" >
+                <div className="input-wrap w-100 d-flex align-items-center">
+
+                  <input
+                    type="text"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    className="form-control w-100"
+                    placeholder="Write a comment"
+                    disabled={isCommentLoading}
+                  />
 
 
-                <AiOutlineLink size={25} className='ms-2  bold-icon' />
-                <BsEmojiSmile size={25} className='ms-2  bold-icon' />
-                <MdOutlineCameraAlt size={25} className='ms-2 me-3 bold-icon' />
+                  <AiOutlineLink size={25} className='ms-2  bold-icon' />
+                  {/* <BsEmojiSmile size={25} onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} className='ms-2  bold-icon' /> */}
+                  <Dropdown>
+                    <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
+                    <BsEmojiSmile size={25} className='ms-2  bold-icon' />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu align="end" className="shadow-sm">
+                      <Dropdown.Item
+                        className="d-flex align-items-center"
+
+                      >
+                        <EmojiPicker
+                          onEmojiClick={handleEmojiSelect}
+                          disableSearchBar
+                          emojiStyle={{ width: '20px', height: '20px' }}
+                        />
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <MdOutlineCameraAlt as={'input'} type='file' size={25} onChange={(e) => setSelectedFiles([...selectedFiles, ...e.target.files])} className='ms-2 me-3 bold-icon' />
+
+                </div>
+
+                {showEmojiDropdown && (
+                  <EmojiPicker
+                    onEmojiClick={handleEmojiSelect}
+                    disableSearchBar
+                    emojiStyle={{ width: '20px', height: '20px' }}
+                  />
+                )}
+
+                <button
+                  type="submit"
+                  className="icon-wrap bg-transparent border-0"
+                  disabled={isCommentLoading}
+                >
+                  {isCommentLoading ? (
+                    <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                  ) :
+                    <LiaTelegram size={'1.75rem'} />}
+                </button>
 
               </div>
+            </Form>
 
-              <div className="icon-wrap">
-                <LiaTelegram size={'1.75rem'} />
 
-              </div>
-            </div>
             <Collapse in={showComments}>
               <div className="comments-section mt-0">
                 <form onSubmit={handleComment} className="mt-2 mb-3">
@@ -740,22 +780,15 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       style={{ width: '40px', height: '40px' }}
                     />
                     <div className="flex-grow-1">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Write a comment..."
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        disabled={isCommentLoading}
-                      />
-                      <button
+
+                      {/* <button
                         type="button"
                         className="btn btn-light"
                         onClick={() => setShowEmojiDropdown(!showEmojiDropdown)}
                       >
                         😀
                       </button>
-                      {/* {showEmojiDropdown && (
+                      {showEmojiDropdown && (
                         <EmojiPicker
                           onEmojiClick={handleEmojiSelect}
                           disableSearchBar
@@ -764,7 +797,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                       )} */}
                     </div>
                     <div className="d-flex gap-3">
-                    <input
+                      <input
                         type="file"
                         className="form-control"
                         accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
@@ -776,7 +809,6 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         type="file"
                         className="form-control"
                         onChange={(e) => setSelectedFiles([...selectedFiles, ...e.target.files])}
-                        multiple
                       />
                       <div>
                         {Array.from(selectedFiles).map((file, index) => (
@@ -786,16 +818,6 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         ))}
                       </div>
                     </div>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={isCommentLoading}
-                    >
-                      Post
-                      {isCommentLoading && (
-                        <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
-                      )}
-                    </button>
                   </div>
                 </form>
                 {comments?.map((comment, index) => (
@@ -807,16 +829,16 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         className="rounded-circle"
                         style={{ width: '40px', height: '40px' }}
                       />
-<div>
-  <h6 className="m-0">{comment.user?.name || 'Anonymous'}</h6>
-  <p className="m-0">{comment.content}</p>
-  
-  {comment.media && (
-    JSON.parse(comment.media).map((mediaItem, index) => (
-      <img key={index} src={baseurl +'/'+ mediaItem} alt={`Media ${index}`} style={{ maxWidth: '200px' }} />
-    ))
-  )}
-</div>
+                      <div>
+                        <h6 className="m-0">{comment.user?.name || 'Anonymous'}</h6>
+                        <p className="m-0">{comment.content}</p>
+
+                        {comment.media && (
+                          JSON.parse(comment.media).map((mediaItem, index) => (
+                            <img key={index} src={baseurl + '/' + mediaItem} alt={`Media ${index}`} style={{ maxWidth: '200px' }} />
+                          ))
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}

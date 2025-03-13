@@ -1130,7 +1130,7 @@
     border: unset !important;
 }
 
-aside {
+#first-tour{
     top: 80px;
     height: calc(100vh - 80px) !important;
     overflow: hidden !important;
@@ -2164,3 +2164,5 @@ aside .sidebar-body {
 .dark-logo{
     display: none;
   }
+
+  /* #react-aria8736048359-:rb: */
