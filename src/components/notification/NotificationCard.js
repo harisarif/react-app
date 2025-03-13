@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Dropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -113,17 +113,9 @@ const NotificationCard = ({ notification, onMarkAsRead, onDelete }) => {
                                 alt={notification.user?.name || 'User'} 
                                 className="rounded-circle avatar-40" 
                             />
-                        </div>
-                        <div className="w-100">
-                            <div className="d-flex justify-content-between">
-                                <div className="ms-3">
-                                    <h6>{notification.content}</h6>
-                                    <p className="mb-0">{getRelativeTime(notification.created_at)}</p>
-                                </div>
-                                <div className="d-flex align-items-center notification-actions">
-                                    <Link 
+                            <Link 
                                         to="#" 
-                                        className={`btn btn-icon btn-${getIconClass(notification.notif_type)}-subtle btn-sm me-3`}
+                                        className={`btn btn-icon btn-${getIconClass(notification.notif_type)}-subtle btn-sm me-3 notification-type-btn`}
                                         onClick={(e) => {
                                             e.preventDefault();
                                             onMarkAsRead(notification.id);
@@ -135,6 +127,15 @@ const NotificationCard = ({ notification, onMarkAsRead, onDelete }) => {
                                             </i>
                                         </span>
                                     </Link>
+                        </div>
+                        <div className="w-100">
+                            <div className="d-flex justify-content-between">
+                                <div className="ms-3">
+                                    <h6>{notification.content}</h6>
+                                    <p className="mb-0">{getRelativeTime(notification.created_at)}</p>
+                                </div>
+                                <div className="d-flex align-items-center notification-actions">
+                                    
                                     <div className="card-header-toolbar d-flex align-items-center">
                                         <Dropdown>
                                             <Dropdown.Toggle 
