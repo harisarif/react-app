@@ -6,7 +6,7 @@ import { getRelativeTime } from '../../utils/dateUtils';
 import { getProfileImageUrl } from '../../utils/helpers';
 import { getNotificationUrl } from '../../utils/notificationHelpers';
 
-const NotificationCard = ({ notification, onMarkAsRead, onDelete }) => {
+const NotificationCard = ({ notification, onMarkAsarchive, onMarkAsRead, onDelete }) => {
     const navigate = useNavigate();
 
     const getNotificationIcon = (type) => {
@@ -171,6 +171,15 @@ const NotificationCard = ({ notification, onMarkAsRead, onDelete }) => {
                                                         {notification.is_read ? 'mark_email_unread' : 'mark_email_read'}
                                                     </span>
                                                     {notification.is_read ? 'Mark as Unread' : 'Mark as Read'}
+                                                </Dropdown.Item>
+                                                <Dropdown.Item 
+                                                    onClick={() => onMarkAsarchive(notification.id)}
+                                                    className='d-flex align-items-center'
+                                                >
+                                                    <span className="material-symbols-outlined me-2 md-18">
+                                                        {notification.archive ? 'mark_email_unarchive' : 'mark_email_archive'}
+                                                    </span>
+                                                    {notification.archive ? 'Mark as Unarchive' : 'Mark as Archive'}
                                                 </Dropdown.Item>
                                                 <Dropdown.Item 
                                                     onClick={() => onDelete(notification.id)}

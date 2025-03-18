@@ -754,7 +754,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
 
                   <AiOutlineLink size={25} onClick={() => document.getElementById("linkFile").click()} className='ms-2  bold-icon' style={{ cursor: 'pointer' }} />
-                  <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowCommentOffcanvas(true)} style={{ cursor: 'pointer' }} />
+                  <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} style={{ cursor: 'pointer' }} />
                   <MdOutlineCameraAlt size={25} onClick={() => document.getElementById("cameraFile").click()} className='ms-2 me-3 bold-icon' style={{ cursor: 'pointer' }} />
 
                 </div>
@@ -906,7 +906,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       </Modal>
 
       <ShareOffcanvasNew show={showShareOffcanvas} onHide={() => setShowShareOffcanvas(false)} />
-      <CommentOffcanvasNew show={showCommentOffcanvas} onHide={() => setShowCommentOffcanvas(false)} />
+      <CommentOffcanvasNew comments={comments} show={showCommentOffcanvas} onHide={() => setShowCommentOffcanvas(false)} />
 
       {/* PDF Preview Modal */}
       <Modal

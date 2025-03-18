@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../../../../context/UserContext';
+import { NotificationContext } from '../../../../context/NotificationContext';
 //router
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
@@ -22,7 +23,7 @@ import { HiMiniUserGroup } from "react-icons/hi2";
 import { MdOutlineTurnedInNot } from "react-icons/md";
 import { MdOutlineTurnedIn } from "react-icons/md";
 import feedSvg from "../../../../assets/images/svg/feeds.svg";
-
+import { getNotificationUrl } from '../../../../utils/notificationHelpers';
 
 function CustomToggle({ children, eventKey, onClick, to }) {
     const { activeEventKey } = useContext(AccordionContext);
@@ -30,6 +31,7 @@ function CustomToggle({ children, eventKey, onClick, to }) {
     const isCurrentEventKey = activeEventKey === eventKey;
     const location = useLocation();
     const navigate = useNavigate();
+    
 
     return (
         <div
@@ -52,6 +54,14 @@ function CustomToggle({ children, eventKey, onClick, to }) {
 }
 
 const VerticalNav = React.memo(() => {
+    const {
+        notifications,
+        totalUnread,
+        markAsRead,
+        deleteNotification,
+        setNotifications,
+        setTotalUnread
+      } = useContext(NotificationContext);
     const { userData, setUserData } = useContext(UserContext);
     const [activeMenu, setActiveMenu] = useState(false)
     const [active, setActive] = useState('')
@@ -190,7 +200,10 @@ const VerticalNav = React.memo(() => {
                             </OverlayTrigger>
                             <span className="item-name">Events Calender</span>
                         </Link>
-                        <div className="total-ntf-counter">2</div>
+                        {totalUnread > 0 && (
+                        <div className="total-ntf-counter">{totalUnread}</div>
+                    )}
+                        
                     </li>
                     <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
                         <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">

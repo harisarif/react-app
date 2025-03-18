@@ -12,13 +12,14 @@ export const NotificationProvider = ({ children }) => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const { userData } = useContext(UserContext);
+  const [key, setKey] = useState("all");
 
-  const fetchNotifications = useCallback(async (pageNum = 1, append = false) => {
+  const fetchNotifications = useCallback(async (key, pageNum = 1, append = false) => {
     if (!userData?.id) return;
     
     try {
       setLoading(true);
-      const response = await notificationService.getNotifications(pageNum);
+      const response = await notificationService.getNotifications(pageNum, key);
       const { data, current_page, last_page, total_unread } = response;
 
       setNotifications(prev => append ? [...prev, ...data] : data);
@@ -30,11 +31,11 @@ export const NotificationProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [userData?.id]);
+  }, [userData?.id , key]);
 
   const loadMore = useCallback(() => {
     if (hasMore && !loading) {
-      fetchNotifications(page + 1, true);
+      fetchNotifications(key, page + 1, true);
     }
   }, [page, hasMore, loading, fetchNotifications]);
 
@@ -45,6 +46,23 @@ export const NotificationProvider = ({ children }) => {
         prev.map(notif => 
           notif.id === notificationId 
             ? { ...notif, is_read: !notif.is_read }
+            : notif
+        )
+      );
+      setTotalUnread(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  }, []);
+
+
+  const markAsarchive = useCallback(async (notificationId) => {
+    try {
+      await notificationService.sendtoarchive(notificationId);
+      setNotifications(prev => 
+        prev.map(notif => 
+          notif.id === notificationId 
+            ? { ...notif, archive: !notif.archive }
             : notif
         )
       );
@@ -84,9 +102,9 @@ export const NotificationProvider = ({ children }) => {
   // Initial fetch
   useEffect(() => {
     if (userData?.id) {
-      fetchNotifications(1, false);
+      fetchNotifications(key, 1, false);
     }
-  }, [userData?.id]);
+  }, [userData?.id, key]);
 
   // Echo listener
   useEffect(() => {
@@ -97,14 +115,14 @@ export const NotificationProvider = ({ children }) => {
     
     channel.listen('.App\\Events\\NewNotification', (data) => {
       console.log('New notification received:', data);
-      fetchNotifications(1, false);
+      fetchNotifications(key, 1, false);
     });
 
     return () => {
       console.log('Cleaning up notification listener');
       channel.stopListening('.App\\Events\\NewNotification');
     };
-  }, [userData?.id]);
+  }, [userData?.id, key]);
 
   return (
     <NotificationContext.Provider
@@ -113,6 +131,9 @@ export const NotificationProvider = ({ children }) => {
         loading,
         hasMore,
         totalUnread,
+        markAsarchive,
+        key,
+        setKey,
         loadMore,
         markAsRead,
         markAllAsRead,

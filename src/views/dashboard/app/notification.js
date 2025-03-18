@@ -11,9 +11,12 @@ const Notification = () => {
    const {
       notifications,
       loading,
+      key,
+      setKey,
       hasMore,
       loadMore,
       markAsRead,
+      markAsarchive,
       markAllAsRead,
       deleteNotification
    } = useContext(NotificationContext);
@@ -30,7 +33,7 @@ const Notification = () => {
          markAllAsRead();
       }
    };
-   const [key, setKey] = useState("all");
+
 
    return (
       <>
@@ -54,8 +57,53 @@ const Notification = () => {
                onSelect={(k) => setKey(k)}
                className="mb-3"
             >
-               <Tab eventKey="all"  title="All">
+               <Tab eventKey="all"  title="All" onClick={() => setKey('all')}>
                   <div id='content-page' className='content-inner w-100'>
+                     <Container className="custom-conatiner">
+                        <Row>
+                           <Col sm="12" >
+                          
+                           </Col>
+                           <Col sm="12">
+                              {loading ? (
+                                 <LoadingSpinner />
+                              ) : notifications.length === 0 ? (
+                                 <NoDataFound
+                                    message="You don't have any notifications yet."
+                                    containerClassName="text-center py-5"
+                                 />
+                              ) : (
+                                 <>
+                                    {notifications.map(notification => (
+                                       <NotificationCard
+                                          key={notification.id}
+                                          notification={notification}
+                                          onMarkAsRead={markAsRead}
+                                          onMarkAsarchive={markAsarchive}
+                                          onDelete={deleteNotification}
+                                       />
+                                    ))}
+
+                                    {hasMore && (
+                                       <div className="text-center mt-3 mb-5">
+                                          <Button
+                                             variant="primary"
+                                             onClick={loadMore}
+                                             className="load-more-btn"
+                                          >
+                                             Load More
+                                          </Button>
+                                       </div>
+                                    )}
+                                 </>
+                              )}
+                           </Col>
+                        </Row>
+                     </Container>
+                  </div>
+               </Tab>
+               <Tab eventKey="following" title="Following" onClick={() => setKey('following')}>
+               <div id='content-page' className='content-inner w-100'>
                      <Container className="custom-conatiner">
                         <Row>
                            <Col sm="12" >
@@ -98,11 +146,49 @@ const Notification = () => {
                      </Container>
                   </div>
                </Tab>
-               <Tab eventKey="following" title="Following">
-                  <p>This is the Profile tab content.</p>
-               </Tab>
-               <Tab eventKey="archive" title="Archive">
-                  <p>This is the Contact tab content.</p>
+               <Tab eventKey="archive" title="Archive" onClick={() => setKey('archive')}>
+               <div id='content-page' className='content-inner w-100'>
+                     <Container className="custom-conatiner">
+                        <Row>
+                           <Col sm="12" >
+                          
+                           </Col>
+                           <Col sm="12">
+                              {loading ? (
+                                 <LoadingSpinner />
+                              ) : notifications.length === 0 ? (
+                                 <NoDataFound
+                                    message="You don't have any notifications yet."
+                                    containerClassName="text-center py-5"
+                                 />
+                              ) : (
+                                 <>
+                                    {notifications.map(notification => (
+                                       <NotificationCard
+                                          key={notification.id}
+                                          notification={notification}
+                                          onMarkAsRead={markAsRead}
+                                          onDelete={deleteNotification}
+                                       />
+                                    ))}
+
+                                    {hasMore && (
+                                       <div className="text-center mt-3 mb-5">
+                                          <Button
+                                             variant="primary"
+                                             onClick={loadMore}
+                                             className="load-more-btn"
+                                          >
+                                             Load More
+                                          </Button>
+                                       </div>
+                                    )}
+                                 </>
+                              )}
+                           </Col>
+                        </Row>
+                     </Container>
+                  </div>
                </Tab>
             </Tabs>
             
