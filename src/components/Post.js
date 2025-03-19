@@ -26,6 +26,8 @@ import { AiOutlineLink } from "react-icons/ai";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import { BsEmojiSmile } from "react-icons/bs";
 import EmojiPicker from 'emoji-picker-react';
+import { HiMiniArrowUturnRight } from "react-icons/hi2";
+import { TbMessage } from "react-icons/tb";
 
 const FollowButton = styled.button`
   border: none;
@@ -505,8 +507,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                 <div className="d-flex align-items-center justify-content-between">
                   <div>
                     <div className="user-profile-info d-flex justify-content-center flex-column g-0">
-                      <h6 className="mb-0 me-2 text-dark">{post.user?.name || 'Anonymous'}</h6>
-                      <p className="mb-0 mt-n-1 fs-12">
+                      <h6 className="mb-0 me-2 text-dark fw-bold">{post.user?.name || 'Anonymous'}</h6>
+                      <p className="mb-0 mt-n1 fs-12 text-secondary">
                         {moment(post.created_at).fromNow()}
                         {' '}
                         {moment(post.created_at).format('h:mm a')}
@@ -544,12 +546,12 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
                   <div>
                     <div className='d-flex align-items-center justify-content-between'>
-                      <span className={badge.className}>{badge.text}</span>
+                      
 
                       <Dropdown>
                         {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
                           <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
-                            <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>more_vert</span>
+                            <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>more_horiz</span>
                           </Dropdown.Toggle>
                         )}
                         <Dropdown.Menu align="end" className="shadow-sm">
@@ -623,7 +625,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
             <div className="m-0 text-dark" dangerouslySetInnerHTML={{ __html: post.description }} />
           </div>
           {post.media && post.media.length > 0 && (
-            <div className={`media-grid media-grid-${Math.min(post.media.length, 5)}`}>
+            <div className={`media-grid position-relative media-grid-${Math.min(post.media.length, 5)}`}>
               {post.media.slice(0, 5)?.map((item, index) => (
                 <div
                   key={index}
@@ -692,10 +694,11 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                   )}
                 </div>
               ))}
+              <span className={`${badge.className} position-absolute top-left-12`}>{badge.text}</span>
             </div>
           )}
-          <div className="comment-area mt-4 pt-2 border-top">
-            <div className="d-flex align-items-center gap-2 w-100">
+          <div className="comment-area pt-3">
+            <div className="d-flex align-items-center justify-content-between gap-2 w-100 px-4">
               <div className="like-block">
                 <button
                   onClick={handleLike}
@@ -703,29 +706,37 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                   disabled={isLiking}
                 >
                   {isLiked ? <AiFillHeart size={'1.75rem'} /> : <AiOutlineHeart size={'1.75rem'} />}
-                  {/* <span className="ms-1">{likes.length} Likes</span> */}
                 </button>
+                <span className="ms-1">{likes.length}</span>
               </div>
-              <button
-                className="btn btn-link text-body p-0"
-                // onClick={() => setShowComments(!showComments)}
-                onClick={() => setShowCommentOffcanvas(true)}
-              >
-                <FaRegComment size={'1.65rem'} />
-              </button>
-              <button
-                className="btn btn-link text-body p-0"
-                onClick={() => setShowShareOffcanvas(true)}
-              >
-                <LiaTelegram size={'1.75rem'} />
-              </button>
+              <div>
+                <button
+                  className="btn btn-link text-body p-0"
+                  // onClick={() => setShowComments(!showComments)}
+                  onClick={() => setShowCommentOffcanvas(true)}
+                >
+                  {/* <FaRegComment size={'1.65rem'} /> */}
+                  <TbMessage size={'1.65rem'} />
+                </button>
+                <span className="ms-1">79</span>
+              </div>
+              <div>
+                <button
+                  className="btn btn-link text-body p-0"
+                  onClick={() => setShowShareOffcanvas(true)}
+                >
+                  {/* <LiaTelegram size={'1.75rem'} /> */}
+                  <HiMiniArrowUturnRight size={'1.75rem'} />
+                </button>
+                <span className="ms-1">12</span>
+              </div>
             </div>
 
-            <div className="w-100 d-flex">
+            {/* <div className="w-100 d-flex">
               <span className="m-1 fw-bold text-dark">{likes.length} Likes</span>
-            </div>
+            </div> */}
             <Form onSubmit={handleComment} >
-              <div className="leave-comment-area d-flex align-items-center gap-2" >
+              <div className="leave-comment-area d-flex align-items-center gap-2 pt-3" >
                 <div className="input-wrap w-100 d-flex align-items-center">
                   <input
                     type="text"

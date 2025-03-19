@@ -478,8 +478,7 @@ const UserFeeds = () => {
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                 {userData && userCanCreatePostCategories?.some(category => [1, 2, 3, 4, 5].includes(category)) && (
                   <Row  >
-                    <EventSlider/>
-                    <Col sm={12} className="mt-5 ">
+                    <Col sm={12} className="">
                       <CreatePost
                         setPosts={setPosts}
                         posts={posts}
@@ -488,6 +487,7 @@ const UserFeeds = () => {
 
 
                     </Col>
+                    <EventSlider/>
 
                   </Row>
                 )}

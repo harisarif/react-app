@@ -477,8 +477,7 @@ const UserFeeds = () => {
 
                 {(userData && userCanCreatePostCategories?.some(category => [3].includes(category)) &&
                   <Row className="special-post-container">
-                    <EventSlider />
-                    <Col sm={12} className="mt-5 ">
+                    <Col sm={12} className="">
                       <CreatePost
                         className="card-block card-stretch card-height"
                         setPosts={setPosts} posts={posts} userCanCreatePostCategories={userCanCreatePostCategories}
@@ -486,6 +485,7 @@ const UserFeeds = () => {
 
 
                     </Col>
+                    <EventSlider />
 
                   </Row>
                 )}

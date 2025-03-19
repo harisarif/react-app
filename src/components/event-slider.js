@@ -16,7 +16,7 @@ const EventSlider =()=>{
     };
     return (
       <>
-      <Col sm={12} className="incoming-slider">
+      <Col sm={12} className="incoming-slider mb-5">
                 <Slider {...settings}>
       <div className="img-wrapper">
       <img src={sliderImg} alt="loader" style={{ height: "250px" , width:"100%"}} />
