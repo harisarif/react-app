@@ -43,10 +43,10 @@ export const SimpleRouter = [
     path: '/auth/reset-password',
     element: <ResetPassword />
   },
-  {
-    path: "/",
-    element: <Index />,
-  },
+  // {
+  //   path: "/",
+  //   element: <Index />,
+  // },
   {
     path: "auth/sign-in",
     element: <SignIn />,
