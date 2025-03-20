@@ -484,8 +484,6 @@ const UserFeeds = () => {
                         posts={posts}
                         userCanCreatePostCategories={userCanCreatePostCategories}
                       />
-
-
                     </Col>
                     <EventSlider/>
 

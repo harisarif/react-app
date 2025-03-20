@@ -726,7 +726,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                   onClick={() => setShowShareOffcanvas(true)}
                 >
                   {/* <LiaTelegram size={'1.75rem'} /> */}
-                  <HiMiniArrowUturnRight size={'1.75rem'} />
+                  <HiMiniArrowUturnRight size={'1.5rem'} />
                 </button>
                 <span className="ms-1">12</span>
               </div>

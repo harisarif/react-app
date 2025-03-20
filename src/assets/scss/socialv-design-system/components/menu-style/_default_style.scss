@@ -8,20 +8,26 @@
                 &.active{
                     // background: var(--#{$variable-prefix}primary);
                     // color: var(--bs-white);
-                    color: var(--purpule-color);
+                    // color: var(--purpule-color);
+                    background-color: var(--purpule-color);
+                    color: #fff;
                     // box-shadow: 0 10px 20px -10px rgba(var(--shadow-dark-color), 38%);
                     .icon {
-                        color: var(--purpule-color);
+                        // color: var(--purpule-color);
+                        color: #fff;
                     }
                 }
                 &:hover {
                     &:not(.active):not([aria-expanded=true]) {
                         // background: rgba(var(--bs-primary-rgb), 0.1);
-                        color: var(--#{$variable-prefix}primary);
-                        box-shadow: unset;
+                        // color: var(--#{$variable-prefix}primary);
+                        background-color: var(--purpule-color);
+                        color: #fff;
+                        // box-shadow: unset;
                         // background-color: #d1d1d18f;
                         .icon {
-                            color: var(--#{$variable-prefix}primary);
+                            // color: var(--#{$variable-prefix}primary);
+                            color: #fff;
                         }
                     }
                 }

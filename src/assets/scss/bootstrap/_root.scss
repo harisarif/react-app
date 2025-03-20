@@ -130,7 +130,18 @@
 
 
 --purpule-color: #6709F5;
-;
+
+
+--light-bg-color: #f9f9f9;
+--light-text-color: #888888;
+--light-text-active-color: #6709F5;
+--nav-text-color: #1E1E1E;
+--border-color: #cccccc;
+--danger-color: #DD2323;
+--light-dark-theme: #fff;
+
+
+
 --shadow-brown-color:#b3b3b3e8;
 --light-dark-theme: #282828;
 --dark-black-theme:#1A1A1A;
@@ -248,6 +259,13 @@ margin: 5px 0;
     // scss-docs-end root-dark-mode-vars
 
     --purpule-color:#9A80FF;
+
+    --light-bg-color: #f9f9f9;
+    --light-text-color: #888888;
+    --light-text-active-color: #6709F5;
+    --nav-text-color: #1E1E1E;
+    --border-color: #555555;
+    --danger-color: #DD2323;
 
 
   }
