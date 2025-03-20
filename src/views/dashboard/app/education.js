@@ -288,14 +288,16 @@ const Education = () => {
       <div className="custom-conatiner container">
         <div className="custom-main-container">
           <div id="content">
-            <div className="d-flex justify-content-between mb-3">
-              <h2>Education Content</h2>
-              {userData && userData?.permissions[0]?.can_create_education == 1 && (
-                <Button variant="primary" onClick={() => setShowModal(true)}>
+            <Card className='create-education-card'>
+              <Card.Body className='d-flex justify-content-between align-items-center w-100'>
+                <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Education Content</h2>
+                {userData && userData?.permissions[0]?.can_create_education == 1 && (
+                <Button className='py-0' variant="primary" style={{fontWeight: '400'}} onClick={() => setShowModal(true)}>
                   Add New Content
                 </Button>
               )}
-            </div>
+              </Card.Body>
+            </Card>
             {isLoading ? (
               <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
                 <div className="spinner-border text-primary" role="status" style={{ width: '2rem', height: '2rem' }}>
@@ -303,12 +305,12 @@ const Education = () => {
                 </div>
               </div>
             ) : (
-              <div className="row g-3">
+              <div className="row g-4">
                 {educationContents.length > 0 ? (
                   educationContents.map((content) => (
-                    <div key={content.id} className="col-sm-6 col-lg-6">
+                    <div key={content.id} className="col-12">
 
-                      <div className="card h-100">
+                      <Card className="h-100 education-card">
                         <div className="edu-card-img">
                           <img
                             src={content.image_path ? `${baseurl}/data/images/education/${content.image_path}` : 'placeholder-image-url'}
@@ -355,13 +357,12 @@ const Education = () => {
                           </div>
                         </div>
 
-                        <div className="card-body">
+                        <Card.Body className="">
                           <div className="d-flex gap-2">
-                          <MdOutlineSchool size={35} color={'#000'} />
-                          <h4 className="card-title turncate-2 elipsis-1">{content.title}</h4>
+                            <h4 className="card-title turncate-1 elipsis-1" style={{fontSize: 20, fontWeight: '600'}}>{content.title}</h4>
                           </div>
-                          <p className="card-text turncate-3 paragraph-holder elipsis-3">{content.short_description}</p>
-                          <div className="d-flex gap-2">
+                          <p className="card-text turncate-3 paragraph-holder elipsis-3" style={{fontSize: '15px', lineHeight: '1.5', fontWeight: '300'}}>{content.short_description}</p>
+                          {/* <div className="d-flex gap-2">
                             <Button
                               className="btn btn-primary flex-grow-1"
                               onClick={() => handleWatchVideo(content.video_url, content.id)}
@@ -369,28 +370,10 @@ const Education = () => {
                             >
                               Watch Video
                             </Button>
-                            {/* {userData && userData?.permissions[0]?.can_create_education == 1 && (
-                              <>
-                                <Button
-                                  className="btn btn-warning"
-                                  onClick={() => handleEdit(content)}
-                                  disabled={isLoading}
-                                >
-                                  <i className="fas fa-edit"></i>
-                                </Button>
-                                <Button
-                                  className="btn btn-danger"
-                                  onClick={() => handleDelete(content.id)}
-                                  disabled={isLoading}
-                                >
-                                  <i className="fas fa-trash"></i>
-                                </Button>
-                              </>
-                            )} */}
-                          </div>
-                        </div>
+                          </div> */}
+                        </Card.Body>
 
-                      </div>
+                      </Card>
                     </div>
                   ))
                 ) : (

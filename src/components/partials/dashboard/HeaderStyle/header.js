@@ -793,132 +793,128 @@ const Header = () => {
                   />
                 </Dropdown.Toggle>
                 <Dropdown.Menu
-                  className={`sub-drop caption-menu `}
+                  className={`sub-drop caption-menu profile-dropdown`}
                 >
                   <Card className="shadow-none m-0">
                     {userData && (
-                      <Card.Header>
-                        <div className="header-title">
-                          <h5 className="mb-0 ">{userData?.name}</h5>
+                      <Card.Header className="p-3 border-bottom">
+                        <div className="d-flex flex-column gap-3">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex justify-content-start align-items-center overflow-hidden gap-3" style={{width: '300px'}}>
+                              <img src="https://lh3.googleusercontent.com/a/ACg8ocLPGKVqEKPajazLWMrOyxndomwsMjPicTy_-SXnHzcRy3PdJ-U=s96-c" alt="Mubashar Ahmad" className="rounded-circle avatar-40" />
+                                <div className="d-flex flex-column gap-0">
+                                  <h6 className="mb-0 suggestion-user-name text-dark" style={{fontSize: '16px'}}>Mubashar Ahmad</h6>
+                                  <p className="mb-0 suggestion-user-email text-dark mt-n1" style={{fontSize: '13px'}}>mubashardev0204@gmail.com</p>
+                                </div>
+                            </div>
+                          </div>
+                          <Link
+                            to="/profile"
+                            className="border rounded-5 w-100 py-0 text-center text-dark mb-2"
+                          >
+                            View Profile
+                          </Link>
                         </div>
                       </Card.Header>
                     )}
-                    <Card.Body className="p-0 ">
+                    <Card.Body className="p-0 border-bottom">
                       {userData && (
-                        <div className="d-flex align-items-center iq-sub-card">
-                          <span className="material-symbols-outlined">
-                            line_style
-                          </span>
-                          <div className="ms-3">
-                            <Link
-                              to="/profile"
-                              className="mb-0 h6"
-                            >
-                              My Profile
-                            </Link>
+                        <Link
+                          to="/dashboard/app/user-profile-edit"
+                          className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
+                        >
+                          <div className="d-flex align-items-center gap-3">
+                            <span className="material-symbols-outlined">
+                              edit_note
+                            </span>
+                            Edit Profile
                           </div>
-                        </div>
+                          <span className="material-symbols-outlined">
+                            keyboard_arrow_right
+                          </span>
+                        </Link>
                       )}
+
                       {userData && (
-                        <div className="d-flex align-items-center iq-sub-card">
-                          <span className="material-symbols-outlined">
-                            edit_note
-                          </span>
-                          <div className="ms-3">
-                            <Link to="/dashboard/app/user-profile-edit" className="mb-0 h6">
-                              Edit Profile
-                            </Link>
+                        <Link
+                          to="/dashboard/app/user-account-setting"
+                          className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
+                        >
+                          <div className="d-flex align-items-center gap-3">
+                            <span className="material-symbols-outlined">
+                              manage_accounts
+                            </span>
+                            Account settings
                           </div>
-                        </div>
-                      )}
-                      {userData && (
-                        <div className="d-flex align-items-center iq-sub-card border-0">
                           <span className="material-symbols-outlined">
-                            manage_accounts
+                            keyboard_arrow_right
                           </span>
-                          <div className="ms-3">
-                            <Link
-                              to="/dashboard/app/user-account-setting"
-                              className="mb-0 h6"
-                            >
-                              Account settings
-                            </Link>
-                          </div>
-                        </div>
-                      )}
-                      {userData && (
-                        <div className="d-flex align-items-center iq-sub-card border-0">
-                          <span className="material-symbols-outlined">
-                            lock
-                          </span>
-                          <div className="ms-3">
-                            <Link
-                              to="/dashboard/app/user-privacy-setting"
-                              className="mb-0 h6"
-                            >
-                              Privacy Settings
-                            </Link>
-                          </div>
-                        </div>
+                        </Link>
                       )}
 
                       <SettingOffCanvas />
 
-
-                      {!userData && (
-                        <div className="d-flex align-items-center iq-sub-card">
-                          <span className="material-symbols-outlined">
-                            login
-                          </span>
-                          <div className="ms-3">
-                            <Link to="/auth/sign-in" className="mb-0 h6">
-                              Sign in
-                            </Link>
+                      {userData && (
+                        <Link
+                          to="#"
+                          className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
+                        >
+                          <div className="d-flex align-items-center gap-3">
+                            <span className="material-symbols-outlined">
+                              chat
+                            </span>
+                            Chat Settings
                           </div>
-                        </div>
+                          <span className="material-symbols-outlined">
+                            keyboard_arrow_right
+                          </span>
+                        </Link>
                       )}
 
                       {userData && (
-                        <div className="d-flex align-items-center iq-sub-card">
+                        <Link
+                          to="/dashboard/app/user-privacy-setting"
+                          className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
+                        >
+                          <div className="d-flex align-items-center gap-3">
+                            <span className="material-symbols-outlined">
+                              lock
+                            </span>
+                            Privacy Settings
+                          </div>
+                          <span className="material-symbols-outlined">
+                            keyboard_arrow_right
+                          </span>
+                        </Link>
+                      )}
+
+                    </Card.Body>
+                    <Card.Footer>
+
+                      {!userData && (
+                        <Link
+                          to="/auth/sign-in"
+                          className="d-flex align-items-center gap-3 text-dark py-2 px-3 profile-link"
+                        >
+                          <span className="material-symbols-outlined">
+                            login
+                          </span>
+                          Sign in
+                        </Link>
+                      )}
+
+                      {userData && (
+                        <Link
+                          onClick={handleLogout}
+                          className="d-flex align-items-center gap-3 text-dark py-2 px-3 profile-link"
+                        >
                           <span className="material-symbols-outlined">
                             logout
                           </span>
-                          <div className="ms-3">
-                            <Link onClick={handleLogout} className="mb-0 h6">
-                              Sign out
-                            </Link>
-                          </div>
-                        </div>
+                          Sign out
+                        </Link>
                       )}
-
-                      <div className=" iq-sub-card">
-                        <h5>Chat Settings</h5>
-                      </div>
-                      <div className="d-flex align-items-center iq-sub-card border-0">
-                        <i className="material-symbols-outlined text-success md-14">
-                          circle
-                        </i>
-                        <div className="ms-3">Online</div>
-                      </div>
-                      <div className="d-flex align-items-center iq-sub-card border-0">
-                        <i className="material-symbols-outlined text-warning md-14">
-                          circle
-                        </i>
-                        <div className="ms-3">Away</div>
-                      </div>
-                      <div className="d-flex align-items-center iq-sub-card border-0">
-                        <i className="material-symbols-outlined text-danger md-14">
-                          circle
-                        </i>
-                        <div className="ms-3">Disconnected</div>
-                      </div>
-                      <div className="d-flex align-items-center iq-sub-card border-0">
-                        <i className="material-symbols-outlined text-gray md-14">
-                          circle
-                        </i>
-                        <div className="ms-3">Invisible</div>
-                      </div>
-                    </Card.Body>
+                    </Card.Footer>
                   </Card>
                 </Dropdown.Menu>
               </Dropdown>

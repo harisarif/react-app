@@ -66,6 +66,32 @@
 /* Improve notification dropdown positioning */
 .dropdown-menu.sub-drop {
   margin-top: 0.5rem;
-  min-width: 320px;
-  max-width: 400px;
+  min-width: var(--sugession-width);
+  max-width: var(--sugession-width);
+  border: 1px solid var(--border-color);
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+
+.profile-dropdown .card-body{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+
+  & .profile-link{
+    font-size: 16px;
+    &:hover{
+      background: var(--light-purpule-color) !important;
+    }
+  }
+}
+
+.profile-dropdown .card-footer{
+  padding: 16px 0px !important;
+  & .profile-link{
+    font-size: 16px;
+    &:hover{
+      background: var(--light-purpule-color) !important;
+    }
+  }
 }

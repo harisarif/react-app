@@ -14505,10 +14505,8 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
                 font-style: normal;
             }
         }
-
-
     }
-
+}
 }
 
 
@@ -14698,7 +14696,7 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    word-break: break-all !important;
+    /* word-break: break-all !important; */
 }
 
 .elipsis-2 {
@@ -14707,7 +14705,7 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    word-break: break-all !important;
+    /* word-break: break-all !important; */
 }
 
 .elipsis-3 {
@@ -14716,7 +14714,7 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    word-break: break-all !important;
+    /* word-break: break-all !important; */
 }
 
 .elipsis-4 {
@@ -14725,7 +14723,7 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    word-break: break-all !important;
+    /* word-break: break-all !important; */
 }
 
 
@@ -14740,13 +14738,13 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
 }
 
 .edu-card-img {
-    height: 230px;
+    /* height: 230px;
     display: flex;
     align-items: center;
     overflow: hidden;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
-    aspect-ratio: 16/9;
+    aspect-ratio: 16/9; */
 }
 
 .brand-logo {
@@ -15945,7 +15943,7 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
 .create-post-icons-main {
     /* border-top: 1px solid rgb(185, 185, 182); */
     /* margin-top: 12px; */
-    padding: 0 4px 0 72px;
+    padding: 0 4px 0 60px;
 
     .jobs-with-icon span:nth-of-type(1) {
         color: rgb(154 165 4);
@@ -16021,14 +16019,15 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
 
     .edu-card-img {
         position: relative;
-        overflow: hidden;
-        /* Ensure overlay stays within the div */
+        overflow: hidden !important;
+        border-radius: 12px;
     }
 
     .edu-card-img img {
-        display: block;
         width: 100%;
         height: auto;
+        object-fit: cover;
+        aspect-ratio: 16 / 7;
     }
 
     .overlay {
@@ -16982,3 +16981,25 @@ body {
 
 }
 
+.education-card,
+.job-list-card{
+  padding: 16px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px;
+
+  & .card-body{
+    padding: 0px !important;
+    padding-top: 16px !important;
+  }
+}
+
+.create-education-card,
+.create-job-list-card{
+  padding: 16px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px;
+
+  & .card-body{
+    padding: 0px !important;
+  }
+}

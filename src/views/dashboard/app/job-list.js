@@ -44,19 +44,16 @@ const JobList = () => {
     <>
       <div id="content-page" className="content-inner">
         <div className="custom-conatiner container">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="mb-0">Job Listings</h2>
-            {userData && userData?.permissions[0]?.can_create_jobs == 1 &&(
-            <Button 
-              variant="primary" 
-              onClick={() => setShowCreateModal(true)}
-              className="mb-3 d-flex align-items-center"
-            >
-              <span className="material-symbols-outlined me-2">add</span>
-              Create Job
-            </Button>
+          <Card className='create-job-list-card'>
+            <Card.Body className='d-flex justify-content-between align-items-center w-100'>
+              <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Job Listings</h2>
+              {userData && userData?.permissions[0]?.can_create_education == 1 && (
+              <Button className='py-0' variant="primary" style={{fontWeight: '400'}} onClick={() => setShowCreateModal(true)}>
+                Create Job
+              </Button>
             )}
-          </div>
+            </Card.Body>
+          </Card>
 
           <div className="custom-container-card">
             <div id="content">
@@ -72,10 +69,10 @@ const JobList = () => {
                   containerClassName="text-center py-5"
                 />
               ) : (
-                <div className="row g-3">
+                <div className="row g-4">
                   {jobs.data.map((job) => (
-                    <div key={job.id} className="col-sm-6 col-lg-4">
-                      <div className="card h-100">
+                    <div key={job.id} className="col-12">
+                      <Card className="h-100 job-list-card">
                         <div className="edu-card-img">
                           <img 
                             src={`${baseurl}/images/${job.main_image}`}
@@ -84,14 +81,14 @@ const JobList = () => {
                             loading="lazy"
                           />
                         </div>
-                        <div className="card-body">
-                          <h4 className="card-title turncate-2">
+                        <Card.Body className="">
+                          <h4 className="card-title turncate-2" style={{fontSize: 20, fontWeight: '600'}}>
                             <Link to={`/job-list-detail/${job.id}`} className="text-black">
                               {job.title}
                             </Link>
                           </h4>
-                          <p className="card-text turncate-3">{job.short_description}</p>
-                          <div className="d-flex justify-content-between align-items-center">
+                          <p className="card-text turncate-3 paragraph-holder elipsis-3" style={{fontSize: '15px', lineHeight: '1.5', fontWeight: '300'}}>{job.short_description}</p>
+                          {/* <div className="d-flex justify-content-between align-items-center">
                             <Link to={`/job-list-detail/${job.id}`} className="btn btn-primary">
                               Read More
                             </Link>
@@ -104,9 +101,9 @@ const JobList = () => {
                                 Status: {job.application.status}
                               </span>
                             )}
-                          </div>
-                        </div>
-                      </div>
+                          </div> */}
+                        </Card.Body>
+                      </Card>
                     </div>
                   ))}
                 </div>

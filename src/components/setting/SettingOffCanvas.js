@@ -50,7 +50,7 @@ const SettingOffCanvas = memo((props) => {
                     settings
                 </span>
             </div> */}
-            <div className="d-flex align-items-center iq-sub-card border-0">
+            {/* <div className="d-flex align-items-center iq-sub-card border-0">
                 <span className="material-symbols-outlined">
                     settings
                 </span>
@@ -62,7 +62,21 @@ const SettingOffCanvas = memo((props) => {
                         App Settings
                     </Link>
                 </div>
-            </div>
+            </div> */}
+            <Link
+                to="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShow(true) }}
+                className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
+            >
+                <div className="d-flex align-items-center gap-3">
+                    <span className="material-symbols-outlined">
+                        settings
+                    </span>
+                    App Settings
+                </div>
+                <span className="material-symbols-outlined">
+                    keyboard_arrow_right
+                </span>
+            </Link>
             {/* <div className="btn btn-fixed-end btn-danger btn-icon btn-setting" onClick={(e) => {e.stopPropagation();setShow(true)}} >
             <span className="icon material-symbols-outlined animated-rotate text-white">
                 settings
