@@ -125,6 +125,10 @@ export const DefaultRouter = [
     element: <MindSet />,
   },
   {
+    path: "/",
+    element: <UserFeeds />,
+  },
+  {
     path: "/home",
     element: <UserFeeds />,
   },
