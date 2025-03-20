@@ -129,7 +129,8 @@
   // scss-docs-end root-form-validation-variables
 
 
---purpule-color:#9e2edb;
+--purpule-color: #6709F5;
+;
 --shadow-brown-color:#b3b3b3e8;
 --light-dark-theme: #282828;
 --dark-black-theme:#1A1A1A;
@@ -139,7 +140,7 @@
 --black-color: #000000;
 
 body{
-  background-color: var(--light-purpule-color);
+  background-color: #f7f7f7;
 }
 .iq-nav-menu li.active>a {
   color: var(--purpule-color) !important;
@@ -178,9 +179,9 @@ margin: 5px 0;
 }
 .nav-item{
   .item-name{
-    font-weight: 700 !important;
-    font-size: 17px !important;
-    margin-left: 30px !important; 
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    margin-left: 12px !important;
     // color: var(--black-color);
   }
 }

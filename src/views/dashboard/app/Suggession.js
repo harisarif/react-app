@@ -122,6 +122,7 @@ import ShareOffcanvasNew from "../../../components/ShareOffcanvasNew";
 // Fslightbox plugin
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import { IoArrowForward } from "react-icons/io5";
 import { getProfileImageUrl } from '../../../utils/helpers';
 const FsLightbox = ReactFsLightbox.default
   ? ReactFsLightbox.default
@@ -419,7 +420,7 @@ const Suggession = () => {
       <div className="suggestions-div pb-3" id="suggestions-div">
         <div className="inner-wrapper bg-white">
           <div className="card mb-2 mt-3">
-            <div className="card-body p-3 py-2">
+            <div className="card-body p-3 py-2 sugession-padding">
               <div className="d-flex flex-column gap-2">
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="d-flex justify-content-start align-items-center overflow-hidden" style={{width: '300px'}}>
@@ -434,7 +435,7 @@ const Suggession = () => {
               </div>
             </div>
           </div>
-          <div className="my-3">
+          <div className="my-2">
             <h4 className="sugession-title">Suggested For you</h4>
             {/* <Form.Control
             type="text"
@@ -456,7 +457,7 @@ const Suggession = () => {
           {admins && admins.length > 0 && admins.map((admin) => {
             return (
               <Card className="mb-2">
-                <Card.Body className="p-3 py-2">
+                <Card.Body className="p-3 py-2 sugession-padding">
 
                   <div className="d-flex flex-column gap-2">
                     <div className="d-flex justify-content-between align-items-center">
@@ -495,16 +496,19 @@ const Suggession = () => {
               </Card>
             );
           })}
-          <div className="mb-3"></div>
+          <div className="mb-3 d-flex justify-content-between align-items-center pe-3">
+            <h4 className="sugession-bottom">View All Sugessions</h4>
+            <IoArrowForward />
+          </div>
         </div>
         <div className="inner-wrapper bg-white">
-          <div className="my-3">
+          <div className="mt-3 mb-2">
             <h4 className="sugession-title">Following</h4>
           </div>
           {admins && admins.length > 0 && admins.map((admin) => {
             return (
               <Card className="mb-2">
-                <Card.Body className="p-3 py-2">
+                <Card.Body className="p-3 py-2 sugession-padding">
 
                   <div className="d-flex flex-column gap-2">
                     <div className="d-flex justify-content-between align-items-center">
@@ -543,7 +547,10 @@ const Suggession = () => {
               </Card>
             );
           })}
-          <div className="mb-3"></div>
+          <div className="mb-3 d-flex justify-content-between align-items-center pe-3">
+            <h4 className="sugession-bottom">View All Following</h4>
+            <IoArrowForward />
+          </div>
         </div>
       </div>
     </>
