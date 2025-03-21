@@ -292,7 +292,7 @@ const Education = () => {
               <Card.Body className='d-flex justify-content-between align-items-center w-100'>
                 <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Education Content</h2>
                 {userData && userData?.permissions[0]?.can_create_education == 1 && (
-                <Button className='py-0' variant="primary" style={{fontWeight: '400'}} onClick={() => setShowModal(true)}>
+                <Button className='py-0 btn-purpule' variant="primary" style={{fontWeight: '400'}} onClick={() => setShowModal(true)}>
                   Add New Content
                 </Button>
               )}

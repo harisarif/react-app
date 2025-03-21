@@ -14726,6 +14726,15 @@ font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
     /* word-break: break-all !important; */
 }
 
+.elipsis-6 {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 6 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  /* word-break: break-all !important; */
+}
+
 
 
 #sidebar-toggle-icon {
@@ -16993,8 +17002,33 @@ body {
   }
 }
 
+.job-app-card{
+  padding: 16px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px;
+
+  & .card-body{
+    padding: 0px !important;
+  }
+
+  & .card-title{
+    font-size: 18px !important;
+    font-weight: 600 !important;
+  }
+  & span{
+    font-size: 14px !important;
+  }
+
+  & .card-sub-title{
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+  
+}
+
 .create-education-card,
-.create-job-list-card{
+.create-job-list-card,
+.filter-job-app-card{
   padding: 16px !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 12px;
@@ -17017,7 +17051,134 @@ color: white !important;
 } */
 #sidebar-menu .nav-item .nav-link:hover svg path{
   stroke: white !important; 
+}
+#sidebar-menu .nav-item .nav-link.active svg path{
+  stroke: white !important; 
+}
+
+.btn-purpule{
+  background-color: var(--purpule-color) !important;
+
+  &:hover{
+    border-color: var(--purpule-color) !important;
   }
-  #sidebar-menu .nav-item .nav-link.active svg path{
-    stroke: white !important; 
+}
+
+.radius-10{
+  border-radius: 10px !important;
+}
+
+.radius-8{
+  border-radius: 8px !important;
+}
+
+.btn-outline-purpule{
+  border-color: var(--purpule-color) !important;
+  color: var(--purpule-color) !important;
+  background-color: #fff !important;
+
+  &:hover{
+    background-color: var(--purpule-color) !important;
+    border-color: var(--purpule-color) !important;
+    color: #fff !important;
+  }
+}
+
+.badge.bg-warning{
+  background: #FFF5CC !important;
+  color: #D28E00 !important;
+  border-radius: 16px !important;
+  padding: 4px 16px 4px !important;
+  font-weight: 500 !important;
+}
+
+.badge.bg-success{
+  background: #D4F7DC !important;
+  color: #0A7D33 !important;
+  border-radius: 16px !important;
+  padding: 4px 16px 4px !important;
+  font-weight: 500 !important;
+}
+
+.badge.bg-danger{
+  background: #FFD6D6 !important;
+  color: #B00020 !important;
+  border-radius: 16px !important;
+  padding: 4px 16px 4px !important;
+  font-weight: 500 !important;
+}
+
+.app-detail-view-modal{
+  & .modal-title{
+    & h3{
+      font-size: 18px !important;
+      font-weight: 600 !important;
     }
+  }
+  & .veiw-modal-img{
+    width: 100px !important;
+    height: 100px !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 100px !important;
+  }
+  & .applicant-detail{
+    text-align: center !important;
+    & h4{
+      font-size: 16px !important;
+      font-weight: 500 !important;
+    }
+    & span{
+      font-size: 14px !important;
+      font-weight: 400 !important;
+    }
+  }
+  & .form-control.disable{
+    border-radius: 8px !important;
+    background-color: #f9f9f9 !important;
+  }
+}
+
+.job-detail-view-modal{
+  & .modal-title{
+    & h3{
+      font-size: 18px !important;
+      font-weight: 600 !important;
+    }
+    & span{
+      font-size: 14px !important;
+      font-weight: 400 !important;
+    }
+  }
+
+  & .job-card-img{
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+
+    & img{
+      width: 100% !important;
+      height: auto !important;
+      object-fit: cover !important;
+      aspect-ratio: 16 / 7 !important;
+    }
+  }
+
+  & .job-list-card{
+    width: 65% !important;
+  }
+  & .job-form{
+    width: 35% !important;
+    padding: 16px !important;
+    margin: 0px !important;
+    border: 1px solid var(--border-color) !important;
+
+    & label{
+      font-size: 14px !important;
+      color: #000 !important;
+    }
+    & .form-control.disable{
+      border-radius: 8px !important;
+      background-color: #f9f9f9 !important;
+    }
+  }
+}
