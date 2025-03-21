@@ -17003,3 +17003,21 @@ body {
     padding: 0px !important;
   }
 }
+
+
+.sidebar.sidebar-default .nav-link:not(.static-item):hover:not(.active):not([aria-expanded=true]) {
+    background-color: var(--purpule-color);
+    color: #fff;
+}
+
+/* #sidebar-menu .nav-item .nav-link:hover svg{
+stroke: white !important;
+fill: white !important;
+color: white !important;
+} */
+#sidebar-menu .nav-item .nav-link:hover svg path{
+  stroke: white !important; 
+  }
+  #sidebar-menu .nav-item .nav-link.active svg path{
+    stroke: white !important; 
+    }

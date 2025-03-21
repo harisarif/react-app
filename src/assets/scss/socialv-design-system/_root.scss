@@ -65,9 +65,16 @@
 
   .main-content {
     #sidebar-menu {
+      background-color: var(--light-dark-theme) !important;
+
       .nav-item {
         .nav-link {
-          color: var(--white-color);
+          color: var(--white-color) !important;
+
+          & span path {
+            color: var(--white-color) !important;
+            stroke: var(--white-color) !important;
+          }
         }
       }
 
@@ -241,22 +248,77 @@
 
 
 
-.light-logo{
-  display: none;
-}
-.dark-logo{
-  display: block;
-}
+  .light-logo {
+    display: none;
+  }
+
+  .dark-logo {
+    display: block;
+  }
 
 
-@media (max-width: 1200px){
-  #first-tour{
-    background-color: var(--dark-black-theme) !important;
-    .sidebar-logo{
-      & svg{
-        color: var(--white-color) !important;
+  @media (max-width: 1200px) {
+    #first-tour {
+      background-color: var(--dark-black-theme) !important;
+
+      .sidebar-logo {
+        & svg {
+          color: var(--white-color) !important;
+        }
       }
     }
   }
-}
+
+  .create-post-icons-main .jobs-with-icon span:nth-child(2) {
+    color: var(--white-color);
+  }
+
+  .create-post-icons-main .event-with-icon span:nth-child(2) {
+    color: var(--white-color);
+
+  }
+
+  .create-post-icons-main .photo-with-icon span:nth-child(2) {
+    color: var(--white-color);
+
+  }
+
+  .SearchBar.headerSearch {
+    & circle {
+      // fill: var(--white-color);
+      color: var(--white-color);
+    }
+
+    & svg path {
+      fill: var(--white-color);
+      color: var(--white-color);
+
+    }
+  }
+
+  .sidebar.navs-rounded-all .sidebar-body .nav-item .nav-link svg path {
+    // fill: var(--white-color) !important;
+    stroke: var(--white-color);
+    // color: var(--white-color) !important;
+
+  }
+
+  .sugession-bottom {
+    color: var(--white-color);
+  }
+
+  .suggestions-div {
+    .inner-wrapper {
+      & svg {
+        fill: var(--white-color);
+        color: var(--white-color);
+      }
+    }
+  }
+
+
+
+
+
+  
 }
