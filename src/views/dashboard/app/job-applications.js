@@ -84,21 +84,13 @@ const JobApplications = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  {application.status === 'pending' ? '' : (
-                    <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'pending')}>
-                      Move to Pending
-                    </Dropdown.Item>
-                  )}
-                  {application.status === 'accepted' ? '' : (
-                    <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'accepted')}>
-                      Accept
-                    </Dropdown.Item>
-                  )}
-                  {application.status === 'rejected' ? '' : (
-                    <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'rejected')}>
-                      Reject
-                    </Dropdown.Item>
-                  )}
+                  {statusArray.map(status => (
+                    application.status === status ? '' : (
+                      <Dropdown.Item className="text-capitalize" onClick={() => handleStatusUpdate(application.id, status)}>
+                        {status}
+                      </Dropdown.Item>
+                    )
+                  ))}
                 </Dropdown.Menu>
               </Dropdown>
             )}
