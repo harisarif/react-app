@@ -168,7 +168,7 @@ const JobApplications = () => {
             {userData && userData?.permissions[0]?.can_create_education == 1 && (
               <div className="d-flex flex-row gap-2">
                 {statusArray.map(status => (
-                  <Button className='py-0 text-capitalize btn-purpule' variant="primary" style={{fontWeight: '400'}} onClick={() => setCurrentStatus(status)}>
+                  <Button className={`py-0 text-capitalize ${currentStatus === status ? 'btn-purpule' : 'btn-outline-purpule'} `} variant="primary" style={{fontWeight: '400'}} onClick={() => setCurrentStatus(status)}>
                     {`${status} `}
                     {/* ${' '} (${getFilteredApplications(status).length}) */}
                   </Button>
