@@ -514,40 +514,9 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                         {moment(post.created_at).format('h:mm a')}
                       </p>
                     </div>
-                    {/* {post.visibility === 'private' && (
-                      <span className="badge  bg-danger text-white ms-2">Private</span>
-                    )}
-                    {post.visibility === 'password_protected' && (
-                      <span className="badge bg-warning text-white ms-2" onClick={() => setModalIsOpen(true)}>
-                        Un-lock Content
-                      </span>
-                    )} */}
-                    {/* {post.user?.id !== userData?.id && (
-                      <FollowButton
-                        className={`ms-2 ${post?.is_following ? 'unfollow-btn' : 'follow-btn'}`}
-                        onClick={() => handleFollow(post.user?.id)}
-                      >
-                        {post?.is_following ? (
-                          <>
-                            <i className="ri-user-unfollow-line"></i>
-                            Unfollow
-                          </>
-                        ) : (
-                          <>
-                            <i className="ri-user-follow-line"></i>
-                            Follow
-                          </>
-                        )}
-                      </FollowButton>
-                    )} */}
-
-
                   </div>
-
                   <div>
                     <div className='d-flex align-items-center justify-content-between'>
-                      
-
                       <Dropdown>
                         {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
                           <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
@@ -585,13 +554,11 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                                           Authorization: `Bearer ${token}`,
                                         },
                                       });
-
                                       Swal.fire(
                                         'Deleted!',
                                         'Your post has been deleted.',
                                         'success'
                                       );
-
                                       // Refresh the page or update the posts list
                                       setPosts(posts?.filter(p => p.id !== post.id))
                                     } catch (error) {
@@ -611,7 +578,6 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                           )}
                         </Dropdown.Menu>
                       </Dropdown>
-
                     </div>
                   </div>
                 </div>
@@ -712,10 +678,8 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
               <div>
                 <button
                   className="btn btn-link text-body p-0"
-                  // onClick={() => setShowComments(!showComments)}
                   onClick={() => setShowCommentOffcanvas(true)}
                 >
-                  {/* <FaRegComment size={'1.65rem'} /> */}
                   <TbMessage size={'1.65rem'} />
                 </button>
                 <span className="ms-1">79</span>
@@ -725,16 +689,11 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                   className="btn btn-link text-body p-0"
                   onClick={() => setShowShareOffcanvas(true)}
                 >
-                  {/* <LiaTelegram size={'1.75rem'} /> */}
                   <HiMiniArrowUturnRight size={'1.5rem'} />
                 </button>
                 <span className="ms-1">12</span>
               </div>
             </div>
-
-            {/* <div className="w-100 d-flex">
-              <span className="m-1 fw-bold text-dark">{likes.length} Likes</span>
-            </div> */}
             <Form onSubmit={handleComment} >
               <div className="leave-comment-area d-flex align-items-center gap-2 pt-3" >
                 <div className="input-wrap w-100 d-flex align-items-center">
@@ -746,7 +705,6 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                     onChange={(e) => setNewComment(e.target.value)}
                     disabled={isCommentLoading}
                   />
-
                   <input
                     type="file"
                     id="cameraFile"
@@ -755,21 +713,16 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
                     accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
                     capture="environment"
                   />
-
                   <input
                     type="file"
                     id="linkFile"
                     className="d-none"
                     onChange={handleLinkChange}
                   />
-
-
                   <AiOutlineLink size={25} onClick={() => document.getElementById("linkFile").click()} className='ms-2  bold-icon' style={{ cursor: 'pointer' }} />
                   <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} style={{ cursor: 'pointer' }} />
                   <MdOutlineCameraAlt size={25} onClick={() => document.getElementById("cameraFile").click()} className='ms-2 me-3 bold-icon' style={{ cursor: 'pointer' }} />
-
                 </div>
-
                 <button
                   type="submit"
                   className="icon-wrap bg-transparent border-0"
@@ -918,8 +871,6 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
       <ShareOffcanvasNew show={showShareOffcanvas} onHide={() => setShowShareOffcanvas(false)} />
       <CommentOffcanvasNew comments={comments} show={showCommentOffcanvas} onHide={() => setShowCommentOffcanvas(false)} />
-
-      {/* PDF Preview Modal */}
       <Modal
         show={showPdfPreview}
         onHide={() => {
@@ -993,8 +944,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
           </button>
         </Modal.Footer>
       </Modal>
-
-      {/* CreatePost modal for editing */}
+      
       {showCreatePostModal && (
         <CreatePost
           posts={posts}

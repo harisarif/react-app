@@ -139,7 +139,7 @@ const viewApplicantDetails = (application) => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-              {application.status === 'pending' && (
+                {application.status === 'pending' && (
                   <>
                     <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'accepted')}>
                       Accept

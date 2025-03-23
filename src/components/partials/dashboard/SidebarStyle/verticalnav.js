@@ -168,9 +168,9 @@ const VerticalNav = React.memo(() => {
                             </svg>
                             <span className="item-name">Events Calender</span>
                         </Link>
-                        {totalUnread > 0 && (
-                        <div className="total-ntf-counter">{totalUnread}</div>
-                    )}
+                        {/* {totalUnread > 0 && (
+                            <div className="total-ntf-counter">{totalUnread}</div>
+                        )} */}
                         
                     </li>
                     <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
