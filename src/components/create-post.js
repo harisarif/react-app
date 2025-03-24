@@ -827,13 +827,13 @@ const CreatePost = ({
           </Form.Group>
           <div className="mb-3">
           <Form.Label>Description *</Form.Label>
-            <ReactQuill
+            <Form.Control
+              as="textarea"
+              rows={5}
+              name="description"
               placeholder="Write something here..."
               value={formData.description}
-              onChange={handleDescriptionChange}
-              ref={quillRef}
-              style={{}}
-              onFocus={() => console.log('Description value:', formData.description)}
+              onChange={handleInputChange}
             />
           </div>
 
