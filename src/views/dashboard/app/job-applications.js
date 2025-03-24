@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Tabs, Tab, Badge, Dropdown } from "react-bootstrap";
+import { Container, Button, Tabs, Tab, Badge, Dropdown, Card, Modal } from "react-bootstrap";
 import axios from '../../../utils/axios';
 import Swal from 'sweetalert2';
 import { Link } from "react-router-dom";
 import { UserContext } from '../../../context/UserContext';
 import NoDataFound from '../../../components/NoDataFound';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import ViewAppDetailModal from "../../../components/ViewAppDetailModal";
+import ViewJobDetailModal from "../../../components/ViewJobDetailModal";
+const statusArray = ['pending', 'accepted', 'rejected']
 
 const JobApplications = () => {
   const { userData } = useContext(UserContext);
@@ -13,7 +16,10 @@ const JobApplications = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
-
+  const [currentStatus, setCurrentStatus] = useState('pending');
+  const [appViewModal, setAppViewModal] = useState(false);
+  const [jobViewModal, setJobViewModal] = useState(false);
+  
   const fetchApplications = async () => {
     try {
       const response = await axios.get('/api/job-applications');
@@ -59,123 +65,63 @@ const JobApplications = () => {
     return applications.filter(app => app.status === status);
   };
 
-const viewApplicantDetails = (application) => {
-  Swal.fire({
-    title: 'Applicant Details',
-    html: `
-      <div class="text-start">
-        <p><strong>Name:</strong> ${application.first_name} ${application.last_name}</p>
-        <p><strong>Email:</strong> ${application.email}</p>
-        <p><strong>Country:</strong> ${application.country}</p>
-        <p><strong>Company:</strong> ${application.company || 'N/A'}</p>
-        <p><strong>Job Title:</strong> ${application.job_title || 'N/A'}</p>
-        <p><strong>Application Status:</strong> ${application.status}</p>
-      </div>
-    `,
-    showCloseButton: true,
-    showCancelButton: true,
-    confirmButtonText: 'View Profile',
-    cancelButtonText: 'View CV',
-    cancelButtonColor: '#3085d6',
-    confirmButtonColor: '#28a745',
-    preConfirm: () => {
-      // Redirect to user profile
-      window.location.href = `/profile/${application.user_id}`;
-      return false; // Prevent modal from closing
-    },
-    didRender: () => {
-      // Add event listener to cancel button (View CV)
-      const cancelButton = Swal.getCancelButton();
-      cancelButton.addEventListener('click', () => {
-        if (application.cv_file_path) {
-          // Open CV in new tab
-          window.open(`${process.env.REACT_APP_BACKEND_BASE_URL}/${application.cv_file_path}`, '_blank');
-        } else {
-          Swal.fire({
-            icon: 'info',
-            title: 'No CV Uploaded',
-            text: 'This applicant has not uploaded a CV.'
-          });
-        }
-      });
-    }
-  });
-};
-
   const ApplicationCard = ({ application }) => (
-    <div className="card mb-3">
-      <div className="card-body">
-        <div className="d-flex justify-content-between align-items-center">
-          <div>
-            <h5 className="card-title">{application.job.title}</h5>
-            <p className="card-text">
-              <strong>Applicant:</strong> {application.user.name}<br />
-              <strong>Applied on:</strong> {new Date(application.created_at).toLocaleDateString()}
-            </p>
-            <Link 
-              to={`/job-list-detail/${application.job_id}`} 
-              className="btn btn-info btn-sm"
-            >
-              View Job Details
-            </Link>
-            &nbsp;&nbsp;
-            <button 
-              onClick={() => viewApplicantDetails(application)}
-              className="btn btn-info btn-sm"
-            >
-              View Applicant Details
-            </button>
-          </div>
-          <Badge bg={
-            application.status === 'accepted' ? 'success' :
-            application.status === 'rejected' ? 'danger' : 'warning'
-          }>
-            {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
-          </Badge>
-          {isAdmin && (application.status === 'accepted' || application.status === 'pending' || application.status === 'rejected') && (
-  <Dropdown>
-    <Dropdown.Toggle variant="light" id="dropdown-basic" className="p-0 border-0 bg-transparent">
-      <i className="ri-more-2-fill"></i>
-    </Dropdown.Toggle>
+    <>
+      <Card className="mb-3 job-app-card">
+        <Card.Body className='d-flex flex-column gap-3'>
+          <div className='d-flex align-items-center justify-content-between'>
+            <Badge bg={
+              application.status === 'accepted' ? 'success' :
+              application.status === 'rejected' ? 'danger' : 'warning'
+            }>
+              {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+            </Badge>
+            {isAdmin && (application.status === 'accepted' || application.status === 'pending' || application.status === 'rejected') && (
+              <Dropdown>
+                <Dropdown.Toggle variant="light" id="dropdown-basic" className="p-0 border-0 bg-transparent">
+                  <i className="ri-more-2-fill" style={{fontSize: 18}}></i>
+                </Dropdown.Toggle>
 
-    <Dropdown.Menu>
-    {application.status === 'pending' && (
-        <>
-          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'accepted')}>
-            Accept
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'rejected')}>
-            Reject
-          </Dropdown.Item>
-        </>
-      )}
-      {application.status === 'accepted' && (
-        <>
-          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'pending')}>
-            Move to Pending
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'rejected')}>
-            Reject
-          </Dropdown.Item>
-        </>
-      )}
-      {application.status === 'rejected' && (
-        <>
-          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'pending')}>
-            Move to Pending
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleStatusUpdate(application.id, 'accepted')}>
-            Accept
-          </Dropdown.Item>
-        </>
-      )}
-    </Dropdown.Menu>
-  </Dropdown>
-)}
-        </div>
-      </div>
-    </div>
+                <Dropdown.Menu>
+                  {statusArray.map(status => (
+                    application.status === status ? '' : (
+                      <Dropdown.Item className="text-capitalize" onClick={() => handleStatusUpdate(application.id, status)}>
+                        {status}
+                      </Dropdown.Item>
+                    )
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
+          </div>
+          <div className='d-flex flex-column gap-2'>
+            <h5 className="card-title mb-0">{application.job.title}</h5>
+            <div className='d-flex flex-column gap-0'>
+              <span className='text-dark'><strong className="card-sub-title text-dark">Applicant:</strong> {application.user.name}</span>
+              <span className='text-dark mt-n1'><strong className="card-sub-title">Applied on:</strong> {new Date(application.created_at).toLocaleDateString()}</span>
+            </div>
+          </div>
+          <div className='d-flex gap-2 justify-content-start'>
+            <Button className='px-3 text-capitalize btn-purpule radius-8' 
+              variant="primary" style={{fontWeight: '400'}}
+              onClick={() => setJobViewModal(true)}
+            >
+              View Job Detail
+            </Button>
+            <Button className='px-3 text-capitalize btn-outline-purpule radius-8' 
+              variant="outline-primary" style={{fontWeight: '400'}} 
+              onClick={() => setAppViewModal(true)}
+            >
+              View Applicant Detail
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
+      <ViewAppDetailModal app={application} show={appViewModal} onHide={() => setAppViewModal(false)} />
+      <ViewJobDetailModal show={jobViewModal} onHide={() => setJobViewModal(false)} />
+    </>
   );
+
 
   const renderTabContent = (status) => {
     const filteredApplications = getFilteredApplications(status);
@@ -207,25 +153,24 @@ const viewApplicantDetails = (application) => {
   return (
     <div id="content-page" className="content-inner">
       <Container className="custom-conatiner">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2>Job Applications</h2>
-        </div>
+        <Card className='filter-job-app-card'>
+          <Card.Body className='d-flex justify-content-between align-items-center w-100'>
+            <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Job Applications</h2>
+            {userData && userData?.permissions[0]?.can_create_education == 1 && (
+              <div className="d-flex flex-row gap-2">
+                {statusArray.map(status => (
+                  <Button className={`py-0 text-capitalize ${currentStatus === status ? 'btn-purpule' : 'btn-outline-purpule'} `} variant="primary" style={{fontWeight: '400'}} onClick={() => setCurrentStatus(status)}>
+                    {`${status} `}
+                    {/* ${' '} (${getFilteredApplications(status).length}) */}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </Card.Body>
+        </Card>
 
-        <Tabs
-          activeKey={activeTab}
-          onSelect={(k) => setActiveTab(k)}
-          className="mb-4"
-        >
-          <Tab eventKey="pending" title={`Pending (${getFilteredApplications('pending').length})`}>
-            {renderTabContent('pending')}
-          </Tab>
-          <Tab eventKey="accepted" title={`Accepted (${getFilteredApplications('accepted').length})`}>
-            {renderTabContent('accepted')}
-          </Tab>
-          <Tab eventKey="rejected" title={`Rejected (${getFilteredApplications('rejected').length})`}>
-            {renderTabContent('rejected')}
-          </Tab>
-        </Tabs>
+        {renderTabContent(currentStatus)}
+
       </Container>
     </div>
   );

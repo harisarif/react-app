@@ -7,18 +7,20 @@ import { Link } from "react-router-dom";
 import axios from '../../../utils/axios'
 import CreateJob from "../../../components/job/CreateJob";
 import NoDataFound from '../../../components/NoDataFound';
+import ViewJobDetailModal from "../../../components/ViewJobDetailModal";
 
 //profile-header
 import ProfileHeader from "../../../components/profile-header";
 
 const JobList = () => {
   const { userData } = useContext(UserContext);
-
+  
   const [jobs, setJobs] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
-
+  const [jobViewModal, setJobViewModal] = useState(false);
+  
   const fetchJobs = async () => {
     try {
       const response = await axios.get('/api/jobs');
@@ -48,7 +50,7 @@ const JobList = () => {
             <Card.Body className='d-flex justify-content-between align-items-center w-100'>
               <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Job Listings</h2>
               {userData && userData?.permissions[0]?.can_create_education == 1 && (
-              <Button className='py-0' variant="primary" style={{fontWeight: '400'}} onClick={() => setShowCreateModal(true)}>
+              <Button className='py-0 btn-purpule' variant="primary" style={{fontWeight: '400'}} onClick={() => setShowCreateModal(true)}>
                 Create Job
               </Button>
             )}
@@ -88,22 +90,15 @@ const JobList = () => {
                             </Link>
                           </h4>
                           <p className="card-text turncate-3 paragraph-holder elipsis-3" style={{fontSize: '15px', lineHeight: '1.5', fontWeight: '300'}}>{job.short_description}</p>
-                          {/* <div className="d-flex justify-content-between align-items-center">
-                            <Link to={`/job-list-detail/${job.id}`} className="btn btn-primary">
-                              Read More
-                            </Link>
-                            {userData && job.application && (
-                              <span className={`badge ms-2 ${
-                                job.application.status === 'accepted' ? 'bg-success' :
-                                job.application.status === 'rejected' ? 'bg-danger' :
-                                'bg-info'
-                              }`}>
-                                Status: {job.application.status}
-                              </span>
-                            )}
-                          </div> */}
+                          <Button className='px-3 text-capitalize btn-purpule radius-8' 
+                            variant="primary" style={{fontWeight: '400'}}
+                            onClick={() => setJobViewModal(true)}
+                          >
+                            View Job Detail
+                          </Button>
                         </Card.Body>
                       </Card>
+                      <ViewJobDetailModal show={jobViewModal} onHide={() => setJobViewModal(false)} />
                     </div>
                   ))}
                 </div>

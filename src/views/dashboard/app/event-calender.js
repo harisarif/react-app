@@ -430,14 +430,17 @@ const handleBackgroundImageChange = (e) => {
 
   return (
     <div id="content-page" className="content-inner">
-      <div className="custom-conatiner container mt-5">
-        {userData &&  userData?.permissions[0]?.can_create_events == 1 && (
-          <div className="mb-4">
-            <Button variant="primary" onClick={handleAddNew}>
+      <div className="custom-conatiner container">
+        <Card className='create-education-card'>
+          <Card.Body className='d-flex justify-content-between align-items-center w-100'>
+            <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Education Content</h2>
+            {userData && userData?.permissions[0]?.can_create_education == 1 && (
+              <Button className='py-0 btn-purpule' variant="primary" style={{fontWeight: '400'}} onClick={handleAddNew}>
               Add New Event
-            </Button>
-          </div>
-        )}
+              </Button>
+            )}
+          </Card.Body>
+        </Card>
         
         <Row>
           {events.length < 1 ? (
