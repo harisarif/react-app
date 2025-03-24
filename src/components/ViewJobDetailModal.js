@@ -60,28 +60,28 @@ const ViewJobDetailModal = ({ show, onHide }) => {
           <Card className="h-100 job-form">
             <Form>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="name@example.com" className="disable" readOnly />
+                <Form.Label>First Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter Your First Name" className="" readOnly />
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Applicant Status</Form.Label>
-                <Form.Control type="email" placeholder="status" className="disable" readOnly />
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter Your Last Name" className="" readOnly />
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Applicant Status</Form.Label>
-                <Form.Control type="email" placeholder="status" className="disable" readOnly />
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control type="email" placeholder="user@gmail.com" className="" readOnly />
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Applicant Status</Form.Label>
-                <Form.Control type="email" placeholder="status" className="disable" readOnly />
+                <Form.Label>Country</Form.Label>
+                <Form.Control type="text" placeholder="Select Your Country" className="" readOnly />
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Applicant Status</Form.Label>
-                <Form.Control type="email" placeholder="status" className="disable" readOnly />
+                <Form.Label>Upload CV* (Only PDF)</Form.Label>
+                <Form.Control type="file" placeholder="" className="" readOnly />
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Applicant Status</Form.Label>
-                <Form.Control type="email" placeholder="status" className="disable" readOnly />
+                <Form.Label>Job Title</Form.Label>
+                <Form.Control type="email" placeholder="Enter your Job Title" className="" readOnly />
               </Form.Group>
               <Button variant="primary" className="btn-purpule radius-8 w-100" type="submit">
                 Apply For Job
