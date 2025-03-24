@@ -15,11 +15,12 @@ const EventSlider =()=>{
       arrows: false, // Hide left & right arrows
       infinite: true,
       speed: 500,
-      autoplay: true, 
+      autoplay: false, 
       slidesToShow: 1, // Show 1 full + small part of next slide
       slidesToScroll: 1,
       centerMode: true, // Centers the active slide
-      centerPadding: "100px", // Adjust to control partial visibility of next slide
+      centerPadding: "75px", // Adjust to control partial visibility of next slide
+      margin: '10px',
       responsive: [
         {
           breakpoint: 1024, // Tablets
