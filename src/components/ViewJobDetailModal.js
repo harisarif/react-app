@@ -25,12 +25,21 @@ const ViewJobDetailModal = ({ show, onHide }) => {
         centered
         className="job-detail-view-modal"
       >
-        <Modal.Header closeButton className="border-0">
-          <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Header className="border-0">
+          <Modal.Title  id="contained-modal-title-vcenter"  className="d-flex justify-content-between w-100">
+            <div>
             <h3 className="modal-title text-dark">
               Job Deatil
             </h3>
             <span className=''>Complete the form below to have a copy of our resource sent direct your inbox.</span>
+            </div>
+            <button  className="model-close-btn">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375" />
+                <path d="M10.6992 17.3016L17.3026 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M17.3026 17.3016L10.6992 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="d-flex flex-row gap-3">

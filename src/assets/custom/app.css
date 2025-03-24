@@ -17233,3 +17233,8 @@ color: white !important;
   border-radius: 10px;
   padding: 8px 14px;
 }
+
+.model-close-btn{
+  background-color: transparent;
+  border: none;
+}
