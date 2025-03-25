@@ -5,15 +5,16 @@ import Swal from 'sweetalert2';
 
 const EditPermissionsModal = ({ show, onHide, user }) => {
   const [permissions, setPermissions] = useState({
-    can_create_jobs: false,
-    can_manage_users:false,
-    can_create_events: false,
-    can_create_education: false,
-    can_create_post_business: false,
-    can_create_post_fitness: false,
-    can_create_post_crypto: false,
-    can_create_post_technology:false,
-    can_create_post_mindset: false,
+    make_admin:false,
+    // can_create_jobs: false,
+    // can_manage_users:false,
+    // can_create_events: false,
+    // can_create_education: false,
+    // can_create_post_business: false,
+    // can_create_post_fitness: false,
+    // can_create_post_crypto: false,
+    // can_create_post_technology:false,
+    // can_create_post_mindset: false,
   });
   const [loading, setLoading] = useState(false);
 
@@ -24,15 +25,16 @@ const EditPermissionsModal = ({ show, onHide, user }) => {
           let arr = JSON.parse(res.data.permissions[0]?.can_create_post_category) || [];
           setPermissions((prev) => ({
             ...prev,
-            can_create_jobs: res.data.permissions[0]?.can_create_jobs,
-            can_manage_users: res.data.permissions[0]?.can_manage_users,
-            can_create_events: res.data.permissions[0]?.can_create_events,
-            can_create_education: res.data.permissions[0]?.can_create_education,
-            can_create_post_business: arr.includes(1),
-            can_create_post_fitness: arr.includes(2),
-            can_create_post_crypto: arr.includes(3),
-            can_create_post_technology:arr.includes(4),
-            can_create_post_mindset: arr.includes(5),
+            make_admin: res.data.permissions[0]?.can_create_jobs == true? true : false,
+            // can_create_jobs: res.data.permissions[0]?.can_create_jobs,
+            // can_manage_users: res.data.permissions[0]?.can_manage_users,
+            // can_create_events: res.data.permissions[0]?.can_create_events,
+            // can_create_education: res.data.permissions[0]?.can_create_education,
+            // can_create_post_business: arr.includes(1),
+            // can_create_post_fitness: arr.includes(2),
+            // can_create_post_crypto: arr.includes(3),
+            // can_create_post_technology:arr.includes(4),
+            // can_create_post_mindset: arr.includes(5),
           }));
         })
         .catch(err => {
