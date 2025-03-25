@@ -41,15 +41,47 @@ const ManageUsers = () => {
     <>
       <div id="content-page" className="content-inner">
         <div className="custom-conatiner container">
-          <h2 className="mb-4">Manage Users</h2>
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="form-control mb-3"
-          />
-          <Table striped bordered hover>
+          <Card className='create-education-card'>
+            <Card.Body className='d-flex justify-content-between align-items-center w-100'>
+              <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Manage Users</h2>
+              <input
+                type="text"
+                placeholder="Search users..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="form-control user-page-search"
+              />
+            </Card.Body>
+          </Card>
+          
+
+          <Card className='user-card-detail'>
+            <Card.Body className=''>
+              <div className='user-title fw-bold p-16'>Name</div>
+              <div className='user-email fw-bold p-16'>Email</div>
+              <div className='user-action fw-bold heading p-16'>Actions</div>
+            </Card.Body>
+          </Card>
+
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map(user => (
+              <Card className='user-card-detail' key={user.id}>
+                <Card.Body className=''>
+                  <div className='user-title'>{user.name}</div>
+                  <div className='user-email'>{user.email}</div>
+                  <div className='user-action'>
+                    <Button variant="secondary user-edit-btn" onClick={() => handleEditClick(user)}>
+                      Edit Permissions
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <NoDataFound message="No users found." />
+          )}
+
+          {/* <Table striped bordered hover>
             <thead>
               <tr>
                 <th>Name</th>
@@ -74,7 +106,7 @@ const ManageUsers = () => {
                 <NoDataFound message="No users found." />
               )}
             </tbody>
-          </Table>
+          </Table> */}
         </div>
       </div>
 

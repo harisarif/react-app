@@ -72,7 +72,14 @@ const EditPermissionsModal = ({ show, onHide, user }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal
+      show={show}
+      onHide={onHide}
+      size="md"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      className="user-permission-model"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Edit Permissions for {user?.name}</Modal.Title>
       </Modal.Header>
@@ -82,6 +89,7 @@ const EditPermissionsModal = ({ show, onHide, user }) => {
             <Form.Group controlId={permission} key={permission}>
               <Form.Check
                 type="switch"
+                className='d-flex flex-row-reverse justify-content-between align-items-center py-2 px-3 border radius-10 mb-3'
                 label={permission.replace(/_/g, ' ').replace('can ', 'Should able to ')}
                 name={permission}
                 checked={permissions[permission]}
@@ -89,7 +97,7 @@ const EditPermissionsModal = ({ show, onHide, user }) => {
               />
             </Form.Group>
           ))}
-          <Button variant="primary" type="submit" disabled={loading}>
+          <Button variant="primary" type="submit" className='btn-purpule w-100 py-2 radius-10' disabled={loading}>
             {loading ? <Spinner animation="border" size="sm" /> : 'Save Changes'}
           </Button>
         </Form>

@@ -6,7 +6,7 @@ import NoDataFound from '../../../components/NoDataFound'
 import { NotificationContext } from '../../../context/NotificationContext'
 import Nav from 'react-bootstrap/Nav';
 import { useState } from "react";
-import { Tabs, Tab } from "react-bootstrap";
+import { Tabs, Tab, Card } from "react-bootstrap";
 const Notification = () => {
    const {
       notifications,
@@ -38,18 +38,18 @@ const Notification = () => {
    return (
       <>
          <div className="notification-page">
-            <div className="d-flex justify-content-between align-items-center mb-3"> 
-            <h4 className="card-title mb-0">Notifications</h4>
-            {notifications.length > 0 && (
-                        <Button
-                           variant="outline-primary"
-                           onClick={handleMarkAllAsRead}
-                           className="ms-2"
-                        >
-                           Mark All as Read
-                        </Button>
-                     )}
-            </div>
+            
+            <Card className='create-education-card'>
+               <Card.Body className='d-flex justify-content-between align-items-center w-100'>
+               <h2 className='text-dark' style={{fontSize: '16px', fontWeight: '500'}}>Notifications</h2>
+               {notifications.length > 0 && (
+                  <Button className='py-0 btn-purpule' variant="primary" style={{fontWeight: '400'}} onClick={handleMarkAllAsRead}>
+                  Mark All as Read
+                  </Button>
+               )}
+               </Card.Body>
+            </Card>
+            
       
             <Tabs
                id="controlled-tabs"

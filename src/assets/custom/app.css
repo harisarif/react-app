@@ -17074,6 +17074,14 @@ color: white !important;
   }
 }
 
+.btn-red{
+  background: #FC2A2A !important;
+
+  &:hover{
+    border-color: #FC2A2A !important;
+  }
+}
+
 .radius-10{
   border-radius: 10px !important;
 }
@@ -17222,6 +17230,23 @@ color: white !important;
   font-size: 12px;
   font-weight: 500;
 }
+.badge-event-calendar{
+  background: #FFF;
+  padding: 6px 16px 5px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #000
+}
+.badge-event-calendar-detail{
+  background: #F9F9F9;
+  padding: 6px 16px 5px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+  max-width: fit-content;
+}
 
 .post-footer-icon{
   font-size: 16px;
@@ -17252,4 +17277,83 @@ color: white !important;
 
 .main-content{
   padding-top: 10px !important;
+}
+
+.user-page-search{
+  width: 240px !important;
+  border-color: #f9f9f9 !important;
+  border-radius: 10px !important;
+  background-color: #f9f9f9 !important;
+}
+
+.w-30{
+  width: 30%;
+}
+.w-25{
+  width: 25%;
+}
+.w-45{
+  width: 45%;
+}
+
+
+.user-card-detail{
+  padding: 0px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+
+  & .card-body{
+    padding: 0px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+
+    & .user-title{
+      padding: 14px 16px !important;
+      max-width: 30% !important;
+      flex-grow: 1;
+      color: #000 !important;
+    }
+
+    & .user-email{
+      padding: 14px 16px !important;
+      max-width: 40% !important;
+      flex-grow: 1;
+      border-left: 1px solid var(--border-color);
+      color: #000 !important;
+    }
+    
+    & .user-action{
+      padding: 10px 16px !important;
+      max-width: 30% !important;
+      flex-grow: 1;
+      border-left: 1px solid var(--border-color);
+      color: #000 !important;
+
+      & .user-edit-btn{
+        background: #f9f9f9 !important;
+        border: none !important;
+        padding: 4px 16px !important;
+        border-radius: 10px !important;
+        font-size: 16px !important;
+        color: #000 !important;
+      }
+    }
+    & .user-action.heading{
+      padding: 14px 16px !important;
+    }
+  }
+}
+
+.p-16{
+  padding: 16px !important;
+}
+
+.user-permission-model{
+  & input[type='checkbox']{
+    margin: 0px !important;
+    height: 24px !important;
+    width: 38px !important;
+  }
 }

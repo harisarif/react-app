@@ -22,6 +22,9 @@ import Swal from "sweetalert2";
 import ReactCrop from 'react-image-crop'
 import { getProfileImageUrl, getBackgroundProfileImageUrl } from '../../../utils/helpers';
 
+import avatar from '../../../assets/images/d0d79bd9c491d22b6f3398fcaedf2780.jpg'
+import post from '../../../assets/images/92a4f16eb9cbb1b124bd7efeb55f2f38.jpg'
+
 import moment from "moment";
 import NoDataFound from '../../../components/NoDataFound';
 
@@ -441,6 +444,36 @@ const handleBackgroundImageChange = (e) => {
             )}
           </Card.Body>
         </Card>
+
+        <Row className="special-post-container">
+          <Col lg={12} className="special-post">
+            <Card className="card-block card-stretch card-height">
+              <Card.Body>
+                <div className={`media-grid position-relative media-grid-1 mt-0`}>
+                  <div className="media-item" >
+                    <div className="position-relative w-100 h-100" >
+                      <img src={post} alt='' />
+                    </div>
+                  </div>
+                  <span className={`badge badge-event-calendar position-absolute top-left-12`}>Public</span>
+                </div>
+                <div className='d-flex flex-column gap-2 mt-3'>
+                  <span className={`badge badge-event-calendar-detail`}>Conference</span>
+                  <h6 className="mb-0 me-2 text-dark fw-bold">Tech Innovation Meetup</h6>
+                  <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>Exploring the Future of AI and Blockchain</p>
+                </div>
+                <div className='d-flex gap-3 mt-3'>
+                  <Button variant="primary" className='btn-purpule py-2 px-3 radius-10'>
+                    View Details
+                  </Button>
+                  <Button variant="danger" className='btn-red py-2 px-3 radius-10'>
+                    Delete
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
         
         <Row>
           {events.length < 1 ? (

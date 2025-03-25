@@ -61,13 +61,6 @@ import business2 from "../../../assets/images/page-img/bussiness(2).jpg";
 import avatar from '../../../assets/images/d0d79bd9c491d22b6f3398fcaedf2780.jpg'
 import post from '../../../assets/images/5d194d4ca634b1e6191d5e4e9181e582.png'
 
-import { AiFillHeart } from "react-icons/ai";
-import { LiaTelegram } from "react-icons/lia";
-import { AiOutlineLink } from "react-icons/ai";
-import { MdOutlineCameraAlt } from "react-icons/md";
-import { BsEmojiSmile } from "react-icons/bs";
-import { HiMiniArrowUturnRight } from "react-icons/hi2";
-import { TbMessage } from "react-icons/tb";
 // Fslightbox plugin
 const FsLightbox = ReactFsLightbox.default
   ? ReactFsLightbox.default
