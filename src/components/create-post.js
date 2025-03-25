@@ -8,10 +8,11 @@ import Swal from 'sweetalert2';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import CreateJob from './job/CreateJob';
+import { BsEmojiSmile } from "react-icons/bs";
 import toast from 'react-hot-toast';
 
 import { IoIosHeartEmpty } from "react-icons/io";
-
+import EmojiPicker from 'emoji-picker-react';
 //images
 import user1 from "../assets/images/user/1.jpg";
 import img1 from "../assets/images/icon/02.png";
@@ -664,6 +665,17 @@ const CreatePost = ({
     }));
   };
 
+  
+  const [showEmojiDropdown, setShowEmojiDropdown] = useState(false);
+
+  const handleEmojiSelect = (emoji) => {
+    setFormData(prev => ({
+      ...prev,
+      description: prev.description + emoji.emoji
+    }));
+    setShowEmojiDropdown(false);
+  };
+
   return (
     <>
       <Card className={className}>
@@ -793,7 +805,7 @@ const CreatePost = ({
             </div>
           </div>
           <Form.Group className="mb-3">
-            <Form.Label>Title *</Form.Label>
+            <Form.Label>Title (optional)</Form.Label>
             <Form.Control
               type="text"
               name="title"
@@ -826,15 +838,22 @@ const CreatePost = ({
             </div>
           </Form.Group>
           <div className="mb-3">
-          <Form.Label>Description *</Form.Label>
-            <ReactQuill
+          <Form.Label>Description * <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} style={{ cursor: 'pointer' }} /> </Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={5}
+              name="description"
               placeholder="Write something here..."
               value={formData.description}
-              onChange={handleDescriptionChange}
-              ref={quillRef}
-              style={{}}
-              onFocus={() => console.log('Description value:', formData.description)}
+              onChange={handleInputChange}
             />
+                        {showEmojiDropdown && (
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+                disableSearchBar
+                emojiStyle={{ width: '20px', height: '20px' }}
+              />
+            )}
           </div>
 
           <div className="position-relative">
@@ -849,6 +868,7 @@ const CreatePost = ({
               </div>
             </div>
           </div>
+          
 
           {Object.entries(previews).some(([_, files]) => true) && (
             <div className="preview-section mt-3">

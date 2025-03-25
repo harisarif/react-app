@@ -467,12 +467,12 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
     }
   };
 
-  const [showEmojiDropdown, setShowEmojiDropdown] = useState(false);
+const [showEmojiDropdown, setShowEmojiDropdown] = useState(false);
 
-  const handleEmojiSelect = (emoji) => {
-    setNewComment(newComment + emoji.emoji);
-    setShowEmojiDropdown(false);
-  };
+const handleEmojiSelect = (emoji) => {
+  setNewComment(newComment + emoji.emoji);
+  setShowEmojiDropdown(false);
+};
 
 
   const [fileNames, setFileNames] = useState([]);

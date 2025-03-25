@@ -8,7 +8,6 @@ import NoDataFound from '../../../components/NoDataFound';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import ViewAppDetailModal from "../../../components/ViewAppDetailModal";
 import ViewJobDetailModal from "../../../components/ViewJobDetailModal";
-
 const statusArray = ['pending', 'accepted', 'rejected']
 
 const JobApplications = () => {

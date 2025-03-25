@@ -68,9 +68,12 @@ const SettingOffCanvas = memo((props) => {
                 className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
             >
                 <div className="d-flex align-items-center gap-3">
-                    <span className="material-symbols-outlined">
-                        settings
-                    </span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 5.625V14.375C17 17.875 16.125 18.75 12.625 18.75H7.375C3.875 18.75 3 17.875 3 14.375V5.625C3 2.125 3.875 1.25 7.375 1.25H12.625C16.125 1.25 17 2.125 17 5.625Z" stroke="#1E1E1E" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.75 4.3125H8.25" stroke="#1E1E1E" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.0004 16.2125C10.7495 16.2125 11.3567 15.6053 11.3567 14.8562C11.3567 14.1072 10.7495 13.5 10.0004 13.5C9.25138 13.5 8.64417 14.1072 8.64417 14.8562C8.64417 15.6053 9.25138 16.2125 10.0004 16.2125Z" stroke="#1E1E1E" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
                     App Settings
                 </div>
                 <span className="material-symbols-outlined">
@@ -98,7 +101,7 @@ const SettingOffCanvas = memo((props) => {
                                 </div>
                                 <div>
                                     <ThemeScheme themeScheme={themeScheme}></ThemeScheme>
-                                    {props.name === true ? '' :
+                                    {/* {props.name === true ? '' :
                                         <Fragment>
                                             <hr className="hr-horizontal" />
                                             <MenuStyle sidebarType={sidebarType}></MenuStyle>
@@ -107,7 +110,7 @@ const SettingOffCanvas = memo((props) => {
                                         </Fragment>
                                     }
                                     <hr className="hr-horizontal" />
-                                    <ColorCustomizer themeColor={themeColor}></ColorCustomizer>
+                                    <ColorCustomizer themeColor={themeColor}></ColorCustomizer> */}
                                     <hr className="hr-horizontal" />
                                     <Direction themeSchemeDirection={themeSchemeDirection}></Direction>
                                 </div>
