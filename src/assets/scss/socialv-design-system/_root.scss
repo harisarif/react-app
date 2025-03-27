@@ -356,13 +356,74 @@ background-color: var(--light-dark-theme) !important;
   .edu-card-img{
     .nav-bar-icon{
       .dropdown{
-        background-color: var(--light-dark-theme);
+        // background-color: var(--light-dark-theme);
         .drop-menu-holder{
         background-color: var(--light-dark-theme);
+&:hover{
+  background-color: var(--light-dark-theme-hover) !important;
 
+}
         }
       }
     }
   }
 }
+
+.dropdown-item{
+  .btn{
+    & i{
+      color: var(--white-color) !important;
+    }
+    & div{
+      color: var(--white-color) !important;
+    }
+  }
+}
+.job-list-card{
+  .card-body {
+    .card-title{
+      .text-black{
+        color: var(--white-color) !important;
+      }
+    }
+  }
+}
+
+.dropdown{
+#dropdown-basic{
+  & i{
+    &::before{
+      color: var(--white-color);
+    }
+  }
+}
+}
+
+#content-page{
+  .custom-conatiner{
+    .create-education-card{
+.form-control.user-page-search{
+  background-color: var(--dark-black-theme) !important;
+  border-color: var(--dark-black-theme) !important;
+}
+    }
+    .user-card-detail{
+      .card-body {
+        & div{
+color: var(--white-color) !important;
+
+      }
+      .user-edit-btn{
+        background-color: var(--dark-black-theme) !important;
+        color: var(--white-color) !important;
+        &:hover{
+          background-color: var(--purpule-color) !important;
+        }
+      }
+      }
+    }
+  }
+}
+
+
 }
