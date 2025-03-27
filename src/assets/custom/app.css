@@ -17100,34 +17100,34 @@ img[src*="doubleclick.net"] {
 }
 
 .crypto-info-btn {
-  background: #FEF9C3 !important;
-  color: #FF9F29 !important;
-  /* border: 1px solid #FF9F29 !important; */
-  padding: 1px 16px !important;
+  background: #FEA832 !important;
+  padding: 6px 16px 5px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
 }
 
 .fitness-info-btn {
-  background: #DCFCE7 !important;
-  color: #16A34A !important;
-  /* border: 1px solid #16A34A !important; */
-  padding: 1px 16px !important;
+  background: #00A33C !important;
+  padding: 6px 16px 5px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
 }
 
 .info-btn {
-  background: #BFDCFF !important;
-  color: #487FFF !important;
-  /* border: 1px solid #487FFF!important; */
-  padding: 1px 16px !important;
+  background: #497BF5 !important;
+  padding: 6px 16px 5px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
 }
 
 .mindset-info-btn {
-  background: #EBD7FF !important;
-  color: #8252E9 !important;
-  /* border: 1px solid #8252E9 !important; */
-  padding: 1px 16px !important;
+  background: #F30055 !important;
+  padding: 6px 16px 5px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
 
 }
@@ -17664,12 +17664,14 @@ aside .sidebar-body {
   padding: 4px 20px;
 }
 
-.comment-area .btn-link svg path {
-  /* fill: var(--light-text-color); */
+.btn-link svg path {
+  stroke: #888 !important;
+  /* fill: #fff !important; */
 }
 
-.comment-area .btn-link.like-button.liked svg path {
-  fill: #f80000;
+.btn-link.like-button.liked svg path {
+  fill: #FC2A2A !important;
+  stroke: #FC2A2A !important;
 }
 
 .create-post-icons-main {
@@ -18321,30 +18323,6 @@ color: white !important;
   }
 }
 
-.badge.bg-warning {
-  background: #FFF5CC !important;
-  color: #D28E00 !important;
-  border-radius: 16px !important;
-  padding: 4px 16px 4px !important;
-  font-weight: 500 !important;
-}
-
-.badge.bg-success {
-  background: #D4F7DC !important;
-  color: #0A7D33 !important;
-  border-radius: 16px !important;
-  padding: 4px 16px 4px !important;
-  font-weight: 500 !important;
-}
-
-.badge.bg-danger {
-  background: #FFD6D6 !important;
-  color: #B00020 !important;
-  border-radius: 16px !important;
-  padding: 4px 16px 4px !important;
-  font-weight: 500 !important;
-}
-
 .app-detail-view-modal {
   & .modal-title {
     & h3 {
@@ -18500,7 +18478,7 @@ color: white !important;
 .special-post {
   .card {
     .card-body {
-      .media-grid.position-relative.media-grid-1 {
+      .media-grid.position-relative {
         margin-top: 20px;
       }
     }

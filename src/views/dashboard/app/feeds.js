@@ -587,23 +587,22 @@ const UserFeeds = () => {
 
                   <Col lg={12} >
                     {loadContent ? (
-                      <div className="col-sm-12 text-center">
+                      <div className="text-center">
                         <img src={loader} alt="loader" style={{ height: "100px" }} />
                       </div>
                     ) : posts.length === 0 ? (
-                      <Col sm={12}>
-                        <NoDataFound
-                          message="No posts available in your feed."
-                          containerClassName="text-center py-5"
-                        />
-                      </Col>
+                      <NoDataFound
+                        message="No posts available in your feed."
+                        containerClassName="text-center py-5"
+                      />
                     ) : (
                       posts.map((post) => (
-                        <Col sm={12} key={post.id} className="special-post">
+                        <div key={post.id} className="special-post"> 
                           <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
-                        </Col>
+                        </div>
                       ))
-                    )}</Col>
+                    )}
+                  </Col>
                 </Row>
             </Tab.Container>
         </Container>

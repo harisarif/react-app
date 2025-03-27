@@ -18,6 +18,7 @@ import user1 from "../assets/images/user/1.jpg";
 import img1 from "../assets/images/icon/02.png";
 import img2 from "../assets/images/icon/02.png";
 import img3 from "../assets/images/icon/03.png";
+import { Ban } from "lucide-react";
 
 const CreatePost = ({ 
   posts, 
@@ -574,30 +575,12 @@ const CreatePost = ({
   const quillRef = useRef(null);
 
   const styles = [
-    {
-      color: "#ff6b6b",
-      textColor: "#fff",
-    },
-    {
-      color: "#48dbfb",
-      textColor: "#000",
-    },
-    {
-      color: "#1dd1a1",
-      textColor: "#fff",
-    },
-    {
-      color: "#feca57",
-      textColor: "#000",
-    },
-    {
-      color: "#222f3e",
-      textColor: "#fff",
-    },
-    {
-      color: "linear-gradient(to right, #ff9a9e, #fad0c4)",
-      textColor: "#000",
-    },
+    { name: "Black", color: "#000000", text: '#fff' },
+    { name: "Orange", color: "#FFAA33", text: '#fff' },
+    { name: "Brown", color: "#B45309", text: '#fff' },
+    { name: "Blue", color: "#2563EB", text: '#fff' },
+    { name: "Purple", color: "#9333EA", text: '#fff' },
+    { name: "Pink", color: "#F500F5", text: '#fff' },
   ];
 
   useEffect(() => {
@@ -789,14 +772,21 @@ const CreatePost = ({
                 <Dropdown className="">
                   <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
                     <span
-                      className={`badge py-0 px-4 d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
+                      className={`badge py-0 px-2 btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
                       style={{ cursor: "pointer" }}
                     >
-                      <span className="material-symbols-outlined" style={postViewIcon}>
-                        {formData.visibility === "public" ? "people" : 
-                         formData.visibility === "private" ? "person" : "lock"}
-                      </span>
                       {formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1).replace('_', ' ')}
+                      <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
+                    </span>
+                  </Dropdown.Toggle>
+                </Dropdown>
+                | <Dropdown className="">
+                  <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
+                    <span
+                      className={`badge py-0 px-2 btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Business
                       <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
                     </span>
                   </Dropdown.Toggle>
@@ -805,13 +795,14 @@ const CreatePost = ({
             </div>
           </div>
           <Form.Group className="mb-3">
-            <Form.Label>Title (optional)</Form.Label>
+            <Form.Label>Title</Form.Label>
             <Form.Control
               type="text"
               name="title"
               value={formData.title}
               onChange={handleInputChange}
               placeholder="Enter title"
+              className="radius-10"
               required
             />
           </Form.Group>
@@ -820,7 +811,7 @@ const CreatePost = ({
             <br />
             <div className="d-flex gap-1 overflow-auto">
               {categories.map(category => (
-                <div className={`py-1 px-2 text-white rounded cursor-pointer border ${category.id.toString() === formData.category_id ? 'bg-primary-2' : 'bg-primary'}`}>
+                <div className={`py-1 px-3 text-white rounded cursor-pointer border ${category.id.toString() === formData.category_id ? 'bg-primary-2' : 'bg-primary'} btn-purpule py-0 radius-10`}>
                   <input
                     type="radio"
                     key={category.id}
@@ -838,7 +829,8 @@ const CreatePost = ({
             </div>
           </Form.Group>
           <div className="mb-3">
-          <Form.Label>Description * <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} style={{ cursor: 'pointer' }} /> </Form.Label>
+          {/* <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} style={{ cursor: 'pointer' }} /> */}
+          <Form.Label>Description * </Form.Label>
             <Form.Control
               as="textarea"
               rows={5}
@@ -846,6 +838,7 @@ const CreatePost = ({
               placeholder="Write something here..."
               value={formData.description}
               onChange={handleInputChange}
+              className="radius-10"
             />
                         {showEmojiDropdown && (
               <EmojiPicker
@@ -859,12 +852,14 @@ const CreatePost = ({
           <div className="position-relative">
             <div className="d-flex gap-2">
               <span className="border rounded bg-gradient color-plate" onClick={() => { setColorPanel(!colorPanel); resetStyles() }} >
-                <span class="material-symbols-outlined">
+                <span class="material-symbols-outlined" style={{margin: '6px'}}>
                   {colorPanel || (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0) ? "block" : ""}                  
                 </span>
               </span>
               <div className={`${colorPanel ? "d-flex" : "d-none"} gap-2 color-panel`}>
-                {styles.map((style, index) => (<span className={`border rounded color-plate`} style={{ background: style.color }} key={index} title="Click to Apply" onClick={() => (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0)? "" : handleStyleClick(style)}></span>))}
+                {styles.map((style, index) => (<span className={`border rounded color-plate position-relative overflow-hidden`} key={index} title="Click to Apply" onClick={() => (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0)? "" : handleStyleClick(style)}>
+                  <span style={{ background: style.color, top: '7px', left: '3px', width: '150%', height: '150%', position: 'absolute', borderRadius: '24px' }}></span>
+                </span>))}
               </div>
             </div>
           </div>
@@ -877,15 +872,15 @@ const CreatePost = ({
              <div className="position-relative">
                <div className="file-upload-section">
                <input
-  type="file"
-  multiple
-  hidden
-  ref={fileInputRef}
-  onChange={handleFileSelect}
-  accept="image/*,video/*"
-  capture="environment" // Opens back camera (use "user" for front camera)
-  disabled={selectedStyle}
-/>
+                type="file"
+                multiple
+                hidden
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+                accept="image/*,video/*"
+                capture="environment" // Opens back camera (use "user" for front camera)
+                disabled={selectedStyle}
+              />
 
                  <Button
                    disabled={selectedStyle}
@@ -894,9 +889,11 @@ const CreatePost = ({
                    style={uploadBtn}
                  >
                    {!selectedStyle ?
-                   <span className="material-symbols-outlined" style={uploadIcon}>
-                     Camera
-                   </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M2.57999 19.01L2.55999 19.03C2.28999 18.44 2.11999 17.77 2.04999 17.03C2.11999 17.76 2.30999 18.42 2.57999 19.01Z" fill="#888888"/>
+                    <path d="M9 10.38C10.3144 10.38 11.38 9.31443 11.38 8C11.38 6.68556 10.3144 5.62 9 5.62C7.68556 5.62 6.62 6.68556 6.62 8C6.62 9.31443 7.68556 10.38 9 10.38Z" fill="#888888"/>
+                    <path d="M16.19 2H7.81C4.17 2 2 4.17 2 7.81V16.19C2 17.28 2.19 18.23 2.56 19.03C3.42 20.93 5.26 22 7.81 22H16.19C19.83 22 22 19.83 22 16.19V13.9V7.81C22 4.17 19.83 2 16.19 2ZM20.37 12.5C19.59 11.83 18.33 11.83 17.55 12.5L13.39 16.07C12.61 16.74 11.35 16.74 10.57 16.07L10.23 15.79C9.52 15.17 8.39 15.11 7.59 15.65L3.85 18.16C3.63 17.6 3.5 16.95 3.5 16.19V7.81C3.5 4.99 4.99 3.5 7.81 3.5H16.19C19.01 3.5 20.5 4.99 20.5 7.81V12.61L20.37 12.5Z" fill="#888888"/>
+                    </svg>
                    :
                    <span className="material-symbols-outlined text-danger" style={uploadIcon}>
                      block
@@ -923,9 +920,9 @@ const CreatePost = ({
                       style={uploadBtn}
                     >
                       {!selectedStyle ?
-                      <span class="material-symbols-outlined" style={uploadIcon}>
-                        cloud_upload
-                      </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM12.66 11.73L11.38 12.47L10.1 13.21C8.45 14.16 7.1 13.38 7.1 11.48V10V8.52C7.1 6.61 8.45 5.84 10.1 6.79L11.38 7.53L12.66 8.27C14.31 9.22 14.31 10.78 12.66 11.73Z" fill="#888888"/>
+                        </svg>
                       :
                       <span class="material-symbols-outlined text-danger" style={uploadIcon}>
                       block
@@ -983,7 +980,7 @@ const CreatePost = ({
           <Button
             variant="primary"
             onClick={handleSubmit}
-            className="mt-3 w-100"
+            className="mt-3 w-100 btn-purpule radius-10 py-2"
             disabled={isLoading}
           >
             {isLoading ? (

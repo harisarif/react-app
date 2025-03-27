@@ -101,11 +101,12 @@
 }
 
 .color-plate {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   display: block;
-  border: 2px solid !important;
+  border: 2px solid var(--border-color) !important;
   cursor: pointer;
+  border-radius: 20px !important;
 }
 
 .ql-toolbar.ql-snow {
