@@ -42,6 +42,16 @@ const JobList = () => {
     fetchJobs(); // Refresh the jobs list
   };
 
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  const handleOpenModal = (jobId) => {
+    setSelectedJob(jobId);
+  };
+  const handleCloseModal = () => {
+    setSelectedJob(null);
+  };
+  
+
   return (
     <>
       <div id="content-page" className="content-inner">
@@ -92,13 +102,16 @@ const JobList = () => {
                           <p className="card-text turncate-3 paragraph-holder elipsis-3" style={{fontSize: '15px', lineHeight: '1.5', fontWeight: '300'}}>{job.short_description}</p>
                           <Button className='px-3 text-capitalize btn-purpule radius-8' 
                             variant="primary" style={{fontWeight: '400'}}
-                            onClick={() => setJobViewModal(true)}
+                            onClick={() => handleOpenModal(job.id)}
                           >
                             View Job Detail
                           </Button>
                         </Card.Body>
                       </Card>
-                      <ViewJobDetailModal show={jobViewModal} onHide={() => setJobViewModal(false)} />
+                    {/* Open Modal Only for Selected Job */}
+    {selectedJob === job.id && (
+      <ViewJobDetailModal id={job.id} show={true} onHide={handleCloseModal} />
+    )}
                     </div>
                   ))}
                 </div>

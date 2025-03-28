@@ -18,7 +18,6 @@ import user1 from "../assets/images/user/1.jpg";
 import img1 from "../assets/images/icon/02.png";
 import img2 from "../assets/images/icon/02.png";
 import img3 from "../assets/images/icon/03.png";
-import { Ban } from "lucide-react";
 
 const CreatePost = ({ 
   posts, 

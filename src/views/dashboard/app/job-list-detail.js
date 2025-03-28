@@ -450,6 +450,8 @@ const handleSubmit = async (e) => {
     accept=".pdf"
     className="form-control mb-0"
     onChange={handleInputChange}
+    required
+    aria-required="true"
   />
 </div>
               <div className="form-group text-start">

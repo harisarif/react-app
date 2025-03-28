@@ -41,28 +41,28 @@ const ViewAppDetailModal = ({ show, onHide, app }) => {
         </Modal.Header>
         <Modal.Body className="mt-3 d-flex flex-column gap-3">
           <div className='d-flex flex-column gap-2 align-items-center mb-3'>
-            <img src={avatar} className='veiw-modal-img' alt='Avatar' />
+            <img src={getProfileImageUrl(app.user)} className='veiw-modal-img' alt='Avatar' />
             <div className='d-flex flex-column gap-0 applicant-detail'>
-              <h4>Applicant Name</h4>
-              <span>Applicant Email</span>
+              <h4>{app.first_name} {app.last_name}</h4>
+              <span>{app.email}</span>
             </div>
           </div>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="name@example.com" className="disable" readOnly />
+              <Form.Control type="email" placeholder="name@example.com" value={app.email} className="disable" readOnly />
             </Form.Group>
             <Row className="g-3">
               <Col>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                   <Form.Label>Country</Form.Label>
-                  <Form.Control type="email" placeholder="name@example.com" className="disable" readOnly />
+                  <Form.Control type="email" placeholder="name@example.com" value={app.country} className="disable" readOnly />
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                   <Form.Label>Company</Form.Label>
-                  <Form.Control type="email" placeholder="name@example.com" className="disable" readOnly />
+                  <Form.Control type="email" placeholder="name@example.com" value={app.company} className="disable" readOnly />
                 </Form.Group>
               </Col>
             </Row>
@@ -72,10 +72,10 @@ const ViewAppDetailModal = ({ show, onHide, app }) => {
             </Form.Group>
           </Form>
           <div className='d-flex flex-row gap-3 mt-2'>
-            <Button className='px-3 text-capitalize btn-outline-purpule radius-8 flex-grow-1' variant="primary" style={{ fontWeight: '400' }}>
+            <Button onClick={()=> window.open(`/profile/${app.user_id}`, '_blank')} className='px-3 text-capitalize btn-outline-purpule radius-8 flex-grow-1' variant="primary" style={{ fontWeight: '400' }}>
               View Profile
             </Button>
-            <Button className='px-3 text-capitalize btn-purpule radius-8 flex-grow-1' variant="primary" style={{ fontWeight: '400' }}>
+            <Button onClick={() => window.open(`${process.env.REACT_APP_BACKEND_BASE_URL}/${app.cv_file_path}`, '_blank')} className='px-3 text-capitalize btn-purpule radius-8 flex-grow-1' variant="primary" style={{ fontWeight: '400' }}>
               View CV
             </Button>
           </div>

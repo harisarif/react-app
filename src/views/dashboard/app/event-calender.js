@@ -446,36 +446,54 @@ const handleBackgroundImageChange = (e) => {
         </Card>
 
         <Row className="special-post-container">
-          <Col lg={12} className="special-post">
+        {events.length < 1 ? (
+            <Col sm={12}>
+              <NoDataFound 
+                message={userData?.roles === "admin" ? "No events found. Click 'Add New Event' to create one!" : "No upcoming events at the moment."}
+                containerClassName="text-center py-5"
+              />
+            </Col>
+          ) : (
+            events.map((event) => (
+          <Col lg={12} className="special-post" onClick={() => handleShow(event)}>
             <Card className="card-block card-stretch card-height">
               <Card.Body>
                 <div className={`media-grid position-relative media-grid-1 mt-0`}>
                   <div className="media-item" >
                     <div className="position-relative w-100 h-100" >
-                      <img src={post} alt='' />
+                      <img src={process.env.REACT_APP_BACKEND_BASE_URL +'/'+ event?.main_image} alt='' />
                     </div>
                   </div>
-                  <span className={`badge badge-event-calendar position-absolute top-left-12`}>Public</span>
+                  <span className={`badge badge-event-calendar position-absolute top-left-12`}>{event.status}</span>
                 </div>
                 <div className='d-flex flex-column gap-2 mt-3'>
-                  <span className={`badge badge-event-calendar-detail`}>Conference</span>
-                  <h6 className="mb-0 me-2 text-dark fw-bold">Tech Innovation Meetup</h6>
-                  <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>Exploring the Future of AI and Blockchain</p>
+                  <span className={`badge badge-event-calendar-detail`}>{event.type}</span>
+                  <h6 className="mb-0 me-2 text-dark fw-bold">{event.title}</h6>
+                  <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>{event.description}</p>
                 </div>
                 <div className='d-flex gap-3 mt-3'>
-                  <Button variant="primary" className='btn-purpule py-2 px-3 radius-10'>
+                {userData && userData?.permissions[0]?.can_create_events == 1 && (
+                  <div>
+                  <Button variant="primary" className='btn-purpule py-2 px-3 radius-10' onClick={() => handleShow(event)}>
                     View Details
                   </Button>
-                  <Button variant="danger" className='btn-red py-2 px-3 radius-10'>
+                  <Button variant="danger" className='btn-red py-2 px-3 radius-10'                             onClick={(e) => {
+                              e.stopPropagation(); // Prevent the parent from receiving the click event
+                              handleDelete(event.id);
+                            }}>
                     Delete
                   </Button>
+                  </div>
+                )}
                 </div>
               </Card.Body>
             </Card>
           </Col>
+          ))
+        )}
         </Row>
         
-        <Row>
+        {/* <Row>
           {events.length < 1 ? (
             <Col sm={12}>
               <NoDataFound 
@@ -567,7 +585,7 @@ const handleBackgroundImageChange = (e) => {
              </div>
             ))
           )}
-        </Row>
+        </Row> */}
       </div>
       <Modal show={showBackgroundCropper} onHide={() => !isSaving && setShowBackgroundCropper(false)} size="lg" centered>
                 <Modal.Header closeButton={!isSaving}>

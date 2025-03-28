@@ -1,15 +1,124 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Row, Col, Container } from "react-bootstrap";
 import Card from "../../../components/Card";
 import { Link } from "react-router-dom";
-
+import axios from '../../../utils/axios';
+import Swal from 'sweetalert2';
 //profile-header
 import ProfileHeader from "../../../components/profile-header";
 
 // image
 import job_img_8 from "../../../assets/images/page-img/image-no-one.jpg";
 
-const JobListReadMore = () => {
+const JobListReadMore = ({id}) => {
+
+
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
+
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const response = await axios.get(`/api/jobs/${id}`);
+        if (response.data && response.data.job) {
+          setJob(response.data.job);
+        }
+      } catch (error) {
+        console.error('Error fetching job:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJob();
+  }, [id]);
+
+const [formData, setFormData] = useState({
+  job_id:id,
+  first_name: '',
+  last_name: '',
+  email: '',
+  country: '',
+  company: '',
+  job_title: '',
+  cv: null, // New field for CV upload
+});
+  const [submitLoading, setSubmitLoading] = useState(false)
+
+const handleInputChange = (e) => {
+  const { name, value, files } = e.target;
+  setFormData(prevState => ({
+    ...prevState,
+    [name]: files ? files[0] : value
+  }));
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitLoading(true);
+
+  // Create FormData for file upload
+  const formDataToSubmit = new FormData();
+  Object.keys(formData).forEach(key => {
+    if (formData[key] !== null && formData[key] !== '') {
+      formDataToSubmit.append(key, formData[key]);
+    }
+  });
+
+  try {
+    const response = await axios.post('/api/job-application', formDataToSubmit, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Job application submitted successfully!',
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Failed to submit job application',
+    });
+  } finally {
+    window.location.href = '/job-list';
+    setSubmitLoading(false);
+  }
+};
+
+  if (loading) {
+    return (
+      <div className="content-inner">
+        <Container className="custom-conatiner">
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
+  if (!job) {
+    return (
+      <div className="content-inner">
+        <Container className="custom-conatiner">
+          <div className="text-center py-5">
+            <h3>Job not found</h3>
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
+
+  
   return (
     <>
     <div>
@@ -27,9 +136,13 @@ const JobListReadMore = () => {
         <div className="col-md-7 col-lg-7 overflow-hidden position-relative d-none d-md-block find-more-left-side">
           <div className="main-inner-wrapper">
             <h2 className="heading-find-more-page mb-2">
-              A Chief Learning Officer's Definitive 30-60-90 Day Plan
+             {job.title}
             </h2>
-            <span className="find-more-span ">
+            <div 
+                className="ql-editor"
+                dangerouslySetInnerHTML={{ __html: job.description }}
+              />
+            {/* <span className="find-more-span ">
               As a Chief Learning Officer, you’ve reached one of the highest
               levels in the L&amp;D space. You know that to succeed, you need to
               keep your pulse on new learnings, have excellent planning skills,
@@ -53,13 +166,13 @@ const JobListReadMore = () => {
               <li>
                 Get a bonus customizable 30-60-90 day checklist and template
               </li>
-            </ul>
+            </ul> */}
             <div className="image-wrapper" >
               <img
-                src={job_img_8}
+                               src={`${baseurl}/images/${job.main_image}`}
+                               alt={job.title}
                 style={{ width: "100%" }}
                 height="100%"
-                alt=""
               />
             </div>
           </div>
@@ -90,14 +203,11 @@ const JobListReadMore = () => {
               your inbox.
             </p>
             <form
-              method="POST"
+              onSubmit={handleSubmit}
               className="mt-5"
-              action="{{ route('login') }}"
               data-toggle="validator"
             >
-              {"{"}
-              {"{"} csrf_field() {"}"}
-              {"}"}
+              
               <div className="form-group text-start">
                 <h6 htmlFor="email" className="form-label fw-bold">
                   First Name
@@ -110,6 +220,8 @@ const JobListReadMore = () => {
                   placeholder="Enter  Your  First  Name"
                   required=""
                   autofocus=""
+                  value={formData.first_name}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group text-start">
@@ -124,6 +236,8 @@ const JobListReadMore = () => {
                   placeholder="Enter Your Last Name"
                   required=""
                   autofocus=""
+                  value={formData.last_name}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group text-start">
@@ -138,13 +252,15 @@ const JobListReadMore = () => {
                   placeholder="user@example.com"
                   required=""
                   autofocus=""
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group text-start">
                 <h6 htmlFor="email" className="form-label fw-bold">
                   Country
                 </h6>
-                <select name="country" className="form-select" id="country">
+                <select name="country" className="form-select" id="country" value={formData.country} onChange={handleInputChange}>
                   <option value="">Select a country</option>
                   <option value="AF">Afghanistan</option>
                   <option value="AL">Albania</option>
@@ -360,8 +476,25 @@ const JobListReadMore = () => {
                   placeholder=""
                   required=""
                   autofocus=""
+                  value={formData.company}
+                  onChange={handleInputChange}
                 />
               </div>
+              <div className="form-group text-start">
+  <h6 htmlFor="cv" className="form-label fw-bold">
+    Upload CV (PDF only)
+  </h6>
+  <input
+    id="cv"
+    type="file"
+    name="cv"
+    accept=".pdf"
+    className="form-control mb-0"
+    onChange={handleInputChange}
+    required
+    aria-required="true"
+  />
+</div>
               <div className="form-group text-start">
                 <h6 htmlFor="email" className="form-label fw-bold">
                   Job Title
@@ -374,13 +507,23 @@ const JobListReadMore = () => {
                   placeholder=""
                   required=""
                   autofocus=""
+                  value={formData.job_title}
+                  onChange={handleInputChange}
                 />
               </div>
               <button
                 type="submit"
                 className="btn btn-primary mt-4 fw-semibold text-uppercase w-100"
+                disabled={submitLoading}
               >
-                Get Our Copy
+                {submitLoading ? (
+                  <div className="d-flex align-items-center justify-content-center">
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Submitting...
+                  </div>
+                ) : (
+                  'Apply for job'
+                )}
               </button>
             </form>
           </div>

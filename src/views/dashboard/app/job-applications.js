@@ -19,6 +19,7 @@ const JobApplications = () => {
   const [currentStatus, setCurrentStatus] = useState('pending');
   const [appViewModal, setAppViewModal] = useState(false);
   const [jobViewModal, setJobViewModal] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
   
   const fetchApplications = async () => {
     try {
@@ -41,6 +42,8 @@ const JobApplications = () => {
   useEffect(() => {
     fetchApplications();
   }, []);
+
+  
 
   const handleStatusUpdate = async (id, status) => {
     try {
@@ -104,21 +107,26 @@ const JobApplications = () => {
           <div className='d-flex gap-2 justify-content-start'>
             <Button className='px-3 text-capitalize btn-purpule radius-8' 
               variant="primary" style={{fontWeight: '400'}}
-              onClick={() => setJobViewModal(true)}
+              onClick={() => {
+                setSelectedApplication(application);
+                setJobViewModal(true);
+            }}
             >
               View Job Detail
             </Button>
             <Button className='px-3 text-capitalize btn-outline-purpule radius-8' 
               variant="outline-primary" style={{fontWeight: '400'}} 
-              onClick={() => setAppViewModal(true)}
+              onClick={() => {
+                setSelectedApplication(application);
+                setAppViewModal(true);
+            }}
             >
               View Applicant Detail
             </Button>
           </div>
         </Card.Body>
       </Card>
-      <ViewAppDetailModal app={application} show={appViewModal} onHide={() => setAppViewModal(false)} />
-      <ViewJobDetailModal show={jobViewModal} onHide={() => setJobViewModal(false)} />
+      
     </>
   );
 
@@ -170,7 +178,8 @@ const JobApplications = () => {
         </Card>
 
         {renderTabContent(currentStatus)}
-
+        {selectedApplication && <ViewAppDetailModal app={selectedApplication} show={appViewModal} onHide={() => setAppViewModal(false)} />}
+        {selectedApplication && <ViewJobDetailModal id={selectedApplication?.job_id} show={jobViewModal} onHide={() => setJobViewModal(false)} />}
       </Container>
     </div>
   );
