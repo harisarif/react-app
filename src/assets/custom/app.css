@@ -18316,7 +18316,7 @@ color: white !important;
 }
 
 .btn-outline-purpule {
-  border-color: var(--purpule-color) !important;
+  border-color: 1px solid var(--purpule-color) !important;
   color: var(--purpule-color) !important;
   background-color: #fff !important;
 

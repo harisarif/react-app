@@ -802,7 +802,7 @@ const CreatePost = ({
                 <Dropdown className="">
                   <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
                     <span
-                      className={`badge cursor-pointer btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
+                      className={`badge cursor-pointer btn-outline-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
                       style={{padding: '4px 10px 2px 15px'}}
                     >
                       {formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1).replace('_', ' ')}

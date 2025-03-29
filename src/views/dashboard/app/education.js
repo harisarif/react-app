@@ -450,21 +450,31 @@ const Education = () => {
           image: null
         });
       }} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {isEditMode ? 'Edit Education Content' : 'Add New Education Content'}
+        <Modal.Header className="d-flex justify-content-between p-3">
+          <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
+            <div className="d-flex align-items-center flex-grow-1">
+              {isEditMode ? 'Edit Education Content' : 'Add New Education Content'}
+            </div>
           </Modal.Title>
+          <Link to="#" className="lh-1" onClick={() => setShowModal(false)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
+              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </Link>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
+              <Form.Label>Title *</Form.Label>
               <Form.Control
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
                 required
+                className='radius-8'
               />
             </Form.Group>
 
@@ -488,10 +498,26 @@ const Education = () => {
                 onChange={handleInputChange}
                 rows={3}
                 required
+                className='radius-8'
+                placeholder='Write here...'
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                rows={5}
+                required
+                className='radius-8'
+                placeholder='Write here...'
+              />
+            </Form.Group>
+
+            {/* <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
               <ReactQuill
                 value={formData.description}
@@ -506,7 +532,7 @@ const Education = () => {
                   ],
                 }}
               />
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group className="mb-3">
               <Form.Label>Video URL *</Form.Label>
@@ -517,6 +543,7 @@ const Education = () => {
                 onChange={handleInputChange}
                 placeholder="https://..."
                 required
+                className='radius-8'
               />
             </Form.Group>
 
@@ -524,6 +551,7 @@ const Education = () => {
               variant="primary"
               type="submit"
               disabled={isSubmitting}
+              className='btn-purpule w-100 radius-8'
             >
               {isSubmitting ? (
                 <>
