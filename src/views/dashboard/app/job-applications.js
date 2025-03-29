@@ -73,10 +73,7 @@ const JobApplications = () => {
       <Card className="mb-3 job-app-card">
         <Card.Body className='d-flex flex-column gap-3'>
           <div className='d-flex align-items-center justify-content-between'>
-            <Badge bg={
-              application.status === 'accepted' ? 'success' :
-              application.status === 'rejected' ? 'danger' : 'warning'
-            }>
+            <Badge className={`badge-${application.status}`} bg={'transparent'}>
               {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
             </Badge>
             {isAdmin && (application.status === 'accepted' || application.status === 'pending' || application.status === 'rejected') && (

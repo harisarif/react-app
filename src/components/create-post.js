@@ -8,17 +8,12 @@ import Swal from 'sweetalert2';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import CreateJob from './job/CreateJob';
-import { BsEmojiSmile } from "react-icons/bs";
 import toast from 'react-hot-toast';
 
-import { IoIosHeartEmpty } from "react-icons/io";
 import EmojiPicker from 'emoji-picker-react';
-//images
-import user1 from "../assets/images/user/1.jpg";
-import img1 from "../assets/images/icon/02.png";
-import img2 from "../assets/images/icon/02.png";
-import img3 from "../assets/images/icon/03.png";
 
+import { FaDotCircle } from "react-icons/fa";
+import { FiCircle } from "react-icons/fi";
 
 
 const CreatePost = ({ 
@@ -775,7 +770,7 @@ const CreatePost = ({
       </Card>
 
       <Modal show={show} onHide={handleClose} size="lg" centered>
-        <Modal.Header className="d-flex justify-content-between p-3">
+        <Modal.Header className="d-flex justify-content-between px-3 py-2">
 
           <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
             <div className="d-flex align-items-center flex-grow-1">
@@ -1086,8 +1081,10 @@ const CreatePost = ({
         show={showVisibilityModal} 
         onHide={() => setShowVisibilityModal(false)} 
         centered
+        size="lg"
+        className="visibility-modal"
       >
-        <Modal.Header className="d-flex justify-content-start gap-3" style={{padding: '10px 20px'}}>
+        <Modal.Header className="d-flex justify-content-start gap-3 px-3 py-2">
           <span className='cursor-pointer' onClick={() => setShowVisibilityModal(false)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
               <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
@@ -1112,8 +1109,10 @@ const CreatePost = ({
                 </div>
               </div>
               <div className='avatar-20 d-flex align-items-center'>
-                {passwordProtectionData.type === 'public' && (
-                  <span className="material-symbols-outlined">check_circle</span>
+                {passwordProtectionData.type === 'public' ? (
+                  <FaDotCircle color={'#6709f5'} size={'20px'} />
+                ) : (
+                  <FiCircle color={'#888888'} size={'20px'}  />
                 )}
               </div>
             </div>
@@ -1131,8 +1130,10 @@ const CreatePost = ({
                 </div>
               </div>
               <div className='avatar-20 d-flex align-items-center'>
-                {passwordProtectionData.type === 'private' && (
-                  <span className="material-symbols-outlined">check_circle</span>
+                {passwordProtectionData.type === 'private' ? (
+                  <FaDotCircle color={'#6709f5'} size={'20px'} />
+                ) : (
+                  <FiCircle color={'#888888'} size={'20px'}  />
                 )}
               </div>
             </div>
@@ -1150,8 +1151,10 @@ const CreatePost = ({
                 </div>
               </div>
               <div className='avatar-20 d-flex align-items-center'>
-                {passwordProtectionData.type === 'password_protected' && (
-                  <span className="material-symbols-outlined">check_circle</span>
+                {passwordProtectionData.type === 'password_protected' ? (
+                  <FaDotCircle color={'#6709f5'} size={'20px'} />
+                ) : (
+                  <FiCircle color={'#888888'} size={'20px'} />
                 )}
               </div>
             </div>

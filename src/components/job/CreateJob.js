@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form} from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Swal from 'sweetalert2';
 import axios from '../../utils/axios';
+import { Link } from "react-router-dom";
 
-const CreateJob = ({ show, onHide, onJobCreated }) => {
+const CreateJob = ({ show, onHide, onJobCreated, setShowCreateModal }) => {
   const [title, setTitle] = useState('');
   const [shortDescription, setShortDescription] = useState('');
   const [description, setDescription] = useState('');
@@ -92,8 +93,19 @@ const CreateJob = ({ show, onHide, onJobCreated }) => {
 
   return (
     <Modal show={show} onHide={onHide} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>Create New Job</Modal.Title>
+      <Modal.Header className="d-flex justify-content-between px-3 py-2">
+        <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
+          <div className="d-flex align-items-center flex-grow-1">
+            Create New Job
+          </div>
+        </Modal.Title>
+        <Link to="#" className="lh-1" onClick={() => setShowCreateModal(false)}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
+            <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </Link>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -119,12 +131,14 @@ const CreateJob = ({ show, onHide, onJobCreated }) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
+            <Form.Label>Title*</Form.Label>
             <Form.Control
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              className='radius-8'
+              placeholder='Enter Title'
             />
           </Form.Group>
 
@@ -136,28 +150,37 @@ const CreateJob = ({ show, onHide, onJobCreated }) => {
               value={shortDescription}
               onChange={(e) => setShortDescription(e.target.value)}
               required
+              className='radius-8'
+              placeholder='Write here...'
             />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
-            <ReactQuill
+            <Form.Control
+              as="textarea"
+              rows={5}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              className='radius-8'
+              placeholder='Write here...'
+            />
+            {/* <ReactQuill
               theme="snow"
               value={description}
               onChange={setDescription}
               modules={modules}
               style={{ height: '200px', marginBottom: '50px' }}
-            />
+            /> */}
           </Form.Group>
 
           <div className="d-flex justify-content-end gap-2">
-            <Button variant="secondary" onClick={onHide}>
-              Cancel
-            </Button>
             <Button 
               variant="primary" 
               type="submit"
               disabled={isLoading}
+              className='btn-purpule radius-8 w-100'
             >
               {isLoading ? (
                 <>

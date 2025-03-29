@@ -15,6 +15,8 @@ import {
   Collapse,
   Form
 } from "react-bootstrap";
+
+import { Link } from "react-router-dom";
 import axios from "../../../utils/axios";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -51,17 +53,17 @@ const EventCalender = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { userData } = useContext(UserContext);
   const [formData, setFormData] = useState({
-    organizer_id:'',
-    banner_image: '',
-    main_image: '',
+    // organizer_id:'',
+    // banner_image: '',
+    // main_image: '',
     title: '',
     subtitle: '',
     description: '',
     event_date: '',
     start_time: '',
     end_time: '',
-    type: '',
-    is_active: true
+    // type: '',
+    // is_active: true
   });
 
   const [isDirty, setIsDirty] = useState(false);
@@ -164,16 +166,16 @@ useEffect(() => {
   const handleEdit = (event) => {
     setSelectedEvent(event);
     setFormData({
-      organizer_id:event.organizer_id,
-      banner_image:event.banner_image,
+      // organizer_id:event.organizer_id,
+      // banner_image:event.banner_image,
       title: event.title,
       subtitle: event.subtitle || '',
       description: event.description || '',
       event_date: moment(event.event_date).format('YYYY-MM-DD'),
       start_time: event.start_time || '',
       end_time: event.end_time || '',
-      type: event.type,
-      is_active: event.is_active
+      // type: event.type,
+      // is_active: event.is_active
     });
     setShowModal(true);
   };
@@ -205,17 +207,17 @@ useEffect(() => {
     // setSelectedAdmin(null);
     setCroppedImageBlob(null);
     setFormData({
-      organizer_id:'',
-      banner_image: '',
-      main_image:'',
+      // organizer_id:'',
+      // banner_image: '',
+      // main_image:'',
       title: '',
       subtitle: '',
       description: '',
       event_date: '',
       start_time: '',
       end_time: '',
-      type: '',
-      is_active: true
+      // type: '',
+      // is_active: true
     });
     setShowModal(true);
   };
@@ -231,23 +233,23 @@ useEffect(() => {
 
 
   const [completedCrop, setCompletedCrop] = useState(null);
-const [isSaving, setIsSaving] = useState(false);
-const imgRef = React.useRef(null);
-const previewCanvasRef = React.useRef(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const imgRef = React.useRef(null);
+  const previewCanvasRef = React.useRef(null);
 
-const [showBackgroundCropper, setShowBackgroundCropper] = useState(false);
-const [backgroundImage, setBackgroundImage] = useState(null);
+  const [showBackgroundCropper, setShowBackgroundCropper] = useState(false);
+  const [backgroundImage, setBackgroundImage] = useState(null);
 
-const [backgroundCrop, setBackgroundCrop] = useState({
-  unit: '%', // Use '%' for a percentage-based crop
-  x: 10, // Start crop 10% from the left
-  y: 10, // Start crop 10% from the top
-  width: 80, // Crop width 80% of the image
-  height: 50, // Crop height 50% of the image
-  aspect: 2.5, // Maintain aspect ratio
-});
-const [completedBackgroundCrop, setCompletedBackgroundCrop] = useState(null);
-const backgroundImgRef = React.useRef(null);
+  const [backgroundCrop, setBackgroundCrop] = useState({
+    unit: '%', // Use '%' for a percentage-based crop
+    x: 10, // Start crop 10% from the left
+    y: 10, // Start crop 10% from the top
+    width: 80, // Crop width 80% of the image
+    height: 50, // Crop height 50% of the image
+    aspect: 2.5, // Maintain aspect ratio
+  });
+  const [completedBackgroundCrop, setCompletedBackgroundCrop] = useState(null);
+  const backgroundImgRef = React.useRef(null);
 
 
 const onLoad = (img) => {
@@ -455,7 +457,7 @@ const handleBackgroundImageChange = (e) => {
             </Col>
           ) : (
             events.map((event) => (
-          <Col lg={12} className="special-post" onClick={() => handleShow(event)}>
+          <Col lg={12} className="special-post">
             <Card className="card-block card-stretch card-height">
               <Card.Body>
                 <div className={`media-grid position-relative media-grid-1 mt-0`}>
@@ -464,7 +466,7 @@ const handleBackgroundImageChange = (e) => {
                       <img src={process.env.REACT_APP_BACKEND_BASE_URL +'/'+ event?.main_image} alt='' />
                     </div>
                   </div>
-                  <span className={`badge badge-event-calendar position-absolute top-left-12`}>{event.status}</span>
+                  <span className={`badge badge-event-calendar position-absolute top-left-12`}>{event.status ? event.status : 'Public'}</span>
                 </div>
                 <div className='d-flex flex-column gap-2 mt-3'>
                   <span className={`badge badge-event-calendar-detail`}>{event.type}</span>
@@ -473,16 +475,16 @@ const handleBackgroundImageChange = (e) => {
                 </div>
                 <div className='d-flex gap-3 mt-3'>
                 {userData && userData?.permissions[0]?.can_create_events == 1 && (
-                  <div>
-                  <Button variant="primary" className='btn-purpule py-2 px-3 radius-10' onClick={() => handleShow(event)}>
-                    View Details
-                  </Button>
-                  <Button variant="danger" className='btn-red py-2 px-3 radius-10'                             onClick={(e) => {
-                              e.stopPropagation(); // Prevent the parent from receiving the click event
-                              handleDelete(event.id);
-                            }}>
-                    Delete
-                  </Button>
+                  <div className='d-flex gap-3'>
+                    <Button variant="primary" className='btn-purpule py-2 px-3 radius-8' onClick={() => handleShow(event)}>
+                      View Details
+                    </Button>
+                    <Button variant="danger" className='btn-red py-2 px-3 radius-8' onClick={(e) => {
+                        e.stopPropagation(); // Prevent the parent from receiving the click event
+                        handleDelete(event.id);
+                      }}>
+                      Delete
+                    </Button>
                   </div>
                 )}
                 </div>
@@ -492,6 +494,65 @@ const handleBackgroundImageChange = (e) => {
           ))
         )}
         </Row>
+
+        <Modal show={showModalDetail} size="lg" centered onHide={() => setShowModalDetail(false)}>
+          <Modal.Body>
+            <div className={`media-grid position-relative media-grid-1 mt-0`}>
+              <div className="media-item" >
+                <div className="position-relative w-100 h-100" >
+                  <img src={process.env.REACT_APP_BACKEND_BASE_URL +'/'+ selectedEventDetail?.main_image} alt='' />
+                </div>
+              </div>
+              <span className={`badge badge-event-calendar position-absolute top-left-12`}>{selectedEventDetail?.status ? selectedEventDetail?.status : 'Public'}</span>
+              <span className={`badge badge-event-calendar-close position-absolute top-right-12`} onClick={() => setShowModalDetail(false)}>
+                x
+              </span>
+            </div>
+            <div className='d-flex flex-column gap-2 mt-3'>
+              <span className={`badge badge-event-calendar-detail`}>{selectedEventDetail?.type}</span>
+              <h6 className="mb-0 me-2 text-dark fw-bold">{selectedEventDetail?.title}</h6>
+              <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>{selectedEventDetail?.description}</p>
+            </div>
+            <div className='d-flex gap-3 mt-3'>
+              <div className='event-card flex-grow-1 px-3 py-2 d-flex gap-3 align-items-center radius-10 bg-gray-2'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M9 9C11.0711 9 12.75 7.32107 12.75 5.25C12.75 3.17893 11.0711 1.5 9 1.5C6.92893 1.5 5.25 3.17893 5.25 5.25C5.25 7.32107 6.92893 9 9 9Z" stroke="#292D32" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15.4436 16.5C15.4436 13.5975 12.5561 11.25 9.00109 11.25C5.44609 11.25 2.55859 13.5975 2.55859 16.5" stroke="#292D32" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div className='d-flex flex-column gap-0'>
+                  <h6 className="mb-0 text-gray">Organizer</h6>
+                  <p className='mb-0 mt-n1'>{selectedEventDetail?.organizer?.name}</p>
+                </div>
+              </div>
+
+              <div className='event-card flex-grow-1 px-3 py-2 d-flex gap-3 align-items-center radius-10 bg-gray-2'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M9 9C11.0711 9 12.75 7.32107 12.75 5.25C12.75 3.17893 11.0711 1.5 9 1.5C6.92893 1.5 5.25 3.17893 5.25 5.25C5.25 7.32107 6.92893 9 9 9Z" stroke="#292D32" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15.4436 16.5C15.4436 13.5975 12.5561 11.25 9.00109 11.25C5.44609 11.25 2.55859 13.5975 2.55859 16.5" stroke="#292D32" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div className='d-flex flex-column gap-0'>
+                  <h6 className="mb-0 text-gray">Date</h6>
+                  <p className='mb-0 mt-n1'>{moment(selectedEventDetail?.event_date).format('DD MMMM')}</p>
+                </div>
+              </div>
+
+              <div className='event-card flex-grow-1 px-3 py-2 d-flex gap-3 align-items-center radius-10 bg-gray-2'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M9 9C11.0711 9 12.75 7.32107 12.75 5.25C12.75 3.17893 11.0711 1.5 9 1.5C6.92893 1.5 5.25 3.17893 5.25 5.25C5.25 7.32107 6.92893 9 9 9Z" stroke="#292D32" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15.4436 16.5C15.4436 13.5975 12.5561 11.25 9.00109 11.25C5.44609 11.25 2.55859 13.5975 2.55859 16.5" stroke="#292D32" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div className='d-flex flex-column gap-0'>
+                  <h6 className="mb-0 text-gray">Time</h6>
+                  <p className='mb-0 mt-n1'>
+                    {moment(selectedEventDetail?.start_time).format('hh:mm A')}
+                    {' - '}
+                    {moment(selectedEventDetail?.end_time).format('hh:mm A')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
         
         {/* <Row>
           {events.length < 1 ? (
@@ -588,238 +649,197 @@ const handleBackgroundImageChange = (e) => {
         </Row> */}
       </div>
       <Modal show={showBackgroundCropper} onHide={() => !isSaving && setShowBackgroundCropper(false)} size="lg" centered>
-                <Modal.Header closeButton={!isSaving}>
-                    <Modal.Title>Crop Background Photo</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {backgroundImage && (
-                        <div className="crop-container">
-                            <ReactCrop
-                                crop={backgroundCrop}
-                                onChange={(c) => setBackgroundCrop(c)}
-                                onComplete={handleBackgroundCropComplete}
-                                aspect={2.5}
-                            >
-                                <img
-                                    ref={backgroundImgRef}
-                                    alt="Crop me"
-                                    src={backgroundImage}
-                                    style={{ maxWidth: '100%' }}
-                                    onLoad={(e) => onLoad(e.target)}
-                                />
-                            </ReactCrop>
-                        </div>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button 
-                        variant="secondary" 
-                        onClick={() => setShowBackgroundCropper(false)}
-                        disabled={isSaving}
+        <Modal.Header closeButton={!isSaving}>
+            <Modal.Title>Crop Background Photo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            {backgroundImage && (
+                <div className="crop-container">
+                    <ReactCrop
+                        crop={backgroundCrop}
+                        onChange={(c) => setBackgroundCrop(c)}
+                        onComplete={handleBackgroundCropComplete}
+                        aspect={2.5}
                     >
-                        Cancel
-                    </Button>
-                    <Button 
-                        variant="primary" 
-                        onClick={handleSaveBackgroundCrop}
-                        disabled={isSaving}
-                    >
-                        {isSaving ? (
-                            <>
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                Saving...
-                            </>
-                        ) : (
-                            'Save Changes'
-                        )}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                        <img
+                            ref={backgroundImgRef}
+                            alt="Crop me"
+                            src={backgroundImage}
+                            style={{ maxWidth: '100%' }}
+                            onLoad={(e) => onLoad(e.target)}
+                        />
+                    </ReactCrop>
+                </div>
+            )}
+        </Modal.Body>
+        <Modal.Footer>
+            <Button 
+                variant="secondary" 
+                onClick={() => setShowBackgroundCropper(false)}
+                disabled={isSaving}
+            >
+                Cancel
+            </Button>
+            <Button 
+                variant="primary" 
+                onClick={handleSaveBackgroundCrop}
+                disabled={isSaving}
+            >
+                {isSaving ? (
+                    <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Saving...
+                    </>
+                ) : (
+                    'Save Changes'
+                )}
+            </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={showModal} onHide={() => handleModalClose()} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedEvent ? 'Edit Event' : 'Create New Event'}</Modal.Title>
+        <Modal.Header className="d-flex justify-content-between px-3 py-2">
+          <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
+            <div className="d-flex align-items-center flex-grow-1">
+              {selectedEvent ? 'Edit Event' : 'Create New Event'}
+            </div>
+          </Modal.Title>
+          <Link to="#" className="lh-1" onClick={() => setShowModal(false)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
+              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </Link>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-        <Form.Label>Banner Image</Form.Label>
-          <div className="profile-header" style={{
-                                                   backgroundImage: `url(${croppedGETImageBlob ? URL.createObjectURL(croppedGETImageBlob) : process.env.REACT_APP_BACKEND_BASE_URL +'/'+ selectedEvent?.banner_image})`,
-                                                    backgroundSize: 'cover',
-                                                    backgroundPosition: 'center',
-                                                    borderRadius: '0.25rem',
-                                                    padding: '7rem',
-                                                    position: 'relative',
-                                                    marginBottom: '2rem'
-                                                }}>
-                                                    <div className="position-relative">
-                                                        
-                                                        <div className="upload-background-button" style={{
-                                                            position: 'absolute',
-                                                            top: '10px',
-                                                            right: '10px',
-                                                            zIndex: 1
-                                                        }}>
-                                                            <input 
-                                                                type="file" 
-                                                                id="background-upload"
-                                                                className="file-upload" 
-                                                                accept="image/*" 
-                                                                onChange={handleBackgroundImageChange}
-                                                                style={{ display: 'none' }}
-                                                            />
-                                                            <label htmlFor="background-upload" className="btn btn-primary btn-sm">
-                                                                <svg width="14" height="14" viewBox="0 0 24 24" className="me-2">
-                                                                    <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                                                </svg>
-                                                                Add Banner Image
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-        </Form.Group>
-{/* <Form.Group className="mb-3">
-    <Form.Label>Main Image</Form.Label>
-    <div 
-        style={{
-            width: '100%',
-            height: '200px',
-            border: '2px dashed #ccc',
-            borderRadius: '8px',
-            position: 'relative',
-            backgroundImage: formData?.main_image ? `url(${formData?.main_image})` : 'none',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            cursor: 'pointer'
-        }}
-        onClick={() => document.getElementById('main-image-input').click()}
-    >
-        {!formData?.main_image && (
-            <div style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                textAlign: 'center',
-                color: '#aaa'
-            }}>
-                <span className="material-icons" style={{ fontSize: '48px' }}>add_a_photo</span>
-                <p>Select Image</p>
-            </div>
-        )}
-        <input
-            type="file"
-            id="main-image-input"
-            accept="image/*"
-            style={{ display: 'none' }}
-            onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        setFormData({
-                            ...formData,
-                            main_image: ev.target.result
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }}
-        />
-    </div>
-</Form.Group> */}
-<Form.Group>
-  <Form.Label>Select Organizer (optional)</Form.Label>
-  <div>
-    {/* Selected Admin Display (Clickable) */}
-    <div 
-      className="d-flex align-items-center justify-content-between border rounded p-2 mb-2"
-      style={{ cursor: "pointer", background: "#fff" }}
-      onClick={() => setShowDropdown(!showDropdown)}
-    >
-      <div className="d-flex align-items-center">
-        {selectedAdmin ? (
-          <>
-            <img
-              src={getProfileImageUrl(admins.find(a => a.id === selectedAdmin))}
-              alt={admins.find(a => a.id === selectedAdmin)?.name}
-              className="rounded-circle me-2"
-              style={{ width: "30px", height: "30px" }}
-            />
-            <h6 className="mb-0">
-              {admins.find(a => a.id === selectedAdmin)?.name || "Select Organizer"}
-            </h6>
-          </>
-        ) : (
-          <h6 className="mb-0 text-muted">Select Organizer</h6>
-        )}
-      </div>
-      <i className={`fas fa-chevron-${showDropdown ? "up" : "down"}`}></i>
-    </div>
+            {/* <Form.Group className="mb-3">
+              <Form.Label>Banner Image</Form.Label>
+              <div className="profile-header" style={{
+                backgroundImage: `url(${croppedGETImageBlob ? URL.createObjectURL(croppedGETImageBlob) : process.env.REACT_APP_BACKEND_BASE_URL +'/'+ selectedEvent?.banner_image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '0.25rem',
+                padding: '7rem',
+                position: 'relative',
+                marginBottom: '2rem'
+              }}>
+                <div className="position-relative">
+                    
+                    <div className="upload-background-button" style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        zIndex: 1
+                    }}>
+                        <input 
+                            type="file" 
+                            id="background-upload"
+                            className="file-upload" 
+                            accept="image/*" 
+                            onChange={handleBackgroundImageChange}
+                            style={{ display: 'none' }}
+                        />
+                        <label htmlFor="background-upload" className="btn btn-primary btn-sm">
+                            <svg width="14" height="14" viewBox="0 0 24 24" className="me-2">
+                                <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                            </svg>
+                            Add Banner Image
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </Form.Group> */}
 
-    {/* Dropdown Container */}
-    {showDropdown && (
-      <div 
-        className="border rounded p-2 position-absolute bg-white shadow"
-        style={{ maxHeight: "250px", width: "100%", overflowY: "auto", zIndex: 1000 }}
-      >
-        {/* Search Field */}
-        <Form.Control
-          type="text"
-          placeholder="Search Users..."
-          value={searchQuery}
-          onChange={(e) => {
-            const query = e.target.value;
-            axios.get(`/api/get-admins?search=${query}`)
-              .then(response => {
-                const adminsArray = response.data.users || [];
-                const userArray = userData ? [userData] : [];
-                setAdmins([...userArray, ...adminsArray].filter((v, i, a) => a.findIndex(v2 => v2.id === v.id) === i));
-              })
-              .catch(error => console.log(error));
-            setSearchQuery(query);
-          }}
-          autoFocus
-        />
-
-        {/* Admin List */}
-        <div className="mt-2">
-          {admins?.length > 0 ? (
-            admins.slice(0, 3).map((admin) => (
-              <Card 
-                key={admin.id} 
-                className={`mb-1 p-2 ${selectedAdmin === admin.id ? "bg-light" : ""}`} 
-                style={{ cursor: "pointer", fontSize: "14px" }}
-                onClick={() => {
-                  handleAdminSelect(admin.id);
-                  setShowDropdown(false);
-                }}
-              >
-                <Card.Body className="d-flex justify-content-between align-items-center p-2">
+            {/* <Form.Group>
+              <Form.Label>Select Organizer (optional)</Form.Label>
+              <div>
+                <div 
+                  className="d-flex align-items-center justify-content-between border rounded p-2 mb-2"
+                  style={{ cursor: "pointer", background: "#fff" }}
+                  onClick={() => setShowDropdown(!showDropdown)}
+                >
                   <div className="d-flex align-items-center">
-                    <img
-                      src={getProfileImageUrl(admin)}
-                      alt={admin.name}
-                      className="rounded-circle me-2"
-                      style={{ width: "25px", height: "25px" }}
-                    />
-                    <h6 className="mb-0">{admin.name}</h6>
+                    {selectedAdmin ? (
+                      <>
+                        <img
+                          src={getProfileImageUrl(admins.find(a => a.id === selectedAdmin))}
+                          alt={admins.find(a => a.id === selectedAdmin)?.name}
+                          className="rounded-circle me-2"
+                          style={{ width: "30px", height: "30px" }}
+                        />
+                        <h6 className="mb-0">
+                          {admins.find(a => a.id === selectedAdmin)?.name || "Select Organizer"}
+                        </h6>
+                      </>
+                    ) : (
+                      <h6 className="mb-0 text-muted">Select Organizer</h6>
+                    )}
                   </div>
-                  {selectedAdmin === admin.id && <i className="fas fa-check text-success"></i>}
-                </Card.Body>
-              </Card>
-            ))
-          ) : (
-            <p className="text-muted text-center">No admins found</p>
-          )}
-        </div>
-      </div>
-    )}
-  </div>
-</Form.Group>
+                  <i className={`fas fa-chevron-${showDropdown ? "up" : "down"}`}></i>
+                </div>
 
+                
+                {showDropdown && (
+                  <div 
+                    className="border rounded p-2 position-absolute bg-white shadow"
+                    style={{ maxHeight: "250px", width: "100%", overflowY: "auto", zIndex: 1000 }}
+                  >
+                    
+                    <Form.Control
+                      type="text"
+                      placeholder="Search Users..."
+                      value={searchQuery}
+                      onChange={(e) => {
+                        const query = e.target.value;
+                        axios.get(`/api/get-admins?search=${query}`)
+                          .then(response => {
+                            const adminsArray = response.data.users || [];
+                            const userArray = userData ? [userData] : [];
+                            setAdmins([...userArray, ...adminsArray].filter((v, i, a) => a.findIndex(v2 => v2.id === v.id) === i));
+                          })
+                          .catch(error => console.log(error));
+                        setSearchQuery(query);
+                      }}
+                      autoFocus
+                    />
 
-
+                    
+                    <div className="mt-2">
+                      {admins?.length > 0 ? (
+                        admins.slice(0, 3).map((admin) => (
+                          <Card 
+                            key={admin.id} 
+                            className={`mb-1 p-2 ${selectedAdmin === admin.id ? "bg-light" : ""}`} 
+                            style={{ cursor: "pointer", fontSize: "14px" }}
+                            onClick={() => {
+                              handleAdminSelect(admin.id);
+                              setShowDropdown(false);
+                            }}
+                          >
+                            <Card.Body className="d-flex justify-content-between align-items-center p-2">
+                              <div className="d-flex align-items-center">
+                                <img
+                                  src={getProfileImageUrl(admin)}
+                                  alt={admin.name}
+                                  className="rounded-circle me-2"
+                                  style={{ width: "25px", height: "25px" }}
+                                />
+                                <h6 className="mb-0">{admin.name}</h6>
+                              </div>
+                              {selectedAdmin === admin.id && <i className="fas fa-check text-success"></i>}
+                            </Card.Body>
+                          </Card>
+                        ))
+                      ) : (
+                        <p className="text-muted text-center">No admins found</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Form.Group> */}
 
             <Form.Group className="mb-3">
               <Form.Label>Title</Form.Label>
@@ -829,6 +849,8 @@ const handleBackgroundImageChange = (e) => {
                 value={formData.title}
                 onChange={handleInputChange}
                 required
+                className="radius-8"
+                placeholder="Enter Title"
               />
             </Form.Group>
 
@@ -839,28 +861,39 @@ const handleBackgroundImageChange = (e) => {
                 name="subtitle"
                 value={formData.subtitle}
                 onChange={handleInputChange}
+                className="radius-8"
+                placeholder="Enter Subitle"
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
-              <ReactQuill
-              theme="snow"
-              name="description"
-              value={formData.description}
-              onChange={(value) => {
-                setFormData(prev => ({
-                  ...prev,
-                  description: value
-                }));
-              }}
-              modules={modules}
-              style={{ height: '200px', marginBottom: '50px' }}
-            />
+              <Form.Control
+                as="textarea"
+                rows={5}
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                className='radius-8'
+                placeholder='Write here...'
+              />
+              {/* <ReactQuill
+                theme="snow"
+                name="description"
+                value={formData.description}
+                onChange={(value) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    description: value
+                  }));
+                }}
+                modules={modules}
+                style={{ height: '200px', marginBottom: '50px' }}
+              /> */}
             </Form.Group>
 
             <Row>
-              <Col md={6}>
+              <Col sm={12}>
                 <Form.Group className="mb-3">
                   <Form.Label>Event Date</Form.Label>
                   <Form.Control
@@ -869,10 +902,11 @@ const handleBackgroundImageChange = (e) => {
                     value={formData.event_date}
                     onChange={handleInputChange}
                     required
+                    className='radius-8'
                   />
                 </Form.Group>
               </Col>
-              <Col md={3}>
+              <Col sm={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Start Time</Form.Label>
                   <Form.Control
@@ -880,10 +914,12 @@ const handleBackgroundImageChange = (e) => {
                     name="start_time"
                     value={formData.start_time}
                     onChange={handleInputChange}
+                    placeholder="Set Start Time"
+                    className='radius-8'
                   />
                 </Form.Group>
               </Col>
-              <Col md={3}>
+              <Col sm={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>End Time</Form.Label>
                   <Form.Control
@@ -891,26 +927,28 @@ const handleBackgroundImageChange = (e) => {
                     name="end_time"
                     value={formData.end_time}
                     onChange={handleInputChange}
+                    placeholder="Set End Time"
+                    className='radius-8'
                   />
                 </Form.Group>
               </Col>
             </Row>
 
-<Form.Group className="mb-3">
-    <Form.Label>Type</Form.Label>
-    <Form.Select
-        name="type"
-        value={formData.type}
-        onChange={handleInputChange}
-        required // Add required if you want to enforce selection
-    >
-        <option value="">Select Type</option> {/* Placeholder option */}
-        <option value="in-person">In person</option>
-        <option value="virtual">Virtual</option>
-    </Form.Select>
-</Form.Group>
+            {/* <Form.Group className="mb-3">
+              <Form.Label>Type</Form.Label>
+              <Form.Select
+                  name="type"
+                  value={formData.type}
+                  onChange={handleInputChange}
+                  required // Add required if you want to enforce selection
+              >
+                  <option value="">Select Type</option>
+                  <option value="in-person">In person</option>
+                  <option value="virtual">Virtual</option>
+              </Form.Select>
+            </Form.Group> */}
 
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
               <Form.Label>Visibility</Form.Label>
               <Form.Select
                 name="is_active"
@@ -920,13 +958,10 @@ const handleBackgroundImageChange = (e) => {
                 <option value="1">Public</option>
                 <option value="0">Private</option>
               </Form.Select>
-            </Form.Group>
+            </Form.Group> */}
 
             <div className="text-end">
-              <Button variant="secondary" className="me-2" onClick={() => setShowModal(false)}>
-                Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              <Button variant="primary" type="submit" className="radius-8 btn-purpule w-100">
                 {selectedEvent ? 'Update' : 'Create'} Event
               </Button>
             </div>

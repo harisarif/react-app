@@ -83,7 +83,7 @@ const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcan
         centered
         className=""
       >
-        <Modal.Header className="d-flex justify-content-between p-3">
+        <Modal.Header className="d-flex justify-content-between px-3 py-2">
           <Modal.Title id="contained-modal-title-vcenter" className="d-flex align-items-center hover-bg mx-auto">
             <div className="d-flex align-items-center flex-grow-1">
               <h3 className="modal-title text-dark" id="share-btnLabel">
@@ -118,8 +118,8 @@ const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcan
                         <h6 className="mb-0 me-2 text-dark fw-bold">{post.user?.name || 'Anonymous'}</h6>
                         <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>Graphic Designer | Social Media Manager | Visual Communication</p>
                         <p className="mb-0 mt-n1 text-gray" style={{fontSize: 14, fontWeight: '400'}}>                        {moment(post.created_at).fromNow()}
-            {' '}
-            {moment(post.created_at).format('h:mm a')}</p>
+                          {' '}
+                          {moment(post.created_at).format('h:mm a')}</p>
                       </div>
                     </div>
                     <div>

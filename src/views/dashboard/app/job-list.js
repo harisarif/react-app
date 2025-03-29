@@ -108,10 +108,10 @@ const JobList = () => {
                           </Button>
                         </Card.Body>
                       </Card>
-                    {/* Open Modal Only for Selected Job */}
-    {selectedJob === job.id && (
-      <ViewJobDetailModal id={job.id} show={true} onHide={handleCloseModal} />
-    )}
+                      {/* Open Modal Only for Selected Job */}
+                      {selectedJob === job.id && (
+                        <ViewJobDetailModal id={job.id} show={true} onHide={handleCloseModal} />
+                      )}
                     </div>
                   ))}
                 </div>
@@ -125,6 +125,7 @@ const JobList = () => {
         show={showCreateModal}
         onHide={() => setShowCreateModal(false)}
         onJobCreated={handleJobCreated}
+        setShowCreateModal={setShowCreateModal}
       />
     </>
   );
