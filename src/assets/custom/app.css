@@ -18586,3 +18586,12 @@ color: white !important;
 .bg-gray-2{
   background-color: #f9f9f9 !important;
 }
+
+
+.category-dropdown-main-wrapper{
+ 
+  
+  & svg path{
+    stroke: var(--white-color);
+  }
+}
