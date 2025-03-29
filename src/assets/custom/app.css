@@ -18311,6 +18311,10 @@ color: white !important;
   border-radius: 8px !important;
 }
 
+.radius-6 {
+  border-radius: 6px !important;
+}
+
 .btn-outline-purpule {
   border-color: var(--purpule-color) !important;
   color: var(--purpule-color) !important;
@@ -18570,4 +18574,15 @@ color: white !important;
     height: 24px !important;
     width: 38px !important;
   }
+}
+
+.end-16px{
+  right: 16px !important
+}
+
+.btn-gray-2{
+  background-color: #f9f9f9 !important;
+}
+.bg-gray-2{
+  background-color: #f9f9f9 !important;
 }

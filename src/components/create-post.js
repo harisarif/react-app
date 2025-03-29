@@ -19,6 +19,8 @@ import img1 from "../assets/images/icon/02.png";
 import img2 from "../assets/images/icon/02.png";
 import img3 from "../assets/images/icon/03.png";
 
+
+
 const CreatePost = ({ 
   posts, 
   setPosts, 
@@ -35,6 +37,13 @@ const CreatePost = ({
   const [previews, setPreviews] = useState({ images: [], videos: [], documents: [] });
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("Business");
+
+
+  const handleCategoryChange = (event, category) => {
+    handleInputChange(event); // Call parent function to update formData
+    setSelectedCategory(category.name.split(" ")[0]); // Update dropdown label
+  };
 
 
   const handleDescriptionChange = (value) => {
@@ -570,12 +579,12 @@ const CreatePost = ({
     return '';
   };
 
+  const textAreaRef = useRef(null); // Create a ref for the textarea
   const [selectedStyle, setSelectedStyle] = useState(null);
-  const quillRef = useRef(null);
 
   const styles = [
     { name: "Black", color: "#000000", text: '#fff' },
-    { name: "Orange", color: "#FFAA33", text: '#fff' },
+    { name: "Orange", color: "#FFAA33", text: '#000' },
     { name: "Brown", color: "#B45309", text: '#fff' },
     { name: "Blue", color: "#2563EB", text: '#fff' },
     { name: "Purple", color: "#9333EA", text: '#fff' },
@@ -583,25 +592,43 @@ const CreatePost = ({
   ];
 
   useEffect(() => {
-    if (quillRef.current) {
-      const editor = quillRef.current.getEditor();
-      if (selectedStyle) {
-        editor.root.style.background = selectedStyle.color;
-        editor.root.style.color = selectedStyle.textColor;
-        editor.root.style.fontSize = "18px";
-        editor.root.style.textAlign = "center";
-        editor.root.style.minHeight = "250px";
-        editor.root.style.padding = "30px 20px";
-      } else {
-        editor.root.style.background = "";
-        editor.root.style.color = "";
-        editor.root.style.fontSize = "";
-        editor.root.style.textAlign = "";
-        editor.root.style.minHeight = "";
-        editor.root.style.padding = "";
-      }
+    if (!textAreaRef.current) return;
+
+    const textArea = textAreaRef.current;
+
+    if (selectedStyle) {
+      textArea.style.background = selectedStyle.color || "";
+      textArea.style.color = selectedStyle.text || "";
+      textArea.style.fontSize = "18px";
+      textArea.style.textAlign = "center";
+      textArea.style.minHeight = "250px";
+      textArea.style.padding = "30px 20px";
+
+      // Dynamically set placeholder color
+      textArea.style.caretColor = selectedStyle.text || ""; // Changes cursor color
+      const sheet = document.styleSheets[0];
+      sheet.insertRule(
+        `textarea::placeholder { color: ${selectedStyle.text || "#000"} !important; }`,
+        sheet.cssRules.length
+      );
+    } else {
+      textArea.style.background = "";
+      textArea.style.color = "";
+      textArea.style.fontSize = "";
+      textArea.style.textAlign = "";
+      textArea.style.minHeight = "";
+      textArea.style.padding = "";
+      textArea.style.caretColor = "";
+
+      // Reset placeholder color
+      const sheet = document.styleSheets[0];
+      sheet.insertRule(
+        `textarea::placeholder { color: #aaa !important; }`, // Default placeholder color
+        sheet.cssRules.length
+      );
     }
   }, [selectedStyle]);
+
 
   const handleStyleClick = (style) => {
     setSelectedStyle(selectedStyle === style ? null : style);
@@ -759,7 +786,11 @@ const CreatePost = ({
             </div>
           </Modal.Title>
           <Link to="#" className="lh-1" onClick={() => handleClose(false)}>
-            <span className="material-symbols-outlined text-dark rounded-4">close</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
+              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </Link>
         </Modal.Header>
         <Modal.Body>
@@ -771,24 +802,43 @@ const CreatePost = ({
                 <Dropdown className="">
                   <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
                     <span
-                      className={`badge py-0 px-2 btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
-                      style={{ cursor: "pointer" }}
+                      className={`badge cursor-pointer btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
+                      style={{padding: '4px 10px 2px 15px'}}
                     >
                       {formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1).replace('_', ' ')}
                       <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
                     </span>
                   </Dropdown.Toggle>
                 </Dropdown>
-                | <Dropdown className="">
-                  <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
+                <span className='text-secondary mx-2'>|</span> 
+                <Dropdown className="">
+                  <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger}>
                     <span
-                      className={`badge py-0 px-2 btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
-                      style={{ cursor: "pointer" }}
+                      className={`badge cursor-pointer btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
+                      style={{padding: '4px 10px 2px 15px'}}
                     >
-                      Business
+                      {selectedCategory}
                       <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
                     </span>
                   </Dropdown.Toggle>
+                  <Dropdown.Menu style={{padding: '0.75rem 0.75rem 0.25rem 0.75rem'}}>
+                    {categories.map(category => (
+                      <Dropdown.Item style={{padding: '0.25rem 0.75rem'}} className="btn btn-purpule mb-2 radius-6 text-white d-flex gap-2 align-items-center" onClick={(e) => handleCategoryChange(e, category)}>
+                        <input
+                          type="radio"
+                          key={category.id}
+                          value={category.id}
+                          checked={category.id.toString() === formData.category_id}
+                          id={category.id}
+                          style={{ display: 'none' }}
+                          name="category_id"
+                          onChange={handleInputChange}
+                          required
+                        />
+                        <label for={category.id} className="cursor-pointer" style={{fontSize: '13px', fontWeight: '300'}}>{category.name.split(" ")[0]}</label>
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
                 </Dropdown>
               </div>
             </div>
@@ -805,7 +855,7 @@ const CreatePost = ({
               required
             />
           </Form.Group>
-          <Form.Group className="mb-3">
+          {/* <Form.Group className="mb-3">
             <Form.Label>Category *</Form.Label>
             <br />
             <div className="d-flex gap-1 overflow-auto">
@@ -826,7 +876,7 @@ const CreatePost = ({
                 </div>
               ))}
             </div>
-          </Form.Group>
+          </Form.Group> */}
           <div className="mb-3">
           {/* <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} style={{ cursor: 'pointer' }} /> */}
           <Form.Label>Description * </Form.Label>
@@ -838,6 +888,7 @@ const CreatePost = ({
               value={formData.description}
               onChange={handleInputChange}
               className="radius-10"
+              ref={textAreaRef}
             />
                         {showEmojiDropdown && (
               <EmojiPicker
@@ -1018,65 +1069,87 @@ const CreatePost = ({
         onHide={() => setShowVisibilityModal(false)} 
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Post Visibility</Modal.Title>
+        <Modal.Header className="d-flex justify-content-start gap-3" style={{padding: '10px 20px'}}>
+          <span className='cursor-pointer' onClick={() => setShowVisibilityModal(false)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
+              <path d="M12.7847 9.78516L8.5 14.0699L12.7847 18.3546" stroke="#292D32" stroke-width="1.05883" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20.5 14.0699H8.6199" stroke="#292D32" stroke-width="1.05883" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <Modal.Title style={{fontSize: '18px', fontWeight: '500'}}>Post Visibility</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <div className="d-flex flex-column gap-3">
-            <div 
-              className={`d-flex align-items-center px-3 py-2 rounded cursor-pointer ${passwordProtectionData.type === 'public' ? 'bg-primary text-white' : 'border'}`}
+        <Modal.Body style={{paddingLeft: '35px', paddingRight: '35px'}}>
+          <div className="d-flex flex-column gap-0">
+            <div className={`d-flex justify-content-between align-items-center px-3 py-2 cursor-pointer `}
               onClick={() => handlePasswordProtectionChange('public')}
             >
-              <span className="material-symbols-outlined me-3 fs-18">people</span>
-              <div>
-                <h6 className="mb-0">Public</h6>
-                <small>Anyone can see your post</small>
+              <div className='d-flex gap-3'>
+                <div className={`d-flex justify-content-center rounded-circle align-items-center p-3 avatar-40 ${passwordProtectionData.type === 'public' ? 'bg-primary-2 text-white' : 'bg-gray-2 text-dark'}`}>
+                  <span className="material-symbols-outlined" style={{fontSize: '16px'}}>people</span>
+                </div>
+                <div className='d-flex flex-column gap-0'>
+                  <h6 className="mb-0" style={{fontSize: '14px', fontWeight: '600'}}>Public</h6>
+                  <small className='mt-n1' style={{fontSize: '13px', fontWeight: '300'}}>Anyone can see your post</small>
+                </div>
               </div>
-              {passwordProtectionData.type === 'public' && (
-                <span className="material-symbols-outlined ms-auto">check_circle</span>
-              )}
+              <div className='avatar-20 d-flex align-items-center'>
+                {passwordProtectionData.type === 'public' && (
+                  <span className="material-symbols-outlined">check_circle</span>
+                )}
+              </div>
             </div>
 
-            <div 
-              className={`d-flex align-items-center px-3 py-2 rounded cursor-pointer ${passwordProtectionData.type === 'private' ? 'bg-primary text-white' : 'border'}`}
+            <div className={`d-flex justify-content-between align-items-center px-3 py-2 cursor-pointer `}
               onClick={() => handlePasswordProtectionChange('private')}
             >
-              <span className="material-symbols-outlined me-3 fs-18">person</span>
-              <div>
-                <h6 className="mb-0">Private</h6>
-                <small>Only you can see your post</small>
+              <div className='d-flex gap-3'>
+                <div className={`d-flex justify-content-center rounded-circle align-items-center p-3 avatar-40 ${passwordProtectionData.type === 'private' ? 'bg-primary-2 text-white' : 'bg-gray-2 text-dark'}`}>
+                  <span className="material-symbols-outlined" style={{fontSize: '16px'}}>person</span>
+                </div>
+                <div className='d-flex flex-column gap-0'>
+                  <h6 className="mb-0" style={{fontSize: '14px', fontWeight: '600'}}>Private</h6>
+                  <small className='mt-n1' style={{fontSize: '13px', fontWeight: '300'}}>Only you can see your post</small>
+                </div>
               </div>
-              {passwordProtectionData.type === 'private' && (
-                <span className="material-symbols-outlined ms-auto">check_circle</span>
-              )}
+              <div className='avatar-20 d-flex align-items-center'>
+                {passwordProtectionData.type === 'private' && (
+                  <span className="material-symbols-outlined">check_circle</span>
+                )}
+              </div>
             </div>
 
-            <div 
-              className={`d-flex align-items-center px-3 py-2 rounded cursor-pointer ${passwordProtectionData.type === 'password_protected' ? 'bg-primary text-white' : 'border'}`}
+            <div className={`d-flex justify-content-between align-items-center px-3 py-2 cursor-pointer `}
               onClick={() => handlePasswordProtectionChange('password_protected')}
             >
-              <span className="material-symbols-outlined me-3 fs-18">lock</span>
-              <div>
-                <h6 className="mb-0">Password Protected</h6>
-                <small>Only people with password can view</small>
+              <div className='d-flex gap-3'>
+                <div className={`d-flex justify-content-center rounded-circle align-items-center p-3 avatar-40 ${passwordProtectionData.type === 'password_protected' ? 'bg-primary-2 text-white' : 'bg-gray-2 text-dark'}`}>
+                  <span className="material-symbols-outlined" style={{fontSize: '16px'}}>lock</span>
+                </div>
+                <div className='d-flex flex-column gap-0'>
+                  <h6 className="mb-0" style={{fontSize: '14px', fontWeight: '600'}}>Password Protected</h6>
+                  <small className='mt-n1' style={{fontSize: '13px', fontWeight: '300'}}>Only people with password can view</small>
+                </div>
               </div>
-              {passwordProtectionData.type === 'password_protected' && (
-                <span className="material-symbols-outlined ms-auto">check_circle</span>
-              )}
+              <div className='avatar-20 d-flex align-items-center'>
+                {passwordProtectionData.type === 'password_protected' && (
+                  <span className="material-symbols-outlined">check_circle</span>
+                )}
+              </div>
             </div>
 
             {passwordProtectionData.type === 'password_protected' && (
-              <div className="position-relative">
+              <div className="position-relative px-3">
                 <Form.Control
                   type={passwordVisible ? 'text' : 'password'}
                   placeholder="Enter password"
                   value={passwordProtectionData.password}
                   onChange={handlePasswordChange}
-                  className="pr-5"
+                  className="pr-5 radius-10"
                 />
                 <Button 
                   variant="link" 
-                  className="position-absolute top-50 end-0 translate-middle-y"
+                  className="position-absolute top-50 end-16px translate-middle-y"
                   onClick={togglePasswordVisibility}
                 >
                   <span className="material-symbols-outlined">
@@ -1087,13 +1160,22 @@ const CreatePost = ({
             )}
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="border-0 pt-0">
+          <Button 
+            variant="secondary" 
+            disabled={passwordProtectionData.type === 'password_protected' && !passwordProtectionData.password.trim()}
+            className="btn-gray-2 px-3 text-dark border-0"
+            onClick={() => setShowVisibilityModal(false)}
+          >
+            Cancel
+          </Button>
           <Button 
             variant="primary" 
             onClick={handleVisibilityModalSubmit}
             disabled={passwordProtectionData.type === 'password_protected' && !passwordProtectionData.password.trim()}
+            className="btn-purpule px-3"
           >
-            Set Visibility
+            Done
           </Button>
         </Modal.Footer>
       </Modal>
