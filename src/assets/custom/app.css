@@ -18635,10 +18635,10 @@ color: white !important;
 }
 
 .btn-gray-2{
-  background-color: #f7f7f7 !important;
+  background-color: var(--gray-2) !important;
 }
 .bg-gray-2{
-  background-color: #f7f7f7 !important;
+  background-color: var(--gray-2) !important;
 }
 
 

@@ -783,8 +783,8 @@ const CreatePost = ({
           <Link to="#" className="lh-1" onClick={() => handleClose(false)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
               <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
-              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </Link>
         </Modal.Header>
@@ -929,7 +929,7 @@ const CreatePost = ({
 
           {Object.entries(previews).some(([_, files]) => true) && (
             <div className="preview-section mt-3">
-              <h6 className="mb-2">Attachments</h6>
+              <h6 className="mb-2 text-dark">Attachments</h6>
               <div className="d-flex gap-2 overflow-auto">
              <div className="position-relative">
                <div className="file-upload-section">
@@ -1087,11 +1087,11 @@ const CreatePost = ({
           <span className='cursor-pointer' onClick={() => setShowVisibilityModal(false)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
               <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
-              <path d="M12.7847 9.78516L8.5 14.0699L12.7847 18.3546" stroke="#292D32" stroke-width="1.05883" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M20.5 14.0699H8.6199" stroke="#292D32" stroke-width="1.05883" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.7847 9.78516L8.5 14.0699L12.7847 18.3546" stroke="#CCCCCC" stroke-width="1.05883" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20.5 14.0699H8.6199" stroke="#CCCCCC" stroke-width="1.05883" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <Modal.Title style={{fontSize: '18px', fontWeight: '500'}}>Post Visibility</Modal.Title>
+          <Modal.Title className="text-dark" style={{fontSize: '18px', fontWeight: '500'}}>Post Visibility</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{paddingLeft: '35px', paddingRight: '35px'}}>
           <div className="d-flex flex-column gap-0">
@@ -1103,8 +1103,8 @@ const CreatePost = ({
                   <span className="material-symbols-outlined" style={{fontSize: '16px'}}>people</span>
                 </div>
                 <div className='d-flex flex-column gap-0'>
-                  <h6 className="mb-0" style={{fontSize: '14px', fontWeight: '600'}}>Public</h6>
-                  <small className='mt-n1' style={{fontSize: '13px', fontWeight: '300'}}>Anyone can see your post</small>
+                  <h6 className="mb-0 text-dark" style={{fontSize: '14px', fontWeight: '600'}}>Public</h6>
+                  <small className='mt-n1 text-dark' style={{fontSize: '13px', fontWeight: '300'}}>Anyone can see your post</small>
                 </div>
               </div>
               <div className='avatar-20 d-flex align-items-center'>
@@ -1124,8 +1124,8 @@ const CreatePost = ({
                   <span className="material-symbols-outlined" style={{fontSize: '16px'}}>person</span>
                 </div>
                 <div className='d-flex flex-column gap-0'>
-                  <h6 className="mb-0" style={{fontSize: '14px', fontWeight: '600'}}>Private</h6>
-                  <small className='mt-n1' style={{fontSize: '13px', fontWeight: '300'}}>Only you can see your post</small>
+                  <h6 className="mb-0 text-dark" style={{fontSize: '14px', fontWeight: '600'}}>Private</h6>
+                  <small className='mt-n1 text-dark' style={{fontSize: '13px', fontWeight: '300'}}>Only you can see your post</small>
                 </div>
               </div>
               <div className='avatar-20 d-flex align-items-center'>
@@ -1145,8 +1145,8 @@ const CreatePost = ({
                   <span className="material-symbols-outlined" style={{fontSize: '16px'}}>lock</span>
                 </div>
                 <div className='d-flex flex-column gap-0'>
-                  <h6 className="mb-0" style={{fontSize: '14px', fontWeight: '600'}}>Password Protected</h6>
-                  <small className='mt-n1' style={{fontSize: '13px', fontWeight: '300'}}>Only people with password can view</small>
+                  <h6 className="mb-0 text-dark" style={{fontSize: '14px', fontWeight: '600'}}>Password Protected</h6>
+                  <small className='mt-n1 text-dark' style={{fontSize: '13px', fontWeight: '300'}}>Only people with password can view</small>
                 </div>
               </div>
               <div className='avatar-20 d-flex align-items-center'>
@@ -1172,7 +1172,7 @@ const CreatePost = ({
                   className="position-absolute top-50 end-16px translate-middle-y"
                   onClick={togglePasswordVisibility}
                 >
-                  <span className="material-symbols-outlined">
+                  <span className="material-symbols-outlined pt-2">
                     {passwordVisible ? 'visibility_off' : 'visibility'}
                   </span>
                 </Button>

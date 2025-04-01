@@ -146,7 +146,7 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const [isDocumentLoading, setIsDocumentLoading] = useState(false);
   const [documentError, setDocumentError] = useState(null);
   const [isCommentLoading, setIsCommentLoading] = useState(false);
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const [editPostData, setEditPostData] = useState(null);
 
@@ -376,6 +376,10 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
         });
       }
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
   };
 
   const handleDownload = async (url) => {
@@ -925,19 +929,42 @@ const handleEmojiSelect = (emoji) => {
         />
       )}
       <Modal show={modalIsOpen} onHide={() => setModalIsOpen(false)}>
-        <Modal.Header>
-          <Modal.Title>Enter Password</Modal.Title>
+        <Modal.Header className="d-flex justify-content-between px-3 py-2">
+          <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
+            <div className="d-flex align-items-center flex-grow-1">
+              <h2 className="fs-16 fw-700 mb-0 text-dark">Enter Password</h2>
+            </div>
+          </Modal.Title>
+          <Link to="#" className="lh-1" onClick={() => setModalIsOpen(false)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
+              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </Link>
         </Modal.Header>
         <Modal.Body>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-          />
+          <div className="position-relative px-3">
+            <Form.Control
+              type={passwordVisible ? 'text' : 'password'}
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="pr-5 radius-10"
+            />
+            <Button 
+              variant="link" 
+              className="position-absolute top-50 end-16px translate-middle-y"
+              onClick={togglePasswordVisibility}
+            >
+              <span className="material-symbols-outlined pt-2">
+                {passwordVisible ? 'visibility_off' : 'visibility'}
+              </span>
+            </Button>
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setModalIsOpen(false)}>
+          <Button variant="secondary" className='btn-gray-2' onClick={() => setModalIsOpen(false)}>
             Cancel
           </Button>
           <Button variant="primary" onClick={unlockContent} disabled={loading}>
