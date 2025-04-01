@@ -426,7 +426,7 @@ const UserFeeds = () => {
                       New
                     </div>
                   </Col>
-                  <Col lg={12} className="special-post">
+                  {/* <Col lg={12} className="special-post">
                     <Card className="card-block card-stretch card-height">
                       <Card.Body>
                         <div className="user-post-data ">
@@ -583,7 +583,7 @@ const UserFeeds = () => {
                         </div>
                       </Card.Body>
                     </Card>
-                  </Col>
+                  </Col> */}
 
                   <Col lg={12} >
                     {loadContent ? (

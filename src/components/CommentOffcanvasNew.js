@@ -322,7 +322,7 @@ const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcan
       {comments?.map((comment, index) => (
         <div key={index} className='d-flex gap-2 mb-2'>
           <img src={getProfileImageUrl(comment?.user)} alt='' className="rounded-circle avatar-30 me-2" />
-          <div className='d-flex flex-column radius-10 p-3 w-100 me-2 pb-0' style={{background: '#f9f9f9'}}>
+          <div className='d-flex flex-column radius-10 p-3 w-100 me-2 pb-0 comment-card'>
 
             <div className='d-flex gap-2 justify-content-between'>
               <div className='d-flex gap-0 flex-column'>

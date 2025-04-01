@@ -496,7 +496,7 @@ const handleEmojiSelect = (emoji) => {
   return (
     <>
                     
-      <Card className="card-block card-stretch card-height">
+      <Card className="card-block card-stretch card-height" {...(userData.roles !== 'admin' && {...(post.visibility === 'password_protected' ? { onClick: () => setModalIsOpen(true) } : {})})}>
         <Card.Body>
           <div className="user-post-data ">
             <div className="d-flex align-items-center justify-content-between">
@@ -514,12 +514,13 @@ const handleEmojiSelect = (emoji) => {
                       <h6 className="mb-0 me-2 text-dark fw-bold">{post.user?.name || 'Anonymous'}</h6>
                       <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>Graphic Designer | Social Media Manager | Visual Communication</p>
                       <p className="mb-0 mt-n1 text-gray" style={{fontSize: 14, fontWeight: '400'}}>                        {moment(post.created_at).fromNow()}
-          {' '}
-          {moment(post.created_at).format('h:mm a')}</p>
+                        {' '}
+                        {moment(post.created_at).format('h:mm a')}</p>
                     </div>
                   </div>
                   <div>
                     <div className='d-flex align-items-center justify-content-between'>
+                    {userData && (userData.id === post.user_id || userData.roles === 'admin') && (
                       <Dropdown>
                         <Dropdown.Toggle className="text-secondary p-0 no-caret" style={{ background: 'none', border: 'none', }}>
                           <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>more_horiz</span>
@@ -578,6 +579,7 @@ const handleEmojiSelect = (emoji) => {
                           </>
                         </Dropdown.Menu>
                       </Dropdown>
+                    )}
                     </div>
                   </div>
                 </div>
@@ -594,74 +596,74 @@ const handleEmojiSelect = (emoji) => {
           {/* <div className={`media-grid position-relative media-grid-1`}>
             <div className="media-item" > */}
             {post.media && post.media.length > 0 && (
-<div className={`media-grid position-relative media-grid-${Math.min(post.media.length, 5)}`}>
-{post.media.slice(0, 5)?.map((item, index) => (
-  <div key={index} className="media-item">
-    {isDocument(item.url) ? (
-      <div className="document-preview">
-        <div className="document-header">
-          <div className={`document-icon ${getFileExtension(item.url)}`}>
-            <span className="material-symbols-outlined">
-              {getFileIcon(getFileExtension(item.url))}
-            </span>
-          </div>
-          <div className="document-info">
-            <p className="document-name">{item.url.split('/').pop()}</p>
-            <div className="document-meta">
-              <span>{formatFileSize(item.size)}</span>
-              <span>•</span>
-              <span>{getFileExtension(item.url).toUpperCase()}</span>
+          <div className={`media-grid position-relative media-grid-${Math.min(post.media.length, 5)}`}>
+          {post.media.slice(0, 5)?.map((item, index) => (
+            <div key={index} className="media-item">
+              {isDocument(item.url) ? (
+                <div className="document-preview">
+                  <div className="document-header">
+                    <div className={`document-icon ${getFileExtension(item.url)}`}>
+                      <span className="material-symbols-outlined">
+                        {getFileIcon(getFileExtension(item.url))}
+                      </span>
+                    </div>
+                    <div className="document-info">
+                      <p className="document-name">{item.url.split('/').pop()}</p>
+                      <div className="document-meta">
+                        <span>{formatFileSize(item.size)}</span>
+                        <span>•</span>
+                        <span>{getFileExtension(item.url).toUpperCase()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="document-actions">
+                    <button
+                      className="btn btn-preview"
+                      onClick={() => handlePreview(item)}
+                    >
+                      <span className="material-symbols-outlined">visibility</span>
+                      Preview
+                    </button>
+                  </div>
+                </div>
+              ) : item.type === 'video' ? (
+                <div className="media-item" >
+                  <div className="position-relative w-100 h-100"
+                    onClick={() => handleMediaClick(item.url, item.type, index)}
+                  >
+                    <video>
+                      <source src={item.url} />
+                    </video>
+                    <div className="play-button">
+                      <span className="material-symbols-outlined">play_circle</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="media-item" >
+                  <div className="position-relative w-100 h-100"
+                    onClick={() => handleMediaClick(item.url, item.type, index)}
+                  >
+                    <img
+                      src={item.url}
+                      alt={`Media ${index + 1}`}
+                    />
+                    {index === 4 && post.media.length > 5 && (
+                      <div className="media-overlay">
+                        <div className="overlay-text">
+                          +{post.media.length - 5}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
+          ))}
+          <span className={`${badge.className} position-absolute top-left-12`}>{badge.text}</span>
+          {/* <span className={`badge badge-business position-absolute top-left-12`}>Business</span> */}
           </div>
-        </div>
-        <div className="document-actions">
-          <button
-            className="btn btn-preview"
-            onClick={() => handlePreview(item)}
-          >
-            <span className="material-symbols-outlined">visibility</span>
-            Preview
-          </button>
-        </div>
-      </div>
-    ) : item.type === 'video' ? (
-      <div className="media-item" >
-        <div className="position-relative w-100 h-100"
-          onClick={() => handleMediaClick(item.url, item.type, index)}
-        >
-          <video>
-            <source src={item.url} />
-          </video>
-          <div className="play-button">
-            <span className="material-symbols-outlined">play_circle</span>
-          </div>
-        </div>
-      </div>
-    ) : (
-      <div className="media-item" >
-        <div className="position-relative w-100 h-100"
-          onClick={() => handleMediaClick(item.url, item.type, index)}
-        >
-          <img
-            src={item.url}
-            alt={`Media ${index + 1}`}
-          />
-          {index === 4 && post.media.length > 5 && (
-            <div className="media-overlay">
-              <div className="overlay-text">
-                +{post.media.length - 5}
-              </div>
-            </div>
           )}
-        </div>
-      </div>
-    )}
-  </div>
-))}
-<span className={`${badge.className} position-absolute top-left-12`}>{badge.text}</span>
-{/* <span className={`badge badge-business position-absolute top-left-12`}>Business</span> */}
-</div>
-)}
               {/* <div className="position-relative w-100 h-100" >
                 <img src={post} alt='' />
               </div> */}
@@ -672,9 +674,9 @@ const handleEmojiSelect = (emoji) => {
             <div className="d-flex align-items-center justify-content-between gap-2 w-100 px-4">
               <div className="like-block d-flex align-items-center">
                 <button
-                                  onClick={handleLike}
-                                  className={`btn btn-link text-body p-0   ${isLiked ? 'liked' : ''}`}
-                                  disabled={isLiking}
+                  onClick={handleLike}
+                  className={`btn btn-link text-body p-0   ${isLiked ? 'liked' : ''}`}
+                  disabled={isLiking}
                 >
                   {isLiked?
                   
@@ -773,20 +775,20 @@ const handleEmojiSelect = (emoji) => {
               </div>
             </Form>
             {showEmojiDropdown && (
-<EmojiPicker
-  onEmojiClick={handleEmojiSelect}
-  disableSearchBar
-  emojiStyle={{ width: '20px', height: '20px' }}
-/>
-)}
-<div className="d-flex gap--2">
-<div className="mt-1 text-gray-700 text-dark text-sm px-1">
-{fileNames.length > 0 ? fileNames.join(", ") : ""}
-</div>
-<div className="mt-1 text-gray-700 text-dark text-sm px-1">
-  {link.length > 0 ? '12345' : ""}
-</div>
-</div>
+            <EmojiPicker
+              onEmojiClick={handleEmojiSelect}
+              disableSearchBar
+              emojiStyle={{ width: '20px', height: '20px' }}
+            />
+            )}
+            <div className="d-flex gap--2">
+            <div className="mt-1 text-gray-700 text-dark text-sm px-1">
+            {fileNames.length > 0 ? fileNames.join(", ") : ""}
+            </div>
+            <div className="mt-1 text-gray-700 text-dark text-sm px-1">
+              {link.length > 0 ? '12345' : ""}
+            </div>
+            </div>
           </div>
         </Card.Body>
       </Card>

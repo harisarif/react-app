@@ -775,8 +775,8 @@ const CreatePost = ({
           <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
             <div className="d-flex align-items-center flex-grow-1">
               {(isEditing && editPostData?.id) ? 
-              <h2 className="fs-16 fw-700 mb-0">Edit Post</h2> : 
-              <h2 className="fs-16 fw-700 mb-0">Create Post</h2>
+              <h2 className="fs-16 fw-700 mb-0 text-dark">Edit Post</h2> : 
+              <h2 className="fs-16 fw-700 mb-0 text-dark">Create Post</h2>
               }
             </div>
           </Modal.Title>
@@ -792,7 +792,7 @@ const CreatePost = ({
           <div className="d-flex w-100 gap-2 align-items-center mb-3">
             <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-40 rounded-circle" />
             <div className="d-flex flex-column gap-0">
-              <h5 className="mb-0">{userData?.name}</h5>
+              <h5 className="mb-0 text-dark">{userData?.name}</h5>
               <div className="d-flex align-items-center category-dropdown-main-wrapper">
                 <Dropdown className="">
                   <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
@@ -857,7 +857,7 @@ const CreatePost = ({
             </div>
           </div>
           <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
+            <Form.Label className=" text-dark">Title</Form.Label>
             <Form.Control
               type="text"
               name="title"
@@ -865,7 +865,6 @@ const CreatePost = ({
               onChange={handleInputChange}
               placeholder="Enter title"
               className="radius-10"
-              required
             />
           </Form.Group>
           {/* <Form.Group className="mb-3">
@@ -892,7 +891,7 @@ const CreatePost = ({
           </Form.Group> */}
           <div className="mb-3">
           {/* <BsEmojiSmile size={25} className='ms-2 bold-icon' onClick={() => setShowEmojiDropdown(!showEmojiDropdown)} style={{ cursor: 'pointer' }} /> */}
-          <Form.Label>Description * </Form.Label>
+          <Form.Label className=" text-dark">Description * </Form.Label>
             <Form.Control
               as="textarea"
               rows={5}
@@ -977,7 +976,7 @@ const CreatePost = ({
                       disabled={selectedStyle}
                     />
                     <Button
-                    disabled={selectedStyle}
+                      disabled={selectedStyle}
                       className=""
                       onClick={() => fileInputRef.current.click()}
                       style={uploadBtn}
@@ -1060,9 +1059,9 @@ const CreatePost = ({
       {showDiscardConfirmation && (
         <Modal size="sm" show={showDiscardConfirmation} onHide={cancelDiscard} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Discard Changes?</Modal.Title>
+            <Modal.Title className="text-dark">Discard Changes?</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="text-dark">
             Are you sure you want to discard your changes? All unsaved modifications will be lost.
           </Modal.Body>
           <Modal.Footer>

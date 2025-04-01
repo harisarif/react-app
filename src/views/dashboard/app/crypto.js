@@ -489,28 +489,29 @@ const UserFeeds = () => {
 
                   </Row>
                 )}
-                <Col sm={12}>
-                  {loadContent ? (
-                    <div className="col-sm-12 text-center">
-                      <img src={loader} alt="loader" style={{ height: "100px" }} />
-                    </div>
-                  ) : posts.length === 0 ? (
-                    <Col sm={12}>
-                      <NoDataFound
-                        message="No posts available in your feed."
-                        containerClassName="text-center py-5"
-                      />
-                    </Col>
-                  ) : (
-                    posts.map((post) => (
-                      <Col sm={12} key={post.id} className="special-post">
-                        <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
+
+                <div className="special-post-container">
+                  <div>
+                    {loadContent ? (
+                      <div className="col-sm-12 text-center">
+                        <img src={loader} alt="loader" style={{ height: "100px" }} />
+                      </div>
+                    ) : posts.length === 0 ? (
+                      <Col sm={12}>
+                        <NoDataFound
+                          message="No posts available in your feed."
+                          containerClassName="text-center py-5"
+                        />
                       </Col>
-                    ))
-
-
-                  )}
-                </Col>
+                    ) : (
+                      posts.map((post) => (
+                        <Col sm={12} key={post.id} className="special-post">
+                          <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
+                        </Col>
+                      ))
+                    )}
+                  </div>
+                </div>
 
 
               </div>

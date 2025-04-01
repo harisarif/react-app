@@ -18367,6 +18367,10 @@ color: white !important;
   }
 }
 
+.comment-card{
+  background-color: var(--comment-card) !important;
+}
+
 .job-detail-view-modal {
   & .modal-title {
     & h3 {

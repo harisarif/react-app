@@ -503,13 +503,10 @@ const UserFeeds = () => {
                           <Post post={post} setPosts={setPosts} posts={posts} handleFollow={handleFollow} categories={categories} />
                         </Col>
                       ))
-
-
                     )}
-
                   </div>
-
                 </div>
+
               </div>
               {/* <div>
                   <div className="mb-3">
