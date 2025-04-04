@@ -45,16 +45,31 @@ const Education = () => {
   const [editingContent, setEditingContent] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const videoRef = useRef(null);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("Business");
   const [formData, setFormData] = useState({
     title: '',
     image: null,
     short_description: '',
     description: '',
+    category_id:'',
+    media: null,
     video_url: ''
   });
 
   useEffect(() => {
     fetchEducationContents();
+  }, []);
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('/api/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+  useEffect(() => {
+    fetchCategories();
   }, []);
 
   const fetchEducationContents = async () => {
@@ -73,7 +88,11 @@ const Education = () => {
     const { name, value, files } = e.target;
     if (name === 'image') {
       setFormData({ ...formData, [name]: files[0] });
-    } else {
+    } 
+    else if(name === "media"){
+      setFormData({ ...formData, [name]: files });
+    }
+    else {
       setFormData({ ...formData, [name]: value });
     }
   };
@@ -88,6 +107,7 @@ const Education = () => {
 
     const formDataToSend = new FormData();
     formDataToSend.append('title', formData.title);
+    formDataToSend.append('category_id', formData.category_id);
     formDataToSend.append('short_description', formData.short_description);
     formDataToSend.append('description', formData.description);
     formDataToSend.append('video_url', formData.video_url);
@@ -95,6 +115,13 @@ const Education = () => {
     // Only append image if it's a new file or we're creating new content
     if (formData.image instanceof File) {
       formDataToSend.append('image', formData.image);
+    }
+    if (formData.media != null) {
+      if (formData.media && formData.media.length > 0) {
+        for (let i = 0; i < formData.media.length; i++) {
+            formDataToSend.append('media[]', formData.media[i]);
+        }
+    }
     }
 
     try {
@@ -123,6 +150,8 @@ const Education = () => {
       setShowModal(false);
       setFormData({
         title: '',
+        category_id:'',
+        media: null,
         short_description: '',
         description: '',
         video_url: '',
@@ -443,6 +472,8 @@ const Education = () => {
         setIsEditMode(false);
         setEditingContent(null);
         setFormData({
+          category_id:'',
+          media: null,
           title: '',
           short_description: '',
           description: '',
@@ -474,6 +505,41 @@ const Education = () => {
                 value={formData.title}
                 onChange={handleInputChange}
                 required
+                className='radius-8'
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                as="select"
+                name="category_id"
+                value={formData.category_id}
+                onChange={
+                  (event) => {
+                    setFormData({
+                      ...formData,
+                      category_id: event.target.value
+                    });
+                  }
+                }
+                className='radius-8'
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Media</Form.Label>
+              <Form.Control
+                type="file"
+                name="media"
+                multiple
+                onChange={handleInputChange}
+                accept="*/*"
                 className='radius-8'
               />
             </Form.Group>
