@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from '../../../utils/axios';
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Dropdown } from "react-bootstrap";
+import { Container, Row, Col, Dropdown , Badge } from "react-bootstrap";
 import Card from "../../../components/Card";
 import NoDataFound from '../../../components/NoDataFound';
 import toast from 'react-hot-toast';
@@ -46,9 +46,14 @@ const Education = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const videoRef = useRef(null);
   const [categories, setCategories] = useState([]);
+  const [visibility, setVisibility] = useState('public');
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [password, setPassword] = useState('');
   const [selectedCategory, setSelectedCategory] = useState("Business");
   const [formData, setFormData] = useState({
     title: '',
+    visibility: 'public',
+    password: '',
     image: null,
     short_description: '',
     description: '',
@@ -123,6 +128,10 @@ const Education = () => {
         }
     }
     }
+    formDataToSend.append('visibility', formData.visibility);
+if (formData.password) {
+  formDataToSend.append('password', formData.password);
+}
 
     try {
       let response;
@@ -152,6 +161,8 @@ const Education = () => {
         title: '',
         category_id:'',
         media: null,
+        visibility: 'public',
+        password: '',
         short_description: '',
         description: '',
         video_url: '',
@@ -195,7 +206,9 @@ const Education = () => {
   const handleEdit = (content) => {
     setEditingContent(content);
     setFormData({
+      visibility: content.visibility,
       title: content.title,
+      category_id: content.category_id,
       short_description: content.short_description,
       description: content.description,
       video_url: content.video_url
@@ -310,6 +323,44 @@ const Education = () => {
     setSelectedVideo('');
     setSelectedContentId(null);
     setPointsAwarded(false);
+
+  };
+
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+const [unlockPassword, setUnlockPassword] = useState('');
+const [selectedContent, setSelectedContent] = useState(null);
+
+  const handleUnlock = (content) => {
+    setSelectedContent(content);
+    setShowUnlockModal(true);
+  };
+
+  const handleUnlockSubmit = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.post('/api/unlock-content', {
+        content_id: selectedContent.id,
+        password: unlockPassword
+      });
+  
+      if (response.data.content) {
+        // Update the content in the list
+        const updatedContent = response.data.content;
+        setEducationContents(prevContents => 
+          prevContents.map(content => 
+            content.id === updatedContent.id ? updatedContent : content
+          )
+        );
+        toast.success('Content unlocked successfully');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to unlock content');
+    } finally {
+      setIsLoading(false);
+      setShowUnlockModal(false);
+      setUnlockPassword('');
+      setSelectedContent(null);
+    }
   };
 
   return (
@@ -327,6 +378,36 @@ const Education = () => {
               )}
               </Card.Body>
             </Card>
+            <Modal show={showUnlockModal} onHide={() => setShowUnlockModal(false)}>
+  <Modal.Header closeButton>
+    <Modal.Title>Unlock Content</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form onSubmit={(e) => {
+      e.preventDefault();
+      handleUnlockSubmit();
+    }}>
+      <Form.Group className="mb-3">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          type="password"
+          value={unlockPassword}
+          onChange={(e) => setUnlockPassword(e.target.value)}
+          required
+          className='radius-8'
+        />
+      </Form.Group>
+    </Form>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowUnlockModal(false)}>
+      Cancel
+    </Button>
+    <Button variant="primary" onClick={handleUnlockSubmit}>
+      Unlock
+    </Button>
+  </Modal.Footer>
+</Modal>
             {isLoading ? (
               <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
                 <div className="spinner-border text-primary" role="status" style={{ width: '2rem', height: '2rem' }}>
@@ -342,12 +423,12 @@ const Education = () => {
                       <Card className="h-100 education-card">
                         <div className="edu-card-img">
                           <img
-                            src={content.image_path ? `${baseurl}/data/images/education/${content.image_path}` : 'placeholder-image-url'}
+                            src={content?.image_path ? `${baseurl}/data/images/education/${content.image_path}` : `${baseurl}/data/images/education/blurred_0RmyStUTRI8PEBCDcW8m.jpg`}
                             className="card-img-top"
                             alt={content.title}
                             loading="lazy"
                             onError={(e) => {
-                              e.target.src = 'placeholder-image-url';
+                              e.target.src = `${baseurl}/data/images/education/blurred_0RmyStUTRI8PEBCDcW8m.jpg`;
                             }}
                           />
                           <div className="overlay"></div> {/* Dark Layer */}
@@ -369,6 +450,18 @@ const Education = () => {
                                     </Button>
                                   )}
                                 </Dropdown.Item>
+<Dropdown.Item href="#">
+  {userData && content.visibility === 'password_protected' && (
+    <Button
+      className="btn d-flex align-items-center bg-transparent w-100 drop-edit-btn"
+      onClick={() => handleUnlock(content)}
+      disabled={isLoading}
+    >
+      <i className="fas fa-lock text-black me-2 "></i>
+      <div className="text-black">Unlock Content</div>
+    </Button>
+  )}
+</Dropdown.Item>
                                 <Dropdown.Item href="#">
                                   {userData && userData?.permissions[0]?.can_create_education == 1 && (
                                     <Button
@@ -473,6 +566,8 @@ const Education = () => {
         setEditingContent(null);
         setFormData({
           category_id:'',
+          visibility: 'public',
+          password: '',
           media: null,
           title: '',
           short_description: '',
@@ -497,6 +592,49 @@ const Education = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Visibility</Form.Label>
+            <Dropdown>
+              <Dropdown.Toggle variant="secondary" className="w-100 radius-8">
+                <Badge bg={formData.visibility === 'public' ? 'success' : formData.visibility === 'private' ? 'warning' : 'danger'}>
+                  {formData.visibility === 'public' ? 'Public' : formData.visibility === 'private' ? 'Private' : 'Password Protected'}
+                </Badge>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setFormData({ ...formData, visibility: 'public' })}>Public</Dropdown.Item>
+                <Dropdown.Item onClick={() => setFormData({ ...formData, visibility: 'private' })}>Private</Dropdown.Item>
+                <Dropdown.Item onClick={() => setShowPasswordModal(true)}>Password Protected</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Form.Group>
+          <Modal show={showPasswordModal} onHide={() => setShowPasswordModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Set Password Protection</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  required
+                  className='radius-8'
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowPasswordModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={() => {
+                setFormData({ ...formData, visibility: 'password_protected' });
+                setShowPasswordModal(false);
+              }}>
+                Save
+              </Button>
+            </Modal.Footer>
+          </Modal>
             <Form.Group className="mb-3">
               <Form.Label>Title *</Form.Label>
               <Form.Control
