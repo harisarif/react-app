@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
@@ -9,7 +9,7 @@ import SwiperCore from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
 
 //img
-import LogoFull from "../../../assets/images/Equity_Circle_full.png";
+import LogoFull from "../../../assets/images/Equity_Circle-sign-in.png";
 import login1 from "../../../assets/images/login/1.jpg";
 import login2 from "../../../assets/images/login/2.jpg";
 import login3 from "../../../assets/images/login/3.jpg";
@@ -37,6 +37,12 @@ const SignUp = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [IsLoader, setLoader] = useState(false);
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handleSubmit = async (e) => {
     setSuccess(null);
@@ -83,176 +89,129 @@ const SignUp = () => {
   };
 
 
-    useEffect(() => {
-      window.fbAsyncInit = function () {
-        window.FB.init({
-          appId: Facebook_client_ID, // Replace with your App ID
-          cookie: true,
-          xfbml: true,
-          version: "v18.0",
-        });
-      };
-  
-      // Load the Facebook SDK script
-      (function (d, s, id) {
-        let js,
-          fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      })(document, "script", "facebook-jssdk");
-    }, []);
-  
-    const handleFBLogin = () => {
-      window.FB.login(
-        function (response) {
-          if (response.authResponse) {
-            console.log("User logged in", response);
-    
-            axios
-              .post(`${baseUrl}/api/auth/facebook/callback`, {
-                access_token: response.authResponse.accessToken,
-              })
-              .then((res) => {
-                if (res.data.token) {
-                  console.log("Login successful, token:", res.data.token);
-                  localStorage.setItem("access_token", res.data.token);
-                } else {
-                  console.error("Login failed:", res.data);
-                }
-              })
-              .catch((error) => {
-                console.error("Error during login:", error);
-              });
-          } else {
-            console.log("User cancelled login or did not fully authorize.");
-          }
-        },
-        { scope: "public_profile,email" }
-      );
+  useEffect(() => {
+    window.fbAsyncInit = function () {
+      window.FB.init({
+        appId: Facebook_client_ID, // Replace with your App ID
+        cookie: true,
+        xfbml: true,
+        version: "v18.0",
+      });
     };
+
+    // Load the Facebook SDK script
+    (function (d, s, id) {
+      let js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+  }, []);
+
+  const handleFBLogin = () => {
+    window.FB.login(
+      function (response) {
+        if (response.authResponse) {
+          console.log("User logged in", response);
+
+          axios
+            .post(`${baseUrl}/api/auth/facebook/callback`, {
+              access_token: response.authResponse.accessToken,
+            })
+            .then((res) => {
+              if (res.data.token) {
+                console.log("Login successful, token:", res.data.token);
+                localStorage.setItem("access_token", res.data.token);
+              } else {
+                console.error("Login failed:", res.data);
+              }
+            })
+            .catch((error) => {
+              console.error("Error during login:", error);
+            });
+        } else {
+          console.log("User cancelled login or did not fully authorize.");
+        }
+      },
+      { scope: "public_profile,email" }
+    );
+  };
 
   return (
     <>
       <section className="sign-in-page">
         <Container fluid>
           <Row className="align-items-center">
-            <Col md={6} className="overflow-hidden position-relative">
-              <div className="bg-primary w-100 h-100 position-absolute top-0 bottom-0 start-0 end-0"></div>
-              <div className="container-inside z-1">
-                <div className="main-circle circle-small"></div>
-                <div className="main-circle circle-medium"></div>
-                <div className="main-circle circle-large"></div>
-                <div className="main-circle circle-xlarge"></div>
-                <div className="main-circle circle-xxlarge"></div>
-              </div>
-              <div className="sign-in-detail container-inside-top">
-                <Swiper
-                  className="list-inline m-0 p-0"
-                  spaceBetween={30}
-                  centeredSlides={true}
-                  loop={true}
-                  autoplay={{
-                    delay: 2000,
-                    disableOnInteraction: false,
-                  }}
-                >
-                  <ul className="swiper-wrapper list-inline m-0 p-0">
-                    <SwiperSlide>
-                      <img
-                        src={login1}
-                        className="signin-img img-fluid mb-5 rounded-3"
-                        alt="images"
-                      />
-                      <h2 className="mb-3 text-white fw-semibold">
-                        Power UP Your Friendship
-                      </h2>
-                      <p className="font-size-16 text-white mb-0">
-                        It is a long established fact that a reader will be
-                        <br /> distracted by the readable content.
-                      </p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <img
-                        src={login2}
-                        className="signin-img img-fluid mb-5 rounded-3"
-                        alt="images"
-                      />
-                      <h2 className="mb-3 text-white fw-semibold">
-                        Connect with the world
-                      </h2>
-                      <p className="font-size-16 text-white mb-0">
-                        It is a long established fact that a reader will be
-                        <br /> distracted by the readable content.
-                      </p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <img
-                        src={login3}
-                        className="signin-img img-fluid mb-5 rounded-3"
-                        alt="images"
-                      />
-                      <h2 className="mb-3 text-white fw-semibold">
-                        Together Is better
-                      </h2>
-                      <p className="font-size-16 text-white mb-0">
-                        It is a long established fact that a reader will be
-                        <br /> distracted by the readable content.
-                      </p>
-                    </SwiperSlide>
-                  </ul>
-                </Swiper>
-              </div>
+            <Col lg={6}>
             </Col>
-            <Col md={6}>
-              <div className="sign-in-from text-center">
+            <Col lg={6} className="d-flex align-items-center" style={{ height: '100vh' }}>
+              <div className="sign-in-from">
                 <Link
                   to="/"
                   className="d-inline-flex align-items-center justify-content-center gap-2"
                 >
-                  <img src={LogoFull} width={120} />
+                  <img src={LogoFull} width={200} alt='' />
                 </Link>
-                <p className="mt-3 font-size-16">
-                  Welcome to Equity Circle, a platform to connect with
-                  <br /> the social world
+                <h6 className='mt-5 mb-2 fw-bold'>Sign Up</h6>
+                <p className="mb-0 font-size-16" style={{ fontSize: '14px', lineHeight: 'normal' }}>
+                  Welcome to Equity Circle, a platform to connect with the <br />social world
                 </p>
-                <Form className="mt-5" onSubmit={handleSubmit}>
-                {error && <div className="alert alert-danger" role="alert">{error}</div>}
-                 {success && <div className="alert alert-success" role="alert">{success}</div>}
-                  
+                <Form className="mt-3" onSubmit={handleSubmit}>
+                  {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                  {success && <div className="alert alert-success" role="alert">{success}</div>}
+
                   <Form.Group className="form-group text-start">
-                    <h6 className="form-label fw-bold">Your Full Name</h6>
+                    <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Full Name</h6>
                     <Form.Control
                       type="text"
-                      className="form-control mb-0"
+                      className="form-control mb-0 radius-8"
                       placeholder="Your Full Name"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                     />
                   </Form.Group>
                   <Form.Group className="form-group text-start">
-                    <h6 className="form-label fw-bold">Email Address</h6>
+                    <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Email</h6>
                     <Form.Control
                       type="email"
-                      className="form-control mb-0"
-                      placeholder="marvin@example.com"
+                      className="form-control mb-0 radius-8"
+                      placeholder="Enter Your Email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </Form.Group>
-                  <Form.Group className="form-group text-start">
-                    <h6 className="form-label fw-bold">Your Password</h6>
-                    <Form.Control
+                  <Form.Group className="form-group text-start mb-2">
+                    <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Password</h6>
+                    {/* <Form.Control
                       type="password"
-                      className="form-control mb-0"
-                      placeholder="Password"
+                      className="form-control mb-0 radius-8"
+                      placeholder="Enter Your Password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                    />
+                    /> */}
+                    <div className="position-relative">
+                      <Form.Control
+                        type={passwordVisible ? 'text' : 'password'}
+                        placeholder="Enter Your Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="mb-0 radius-8"
+                      />
+                      <Button
+                        variant="link"
+                        className="position-absolute top-50 end-4px translate-middle-y cursor-pointer"
+                        onClick={togglePasswordVisibility}
+                      >
+                        <span className="material-symbols-outlined pt-2">
+                          {passwordVisible ? 'visibility_off' : 'visibility'}
+                        </span>
+                      </Button>
+                    </div>
                   </Form.Group>
-                  <div className="d-flex align-items-center justify-content-between">
+                  {/* <div className="d-flex align-items-center justify-content-between">
                     <Form.Check className="form-check d-inline-block m-0">
                       <Form.Check.Input
                         type="checkbox"
@@ -267,22 +226,38 @@ const SignUp = () => {
                         </Link>
                       </h6>
                     </Form.Check>
+                  </div> */}
+
+                  <div className="d-flex align-items-center justify-content-between">
+                    <Form.Check className="form-check d-flex gap-2 m-0">
+                      <Form.Check.Input
+                        type="checkbox"
+                        className="form-check-input"
+                      />
+                      <h6 className="form-check-label mt-1" style={{ fontSize: '12px', fontWeight: '500' }}>Remember Me</h6>
+                    </Form.Check>
+                    <Link to="/auth/recover-password" className="font-italic" style={{ fontSize: '12px', fontWeight: '500' }}>
+                      Forgot Password?
+                    </Link>
                   </div>
+
                   <Button
                     variant="primary"
                     type="submit"
-                    className="btn btn-primary mt-4 fw-semibold text-uppercase w-100"
+                    className="btn-purpule radius-8 mt-4 w-100"
                   >
-                      {IsLoader ? (
-                      <div className="Authloader" style={{margin: '0 auto'}}></div>
+                    {IsLoader ? (
+                      <div className="Authloader" style={{ margin: '0 auto' }}></div>
                     ) : (
                       'Sign up'
                     )}
                   </Button>
 
                   <div className="mt-4">
-                    <div className="or-divider">
-                      <span className="or-text">OR</span>
+                    <div className="d-flex align-items-center justify-content-center mb-2">
+                      <hr className="flex-grow-1" />
+                      <span className="mx-3" style={{ fontSize: '12px' }}>OR</span>
+                      <hr className="flex-grow-1" />
                     </div>
 
                     <div className="mt-4">
@@ -299,16 +274,21 @@ const SignUp = () => {
                           context="signup"
                         />
                       </GoogleOAuthProvider>
-                      <button onClick={handleFBLogin} type="button" className="btn btn-primary">
-      Login with Facebook
-    </button>
+                      {/* <button onClick={handleFBLogin} type="button" className="btn btn-primary">
+                        Login with Facebook
+                      </button> */}
                     </div>
                   </div>
 
-                  <h6 className="mt-5">
+                  <h6 className="mt-5 text-center">
+                    <span style={{ fontSize: '14px', fontWeight: '400' }}>Already Have An Account ?{" "}</span>
+                    <Link to="/auth/sign-in" style={{ fontSize: '14px', fontWeight: '600', textDecoration: 'underline' }}>Login</Link>
+                  </h6>
+
+                  {/* <h6 className="mt-5">
                     Already Have An Account ?{" "}
                     <Link to={"/auth/sign-in"}>Login</Link>
-                  </h6>
+                  </h6> */}
                 </Form>
               </div>
             </Col>

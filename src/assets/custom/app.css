@@ -18634,6 +18634,10 @@ color: white !important;
   right: 16px !important
 }
 
+.end-4px{
+  right: 4px !important
+}
+
 .btn-gray-2{
   background-color: var(--gray-2) !important;
 }
