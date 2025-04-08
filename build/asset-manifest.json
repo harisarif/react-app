@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.2e8819f6.css",
-    "main.js": "/static/js/main.899dbdb3.js",
+    "main.css": "/static/css/main.3ec4b02e.css",
+    "main.js": "/static/js/main.96d267d7.js",
     "static/media/video-2.mp4": "/static/media/video-2.40a85315bf4af5fbcd2b.mp4",
     "static/media/video-3.mp4": "/static/media/video-3.37562dfa01c4e7d7a734.mp4",
     "static/media/crypto(3).jpg": "/static/media/crypto(3).2320d35c9d4dac6d52b1.jpg",
@@ -21,6 +21,7 @@
     "static/media/remixicon.ttf?t=1590207869815": "/static/media/remixicon.f2616f597cf98f38d234.ttf",
     "static/media/sliderImg.png": "/static/media/sliderImg.dd65b7fc0dd9a626f665.png",
     "static/media/png": "/static/media/5d194d4ca634b1e6191d5e4e9181e582.79c8e43f6ce6a83cfde2.png",
+    "static/media/sign-in.jpg": "/static/media/sign-in.10009402080a2510cfc2.jpg",
     "static/media/image-no-one.jpg": "/static/media/image-no-one.b394053d44f5699829f9.jpg",
     "static/media/la-solid-900.eot": "/static/media/la-solid-900.4184d740eae2fb727bfe.eot",
     "static/media/la-solid-900.ttf": "/static/media/la-solid-900.279f38601f1d1655255f.ttf",
@@ -39,7 +40,6 @@
     "static/media/remixicon.woff2?t=1590207869815": "/static/media/remixicon.90668f6f9b3c2c18a090.woff2",
     "static/media/img-success.png": "/static/media/img-success.06a0ae13f6e84d9ce62c.png",
     "static/media/la-regular-400.svg": "/static/media/la-regular-400.5b8ad6f4ffe812a4eb26.svg",
-    "static/media/Equity_Circle_full.png": "/static/media/Equity_Circle_full.ad951b4d0c6fa2c52be3.png",
     "static/media/fa-solid-900.woff": "/static/media/fa-solid-900.22aa6d4357cf74671bc4.woff",
     "static/media/la-brands-400.woff": "/static/media/la-brands-400.925b340f49e65e8bab10.woff",
     "static/media/la-solid-900.woff2": "/static/media/la-solid-900.3efd5ba15a279377d224.woff2",
@@ -58,6 +58,7 @@
     "static/media/la-regular-400.ttf": "/static/media/la-regular-400.cf246e21218cab398b3d.ttf",
     "static/media/coin.svg": "/static/media/coin.55c42a220085674eafca75c4b1ecd971.svg",
     "static/media/bussiness(5).jpg": "/static/media/bussiness(5).60606fbe9f28c3410531.jpg",
+    "static/media/Equity_Circle-sign-in.png": "/static/media/Equity_Circle-sign-in.c9cf1e20ccfeece7587f.png",
     "static/media/credit.svg": "/static/media/credit.68c96e7ab946247217157f2116d685f1.svg",
     "static/media/edu-card-2.png": "/static/media/edu-card-2.0e1da28b70b86b33f54e.png",
     "static/media/edu-card-3.png": "/static/media/edu-card-3.9329064de500d2f4f5f1.png",
@@ -125,11 +126,11 @@
     "static/media/left-svg-large.svg": "/static/media/left-svg-large.bf4822421d84b7be8d9f.svg",
     "static/media/left-svg-medium.svg": "/static/media/left-svg-medium.7cec6d031f67fd1c6609.svg",
     "static/media/left-svg-small.svg": "/static/media/left-svg-small.acd12064d8c828f317a4.svg",
-    "main.2e8819f6.css.map": "/static/css/main.2e8819f6.css.map",
-    "main.899dbdb3.js.map": "/static/js/main.899dbdb3.js.map"
+    "main.3ec4b02e.css.map": "/static/css/main.3ec4b02e.css.map",
+    "main.96d267d7.js.map": "/static/js/main.96d267d7.js.map"
   },
   "entrypoints": [
-    "static/css/main.2e8819f6.css",
-    "static/js/main.899dbdb3.js"
+    "static/css/main.3ec4b02e.css",
+    "static/js/main.96d267d7.js"
   ]
 }
