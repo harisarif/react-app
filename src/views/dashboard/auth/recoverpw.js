@@ -71,7 +71,7 @@ const Recoverpw = () => {
                 >
                   <img src={LogoFull} width={200} alt='' />
                 </Link>
-                <h6 className='mt-5 mb-2 fw-bold'>Login</h6>
+                <h6 className='mt-5 mb-2 fw-bold'>Forget Password</h6>
                 <p className="mb-0 font-size-16" style={{ fontSize: '14px', lineHeight: 'normal' }}>
                   Welcome to Equity Circle, a platform to connect with the <br />social world
                 </p>

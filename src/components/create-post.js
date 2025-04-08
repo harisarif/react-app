@@ -770,7 +770,7 @@ const CreatePost = ({
       </Card>
 
       <Modal show={show} onHide={handleClose} size="lg" centered>
-        <Modal.Header className="d-flex justify-content-between px-3 py-2">
+        <Modal.Header className="d-flex justify-content-between px-3 py-2 model-border-color">
 
           <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
             <div className="d-flex align-items-center flex-grow-1">
@@ -796,24 +796,42 @@ const CreatePost = ({
               <div className="d-flex align-items-center category-dropdown-main-wrapper">
                 <Dropdown className="">
                   <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
+                    
                     <span
-                      className={`badge cursor-pointer btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
+                      className={`badge cursor-pointer btn-purpule d-flex gap-2 justify-content-center align-items-center select-privacy-bage-create-post ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
                       style={{padding: '4px 10px 2px 15px'}}
                     >
+                      <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.99955 12.4993C10.313 12.4993 12.9991 9.8132 12.9991 6.49974C12.9991 3.18627 10.313 0.500183 6.99955 0.500183C3.68609 0.500183 1 3.18627 1 6.49974C1 9.8132 3.68609 12.4993 6.99955 12.4993Z" stroke="#888888" stroke-width="0.857143" stroke-miterlimit="10"/>
+<path d="M1.00171 6.49939H13" stroke="#888888" stroke-width="0.857143" stroke-miterlimit="10"/>
+<path d="M7.07446 12.4984V0.500183" stroke="#888888" stroke-width="0.857143" stroke-miterlimit="10"/>
+<path d="M2.67627 2.34379C3.42229 2.67618 4.20173 2.92775 5.0013 3.09422C5.65883 3.23336 6.32891 3.3046 7.001 3.30677H7.07476C7.72759 3.29804 8.3776 3.21951 9.01373 3.07253C9.79575 2.89234 10.5584 2.63666 11.2911 2.30908" stroke="#888888" stroke-width="0.857143" stroke-miterlimit="10"/>
+<path d="M7.4043 0.516968C8.03161 1.30787 8.57119 2.16453 9.01359 3.0719C9.54739 4.13951 9.85321 5.30653 9.91153 6.49873C9.9543 7.65847 9.74718 8.81384 9.30424 9.88651C8.896 10.8863 8.2568 11.7752 7.43898 12.4805" stroke="#888888" stroke-width="0.857143" stroke-miterlimit="10"/>
+<path d="M6.71894 0.508606C6.03574 1.29153 5.45825 2.16072 5.00121 3.09391C4.46586 4.14799 4.19635 5.31697 4.2161 6.49905C4.24932 7.62857 4.47216 8.74447 4.87539 9.80009C5.24578 10.7869 5.79914 11.6949 6.5064 12.4765" stroke="#888888" stroke-width="0.857143" stroke-miterlimit="10"/>
+<path d="M2.5415 10.5117C3.2936 10.1969 4.07544 9.9586 4.87522 9.80028C5.51039 9.67598 6.1544 9.60201 6.80121 9.57905C6.8923 9.57471 6.9834 9.57471 7.07449 9.57471C7.82827 9.57936 8.57807 9.68439 9.30411 9.88703C10.0013 10.0765 10.6783 10.3337 11.3255 10.6548" stroke="#888888" stroke-width="0.857143" stroke-miterlimit="10"/>
+</svg>
                       {formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1).replace('_', ' ')}
-                      <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
+                      {/* <span className="material-symbols-outlined text-white select-category-arrow" style={postViewIcon}>arrow_drop_down</span> */}
+                      <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.00005 1.5L4.62227 5.17453C5.05005 5.60849 5.75005 5.60849 6.17783 5.17453L9.80005 1.5" stroke="#1E1E1E" stroke-width="1.2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
                     </span>
                   </Dropdown.Toggle>
                 </Dropdown>
-                <span className='text-secondary mx-2'>|</span> 
+                <span className='text-secondary mx-2 create-category-divider'> </span> 
                 <Dropdown className="">
                   <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger}>
                     <span
-                      className={`badge cursor-pointer btn-purpule d-flex gap-2 justify-content-center align-items-center ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
+                      className={`badge cursor-pointer btn-purpule d-flex gap-2 justify-content-center align-items-center select-category-bage-create-post ${formData.visibility === "public" ? "bg-primary" : formData.visibility === "private" ? "bg-danger" : "bg-warning"}`}
                       style={{padding: '4px 10px 2px 15px'}}
                     >
                       {selectedCategory}
-                      <span className="material-symbols-outlined text-white" style={postViewIcon}>arrow_drop_down</span>
+                      {/* <span className="material-symbols-outlined text-white " style={postViewIcon}>arrow_drop_down</span> */}
+                      <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.00005 1.5L4.62227 5.17453C5.05005 5.60849 5.75005 5.60849 6.17783 5.17453L9.80005 1.5" stroke="#1E1E1E" stroke-width="1.2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
                     </span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu style={{padding: '0.75rem 0.75rem 0.25rem 0.75rem'}}>
@@ -864,7 +882,7 @@ const CreatePost = ({
               value={formData.title}
               onChange={handleInputChange}
               placeholder="Enter title"
-              className="radius-10"
+              className="radius-10 model-border-color"
             />
           </Form.Group>
           {/* <Form.Group className="mb-3">
@@ -896,10 +914,10 @@ const CreatePost = ({
               as="textarea"
               rows={5}
               name="description"
-              placeholder="Write something here..."
+              placeholder="Write something hereee..."
               value={formData.description}
               onChange={handleInputChange}
-              className="radius-10"
+              className="radius-10 model-border-color"
               ref={textAreaRef}
             />
                         {showEmojiDropdown && (
@@ -932,7 +950,7 @@ const CreatePost = ({
               <h6 className="mb-2 text-dark">Attachments</h6>
               <div className="d-flex gap-2 overflow-auto">
              <div className="position-relative">
-               <div className="file-upload-section">
+               <div className="file-upload-section ">
                <input
                 type="file"
                 multiple
@@ -946,7 +964,7 @@ const CreatePost = ({
 
                  <Button
                    disabled={selectedStyle}
-                   className=""
+                   className="attachment-uploads"
                    onClick={() => fileInputRef.current.click()}
                    style={uploadBtn}
                  >
@@ -965,7 +983,7 @@ const CreatePost = ({
                </div>
              </div>
                 <div className="position-relative">
-                  <div className="file-upload-section">
+                  <div className="file-upload-section attachment-uploads">
                     <input
                       type="file"
                       multiple
@@ -977,7 +995,7 @@ const CreatePost = ({
                     />
                     <Button
                       disabled={selectedStyle}
-                      className=""
+                      className="model-border-color "
                       onClick={() => fileInputRef.current.click()}
                       style={uploadBtn}
                     >
@@ -1057,18 +1075,26 @@ const CreatePost = ({
       </Modal>
 
       {showDiscardConfirmation && (
-        <Modal size="sm" show={showDiscardConfirmation} onHide={cancelDiscard} centered>
-          <Modal.Header closeButton>
-            <Modal.Title className="text-dark">Discard Changes?</Modal.Title>
+        <Modal size="md" className="discard-modal-main" show={showDiscardConfirmation} onHide={cancelDiscard} centered>
+      
+          <Modal.Header  className="bodr-none discard-model-header">
+          <Link to="#" className="lh-1 d-flex justify-content-end"  onClick={() => handleClose(false)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
+              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </Link>
+            <Modal.Title className="text-dark text-center d-block">Discard Changes?</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="text-dark">
+          <Modal.Body className="text-dark text-center discard-modal-text">
             Are you sure you want to discard your changes? All unsaved modifications will be lost.
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={cancelDiscard}>
+          <Modal.Footer className="bodr-none justify-content-center">
+            <Button className="discard-cancel-btn" onClick={cancelDiscard}>
               Cancel
             </Button>
-            <Button variant="danger" onClick={confirmDiscard}>
+            <Button   className="discard-discard-btn" onClick={confirmDiscard}>
               Discard
             </Button>
           </Modal.Footer>
