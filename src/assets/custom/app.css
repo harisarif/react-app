@@ -2,6 +2,8 @@
   --model-border-color: #e2e2e2;
   --light-purpule-border: #bf97fb;
   --modal-text-color: #888888;
+  --hover-active-purpule-light: #F3EBFE;
+  --red-color: red;
 }
 
 .country-selector_country-selector__select-trigger__JP0uz {
@@ -18284,8 +18286,8 @@ body {
 
 
 .sidebar.sidebar-default .nav-link:not(.static-item):hover:not(.active):not([aria-expanded=true]) {
-  background-color: var(--purpule-color);
-  color: #fff;
+  /* background-color: var(--purpule-color); */
+  color: var(--purpule-color);
 }
 
 /* #sidebar-menu .nav-item .nav-link:hover svg{
@@ -18293,13 +18295,7 @@ stroke: white !important;
 fill: white !important;
 color: white !important;
 } */
-#sidebar-menu .nav-item .nav-link:hover svg path {
-  stroke: white !important;
-}
 
-#sidebar-menu .nav-item .nav-link.active svg path {
-  stroke: white !important;
-}
 
 .btn-purpule {
   background-color: var(--purpule-color) !important;

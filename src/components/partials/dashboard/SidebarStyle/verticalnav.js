@@ -93,7 +93,7 @@ const VerticalNav = React.memo(() => {
                         </Link>
                     </li>
 
-                    {userData && (
+                    {/* {userData && (
 
                         <li className={`${location.pathname === '/profile' ? 'active' : ''} nav-item nav-third-li nav-common-class`}>
                             <Link className={`${location.pathname === '/profile' ? 'active' : ''} nav-link `} aria-current="page" to="/profile"
@@ -104,7 +104,7 @@ const VerticalNav = React.memo(() => {
                                 <span className="item-name">Profiles</span>
                             </Link>
                         </li>
-                    )}
+                    )} */}
 
                     <li className={`${location.pathname === '/home' || location.pathname === '/business' || location.pathname === '/crypto' || location.pathname === '/fitness' || location.pathname === '/mindset' ? 'active' : ''} nav-item nav-seventh-li nav-common-class`}>
                         <Link className={`${location.pathname === '/home' || location.pathname === '/business' || location.pathname === '/crypto' || location.pathname === '/fitness' || location.pathname === '/mindset' ? 'active' : ''} nav-link `} aria-current="page" to="/home">
@@ -116,7 +116,14 @@ const VerticalNav = React.memo(() => {
 
                     <li className={`${location.pathname === '/education' ? 'active' : ''} nav-item nav-fifth-li nav-common-class`}>
                         <Link className={`${location.pathname === '/education' ? 'active' : ''} nav-link `} aria-current="page" to="/education">
-                            <LuBookOpenText />
+                            {/* <LuBookOpenText /> */}
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M18.3333 13.95V3.89168C18.3333 2.89168 17.5166 2.15001 16.525 2.23335H16.475C14.725 2.38335 12.0666 3.27502 10.5833 4.20835L10.4416 4.30001C10.2 4.45001 9.79996 4.45001 9.55829 4.30001L9.34996 4.17502C7.86663 3.25002 5.21663 2.36668 3.46663 2.22501C2.47496 2.14168 1.66663 2.89168 1.66663 3.88335V13.95C1.66663 14.75 2.31663 15.5 3.11663 15.6L3.35829 15.6333C5.16663 15.875 7.95829 16.7917 9.55829 17.6667L9.59163 17.6833C9.81663 17.8083 10.175 17.8083 10.3916 17.6833C11.9916 16.8 14.7916 15.875 16.6083 15.6333L16.8833 15.6C17.6833 15.5 18.3333 14.75 18.3333 13.95Z" stroke="#1E1E1E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 4.57501V17.075" stroke="#1E1E1E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.45837 7.07501H4.58337" stroke="#1E1E1E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.08337 9.57501H4.58337" stroke="#1E1E1E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
                             <span className="item-name">Education</span>
                         </Link>
                     </li>
@@ -173,14 +180,14 @@ const VerticalNav = React.memo(() => {
                         )} */}
                         
                     </li>
-                    <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
+                    {/* <li className={`${location.pathname === '/notification' ? 'active' : ''} nav-item nav-ninth-li nav-common-class`}>
                         <Link className={`${location.pathname === '/notification' ? 'active' : ''} nav-link `} aria-current="page" to="/notification">
                             <OverlayTrigger placement="right" overlay={<Tooltip>Notifications</Tooltip>}>
                                 {location.pathname === '/notification' ? <MdNotificationsActive size={'1.5rem'} /> : <MdOutlineNotificationsActive size={'1.5rem'} />}
                             </OverlayTrigger>
                             <span className="item-name">Notifications</span>
                         </Link>
-                    </li>
+                    </li> */}
 
                     {userData && userData?.permissions[0]?.can_manage_users == 1 && (
                         <li className={`${location.pathname === '/manage-users' ? 'active' : ''} nav-item nav-tenth-li nav-common-class`}>
