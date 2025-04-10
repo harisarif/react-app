@@ -769,22 +769,22 @@ const CreatePost = ({
         </Card.Body>
       </Card>
 
-      <Modal show={show} onHide={handleClose} size="lg" centered>
+      <Modal show={show} onHide={handleClose} size="lg" className="feed-create-post" centered>
         <Modal.Header className="d-flex justify-content-between px-3 py-2 model-border-color">
 
           <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
             <div className="d-flex align-items-center flex-grow-1">
               {(isEditing && editPostData?.id) ? 
               <h2 className="fs-16 fw-700 mb-0 text-dark">Edit Post</h2> : 
-              <h2 className="fs-16 fw-700 mb-0 text-dark">Create Post</h2>
+              <h2 className="fs-16 fw-700 mb-0 text-dark post-heading">Create Post</h2>
               }
             </div>
           </Modal.Title>
           <Link to="#" className="lh-1" onClick={() => handleClose(false)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
               <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
-              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#CCCCCC" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="black" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="black" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </Link>
         </Modal.Header>
@@ -792,7 +792,7 @@ const CreatePost = ({
           <div className="d-flex w-100 gap-2 align-items-center mb-3">
             <img src={getProfileImageUrl(userData)} alt="user1" className="avatar-40 rounded-circle" />
             <div className="d-flex flex-column gap-0">
-              <h5 className="mb-0 text-dark">{userData?.name}</h5>
+              <h5 className="mb-0 text-dark post-creater-name">{userData?.name}</h5>
               <div className="d-flex align-items-center category-dropdown-main-wrapper">
                 <Dropdown className="">
                   <Dropdown.Toggle variant="link" className="p-0" style={postViewChanger} onClick={() => setShowVisibilityModal(true)}>
@@ -875,7 +875,7 @@ const CreatePost = ({
             </div>
           </div>
           <Form.Group className="mb-3">
-            <Form.Label className=" text-dark">Title</Form.Label>
+            <Form.Label className=" text-dark">Title *</Form.Label>
             <Form.Control
               type="text"
               name="title"
@@ -928,15 +928,15 @@ const CreatePost = ({
               />
             )}
           </div>
-
+<div className=" text-dark" >Background Color</div>
           <div className="position-relative">
             <div className="d-flex gap-2">
-              <span className="border rounded bg-gradient color-plate" onClick={() => { setColorPanel(!colorPanel); resetStyles() }} >
-                <span class="material-symbols-outlined" style={{margin: '6px'}}>
-                  {colorPanel || (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0) ? "block" : ""}                  
+              <span className="border rounded bg-gradient color-plate color-holder-plate" onClick={() => { setColorPanel(!colorPanel); resetStyles() }} >
+                <span class="material-symbols-outlined" style={{margin: '7px'}}>
+                  {colorPanel || (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0) ? "block" : "" }                  
                 </span>
               </span>
-              <div className={`${colorPanel ? "d-flex" : "d-none"} gap-2 color-panel`}>
+              <div className={`${colorPanel ? "d-flex" : "d-none"} gap-2 color-panel multiple-color-plate`}>
                 {styles.map((style, index) => (<span className={`border rounded color-plate position-relative overflow-hidden`} key={index} title="Click to Apply" onClick={() => (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0)? "" : handleStyleClick(style)}>
                   <span style={{ background: style.color, top: '7px', left: '3px', width: '150%', height: '150%', position: 'absolute', borderRadius: '24px' }}></span>
                 </span>))}
@@ -947,7 +947,7 @@ const CreatePost = ({
 
           {Object.entries(previews).some(([_, files]) => true) && (
             <div className="preview-section mt-3">
-              <h6 className="mb-2 text-dark">Attachments</h6>
+              <h6 className="mb-2 text-dark add-post-uploder">Add to your post</h6>
               <div className="d-flex gap-2 overflow-auto">
              <div className="position-relative">
                <div className="file-upload-section ">
@@ -964,7 +964,7 @@ const CreatePost = ({
 
                  <Button
                    disabled={selectedStyle}
-                   className="attachment-uploads"
+                   className="attachment-uploads attachment-uploads-btn"
                    onClick={() => fileInputRef.current.click()}
                    style={uploadBtn}
                  >
@@ -983,7 +983,7 @@ const CreatePost = ({
                </div>
              </div>
                 <div className="position-relative">
-                  <div className="file-upload-section attachment-uploads">
+                  <div className="file-upload-section attachment-uploads  ">
                     <input
                       type="file"
                       multiple
@@ -995,7 +995,7 @@ const CreatePost = ({
                     />
                     <Button
                       disabled={selectedStyle}
-                      className="model-border-color "
+                      className="model-border-color attachment-uploads-btn"
                       onClick={() => fileInputRef.current.click()}
                       style={uploadBtn}
                     >

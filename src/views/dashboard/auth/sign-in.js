@@ -50,7 +50,8 @@ const SignIn = () => {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   }
 
-  function submitForm() {
+  function submitForm(e) {
+    e.preventDefault();
     setSuccess(null);
     setError(null);
     setLoader(true);
@@ -108,7 +109,7 @@ const SignIn = () => {
                 <p className="mb-0 font-size-16" style={{fontSize: '14px', lineHeight: 'normal'}}>
                   Welcome to Equity Circle, a platform to connect with the <br />social world
                 </p>
-                <Form className="mt-3">
+                <Form onSubmit={submitForm} className="mt-3">
                   {error && <div className="alert alert-danger" role="alert">{error}</div>}
                   {success && <div className="alert alert-success" role="alert">{success}</div>}
                   <Form.Group className="form-group text-start">
@@ -173,8 +174,7 @@ const SignIn = () => {
                   </div>
                   <Button
                     variant="primary"
-                    type="button"
-                    onClick={submitForm}
+                    type="submit"
                     className="btn-purpule radius-8 mt-4 w-100"
                   >
 
