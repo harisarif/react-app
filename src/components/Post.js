@@ -149,6 +149,17 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const [editPostData, setEditPostData] = useState(null);
+  const [ReplyTo, setReplyTo] = useState({});
+  const [showReply, setShowReply] = useState(false);
+
+  const handleReply = async (commentId, userId, userName) => {
+    setReplyTo({
+      commentId,
+      userId,
+      userName
+    });
+    setShowReply(true);
+  }
 
   const handleEditShow = () => {
     // Prepare the post data for editing
@@ -286,6 +297,10 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       const token = localStorage.getItem('access_token');
 
       const data = new FormData();
+      if(showReply){
+        data.append('parent_id',ReplyTo.commentId);
+        data.append('reply_to',ReplyTo.userId);
+      }
       data.append('content', newComment);
 
       // Ensure selectedFiles is an array
@@ -307,8 +322,26 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
           "Content-Type": "multipart/form-data", // Optional, axios usually sets this automatically
         },
       });
+      if(showReply){
+        // Find the parent comment and add the reply to its replies array
+        setComments(comments.map(comment => 
+          comment.id === ReplyTo.commentId
+            ? {
+                ...comment,
+                replies: [
+                  response.data.comment,
+                  ...(comment.replies || [])
+                ]
+              }
+            : comment
+        ));
+        setReplyTo({});
+        setShowReply(false);
+      } else {
+        // Add new top-level comment
+        setComments([...comments, response.data.comment]);
+      }
 
-      setComments([...comments, response.data.comment]);
       setNewComment('');
       setSelectedFiles([]); // Reset selected files after upload
     } catch (error) {
@@ -703,7 +736,7 @@ const handleEmojiSelect = (emoji) => {
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M8.50049 10.5H15.5005" stroke="#888888" stroke-width="1.8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M6.99951 18.4299H10.9995L15.4495 21.39C16.1095 21.83 16.9995 21.3599 16.9995 20.5599V18.4299C19.9995 18.4299 21.9995 16.4299 21.9995 13.4299V7.42993C21.9995 4.42993 19.9995 2.42993 16.9995 2.42993H6.99951C3.99951 2.42993 1.99951 4.42993 1.99951 7.42993V13.4299C1.99951 16.4299 3.99951 18.4299 6.99951 18.4299Z" stroke="#888888" stroke-width="1.8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.99951 18.4299H10.9995L15.4495 21.39C16.1095 21.83 16.9995 21.3599 16.9995 20.5599V18.4299C19.9995 18.4299 21.9995 16.4299 21.9995 13.4299V7.42993C21.9995 4.42993 19.9995 2.42993 16.9995 2.42993H6.37533C3.85866 2.42993 1.99951 4.42993 1.99951 7.42993V13.4299C1.99951 16.4299 3.99951 18.4299 6.99951 18.4299Z" stroke="#888888" stroke-width="1.8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </button>
                 <span className="ms-1 post-footer-icon text-gray">{comments.length}</span>
@@ -843,7 +876,7 @@ const handleEmojiSelect = (emoji) => {
       </Modal>
 
       <ShareOffcanvasNew show={showShareOffcanvas} onHide={() => setShowShareOffcanvas(false)} />
-      <CommentOffcanvasNew setPosts={setPosts} posts={posts} isDocument={isDocument} getFileExtension={getFileExtension} getFileIcon={getFileIcon} badge={badge} formatFileSize={formatFileSize} setShowCommentOffcanvas={setShowCommentOffcanvas} setShowShareOffcanvas={setShowShareOffcanvas} setNewComment={setNewComment} handleEmojiSelect={handleEmojiSelect} isCommentLoading={isCommentLoading}  showEmojiDropdown={showEmojiDropdown} fileNames={fileNames} link={link} handleEditShow={handleEditShow} handleFileChange={handleFileChange} handleLinkChange={handleLinkChange} handleMediaClick={handleMediaClick} handlePreview={handlePreview} handleComment={handleComment} newComment={newComment} isLiked={isLiked} handleLike={handleLike} isLiking={isLiking} likes={likes} comments={comments} post={post} show={showCommentOffcanvas} onHide={() => setShowCommentOffcanvas(false)} />
+      <CommentOffcanvasNew handleReply={handleReply} setShowReply={setShowReply} showReply={showReply} ReplyTo={ReplyTo} setReplyTo={setReplyTo} setPosts={setPosts} posts={posts} isDocument={isDocument} getFileExtension={getFileExtension} getFileIcon={getFileIcon} badge={badge} formatFileSize={formatFileSize} setShowCommentOffcanvas={setShowCommentOffcanvas} setShowShareOffcanvas={setShowShareOffcanvas} setNewComment={setNewComment} handleEmojiSelect={handleEmojiSelect} isCommentLoading={isCommentLoading}  showEmojiDropdown={showEmojiDropdown} fileNames={fileNames} link={link} handleEditShow={handleEditShow} handleFileChange={handleFileChange} handleLinkChange={handleLinkChange} handleMediaClick={handleMediaClick} handlePreview={handlePreview} handleComment={handleComment} newComment={newComment} isLiked={isLiked} handleLike={handleLike} isLiking={isLiking} likes={likes} setComments={setComments} comments={comments} post={post} show={showCommentOffcanvas} onHide={() => setShowCommentOffcanvas(false)} />
       <Modal
         show={showPdfPreview}
         onHide={() => {

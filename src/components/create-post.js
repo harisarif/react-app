@@ -88,6 +88,8 @@ const CreatePost = ({
       defaultCategoryId = '3';
     } else if (path.includes('/mindset')) {
       defaultCategoryId = '4';
+    }else{
+      defaultCategoryId = '1';
     }
 
     if (defaultCategoryId) {
