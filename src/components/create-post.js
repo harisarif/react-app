@@ -312,6 +312,13 @@ const CreatePost = ({
   };
 
   const handleInputChange = (e) => {
+    if(e.target.name === 'category_id'){
+      // setFormData({
+      //   ...formData,
+      //   category_id: e.target.value
+      // });
+      setSelectedCategory(e.target.value);
+    }
     setFormData({
       ...formData,
       [e.target.name]: e.target.value

@@ -75,7 +75,7 @@ const getCategoryBadge = (categoryId) => {
 
 const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, ReplyTo ,setComments, setPosts, posts, isDocument, setShowCommentOffcanvas, getFileExtension, getFileIcon, badge, formatFileSize, setShowShareOffcanvas, setNewComment, handleEmojiSelect, isCommentLoading , showEmojiDropdown , fileNames , link , handleEditShow , handleFileChange , handleLinkChange , handleMediaClick , handlePreview , handleComment , newComment , isCommenting, likes, isLiked, handleLike, isLiking, comments,  post, show, onHide }) => {
   const { userData } = useContext(UserContext);
-
+  const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
   const handleCommentLike = async (commentId) => {
     // if (isLiking) return;
 
@@ -127,38 +127,78 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
           const newLike = {
             id: Date.now(), // Generate a temporary ID
             user_id: userData.id,
-            post_id: commentId,
+            comment_id: commentId,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
             type: "comment"
           };
           console.log("liked successfully");
-
-          setComments(
-            comments.map(comment =>
-              comment.id === commentId
-                ? { 
-                    ...comment, 
+          setComments(comments.map(comment => {
+            if (comment.id === commentId) {
+              return {
+                ...comment, 
+                isLiked: true,
+                likes: [...(comment.likes || []), response.data.like]
+              };
+            }
+            
+            return {
+              ...comment,
+              replies: comment.replies.map(reply => 
+                reply.id === commentId
+                  ? { 
+                    ...reply, 
                     isLiked: true,
-                    likes: [...(comment.likes || []), response.data.like]
-                  }
-                : comment
-            ),
-          );
+                    likes: [...(reply.likes || []), response.data.like]
+                    }
+                  : reply
+              )
+            };
+          }));
+          // setComments(
+          //   comments.map(comment =>
+          //     comment.id === commentId
+          //       ? { 
+          //           ...comment, 
+          //           isLiked: true,
+          //           likes: [...(comment.likes || []), response.data.like]
+          //         }
+          //       : comment.replies.map(reply =>
+          //         reply.id === commentId
+          //           ? { 
+          //               ...reply, 
+          //               isLiked: true,
+          //               likes: [...(reply.likes || []), response.data.like]
+          //             }
+          //           : reply
+          //       )
+          //   ),
+          // );
         }
         else{
           console.log("un-liked successfully");
-          setComments(
-            comments.map(comment =>
-              comment.id === commentId
-                ? { 
-                    ...comment, 
-                    isLiked: false,
-                    likes: comment.likes?.filter(like => like.id !== response.data.like_id)
-                  }
-                : comment
-            ),
-          );
+         setComments(comments.map(comment => {
+           if (comment.id === commentId) {
+             return {
+               ...comment,
+               isLiked: false,
+               likes: comment.likes?.filter(like => like.id !== response.data.like_id)
+             };
+           }
+           
+           return {
+             ...comment,
+             replies: comment.replies.map(reply => 
+               reply.id === commentId
+                 ? { 
+                     ...reply, 
+                     isLiked: false,
+                     likes: reply.likes?.filter(like => like.id !== response.data.like_id)
+                   }
+                 : reply
+             )
+           };
+         }));
         }
 
         // Update with server response
@@ -193,6 +233,15 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
       // }, 800); // Match this with animation duration
     }
   }
+  const [showReplies, setShowReplies] = useState({});
+
+  const toggleReplies = (commentId) => {
+    setShowReplies(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId]
+    }));
+  };
+
   return (
     <>
       <Modal
@@ -447,6 +496,19 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
             <div className='d-flex gap-2 justify-content-between'>
               <div className='d-flex gap-0 flex-column'>
                 <h6 className="mb-0 suggestion-user-name text-dark" style={{fontSize: '12px', fontWeight: '700'}}>{comment?.user?.name}</h6>
+                {comment?.media && typeof comment.media === 'string' && (
+                  <div className="mt-2">
+                    {JSON.parse(comment.media).map((imageUrl, index) => (
+                      <img 
+                        key={index}
+                        src={baseurl +'/'+ imageUrl}
+                        alt="Comment media" 
+                        className="mb-2" 
+                        style={{ maxWidth: '100%', maxHeight: '150px', objectFit: 'cover' }}
+                      />
+                    ))}
+                  </div>
+                )}
                 <p className="elipsis-2 mb-0 mt-n1" style={{fontSize: '13px'}}>{comment?.content}</p>
               </div>
               <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>more_horiz</span>
@@ -457,20 +519,40 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
               <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>{moment(comment?.created_at).fromNow()}</p>
               <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleCommentLike(comment.id)}>{comment?.isLiked ? 'Liked' : 'Like'}</p>
               <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleReply(comment.id, comment.user.id, comment.user.name)}>Reply</p>
+              <p 
+                className="mb-0 mt-n1 text-gray"
+                onClick={() => toggleReplies(comment.id)}
+                style={{ fontSize: '12px', fontWeight: '400', textDecoration: 'none' }}
+              >
+                {showReplies[comment.id] ? 'Hide' : 'Show'} Replies ({comment?.replies?.length || 0})
+              </p>
               </div>
               <span style={{fontSize: 12, fontWeight: '400', marginBottom: '8px'}}>{comment?.isLiked ? '❤️' : '♡'} {comment?.likes?.length}</span>
             </div>
 
           </div>
         </div>
-              {comment?.replies?.map((reply, replyIndex) => (
-                <div key={replyIndex} className='d-flex gap-2 mb-2'>
+              {showReplies[comment.id] && comment?.replies?.map((reply, replyIndex) => (
+                <div key={replyIndex} className='d-flex gap-2 mb-2' style={{ paddingLeft: '30px' }}>
                   <img src={getProfileImageUrl(reply?.user)} alt='' className="rounded-circle avatar-30 me-2" />
                   <div className='d-flex flex-column radius-10 p-3 w-100 me-2 pb-0 comment-card'>
         
                     <div className='d-flex gap-2 justify-content-between'>
                       <div className='d-flex gap-0 flex-column'>
                         <h6 className="mb-0 suggestion-user-name text-dark" style={{fontSize: '12px', fontWeight: '700'}}>{reply?.user?.name}</h6>
+                        {reply?.media && typeof reply.media === 'string' && (
+                          <div className="mt-2">
+                            {JSON.parse(reply.media).map((imageUrl, index) => (
+                              <img 
+                                key={index}
+                                src={imageUrl} 
+                                alt="Reply media" 
+                                className="mb-2" 
+                                style={{ maxWidth: '100%', maxHeight: '150px', objectFit: 'cover' }}
+                              />
+                            ))}
+                          </div>
+                        )}
                         <p className="elipsis-2 mb-0 mt-n1" style={{fontSize: '13px'}}>{reply?.content}</p>
                       </div>
                       <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>more_horiz</span>
@@ -480,7 +562,7 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
                       <div className='d-flex gap-3'>
                       <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>{moment(reply?.created_at).fromNow()}</p>
                       <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleCommentLike(reply.id)}>{reply?.isLiked ? 'Liked' : 'Like'}</p>
-                      <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleReply(reply.id, reply.user.id, reply.user.name)}>Reply</p>
+                      <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleReply(comment.id, reply.user.id, reply.user.name)}>Reply</p>
                       </div>
                       <span style={{fontSize: 12, fontWeight: '400', marginBottom: '8px'}}>{reply?.isLiked ? '❤️' : '♡'} {reply?.likes?.length}</span>
                     </div>
@@ -527,7 +609,7 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
                       type="file"
                       id="linkFile"
                       className="d-none"
-                      onChange={handleLinkChange}
+                      onChange={handleFileChange}
                     />
                     <span className='cursor-pointer'  onClick={() => document.getElementById("linkFile").click()}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -538,14 +620,14 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
                     </span>
                     <span className='cursor-pointer ms-2' >
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6753 6.58173V13.3742C17.6753 15.8909 16.1003 17.6659 13.5837 17.6659H6.37533C3.85866 17.6659 2.29199 15.8909 2.29199 13.3742V6.58173C2.29199 4.06506 3.86699 2.29089 6.37533 2.29089H13.5837C16.1003 2.29089 17.6753 4.06506 17.6753 6.58173Z" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M4.40137 13.6918L5.6747 12.3476C6.1172 11.8785 6.8547 11.856 7.3247 12.2976C7.33887 12.3118 8.10553 13.091 8.10553 13.091C8.56803 13.5618 9.32387 13.5693 9.7947 13.1076C9.82553 13.0776 11.7397 10.756 11.7397 10.756C12.233 10.1568 13.1189 10.071 13.7189 10.5651C13.7589 10.5985 15.5672 12.4543 15.5672 12.4543" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M8.59423 7.60986C8.59423 8.41736 7.94007 9.07153 7.13257 9.07153C6.32507 9.07153 5.6709 8.41736 5.6709 7.60986C5.6709 6.80236 6.32507 6.14819 7.13257 6.14819C7.94007 6.14903 8.59423 6.80236 8.59423 7.60986Z" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M17.6753 6.58173V13.3742C17.6753 15.8909 16.1003 17.6659 13.5837 17.6659H6.37533C3.85866 17.6659 2.29199 15.8909 2.29199 13.3742V6.58173C2.29199 4.06506 3.86699 2.29089 6.37533 2.29089H13.5837C16.1003 2.29089 17.6753 4.06506 17.6753 6.58173Z" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M15.4541 7.53475H15.463" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1556 11.1357C13.1556 9.39308 11.7435 7.98096 10.0009 7.98096C8.25831 7.98096 6.84619 9.39308 6.84619 11.1357C6.84619 12.8782 8.25831 14.2903 10.0009 14.2903C11.7435 14.2903 13.1556 12.8782 13.1556 11.1357Z" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </span>
                     <span className='cursor-pointer ms-2' onClick={() => document.getElementById("cameraFile").click()}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M13.0178 2.12781C14.0201 2.52673 14.3267 3.91603 14.7366 4.36259C15.1464 4.80915 15.7329 4.96098 16.0574 4.96098C17.7821 4.96098 19.1803 6.3592 19.1803 8.08292V13.8336C19.1803 16.1458 17.3048 18.0213 14.9926 18.0213H5.00951C2.69633 18.0213 0.821777 16.1458 0.821777 13.8336V8.08292C0.821777 6.3592 2.22 4.96098 3.94472 4.96098C4.26822 4.96098 4.8547 4.80915 5.26554 4.36259C5.67538 3.91603 5.98103 2.52673 6.9833 2.12781C7.98657 1.72888 12.0155 1.72888 13.0178 2.12781Z" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6753 6.58173V13.3742C17.6753 15.8909 16.1003 17.6659 13.5837 17.6659H6.37533C3.85866 17.6659 2.29199 15.8909 2.29199 13.3742V6.58173C2.29199 4.06506 3.86699 2.29089 6.37533 2.29089H13.5837C16.1003 2.29089 17.6753 4.06506 17.6753 6.58173Z" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       <path d="M15.4541 7.53475H15.463" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1556 11.1357C13.1556 9.39308 11.7435 7.98096 10.0009 7.98096C8.25831 7.98096 6.84619 9.39308 6.84619 11.1357C6.84619 12.8782 8.25831 14.2903 10.0009 14.2903C11.7435 14.2903 13.1556 12.8782 13.1556 11.1357Z" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -691,6 +773,13 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
                           <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>2 hr</p>
                           <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>Like</p>
                           <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>Reply</p>
+                          <button 
+                            className="btn btn-link p-0 text-gray"
+                            onClick={() => toggleReplies(comment.id)}
+                            style={{ fontSize: '12px', fontWeight: '400', textDecoration: 'none' }}
+                          >
+                            {showReplies[comment.id] ? 'Hide' : 'Show'} Replies ({comment?.replies?.length || 0})
+                          </button>
                           </div>
                           <span style={{fontSize: 12, fontWeight: '400', marginBottom: '8px'}}>❤️ 10</span>
                         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form} from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -6,13 +6,28 @@ import Swal from 'sweetalert2';
 import axios from '../../utils/axios';
 import { Link } from "react-router-dom";
 
-const CreateJob = ({ show, onHide, onJobCreated, setShowCreateModal }) => {
+const CreateJob = ({ show, onHide, onJobCreated, job, isEditing, setShowCreateModal }) => {
   const [title, setTitle] = useState('');
   const [shortDescription, setShortDescription] = useState('');
   const [description, setDescription] = useState('');
   const [mainImage, setMainImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (job) {
+      setTitle(job.title || '');
+      setShortDescription(job.short_description || '');
+      setDescription(job.description || '');
+      setImagePreview(job.main_image || '');
+    } else {
+      // Reset form when job is null
+      setTitle('');
+      setShortDescription('');
+      setDescription('');
+      setImagePreview('');
+    }
+  }, [job]);
 
   const modules = {
     toolbar: [
@@ -49,18 +64,27 @@ const CreateJob = ({ show, onHide, onJobCreated, setShowCreateModal }) => {
       if (mainImage) {
         formData.append('main_image', mainImage);
       }
-
-      const response = await axios.post('/api/jobs', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
-      });
+      if(isEditing){
+        formData.append('_method','PUT')
+      }
+      const response = await (isEditing 
+        ? axios.post(`/api/jobs/${job.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          })
+        : axios.post('/api/jobs', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          })
+      );
 
       if (response.data && response.data.job) {
         Swal.fire({
           icon: 'success',
-          title: 'Success!',
-          text: 'Job created successfully',
+          title: isEditing ? 'Updated!' : 'Created!',
+          text: isEditing ? 'Job updated successfully' : 'Job created successfully',
           timer: 1500,
           showConfirmButton: false
         });
@@ -79,11 +103,11 @@ const CreateJob = ({ show, onHide, onJobCreated, setShowCreateModal }) => {
         }
       }
     } catch (error) {
-      console.error('Error creating job:', error);
+      console.error('Error:', error);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: error.response?.data?.message || 'Something went wrong while creating the job!',
+        text: error.response?.data?.message || (isEditing ? 'Something went wrong while updating the job!' : 'Something went wrong while creating the job!'),
       });
       onHide();
     } finally {
@@ -96,7 +120,7 @@ const CreateJob = ({ show, onHide, onJobCreated, setShowCreateModal }) => {
       <Modal.Header className="d-flex justify-content-between px-3 py-2">
         <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
           <div className="d-flex align-items-center flex-grow-1">
-            Create New Job
+            {isEditing ? 'Edit Job' : 'Create New Job'}
           </div>
         </Modal.Title>
         <Link to="#" className="lh-1" onClick={() => setShowCreateModal(false)}>
@@ -125,7 +149,7 @@ const CreateJob = ({ show, onHide, onJobCreated, setShowCreateModal }) => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                required
+                required={isEditing ? false : true}
               />
             </div>
           </Form.Group>
@@ -185,9 +209,9 @@ const CreateJob = ({ show, onHide, onJobCreated, setShowCreateModal }) => {
               {isLoading ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                  Creating...
+                  {isEditing ? 'Updating...' : 'Creating...'}
                 </>
-              ) : 'Create Job'}
+              ) : isEditing ? 'Update Job' : 'Create Job'}
             </Button>
           </div>
         </Form>
