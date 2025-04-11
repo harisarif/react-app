@@ -112,7 +112,7 @@ useEffect(() => {
   const handleInputChange = (e) => {
     const { name, value, files, type } = e.target;
     if(name === "media"){
-      setFormData({ ...formData, [name]: e.target.files });
+      setFormData({ ...formData, [name]: files });
     }else{
     setFormData(prev => ({
       ...prev,
@@ -125,7 +125,7 @@ useEffect(() => {
     e.preventDefault();
     
     try {
-      // const formDataToSend = new FormData();
+      const formDataToSend = new FormData();
       // Object.keys(formData).forEach(key => {
 
       //     if (key === 'is_active') {
@@ -142,34 +142,23 @@ useEffect(() => {
       //       formDataToSend.append(key, formData[key]);
       //     }
       //   });
-      const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('subtitle', formData.subtitle);
-      formDataToSend.append('short_description', formData.short_description);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('event_date', formData.event_date);
-      formDataToSend.append('start_time', formData.start_time);
-      formDataToSend.append('end_time', formData.end_time);
+      Object.keys(formData).forEach(key => {
+        if (key === 'is_active') {
+          formDataToSend.append(key, formData[key] ? 1 : 0);
+        } else if (key !== 'media') {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
   
-      // Only append image if it's a new file or we're creating new content
-      // if (formData.image instanceof File) {
-      //   formDataToSend.append('main_image', formData.image);
-      // }
-      // if (formData.media != null) {
-      //   if (formData.media && formData.media.length > 0) {
-      //     for (let i = 0; i < formData.media.length; i++) {
-      //         formDataToSend.append('media[]', formData.media[i]);
-      //     }
-      // }
-      // }
-        
-        // if (formData.media != null) {
-        //   if (formData.media && formData.media.length > 0) {
-        //     for (let i = 0; i < formData.media.length; i++) {
-        //         formDataToSend.append('media[]', formData.media[i]);
-        //     }
-        // }
-        // }
+      // Handle media files
+      if (formData.media && formData.media.length > 0) {
+        for (let i = 0; i < formData.media.length; i++) {
+          const file = formData.media[i];
+          if (file instanceof File) {
+            formDataToSend.append('media[]', file);
+          }
+        }
+      }
       if (selectedEvent) {
         await axios.put(`/api/events/${selectedEvent.id}`, formDataToSend);
       } else {

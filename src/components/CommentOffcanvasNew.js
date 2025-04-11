@@ -73,7 +73,126 @@ const getCategoryBadge = (categoryId) => {
   }
 };
 
-const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcanvas, getFileExtension, getFileIcon, badge, formatFileSize, setShowShareOffcanvas, setNewComment, handleEmojiSelect, isCommentLoading , showEmojiDropdown , fileNames , link , handleEditShow , handleFileChange , handleLinkChange , handleMediaClick , handlePreview , handleComment , newComment , isCommenting, likes, isLiked, handleLike, isLiking, comments,  post, show, onHide }) => {
+const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, ReplyTo ,setComments, setPosts, posts, isDocument, setShowCommentOffcanvas, getFileExtension, getFileIcon, badge, formatFileSize, setShowShareOffcanvas, setNewComment, handleEmojiSelect, isCommentLoading , showEmojiDropdown , fileNames , link , handleEditShow , handleFileChange , handleLinkChange , handleMediaClick , handlePreview , handleComment , newComment , isCommenting, likes, isLiked, handleLike, isLiking, comments,  post, show, onHide }) => {
+  const { userData } = useContext(UserContext);
+
+  const handleCommentLike = async (commentId) => {
+    // if (isLiking) return;
+
+    // setIsLiking(true);
+    // setIsAnimating(true);
+
+    try {
+      // Check if userData exists and is valid
+      if (!userData || Object.keys(userData).length === 0) {
+        Swal.fire({
+          title: 'Login Required',
+          text: 'Please login to like posts',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Login',
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '/auth/sign-in';
+          }
+        });
+        // setIsLiking(false);
+        // setIsAnimating(false);
+        return;
+      }
+
+      // Retrieve the token from local storage
+      const token = localStorage.getItem('access_token');
+
+      // Optimistic update
+      // const wasLiked = isLiked;
+      // setIsLiked(!wasLiked);
+      // setLikes(prevLikes =>
+      //   wasLiked
+      //     ? prevLikes.filter(like => like.user_id !== userData.id)
+      //     : [...prevLikes, { user_id: userData.id }]
+      // );
+
+      const response = await axios.post(`/api/like-comment`, {
+        comment_id: commentId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.success) {
+        if(response.data.message == 'Comment liked successfully') {
+          const newLike = {
+            id: Date.now(), // Generate a temporary ID
+            user_id: userData.id,
+            post_id: commentId,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            type: "comment"
+          };
+          console.log("liked successfully");
+
+          setComments(
+            comments.map(comment =>
+              comment.id === commentId
+                ? { 
+                    ...comment, 
+                    isLiked: true,
+                    likes: [...(comment.likes || []), response.data.like]
+                  }
+                : comment
+            ),
+          );
+        }
+        else{
+          console.log("un-liked successfully");
+          setComments(
+            comments.map(comment =>
+              comment.id === commentId
+                ? { 
+                    ...comment, 
+                    isLiked: false,
+                    likes: comment.likes?.filter(like => like.id !== response.data.like_id)
+                  }
+                : comment
+            ),
+          );
+        }
+
+        // Update with server response
+        // setLikes(response.data.likes);
+        // setIsLiked(response.data.liked);
+        
+      } else {
+        // Revert changes if server response is not as expected
+        // setIsLiked(wasLiked);
+        // setLikes(prevLikes =>
+        //   wasLiked
+        //     ? [...prevLikes, { user_id: userData.id }]
+        //     : prevLikes.filter(like => like.user_id !== userData.id)
+        // );
+      }
+    } catch (error) {
+      console.error('Error liking post:', error);
+      // setIsAnimating(false);
+      // Show error message
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to update like status',
+        icon: 'error',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } finally {
+      // Keep the animation running for a moment after the request completes
+      // setTimeout(() => {
+        // setIsLiking(false);
+        // setIsAnimating(false);
+      // }, 800); // Match this with animation duration
+    }
+  }
   return (
     <>
       <Modal
@@ -320,6 +439,7 @@ const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcan
               <hr />
     <div style={{maxHeight: '130px'}} className='overflow-auto' >
       {comments?.map((comment, index) => (
+        <>
         <div key={index} className='d-flex gap-2 mb-2'>
           <img src={getProfileImageUrl(comment?.user)} alt='' className="rounded-circle avatar-30 me-2" />
           <div className='d-flex flex-column radius-10 p-3 w-100 me-2 pb-0 comment-card'>
@@ -334,24 +454,63 @@ const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcan
 
             <div className='d-flex gap-2 justify-content-between'>
               <div className='d-flex gap-3'>
-              <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>2 hr</p>
-              <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>Like</p>
-              <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>Reply</p>
+              <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>{moment(comment?.created_at).fromNow()}</p>
+              <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleCommentLike(comment.id)}>{comment?.isLiked ? 'Liked' : 'Like'}</p>
+              <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleReply(comment.id, comment.user.id, comment.user.name)}>Reply</p>
               </div>
-              <span style={{fontSize: 12, fontWeight: '400', marginBottom: '8px'}}>❤️ 10</span>
+              <span style={{fontSize: 12, fontWeight: '400', marginBottom: '8px'}}>{comment?.isLiked ? '❤️' : '♡'} {comment?.likes?.length}</span>
             </div>
 
           </div>
         </div>
+              {comment?.replies?.map((reply, replyIndex) => (
+                <div key={replyIndex} className='d-flex gap-2 mb-2'>
+                  <img src={getProfileImageUrl(reply?.user)} alt='' className="rounded-circle avatar-30 me-2" />
+                  <div className='d-flex flex-column radius-10 p-3 w-100 me-2 pb-0 comment-card'>
+        
+                    <div className='d-flex gap-2 justify-content-between'>
+                      <div className='d-flex gap-0 flex-column'>
+                        <h6 className="mb-0 suggestion-user-name text-dark" style={{fontSize: '12px', fontWeight: '700'}}>{reply?.user?.name}</h6>
+                        <p className="elipsis-2 mb-0 mt-n1" style={{fontSize: '13px'}}>{reply?.content}</p>
+                      </div>
+                      <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>more_horiz</span>
+                    </div>
+        
+                    <div className='d-flex gap-2 justify-content-between'>
+                      <div className='d-flex gap-3'>
+                      <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>{moment(reply?.created_at).fromNow()}</p>
+                      <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleCommentLike(reply.id)}>{reply?.isLiked ? 'Liked' : 'Like'}</p>
+                      <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleReply(reply.id, reply.user.id, reply.user.name)}>Reply</p>
+                      </div>
+                      <span style={{fontSize: 12, fontWeight: '400', marginBottom: '8px'}}>{reply?.isLiked ? '❤️' : '♡'} {reply?.likes?.length}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              </>
       ))}
     </div>
               <Form onSubmit={handleComment}>
+                {showReply && (
+                  <div className="reply-bar mb-2 p-2 bg-light rounded-1">
+                    <span className="text-muted small me-2">Replying to {ReplyTo.userName}</span>
+                    <button 
+                      type="button" 
+                      className="btn-close float-end" 
+                      aria-label="Close"
+                      onClick={() => {
+                        setReplyTo({});
+                        setShowReply(false);
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="leave-comment-area d-flex align-items-center gap-2 pt-3" >
                   <div className="input-wrap w-100 d-flex align-items-center">
                     <input
                       type="text"
                       className="w-100"
-                      placeholder="Write a comment"
+                      placeholder={showReply ? `Reply to ${ReplyTo.userName}` : "Write a comment"}
                       value={newComment}
                       onChange={(e) => setNewComment(e.target.value)}
                       disabled={isCommentLoading}
@@ -497,22 +656,22 @@ const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcan
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M8.50049 10.5H15.5005" stroke="#888888" stroke-width="1.8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M6.99951 18.4299H10.9995L15.4495 21.39C16.1095 21.83 16.9995 21.3599 16.9995 20.5599V18.4299C19.9995 18.4299 21.9995 16.4299 21.9995 13.4299V7.42993C21.9995 4.42993 19.9995 2.42993 16.9995 2.42993H6.99951C3.99951 2.42993 1.99951 4.42993 1.99951 7.42993V13.4299C1.99951 16.4299 3.99951 18.4299 6.99951 18.4299Z" stroke="#888888" stroke-width="1.8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                    <span className="ms-1 post-footer-icon text-gray">396</span>
-                  </div>
-                  <div className='d-flex align-items-center'>
-                    <button
-                      className="btn btn-link text-body p-0"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M19.9995 8.00025L20.6359 8.63664L21.2723 8.00025L20.6359 7.36385L19.9995 8.00025ZM14.9995 19.9002C15.4966 19.9002 15.8995 19.4973 15.8995 19.0002C15.8995 18.5032 15.4966 18.1002 14.9995 18.1002L14.9995 19.9002ZM15.6359 13.6366L20.6359 8.63664L19.3631 7.36385L14.3631 12.3638L15.6359 13.6366ZM20.6359 7.36385L15.6359 2.36385L14.3631 3.63664L19.3631 8.63664L20.6359 7.36385ZM19.9995 7.10025L9.49951 7.10024L9.49951 8.90024L19.9995 8.90024L19.9995 7.10025ZM9.49951 19.9002L14.9995 19.9002L14.9995 18.1002L9.49951 18.1002L9.49951 19.9002ZM3.09951 13.5002C3.09951 17.0349 5.96489 19.9002 9.49951 19.9002L9.49951 18.1002C6.959 18.1002 4.89951 16.0408 4.89951 13.5002L3.09951 13.5002ZM9.49951 7.10024C5.96489 7.10024 3.09951 9.96562 3.09951 13.5002L4.89951 13.5002C4.89951 10.9597 6.959 8.90024 9.49951 8.90024L9.49951 7.10024Z" fill="#888888"/>
-                      </svg>
-                    </button>
-                    <span className="ms-1 post-footer-icon text-gray">200</span>
-                  </div>
+                    </svg>
+                  </button>
+                  <span className="ms-1 post-footer-icon text-gray">396</span>
                 </div>
-                <hr />
+                <div className='d-flex align-items-center'>
+                  <button
+                    className="btn btn-link text-body p-0"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M19.9995 8.00025L20.6359 8.63664L21.2723 8.00025L20.6359 7.36385L19.9995 8.00025ZM14.9995 19.9002C15.4966 19.9002 15.8995 19.4973 15.8995 19.0002C15.8995 18.5032 15.4966 18.1002 14.9995 18.1002L14.9995 19.9002ZM15.6359 13.6366L20.6359 8.63664L19.3631 7.36385L14.3631 12.3638L15.6359 13.6366ZM20.6359 7.36385L15.6359 2.36385L14.3631 3.63664L19.3631 8.63664L20.6359 7.36385ZM19.9995 7.10025L9.49951 7.10024L9.49951 8.90024L19.9995 8.90024L19.9995 7.10025ZM9.49951 19.9002L14.9995 19.9002L14.9995 18.1002L9.49951 18.1002L9.49951 19.9002ZM3.09951 13.5002C3.09951 17.0349 5.96489 19.9002 9.49951 19.9002L9.49951 18.1002C6.959 18.1002 4.89951 16.0408 4.89951 13.5002L3.09951 13.5002ZM9.49951 7.10024C5.96489 7.10024 3.09951 9.96562 3.09951 13.5002L4.89951 13.5002C4.89951 10.9597 6.959 8.90024 9.49951 8.90024L9.49951 7.10024Z" fill="#888888"/>
+                    </svg>
+                  </button>
+                  <span className="ms-1 post-footer-icon text-gray">200</span>
+                </div>
+              </div>
+              <hr />
                 <div style={{maxHeight: '130px'}} className='overflow-auto' >
                   {comments?.map((comment, index) => (
                     <div key={index} className='d-flex gap-2 mb-2'>
@@ -588,10 +747,10 @@ const CommentOffcanvasNew = ({ setPosts, posts, isDocument, setShowCommentOffcan
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
                       <path d="M1.49906 2.13311L4.71649 7.76363C4.85491 8.00586 4.92412 8.12698 4.92412 8.25977C4.92412 8.39255 4.85491 8.51367 4.71649 8.7559L1.49906 14.3864C0.879904 15.4699 0.570328 16.0117 0.81174 16.2804C1.05315 16.549 1.62481 16.2989 2.76812 15.7987L17.9059 9.17592C18.8037 8.78316 19.2526 8.58677 19.2526 8.25977C19.2526 7.93276 18.8037 7.73637 17.9059 7.34361L2.76812 0.720817C1.62481 0.220619 1.05315 -0.0294802 0.81174 0.239179C0.570328 0.507839 0.879904 1.0496 1.49906 2.13311Z" fill="white"/>
-                      </svg>
-                    </button>
-                  </div>
-                </Form>
+                    </svg>
+                  </button>
+                </div>
+              </Form>
               </div>
             </Card.Body>
           </Card> */}
