@@ -99,7 +99,7 @@ const JobList = () => {
                               {job.title}
                             </Link>
                           </h4>
-                          <p className="card-text turncate-3 paragraph-holder elipsis-3" style={{fontSize: '15px', lineHeight: '1.5', fontWeight: '300'}}>{job.short_description}</p>
+                          <p className="card-text turncate-3 paragraph-holder rrrrrg elipsis-3" style={{fontSize: '15px', lineHeight: '1.5', fontWeight: '300'}}>{job.short_description}</p>
                           <Button className='px-3 text-capitalize btn-purpule radius-8' 
                             variant="primary" style={{fontWeight: '400'}}
                             onClick={() => handleOpenModal(job.id)}
