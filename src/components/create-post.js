@@ -845,7 +845,7 @@ const CreatePost = ({
                   </Dropdown.Toggle>
                   <Dropdown.Menu style={{padding: '0.75rem 0.75rem 0.25rem 0.75rem'}}>
                     {categories.map(category => (
-                      <Dropdown.Item style={{padding: '0.25rem 0.75rem'}} className="btn btn-purpule mb-2 radius-6 text-white d-flex gap-2 align-items-center" onClick={(e) => handleCategoryChange(e, category)}>
+                      <Dropdown.Item style={{padding: '0.25rem 0.75rem'}} className={`btn ${selectedCategory === category.name.split(" ")[0] ? "btn-purpule text-white" : "text-black"} mb-2 radius-6 d-flex gap-2 align-items-center`} onClick={(e) => handleCategoryChange(e, category)}>
                       {category.id == 1 ?
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
                           fill="none"><path d="M6.66685 18.3333H13.3335C16.6835 18.3333 17.2835 16.9917 17.4585 15.3583L18.0835 8.69167C18.3085 6.65833 17.7252 5 14.1668 5H5.83351C2.27518 5 1.69185 6.65833 1.91685 8.69167L2.54185 15.3583C2.71685 16.9917 3.31685 18.3333 6.66685 18.3333Z"
