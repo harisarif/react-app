@@ -4,6 +4,7 @@
   --modal-text-color: #888888;
   --hover-active-purpule-light: #F3EBFE;
   --red-color: red;
+  --light-model-inner-border-color: #CCCCCC;
 }
 
 .country-selector_country-selector__select-trigger__JP0uz {
@@ -19081,4 +19082,28 @@ color: white !important;
     font-size: 14px;
     font-weight: 400;
   }
+}
+
+
+.main-job-list-img-uploder{
+  border: 2px dashed #CCCCCC !important ;
+}
+.light-model-border-color{
+  border-color: var(--light-model-inner-border-color) !important;
+}
+
+.jobList-title-emojis{
+  position: absolute;
+  right: 0;
+  background: transparent;
+  border: none;
+  margin: 0;
+}
+.jobList-des-title-emojis{
+  position: absolute;
+  right: 0;
+  background: transparent;
+  border: none;
+  margin: 0;
+  bottom: 0;
 }
