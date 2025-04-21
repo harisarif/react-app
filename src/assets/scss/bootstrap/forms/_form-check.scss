@@ -64,8 +64,8 @@
   }
 
   &:checked {
-    background-color: $form-check-input-checked-bg-color;
-    border-color: $form-check-input-checked-border-color;
+    background-color: var(--purpule-color);
+    border-color: var(--purpule-color);
 
     &[type="checkbox"] {
       @if $enable-gradients {
@@ -128,11 +128,12 @@
     --#{$prefix}form-switch-bg: #{escape-svg($form-switch-bg-image)};
 
     width: $form-switch-width;
-    margin-left: $form-switch-padding-start * -1;
+    // margin-left: $form-switch-padding-start * -1;
     background-image: var(--#{$prefix}form-switch-bg);
     background-position: left center;
     @include border-radius($form-switch-border-radius);
     @include transition($form-switch-transition);
+    height: 20px;
 
     &:focus {
       --#{$prefix}form-switch-bg: #{escape-svg($form-switch-focus-bg-image)};

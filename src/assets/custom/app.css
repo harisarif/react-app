@@ -18318,6 +18318,14 @@ color: white !important;
   }
 }
 
+.radius-14 {
+  border-radius: 14px !important;
+}
+
+.radius-12 {
+  border-radius: 12px !important;
+}
+
 .radius-10 {
   border-radius: 10px !important;
 }
@@ -19106,4 +19114,10 @@ color: white !important;
   border: none;
   margin: 0;
   bottom: 0;
+}
+
+.edit-profile-header{
+  & .card-body{
+    padding: 0 !important;
+  }
 }

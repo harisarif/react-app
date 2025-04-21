@@ -5,13 +5,13 @@
 
         &:focus,
         &:hover {
-            color: var(--light-text-active-color)
+            color: #000;
         }
 
         &.active {
-            color: var(--light-text-active-color);
-            background-color: transparent;
-            border-color: var(--light-text-active-color);
+            color: #fff;
+            background-color: var(--purpule-color);
+            border-color: var(--purpule-color);
         }
     }
 }
