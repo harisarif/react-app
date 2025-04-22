@@ -19158,3 +19158,31 @@ color: white !important;
 .text-purpule-hover{
   color: #6709F5 !important;
 }
+
+.profile-main-card{
+  & img{
+    aspect-ratio: 16/6 !important;
+  }
+  & .card-body{
+    padding: 12px 24px !important;
+
+    & h2{
+      font-size: 18px;
+    }
+    & h4{
+      font-size: 15px;
+    }
+    & .profile-content{
+      display: flex;
+      gap: 4px;
+      align-items: center;
+
+      & p{
+        margin: 0px !important;
+      }
+    }
+  }
+  & .profile-div-footer{
+    padding: 0px 24px !important;
+  }
+}
