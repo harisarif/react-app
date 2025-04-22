@@ -19121,3 +19121,40 @@ color: white !important;
     padding: 0 !important;
   }
 }
+
+.privacy-card{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  & h4{
+    font-size: 15px !important;
+    font-weight: 500 !important;
+  }
+
+  & .privacy-card-body{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    & label{
+      font-size: 15px !important;
+      font-weight: 500 !important;
+    }
+
+    & p{
+      font-size: 14px !important;
+      font-weight: 300 !important;
+      line-height: 1.5 !important;
+      margin-bottom: 0px !important;
+    }
+  }
+}
+
+.text-purpule{
+  color: #6709F5 !important;
+}
+
+.text-purpule-hover{
+  color: #6709F5 !important;
+}
