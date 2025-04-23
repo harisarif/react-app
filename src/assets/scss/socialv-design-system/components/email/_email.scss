@@ -359,8 +359,11 @@ button.close-popup {
 
 .nav-pills {
 	.nav-link.active {
-		color: var(--bs-primary);
-		background: rgba(var(--bs-primary-rgb),.2);;
+		color: var(--purpule-color);
+		background: #0000;
+		border-bottom: 2px solid var(--purpule-color) !important;
+		border-radius: 0px !important;
+		padding: 8px 0px 2px 0px !important;
 	}
 	.show {
 		>.nav-link {

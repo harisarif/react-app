@@ -259,13 +259,13 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
               </h3>
             </div>
           </Modal.Title>
-          <Link to="#" className="lh-1" onClick={() => setShowCommentOffcanvas(false)}>
+          <span className="lh-1" onClick={() => setShowCommentOffcanvas(false)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
               <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375"/>
               <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </Link>
+          </span>
         </Modal.Header>
         <Modal.Body className="mt-0 p-0">
         <Card className="card-block card-stretch card-height">

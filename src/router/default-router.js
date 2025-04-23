@@ -7,6 +7,9 @@ import JobList from "../views/dashboard/app/job-list";
 import JobListReadMore from "../views/dashboard/app/job-list-read-more";
 import JobDetail from "../views/dashboard/app/job-list-detail";
 import Education from "../views/dashboard/app/education";
+import Subject from "../views/dashboard/app/subject";
+import SubjectDetail from "../views/dashboard/app/subjectDetail";
+import VideoDetail from "../views/dashboard/app/videoDetail";
 import Business from "../views/dashboard/app/business";
 import Crypto from "../views/dashboard/app/crypto";
 import MindSet from "../views/dashboard/app/mindset";
@@ -163,6 +166,19 @@ export const DefaultRouter = [
   {
     path: "/education",
     element: <Education />,
+  },
+  {
+    path: "/subject",
+    element: <Subject />,
+  },
+  {
+    path: "/subjectDetail",
+    element: <SubjectDetail />,
+  },
+  
+  {
+    path: "/videoDetail",
+    element: <VideoDetail />,
   },
   
   {

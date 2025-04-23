@@ -34,7 +34,7 @@
 }
 .iq-edit-profile {
 	.nav-link {
-		padding: 20px 15px;
+		padding: 12px 16px;
 		border-radius: 0;
 		color: var(--iq-body-text);
 		text-align: center;
@@ -44,12 +44,12 @@
 }
 .iq-edit-profile.nav-pills {
 	.nav-link.active {
-		color: $white;
-		background: var(--#{$variable-prefix}primary);
+		color: $white !important;
+		background: var(--purpule-color);
 	}
 	.show {
 		>.nav-link {
-			color: $white;
+			color: $white !important;
 			background: var(--#{$variable-prefix}primary);
 		}
 	}
