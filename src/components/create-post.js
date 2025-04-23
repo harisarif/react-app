@@ -58,6 +58,7 @@ const CreatePost = ({
   });
   const [showEventModal, setShowEventModal] = useState(false);
   const [showJobModal, setShowJobModal] = useState(false);
+  const [backgroundColorEdited , setBackgroundColorEdited] = useState('');
   const [eventFormData, setEventFormData] = useState({
     title: '',
     subtitle: '',
@@ -105,9 +106,42 @@ const CreatePost = ({
       setShow(true);
       setIsEditing(true);
       // Prepare form data from edit post data
+      const description = editPostData.description || '';
+      let extractedText = '';
+      let backgroundColor = '';
+      
+      if (description.includes('<div') && description.includes('</div>')) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(description, 'text/html');
+        const div = doc.querySelector('div');
+        
+        if (div) {
+          extractedText = div.textContent || div.innerText;
+          const style = div.getAttribute('style');
+          if (style) {
+            const styleObj = {};
+            style.split(';').forEach(part => {
+              const [key, value] = part.split(':').map(str => str.trim());
+              if (key && value) styleObj[key] = value;
+            });
+            backgroundColor = styleObj['background'] || styleObj['background-color'];
+          }
+        }
+      }
+      
+      // Now you can use extractedText and backgroundColor
+      // For example:
+      console.log('Extracted Text:', extractedText);
+      setBackgroundColorEdited(backgroundColor);
+      styles.forEach(style => {
+        console.log('HEX Color:', rgbToHex(backgroundColor));
+        if (style.color.toLowerCase() === rgbToHex(backgroundColor).toLowerCase()) {
+          handleStyleClick(style);
+        }
+      });
       setFormData({
         title: editPostData.title || '',
-        description: editPostData.description || '',
+        description: extractedText == '' ? editPostData.description : extractedText || '',
         category_id: editPostData.category_id || '',
         images: editPostData.images || [],
         videos: editPostData.videos || [],
@@ -189,7 +223,15 @@ const CreatePost = ({
     setShow(false);
     setShowDiscardConfirmation(false);
   };
-
+// Add this function at the top of your component
+const rgbToHex = (rgb) => {
+  if (!rgb) return '';
+  const matches = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (!matches) return '';
+  
+  const [r, g, b] = matches.slice(1).map(num => parseInt(num));
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+};
   const confirmDiscard = () => {
     setShowDiscardConfirmation(false);
     setIsEditing(false);
@@ -528,6 +570,7 @@ const CreatePost = ({
       description: value
     }));
   };
+
 
   useEffect(() => {
     if (!formData.visibility) {
@@ -946,9 +989,28 @@ const CreatePost = ({
                 </span>
               </span>
               <div className={`${colorPanel ? "d-flex" : "d-none"} gap-2 color-panel multiple-color-plate`}>
-                {styles.map((style, index) => (<span className={`border rounded color-plate position-relative overflow-hidden`} key={index} title="Click to Apply" onClick={() => (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0)? "" : handleStyleClick(style)}>
-                  <span style={{ background: style.color, top: '7px', left: '3px', width: '150%', height: '150%', position: 'absolute', borderRadius: '24px' }}></span>
-                </span>))}
+{styles.map((style, index) => (
+  <span 
+    className={`border rounded color-plate position-relative overflow-hidden`} 
+    key={index} 
+    title="Click to Apply" 
+    onClick={() => (selectedFiles.images.length > 0 || selectedFiles.videos.length > 0 || selectedFiles.documents.length > 0)? "" : handleStyleClick(style)}
+  >
+    
+    <span 
+      style={{ 
+        background: style.color, 
+        top: '7px', 
+        left: '3px', 
+        width: '150%', 
+        height: '150%', 
+        position: 'absolute', 
+        borderRadius: '24px'
+      }}
+    ></span>
+  </span>
+))}
+
               </div>
             </div>
           </div>
