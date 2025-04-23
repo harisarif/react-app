@@ -11,6 +11,7 @@ import {
   Tab,
   OverlayTrigger,
   Tooltip,
+  Button,
   Collapse,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -119,6 +120,20 @@ import coin from "../../../assets/images/gamipress/coin.svg";
 import credit from "../../../assets/images/gamipress/credit.svg";
 import gems from "../../../assets/images/gamipress/gems.svg";
 import ShareOffcanvasNew from "../../../components/ShareOffcanvasNew";
+
+import gallery1 from "../../../assets/images/gallery/1.jpg";
+import gallery2 from "../../../assets/images/gallery/2.jpg";
+import gallery3 from "../../../assets/images/gallery/3.jpg";
+import gallery4 from "../../../assets/images/gallery/4.jpg";
+import gallery5 from "../../../assets/images/gallery/5.jpg";
+import gallery6 from "../../../assets/images/gallery/6.jpg";
+import gallery7 from "../../../assets/images/gallery/7.jpg";
+import gallery8 from "../../../assets/images/gallery/8.jpg";
+import gallery9 from "../../../assets/images/gallery/9.jpg";
+import gallery10 from "../../../assets/images/gallery/10.jpg";
+
+
+
 // Fslightbox plugin
 const FsLightbox = ReactFsLightbox.default
   ? ReactFsLightbox.default
@@ -148,5945 +163,809 @@ const Timeline = ({ userData, posts, loadContent, id }) => {
 };
 
 const About = ({ profileData, linkData }) => {
+
+  const BasicInfo = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <h4 className='text-dark'>Personal Info</h4>
+            <hr />
+            <div className="table-responsive">
+              <table className="table profile-table aboutProfileCard">
+                <tbody>
+                  {profileData?.about && Object.entries(profileData.about).map(([key, value]) => (
+                    value && (
+                      <tr key={key} className='p-0'>
+                        <td className='px-0'><h6 className='text-dark'>{key.replace('_', ' ').toUpperCase()}:</h6></td>
+                        <td className='px-0'><p className="mb-0 text-end">{value}</p></td>
+                      </tr>
+                    )
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card.Body>
+        </Card>
+        <Card className='radius-12 border'>
+          <Card.Body>
+            <h4 className='text-dark'>
+              Websites and Social Links
+            </h4>
+            <hr />
+            <div className="table-responsive">
+              <table className="table profile-table aboutProfileCard">
+                <tbody>
+                  {linkData.map((item, index) => {
+                    return (
+                      <tr key={index} className='p-0'>
+                        <td className='px-0'><h6 className='text-dark'>{item.title}</h6></td>
+                        <td className='px-0'><p className="mb-0 text-end">{item.data}</p></td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const Hobies = () => {
+    return (
+      <>
+        <Card className='radius-12 border'>
+          <Card.Body>
+            <h4 className="text-dark">Hobbies and Interests</h4>
+            <hr />
+            <h6 className="mb-1 text-dark">Hobbies:</h6>
+            <p className='line-height-1-5'>
+              Hi, I’m Bni, I’m 26 and I work as a Web
+              Designer for the iqonicdesign.I like to ride
+              the bike to work, swimming, and working out. I
+              also like reading design magazines, go to
+              museums, and binge watching a good tv show
+              while it’s raining outside.
+            </p>
+            <h6 className="mt-2 mb-1 text-dark">
+              Favourite TV Shows:
+            </h6>
+            <p className='line-height-1-5'>
+              Breaking Good, RedDevil, People of Interest,
+              The Running Dead, Found, American Guy.
+            </p>
+            <h6 className="mt-2 mb-1 text-dark">Favourite Movies:</h6>
+            <p className='line-height-1-5'>
+              Idiocratic, The Scarred Wizard and the Fire
+              Crown, Crime Squad, Ferrum Man.
+            </p>
+            <h6 className="mt-2 mb-1 text-dark">Favourite Games:</h6>
+            <p className='line-height-1-5'>
+              The First of Us, Assassin’s Squad, Dark
+              Assylum, NMAK16, Last Cause 4, Grand Snatch
+              Auto.
+            </p>
+            <h6 className="mt-2 mb-1 text-dark">
+              Favourite Music Bands / Artists:
+            </h6>
+            <p className='line-height-1-5'>
+              Iron Maid, DC/AC, Megablow, The Ill, Kung
+              Fighters, System of a Revenge.
+            </p>
+            <h6 className="mt-2 mb-1 text-dark">Favourite Books:</h6>
+            <p className='line-height-1-5'>
+              The Crime of the Century, Egiptian Mythology
+              101, The Scarred Wizard, Lord of the Wings,
+              Amongst Gods, The Oracle, A Tale of Air and
+              Water.
+            </p>
+            <h6 className="mt-2 mb-1 text-dark">
+              Favourite Writers:
+            </h6>
+            <p className='line-height-1-5'>
+              Martin T. Georgeston, Jhonathan R. Token,
+              Ivana Rowle, Alexandria Platt, Marcus Roth.
+            </p>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const Family = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex justify-content-between">
+              <h4 className="text-dark">Family Members</h4>
+              <Link to='#' className='border-0 color-purpule'>+ Add Family Members</Link>
+            </div>
+            <hr />
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div>
+              <div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div><div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex justify-content-between">
+              <h4 className="text-dark">Relationship</h4>
+              <Link to='#' className='border-0 color-purpule'>+ Add your relationship status</Link>
+            </div>
+            {false && (
+              <>
+                <hr />
+                <div className="d-flex flex-column gap-3">
+                  <div className="d-flex justify-content-between align-items-center gap-3">
+                    <div className="d-flex justify-content-start gap-3 align-items-center">
+                      <img
+                        loading="lazy"
+                        src={user01}
+                        alt="story1"
+                        className="rounded-circle avatar-50"
+                      />
+                      <div className="d-flex flex-column gap-0">
+                        <h6 className='text-dark mb-0'>Paul Molive</h6>
+                        <p className="mb-0">Brother</p>
+                      </div>
+                    </div>
+                    <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center gap-3">
+                    <div className="d-flex justify-content-start gap-3 align-items-center">
+                      <img
+                        loading="lazy"
+                        src={user01}
+                        alt="story1"
+                        className="rounded-circle avatar-50"
+                      />
+                      <div className="d-flex flex-column gap-0">
+                        <h6 className='text-dark mb-0'>Paul Molive</h6>
+                        <p className="mb-0">Brother</p>
+                      </div>
+                    </div>
+                    <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+                  </div><div className="d-flex justify-content-between align-items-center gap-3">
+                    <div className="d-flex justify-content-start gap-3 align-items-center">
+                      <img
+                        loading="lazy"
+                        src={user01}
+                        alt="story1"
+                        className="rounded-circle avatar-50"
+                      />
+                      <div className="d-flex flex-column gap-0">
+                        <h6 className='text-dark mb-0'>Paul Molive</h6>
+                        <p className="mb-0">Brother</p>
+                      </div>
+                    </div>
+                    <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+                  </div>
+                </div>
+              </>
+            )}
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const Work = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex justify-content-between">
+              <h4 className="text-dark">Professional Skills</h4>
+              <Link to='#' className='border-0 color-purpule'>+ Add Professional Skills</Link>
+            </div>
+            {false && (
+              <>
+                <hr />
+                <div className="d-flex flex-column gap-3">
+                  <div className="d-flex justify-content-between align-items-center gap-3">
+                    <div className="d-flex justify-content-start gap-3 align-items-center">
+                      <img
+                        loading="lazy"
+                        src={user01}
+                        alt="story1"
+                        className="rounded-circle avatar-50"
+                      />
+                      <div className="d-flex flex-column gap-0">
+                        <h6 className='text-dark mb-0'>Paul Molive</h6>
+                        <p className="mb-0">Brother</p>
+                      </div>
+                    </div>
+                    <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center gap-3">
+                    <div className="d-flex justify-content-start gap-3 align-items-center">
+                      <img
+                        loading="lazy"
+                        src={user01}
+                        alt="story1"
+                        className="rounded-circle avatar-50"
+                      />
+                      <div className="d-flex flex-column gap-0">
+                        <h6 className='text-dark mb-0'>Paul Molive</h6>
+                        <p className="mb-0">Brother</p>
+                      </div>
+                    </div>
+                    <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+                  </div><div className="d-flex justify-content-between align-items-center gap-3">
+                    <div className="d-flex justify-content-start gap-3 align-items-center">
+                      <img
+                        loading="lazy"
+                        src={user01}
+                        alt="story1"
+                        className="rounded-circle avatar-50"
+                      />
+                      <div className="d-flex flex-column gap-0">
+                        <h6 className='text-dark mb-0'>Paul Molive</h6>
+                        <p className="mb-0">Brother</p>
+                      </div>
+                    </div>
+                    <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+                  </div>
+                </div>
+              </>
+            )}
+          </Card.Body>
+        </Card>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex justify-content-between">
+              <h4 className="text-dark">Work</h4>
+              <Link to='#' className='border-0 color-purpule'>+ Add Work Places</Link>
+            </div>
+            <hr />
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div>
+              <div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div><div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex justify-content-between">
+              <h4 className="text-dark">College</h4>
+              <Link to='#' className='border-0 color-purpule'>+ Add College</Link>
+            </div>
+            <hr />
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const Place = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex justify-content-between">
+              <h4 className="text-dark">Other Places Lived</h4>
+              <Link to='#' className='border-0 color-purpule'>+ Add Places</Link>
+            </div>
+          </Card.Body>
+        </Card>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div>
+              <div className="d-flex justify-content-between align-items-center gap-3">
+                <div className="d-flex justify-content-start gap-3 align-items-center">
+                  <img
+                    loading="lazy"
+                    src={user01}
+                    alt="story1"
+                    className="rounded-circle avatar-50"
+                  />
+                  <div className="d-flex flex-column gap-0">
+                    <h6 className='text-dark mb-0'>Paul Molive</h6>
+                    <p className="mb-0">Brother</p>
+                  </div>
+                </div>
+                <Button variant='secondary' className='text-center px-3 py-1 bg-white text-dark border radius-8'>Edit</Button>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
   const tabs = [
-    { key: 'timeline', label: 'TimeLine', content: ''},
-    { key: 'about', label: 'About', content: ''},
-    { key: 'friends', label: 'Friends', content: ''},
-    { key: 'photos', label: 'Photos', content: ''},
-    { key: 'lifeevents', label: 'Life Events', content: ''},
+    { key: 'ContactandBasicInfo', label: 'Contact and Basic Info', content: <BasicInfo /> },
+    { key: 'HobbiesandInterests', label: 'Hobbies and Interests', content: <Hobies /> },
+    { key: 'FamilyandRelationship', label: 'Family and Relationship', content: <Family /> },
+    { key: 'WorkandEducation', label: 'Work and Education', content: <Work /> },
+    { key: `PlacesYouLived`, label: `Places You've Lived`, content: <Place /> },
   ];
   const [activeKey, setActiveKey] = useState(tabs[0].key);
   return (
     <>
-      <Row className='g-4'>
+      <Row className='g-3'>
         <Col md={4}>
-          <Card className='radius-12 border'>
+          <Card className='radius-12 border nav-sticky-100'>
             <Card.Body>
               <Nav
                 variant="pills"
-                className=" basic-info-items list-inline d-block p-0 m-0"
+                className="flex-column m-0 gap-2"
+                activeKey={activeKey}
+                onSelect={(selectedKey) => setActiveKey(selectedKey)}
               >
-                <Nav.Item>
-                  <Nav.Link to="#" eventKey="about1">
-                    Contact and Basic Info
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link to="#" eventKey="about2">
-                    Hobbies and Interests
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link to="#" eventKey="about3">
-                    Family and Relationship
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link to="#" eventKey="about4">
-                    Work and Education
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link to="#" eventKey="about5">
-                    Places You've Lived
-                  </Nav.Link>
-                </Nav.Item>
+                {tabs.map((tab) => (
+                  <Nav.Item key={tab.key}>
+                    <Nav.Link eventKey={tab.key} className='AboutProfileTab'>{tab.label}</Nav.Link>
+                  </Nav.Item>
+                ))}
               </Nav>
             </Card.Body>
           </Card>
         </Col>
         <Col md={8}>
-          <Card className='radius-12 border'>
-            <Card.Body>
-              <Tab.Content>
-                <Tab.Pane eventKey="about1">
-                  <h4>Personal Info</h4>
-                  <hr />
-                  <div className="table-responsive">
-                    <table className="table profile-table">
-                      <tbody>
-                        {profileData?.about && Object.entries(profileData.about).map(([key, value]) => (
-                          value && (
-                            <tr key={key}>
-                              <td><h6>{key.replace('_', ' ').toUpperCase()}:</h6></td>
-                              <td><p className="mb-0">{value}</p></td>
-                            </tr>
-                          )
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <h4 className="mt-2">
-                    Websites and Social Links
-                  </h4>
-                  <hr />
-                  <div className="table-responsive">
-                    <table className="table profile-table">
-                      <tbody>
-                        {linkData.map((item, index) => {
-                          return (
-                            <tr key={index}>
-                              <td><h6>{item.title}</h6></td>
-                              <td><p className="mb-0">{item.data}</p></td>
-                            </tr>
-                          )
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </Tab.Pane>
-                <Tab.Pane eventKey="about2">
-                  <h4 className="mt-2">Hobbies and Interests</h4>
-                  <hr />
-                  <h6 className="mb-1">Hobbies:</h6>
-                  <p>
-                    Hi, I’m Bni, I’m 26 and I work as a Web
-                    Designer for the iqonicdesign.I like to ride
-                    the bike to work, swimming, and working out. I
-                    also like reading design magazines, go to
-                    museums, and binge watching a good tv show
-                    while it’s raining outside.
-                  </p>
-                  <h6 className="mt-2 mb-1">
-                    Favourite TV Shows:
-                  </h6>
-                  <p>
-                    Breaking Good, RedDevil, People of Interest,
-                    The Running Dead, Found, American Guy.
-                  </p>
-                  <h6 className="mt-2 mb-1">Favourite Movies:</h6>
-                  <p>
-                    Idiocratic, The Scarred Wizard and the Fire
-                    Crown, Crime Squad, Ferrum Man.
-                  </p>
-                  <h6 className="mt-2 mb-1">Favourite Games:</h6>
-                  <p>
-                    The First of Us, Assassin’s Squad, Dark
-                    Assylum, NMAK16, Last Cause 4, Grand Snatch
-                    Auto.
-                  </p>
-                  <h6 className="mt-2 mb-1">
-                    Favourite Music Bands / Artists:
-                  </h6>
-                  <p>
-                    Iron Maid, DC/AC, Megablow, The Ill, Kung
-                    Fighters, System of a Revenge.
-                  </p>
-                  <h6 className="mt-2 mb-1">Favourite Books:</h6>
-                  <p>
-                    The Crime of the Century, Egiptian Mythology
-                    101, The Scarred Wizard, Lord of the Wings,
-                    Amongst Gods, The Oracle, A Tale of Air and
-                    Water.
-                  </p>
-                  <h6 className="mt-2 mb-1">
-                    Favourite Writers:
-                  </h6>
-                  <p>
-                    Martin T. Georgeston, Jhonathan R. Token,
-                    Ivana Rowle, Alexandria Platt, Marcus Roth.
-                  </p>
-                </Tab.Pane>
-                <Tab.Pane eventKey="about3">
-                  <h4 className="mb-3">Relationship</h4>
-                  <ul className="suggestions-lists m-0 p-0">
-                    <li className="d-flex mb-4 align-items-center">
-                      <div className="user-img img-fluid">
-                        <span className="material-symbols-outlined md-18">
-                          add
-                        </span>
-                      </div>
-                      <div className="media-support-info ms-3">
-                        <h6>Add Your Relationship Status</h6>
-                      </div>
-                    </li>
-                  </ul>
-                  <h4 className="mt-3 mb-3">Family Members</h4>
-                  <ul className="suggestions-lists m-0 p-0">
-                    <li className="d-flex mb-4 align-items-center">
-                      <div className="user-img img-fluid">
-                        <span className="material-symbols-outlined md-18">
-                          add
-                        </span>
-                      </div>
-                      <div className="media-support-info ms-3">
-                        <h6>Add Family Members</h6>
-                      </div>
-                    </li>
-                    <li className="d-flex mb-4 align-items-center justify-content-between">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user01}
-                          alt="story1"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex justify-content-between">
-                          <div className="ms-3">
-                            <h6>Paul Molive</h6>
-                            <p className="mb-0">Brothe</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link to="#" className="d-flex align-items-center">
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="d-flex justify-content-between mb-4  align-items-center">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user02}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex flex-wrap justify-content-between">
-                          <div className=" ms-3">
-                            <h6>Anna Mull</h6>
-                            <p className="mb-0">Sister</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link to="#" className="d-flex align-items-center">
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="d-flex mb-4 align-items-center justify-content-between">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user03}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex justify-content-between">
-                          <div className="ms-3">
-                            <h6>Paige Turner</h6>
-                            <p className="mb-0">Cousin</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link to="#" className="d-flex align-items-center">
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </Tab.Pane>
-                <Tab.Pane eventKey="about4">
-                  <h4 className="mb-3">Work</h4>
-                  <ul className="suggestions-lists m-0 p-0">
-                    <li className="d-flex justify-content-between mb-4  align-items-center">
-                      <div className="user-img img-fluid">
-                        <span className="material-symbols-outlined md-18">
-                          add
-                        </span>
-                      </div>
-                      <div className="ms-3">
-                        <h6>Add Work Place</h6>
-                      </div>
-                    </li>
-                    <li className="d-flex mb-4 align-items-center justify-content-between">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user01}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex justify-content-between">
-                          <div className="ms-3">
-                            <h6>Themeforest</h6>
-                            <p className="mb-0">Web Designer</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link
-                              to="#"
-                              className="d-flex align-items-center"
-                            >
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="d-flex mb-4 align-items-center justify-content-between">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user02}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex flex-wrap justify-content-between">
-                          <div className="ms-3">
-                            <h6>iqonicdesign</h6>
-                            <p className="mb-0">Web Developer</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link
-                              to="#"
-                              className="d-flex align-items-center"
-                            >
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="d-flex mb-4 align-items-center justify-content-between">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user03}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex flex-wrap justify-content-between">
-                          <div className="ms-3">
-                            <h6>W3school</h6>
-                            <p className="mb-0">Designer</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link
-                              to="#"
-                              className="d-flex align-items-center"
-                            >
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                  <h4 className="mb-3">Professional Skills</h4>
-                  <ul className="suggestions-lists m-0 p-0">
-                    <li className="d-flex mb-4 align-items-center">
-                      <div className="user-img img-fluid">
-                        <span className="material-symbols-outlined md-18">
-                          add
-                        </span>
-                      </div>
-                      <div className="ms-3">
-                        <h6>Add Professional Skills</h6>
-                      </div>
-                    </li>
-                  </ul>
-                  <h4 className="mt-3 mb-3">College</h4>
-                  <ul className="suggestions-lists m-0 p-0">
-                    <li className="d-flex mb-4 align-items-center">
-                      <div className="user-img img-fluid">
-                        <span className="material-symbols-outlined md-18">
-                          add
-                        </span>
-                      </div>
-                      <div className="ms-3">
-                        <h6>Add College</h6>
-                      </div>
-                    </li>
-                    <li className="d-flex mb-4 align-items-center">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user01}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex flex-wrap justify-content-between">
-                          <div className="ms-3">
-                            <h6>Lorem ipsum</h6>
-                            <p className="mb-0">USA</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link
-                              to="#"
-                              className="d-flex align-items-center"
-                            >
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </Tab.Pane>
-                <Tab.Pane eventKey="about5">
-                  <h4 className="mb-3">
-                    Current City and Hometown
-                  </h4>
-                  <ul className="suggestions-lists m-0 p-0">
-                    <li className="d-flex mb-4 align-items-center justify-content-between">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user01}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex flex-wrap justify-content-between">
-                          <div className="ms-3">
-                            <h6>Georgia</h6>
-                            <p className="mb-0">Georgia State</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link
-                              to="#"
-                              className="d-flex align-items-center"
-                            >
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="d-flex mb-4 align-items-center justify-content-between">
-                      <div className="user-img img-fluid">
-                        <img
-                          loading="lazy"
-                          src={user02}
-                          alt="story-img"
-                          className="rounded-circle avatar-40"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex flex-wrap justify-content-between">
-                          <div className="ms-3">
-                            <h6>Atlanta</h6>
-                            <p className="mb-0">Atlanta City</p>
-                          </div>
-                          <div className="edit-relation">
-                            <Link
-                              to="#"
-                              className="d-flex align-items-center"
-                            >
-                              <span className="material-symbols-outlined me-2 md-18">
-                                edit
-                              </span>
-                              Edit
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                  <h4 className="mt-3 mb-3">
-                    Other Places Lived
-                  </h4>
-                  <ul className="suggestions-lists m-0 p-0">
-                    <li className="d-flex mb-4 align-items-center">
-                      <div className="user-img img-fluid">
-                        <span className="material-symbols-outlined md-18">
-                          add
-                        </span>
-                      </div>
-                      <div className="ms-3">
-                        <h6>Add Place</h6>
-                      </div>
-                    </li>
-                  </ul>
-                </Tab.Pane>
-              </Tab.Content>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+          {tabs.find(tab => tab.key === activeKey)?.content}
+        </Col >
+      </Row >
     </>
   );
 }
 
 const Friends = () => {
+
+  const friends = [
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+  ]
+
+  const friend2 = [
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+  ]
+
+  const friend3 = [
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+  ]
+
+  const friend4 = [
+    { img: user01, name: 'Paul Molive', friends: '15 Friends' },
+    { img: user01, name: 'Umar', friends: '15 Friends' },
+    { img: user01, name: 'Haseeb', friends: '15 Friends' },
+    { img: user01, name: 'Hassan', friends: '15 Friends' },
+  ]
+
+  const AllFriends = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex flex-column gap-3">
+              {friends.map((friend, index) => (
+                <div key={index} className="d-flex justify-content-between align-items-center gap-3">
+                  <div className="d-flex justify-content-start gap-3 align-items-center">
+                    <img
+                      loading="lazy"
+                      src={friend.img}
+                      alt="story1"
+                      className="rounded-circle avatar-50"
+                    />
+                    <div className="d-flex flex-column gap-0">
+                      <h6 className='text-dark mb-0'>{friend.name}</h6>
+                      <p className="mb-0">{friend.friends}</p>
+                    </div>
+                  </div>
+                  <Button variant='secondary' className='text-center px-3 py-1 btn-gray-2 text-dark border radius-8'>Friend</Button>
+                </div>
+              ))}
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const RecentlyAdded = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex flex-column gap-3">
+              {friend4.map((friend, index) => (
+                <div key={index} className="d-flex justify-content-between align-items-center gap-3">
+                  <div className="d-flex justify-content-start gap-3 align-items-center">
+                    <img
+                      loading="lazy"
+                      src={friend.img}
+                      alt="story1"
+                      className="rounded-circle avatar-50"
+                    />
+                    <div className="d-flex flex-column gap-0">
+                      <h6 className='text-dark mb-0'>{friend.name}</h6>
+                      <p className="mb-0">{friend.friends}</p>
+                    </div>
+                  </div>
+                  <Button variant='secondary' className='text-center px-3 py-1 btn-gray-2 text-dark border radius-8'>Friend</Button>
+                </div>
+              ))}
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const CloseFriends = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex flex-column gap-3">
+              {friend2.map((friend, index) => (
+                <div key={index} className="d-flex justify-content-between align-items-center gap-3">
+                  <div className="d-flex justify-content-start gap-3 align-items-center">
+                    <img
+                      loading="lazy"
+                      src={friend.img}
+                      alt="story1"
+                      className="rounded-circle avatar-50"
+                    />
+                    <div className="d-flex flex-column gap-0">
+                      <h6 className='text-dark mb-0'>{friend.name}</h6>
+                      <p className="mb-0">{friend.friends}</p>
+                    </div>
+                  </div>
+                  <Button variant='secondary' className='text-center px-3 py-1 btn-gray-2 text-dark border radius-8'>Friend</Button>
+                </div>
+              ))}
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const Home = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex flex-column gap-3">
+              {friend4.map((friend, index) => (
+                <div key={index} className="d-flex justify-content-between align-items-center gap-3">
+                  <div className="d-flex justify-content-start gap-3 align-items-center">
+                    <img
+                      loading="lazy"
+                      src={friend.img}
+                      alt="story1"
+                      className="rounded-circle avatar-50"
+                    />
+                    <div className="d-flex flex-column gap-0">
+                      <h6 className='text-dark mb-0'>{friend.name}</h6>
+                      <p className="mb-0">{friend.friends}</p>
+                    </div>
+                  </div>
+                  <Button variant='secondary' className='text-center px-3 py-1 btn-gray-2 text-dark border radius-8'>Friend</Button>
+                </div>
+              ))}
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const Following = () => {
+    return (
+      <>
+        <Card className='radius-12 border mb-3'>
+          <Card.Body>
+            <div className="d-flex flex-column gap-3">
+              {friends.map((friend, index) => (
+                <div key={index} className="d-flex justify-content-between align-items-center gap-3">
+                  <div className="d-flex justify-content-start gap-3 align-items-center">
+                    <img
+                      loading="lazy"
+                      src={friend.img}
+                      alt="story1"
+                      className="rounded-circle avatar-50"
+                    />
+                    <div className="d-flex flex-column gap-0">
+                      <h6 className='text-dark mb-0'>{friend.name}</h6>
+                      <p className="mb-0">{friend.friends}</p>
+                    </div>
+                  </div>
+                  <Button variant='secondary' className='text-center px-3 py-1 btn-gray-2 text-dark border radius-8'>Friend</Button>
+                </div>
+              ))}
+            </div>
+          </Card.Body>
+        </Card>
+      </>
+    );
+  }
+
+  const tabs = [
+    { key: 'allfriends', label: 'All Friends', content: <AllFriends /> },
+    { key: 'recentlyadded', label: 'Recently Added', content: <RecentlyAdded /> },
+    { key: 'closefriends', label: 'Close Friends', content: <CloseFriends /> },
+    { key: 'home', label: 'Home/Town', content: <Home /> },
+    { key: `following`, label: `Following`, content: <Following /> },
+  ];
+  const [activeKey, setActiveKey] = useState(tabs[0].key);
+
   return (
     <>
-      <Card>
-        <Card.Body>
-          <h2>Friends</h2>
-          <div className="friend-list-tab mt-2">
-            <Nav
-              variant="pills"
-              as="ul"
-              className=" d-flex align-items-center justify-content-left item-list-tabs  p-0 mb-4"
-            >
-              <Nav.Item>
-                <Nav.Link
-                  href="#pill-all-friends"
-                  eventKey="all-friends"
-                >
-                  All Friends
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  href="#pill-recently-add"
-                  eventKey="recently-add"
-                >
-                  Recently Added
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  href="#pill-closefriends"
-                  eventKey="closefriends"
-                >
-                  {" "}
-                  Close friends
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link to="#pill-home" eventKey="home-town">
-                  {" "}
-                  Home/Town
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  href="#pill-following"
-                  eventKey="following"
-                >
-                  Following
-                </Nav.Link>
-              </Nav.Item>
-            </Nav>
-            <Tab.Content>
-              <Tab.Pane eventKey="all-friends">
-                <Card.Body className="p-0">
-                  <Row>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Petey Cruiser</h5>
-                              <p className="mb-0">15 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Anna Sthesia</h5>
-                              <p className="mb-0">50 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user07}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Paul Molive</h5>
-                              <p className="mb-0">10 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user08}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Gail Forcewind</h5>
-                              <p className="mb-0">20 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user09}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Paige Turner</h5>
-                              <p className="mb-0">12 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user10}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>b Frapples</h5>
-                              <p className="mb-0">6 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user13}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Walter Melon</h5>
-                              <p className="mb-0">30 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user14}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Barb Ackue</h5>
-                              <p className="mb-0">14 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user15}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Buck Kinnear</h5>
-                              <p className="mb-0">16 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user16}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Ira Membrit</h5>
-                              <p className="mb-0">22 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user17}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Shonda Leer</h5>
-                              <p className="mb-0">10 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user18}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>ock Lee</h5>
-                              <p className="mb-0">18 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user19}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Maya Didas</h5>
-                              <p className="mb-0">40 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Rick O'Shea</h5>
-                              <p className="mb-0">50 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Pete Sariya</h5>
-                              <p className="mb-0">5 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user07}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Monty Carlo</h5>
-                              <p className="mb-0">2 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user08}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Sal Monella</h5>
-                              <p className="mb-0">0 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user09}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Sue Vaneer</h5>
-                              <p className="mb-0">25 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user10}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Cliff Hanger</h5>
-                              <p className="mb-0">18 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Barb Dwyer</h5>
-                              <p className="mb-0">23 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Terry Aki</h5>
-                              <p className="mb-0">8 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user13}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Cory Ander</h5>
-                              <p className="mb-0">7 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user14}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Robin Banks</h5>
-                              <p className="mb-0">14 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user15}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Jimmy Changa</h5>
-                              <p className="mb-0">10 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user16}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Barry Wine</h5>
-                              <p className="mb-0">18 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user17}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Poppa Cherry</h5>
-                              <p className="mb-0">16 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user18}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Zack Lee</h5>
-                              <p className="mb-0">33 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user19}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Don Stairs</h5>
-                              <p className="mb-0">15 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Peter Pants</h5>
-                              <p className="mb-0">12 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Hal Appeno </h5>
-                              <p className="mb-0">13 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Row>
-                </Card.Body>
-              </Tab.Pane>
-              <Tab.Pane eventKey="recently-add">
-                <div className="card-body p-0">
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user15}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Polly Tech</h5>
-                              <p className="mb-0">10 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user16}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Holly Graham</h5>
-                              <p className="mb-0">8 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user17}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Tara Zona</h5>
-                              <p className="mb-0">5 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user18}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Barry Cade</h5>
-                              <p className="mb-0">20 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Tab.Pane>
-              <Tab.Pane eventKey="closefriends">
-                <div className="card-body p-0">
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user19}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Bud Wiser</h5>
-                              <p className="mb-0">32 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Otto Matic</h5>
-                              <p className="mb-0">9 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Peter Pants</h5>
-                              <p className="mb-0">2 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user07}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Zack Lee</h5>
-                              <p className="mb-0">15 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user08}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Barry Wine</h5>
-                              <p className="mb-0">36 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user09}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Robin Banks</h5>
-                              <p className="mb-0">22 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user10}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Cory Ander</h5>
-                              <p className="mb-0">18 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user15}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Moe Fugga</h5>
-                              <p className="mb-0">12 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user16}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Polly Tech</h5>
-                              <p className="mb-0">30 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user17}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Hal Appeno</h5>
-                              <p className="mb-0">25 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Tab.Pane>
-              <Tab.Pane eventKey="home-town">
-                <div className="card-body p-0">
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user18}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Paul Molive</h5>
-                              <p className="mb-0">14 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user19}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Paige Turner</h5>
-                              <p className="mb-0">8 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Barb Ackue</h5>
-                              <p className="mb-0">23 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Ira Membrit</h5>
-                              <p className="mb-0">16 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user07}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Maya Didas</h5>
-                              <p className="mb-0">12 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Tab.Pane>
-              <Tab.Pane eventKey="following">
-                <div className="card-body p-0">
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Maya Didas</h5>
-                              <p className="mb-0">20 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Monty Carlo</h5>
-                              <p className="mb-0">3 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user07}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Cliff Hanger</h5>
-                              <p className="mb-0">20 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user08}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>b Ackue</h5>
-                              <p className="mb-0">12 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user09}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Bob Frapples</h5>
-                              <p className="mb-0">12 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user10}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Anna Mull</h5>
-                              <p className="mb-0">6 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user15}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>ry Wine</h5>
-                              <p className="mb-0">15 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user16}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Don Stairs</h5>
-                              <p className="mb-0">12 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user17}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Peter Pants</h5>
-                              <p className="mb-0">8 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user18}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Polly Tech</h5>
-                              <p className="mb-0">18 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user19}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Tara Zona</h5>
-                              <p className="mb-0">30 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user05}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Arty Ficial</h5>
-                              <p className="mb-0">15 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user06}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Bill Emia</h5>
-                              <p className="mb-0">25 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user07}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Bill Yerds</h5>
-                              <p className="mb-0">9 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 mb-3">
-                      <div className="iq-friendlist-block">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <Link to="#">
-                              <img
-                                loading="lazy"
-                                src={user08}
-                                alt="profile-img"
-                                className="img-fluid"
-                              />
-                            </Link>
-                            <div className="friend-info ms-3">
-                              <h5>Matt Innae</h5>
-                              <p className="mb-0">19 friends</p>
-                            </div>
-                          </div>
-                          <div className="card-header-toolbar d-flex align-items-center">
-                            <Dropdown>
-                              <Dropdown.Toggle as="span" className="btn btn-secondary me-2 d-flex align-items-center">
-                                <i className="material-symbols-outlined me-2">
-                                  done
-                                </i>
-                                Friend
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu className="dropdown-menu-right">
-                                <Dropdown.Item href="#">
-                                  Get Notification
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Close Friend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfollow
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Unfriend
-                                </Dropdown.Item>
-                                <Dropdown.Item href="#">
-                                  Block
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Tab.Pane>
-            </Tab.Content>
-          </div>
-        </Card.Body>
-      </Card>
+      <Row className='g-3'>
+        <Col md={3}>
+          <Card className='radius-12 border nav-sticky-100'>
+            <Card.Body>
+              <Nav
+                variant="pills"
+                className="flex-column m-0 gap-2"
+                activeKey={activeKey}
+                onSelect={(selectedKey) => setActiveKey(selectedKey)}
+              >
+                {tabs.map((tab) => (
+                  <Nav.Item key={tab.key}>
+                    <Nav.Link eventKey={tab.key} className='AboutProfileTab'>{tab.label}</Nav.Link>
+                  </Nav.Item>
+                ))}
+              </Nav>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={9}>
+          {tabs.find(tab => tab.key === activeKey)?.content}
+        </Col >
+      </Row >
     </>
   );
 }
 
-const Photos = ({ imageOnSlide }) => {
+const Photos = () => {
+
+  const photosArray = [
+    { image: gallery1, alt: 'Gallery Image' },
+    { image: gallery2, alt: 'Gallery Image' },
+    { image: gallery3, alt: 'Gallery Image' },
+    { image: gallery4, alt: 'Gallery Image' },
+    { image: gallery5, alt: 'Gallery Image' },
+    { image: gallery6, alt: 'Gallery Image' },
+    { image: gallery7, alt: 'Gallery Image' },
+    { image: gallery8, alt: 'Gallery Image' },
+    { image: gallery9, alt: 'Gallery Image' },
+    { image: gallery10, alt: 'Gallery Image' },
+  ]
+
+  const photosArray2 = [
+    { image: gallery1, alt: 'Gallery Image' },
+    { image: gallery6, alt: 'Gallery Image' },
+    { image: gallery7, alt: 'Gallery Image' },
+    { image: gallery8, alt: 'Gallery Image' },
+    { image: gallery9, alt: 'Gallery Image' },
+    { image: gallery10, alt: 'Gallery Image' },
+  ]
+
+  const PhotosOfYou = () => {
+    return (
+      <>
+        <Row className="g-3">
+          {photosArray.map((photo, index) => {
+            return (
+              <Col md={4} key={index}>
+                <div className="w-100 border radius-12 p-0 profile-gallery-image">
+                  <img src={photo.image} alt={photo.alt} className='w-100 radius-8 object-fit-cover' />
+                </div>
+              </Col>
+            );
+          })}
+        </Row>
+      </>
+    );
+  }
+
+  const YourPhotos = () => {
+    return (
+      <>
+        <Row className="g-3">
+          {photosArray2.map((photo, index) => {
+            return (
+              <Col md={4} key={index}>
+                <div className="w-100 border radius-12 p-0 profile-gallery-image">
+                  <img src={photo.image} alt={photo.alt} className='w-100 radius-8 object-fit-cover' />
+                </div>
+              </Col>
+            );
+          })}
+        </Row>
+      </>
+    );
+  }
+
+  const tabs = [
+    { key: 'photos', label: 'Photo of You', content: <PhotosOfYou /> },
+    { key: 'yourphotos', label: 'Your Photos', content: <YourPhotos /> },
+  ];
+  const [activeKey, setActiveKey] = useState(tabs[0].key);
+
   return (
     <>
-      <Card>
+      <Card className='radius-12 border mb-3'>
         <Card.Body>
-          <h2>Photos</h2>
-          <div className="friend-list-tab mt-2">
-            <Nav
-              variant="pills"
-              as="ul"
-              className=" d-flex align-items-center justify-content-left item-list-tabs p-0 mb-4"
-            >
-              <li>
-                <Nav.Link eventKey="p1" href="#pill-photosofyou">
-                  Photos of You
-                </Nav.Link>
-              </li>
-              <li>
-                <Nav.Link eventKey="p2" href="#pill-your-photos">
-                  Your Photos
-                </Nav.Link>
-              </li>
-            </Nav>
-            <Tab.Content>
-              <Tab.Pane eventKey="p1">
-                <Card.Body className="p-0">
-                  <div className="d-grid gap-2 d-grid-template-1fr-13">
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(16)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img51}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(17)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img52}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(18)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img53}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(19)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img54}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(20)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img55}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(21)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img56}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(22)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img57}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(23)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img58}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(24)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img59}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(25)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img60}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(26)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img61}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(27)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img62}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(28)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img63}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(29)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img64}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(30)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img65}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(31)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img51}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(32)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img52}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(33)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img53}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(34)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img54}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(35)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img55}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(36)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img56}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(37)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img57}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(38)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img58}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                  </div>
-                </Card.Body>
-              </Tab.Pane>
-              <Tab.Pane eventKey="p2">
-                <div className="card-body p-0">
-                  <div className="d-grid gap-2 d-grid-template-1fr-13 ">
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(39)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img51}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(40)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img52}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(41)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img53}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(42)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img54}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(43)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img55}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(44)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img56}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(45)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img57}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(46)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img58}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(47)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img59}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="user-images position-relative overflow-hidden">
-                        <Link
-                          onClick={() => imageOnSlide(48)}
-                          to="#"
-                        >
-                          <img
-                            loading="lazy"
-                            src={img60}
-                            className="img-fluid rounded"
-                            alt="Responsive"
-                          />
-                        </Link>
-                        <div className="image-hover-data">
-                          <div className="product-elements-icon">
-                            <ul className="d-flex align-items-center m-0 p-0 list-inline">
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  60{" "}
-                                  <i className="material-symbols-outlined md-14 ms-1">
-                                    thumb_up
-                                  </i>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  30{" "}
-                                  <span className="material-symbols-outlined  md-14 ms-1">
-                                    chat_bubble_outline
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to="#"
-                                  className="pe-3 text-white d-flex align-items-center"
-                                >
-                                  {" "}
-                                  10{" "}
-                                  <span className="material-symbols-outlined md-14 ms-1">
-                                    forward
-                                  </span>{" "}
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip>Edit or Remove</Tooltip>
-                          }
-                        >
-                          <Link
-                            to="#"
-                            className="image-edit-btn material-symbols-outlined md-16"
-                          >
-                            drive_file_rename_outline
-                          </Link>
-                        </OverlayTrigger>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Tab.Pane>
-            </Tab.Content>
-          </div>
+          <h4 className='text-dark'>Photos</h4>
+          <hr />
+          <Nav
+            variant="pills"
+            className="flex-row m-0 gap-4 mt-n2 mb-3"
+            activeKey={activeKey}
+            onSelect={(selectedKey) => setActiveKey(selectedKey)}
+          >
+            {tabs.map((tab) => (
+              <Nav.Item key={tab.key}>
+                <Nav.Link eventKey={tab.key}>{tab.label}</Nav.Link>
+              </Nav.Item>
+            ))}
+          </Nav>
+          {tabs.find(tab => tab.key === activeKey)?.content}
         </Card.Body>
       </Card>
     </>

@@ -31,7 +31,7 @@
   background: none;
   border: 0;
   @include transition($nav-link-transition);
-  padding: 8px 0px 4px 0px !important;
+  padding: 8px 0px 4px 0px;
 
   &:hover,
   &:focus {
