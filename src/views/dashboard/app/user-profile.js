@@ -979,7 +979,7 @@ const LifeEvents = () => {
     <>
       <Card className='create-education-card'>
         <Card.Body className='d-flex justify-content-between align-items-center w-100'>
-          <h2 className='text-dark' style={{ fontSize: '16px', fontWeight: '500' }}>Education Content</h2>
+          <h2 className='text-dark' style={{ fontSize: '16px', fontWeight: '500' }}>Event Calendar</h2>
           <Button className='py-0 btn-purpule' variant="primary" style={{ fontWeight: '400' }}>
             Add New Event
           </Button>
