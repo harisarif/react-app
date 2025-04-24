@@ -132,6 +132,8 @@ import gallery8 from "../../../assets/images/gallery/8.jpg";
 import gallery9 from "../../../assets/images/gallery/9.jpg";
 import gallery10 from "../../../assets/images/gallery/10.jpg";
 
+import profileEvent from '../../../assets/images/ProfileEvent.jpg'
+
 
 
 // Fslightbox plugin
@@ -975,9 +977,44 @@ const Photos = () => {
 const LifeEvents = () => {
   return (
     <>
-      <Card className='radius-12 border'>
+      <Card className='create-education-card'>
+        <Card.Body className='d-flex justify-content-between align-items-center w-100'>
+          <h2 className='text-dark' style={{ fontSize: '16px', fontWeight: '500' }}>Education Content</h2>
+          <Button className='py-0 btn-purpule' variant="primary" style={{ fontWeight: '400' }}>
+            Add New Event
+          </Button>
+        </Card.Body>
+      </Card>
+      <Card className="border radius-12">
         <Card.Body>
-          Life Events is not defined yet!
+          <div className="media-grid position-relative">
+            <div className="media-item">
+              <img
+                src={profileEvent}
+                alt="Media 1"
+                className="w-100"
+                style={{aspectRatio: '16/9'}}
+              />
+            </div>
+            <span className="bg-white text-dark px-3 py-1 rounded-pill position-absolute" style={{ top: "12px", left: "12px" }}>
+              Public
+            </span>
+          </div>
+          <div className="d-flex flex-column gap-2 mt-3">
+            <span className="bg-gray-2 text-dark px-3 py-0 rounded-pill" style={{maxWidth: 'fit-content'}}>
+              Confidance
+            </span>
+            <h4 className='m-0 text-dark'>Tech Innovation Meetup</h4>
+            <p className='mb-2 text-dark'>Exploring the Future of AI and Blockchain</p>
+            <div className="d-flex justify-content-start gap-2 align-items-center">
+              <Button variant="primary" className='btn-purpule py-2 px-3 radius-8'>
+                View Details
+              </Button>
+              <Button variant="danger" className='btn-red py-2 px-3 radius-8'>
+                Delete
+              </Button>
+            </div>
+          </div>
         </Card.Body>
       </Card>
     </>
