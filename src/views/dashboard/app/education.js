@@ -17,6 +17,115 @@ import SwiperCore from "swiper";
 
 SwiperCore.use([Autoplay]);
 
+const CreateCategoryModal = ({ show, handleClose }) => {
+  const [categoryName, setCategoryName] = useState('');
+  const [categoryImage, setCategoryImage] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!categoryName.trim()) {
+      newErrors.categoryName = 'Category name is required.';
+    }
+    if (!categoryImage) {
+      newErrors.categoryImage = 'Category image is required.';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    // Handle category creation logic here
+    console.log('Category Name:', categoryName);
+    console.log('Category Image:', categoryImage);
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Category Created',
+      text: 'Your category has been successfully created!',
+    });
+
+    // Reset form and close modal
+    resetForm();
+    handleClose();
+  };
+
+  const resetForm = () => {
+    setCategoryName('');
+    setCategoryImage(null);
+    setErrors({});
+  };
+
+  const handleModalClose = () => {
+    if (categoryName || categoryImage) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You have unsaved changes. Do you really want to close?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, close it!',
+        cancelButtonText: 'No, keep editing',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          resetForm();
+          handleClose();
+        }
+      });
+    } else {
+      resetForm();
+      handleClose();
+    }
+  };
+
+  return (
+    <Modal show={show} onHide={handleModalClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Create New Category</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleFormSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Category Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter category name"
+              value={categoryName}
+              className='radius-10'
+              onChange={(e) => setCategoryName(e.target.value)}
+              isInvalid={!!errors.categoryName}
+            />
+            {errors.categoryName && (
+              <Form.Text className="text-danger">{errors.categoryName}</Form.Text>
+            )}
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Category Image</Form.Label>
+            <Form.Control
+              type="file"
+              accept="image/*"
+              className='radius-10'
+              onChange={(e) => setCategoryImage(e.target.files[0])}
+              isInvalid={!!errors.categoryImage}
+            />
+            {errors.categoryImage && (
+              <Form.Text className="text-danger">{errors.categoryImage}</Form.Text>
+            )}
+          </Form.Group>
+          <Button variant="primary" type="submit" className="w-100 radius-10 btn-purpule">
+            Create Category
+          </Button>
+        </Form>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
 const Education = () => {
   const { userData } = useContext(UserContext);
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
@@ -44,6 +153,8 @@ const Education = () => {
     media: null,
     video_url: ''
   });
+
+  const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
 
   useEffect(() => {
     fetchEducationContents();
@@ -372,13 +483,28 @@ const Education = () => {
             <Card className='create-education-card'>
               <Card.Body className='d-flex justify-content-between align-items-center w-100'>
                 <h2 className='text-dark' style={{ fontSize: '16px', fontWeight: '500' }}>Education Content</h2>
-                {userData && userData?.permissions[0]?.can_create_education === 1 && (
-                  <Button className='py-0 btn-purpule' variant="primary" style={{ fontWeight: '400' }} onClick={() => setShowModal(true)}>
-                    Add New Content
+                <div className="d-flex justify-content-end gap-2 align-items-center">
+                  <Button
+                    variant="primary"
+                    onClick={() => setShowCreateCategoryModal(true)}
+                    className='py-0 btn-purpule'
+                    style={{ fontWeight: '400' }}
+                  >
+                    Create New Category
                   </Button>
-                )}
+                  {userData && userData?.permissions[0]?.can_create_education === 1 && (
+                    <Button className='py-0 btn-purpule' variant="primary" style={{ fontWeight: '400' }} onClick={() => setShowModal(true)}>
+                      Add New Content
+                    </Button>
+                  )}
+                </div>
               </Card.Body>
             </Card>
+
+            <CreateCategoryModal
+              show={showCreateCategoryModal}
+              handleClose={() => setShowCreateCategoryModal(false)}
+            />
 
             <Modal show={showUnlockModal} onHide={() => setShowUnlockModal(false)}>
               <Modal.Header closeButton>
@@ -436,7 +562,7 @@ const Education = () => {
                           </Card>
                         </Link>
                       </Col>
-                      );
+                    );
                   })
               ) : (
                 <NoDataFound
