@@ -19327,3 +19327,13 @@ div:where(.swal2-container) {
   width : 90% !important;
   }
 }
+
+
+.comment-reply-bar{
+& button{
+  position: absolute;
+right: 25%;
+bottom: 30px;
+}
+
+}

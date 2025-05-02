@@ -223,14 +223,14 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
       // Retrieve the token from local storage
       const token = localStorage.getItem('access_token');
 
-      // Optimistic update
-      const wasLiked = isLiked;
-      setIsLiked(!wasLiked);
-      setLikes(prevLikes =>
-        wasLiked
-          ? prevLikes.filter(like => like.user_id !== userData.id)
-          : [...prevLikes, { user_id: userData.id }]
-      );
+      // // Optimistic update
+      // const wasLiked = isLiked;
+      // setIsLiked(!wasLiked);
+      // setLikes(prevLikes =>
+      //   wasLiked
+      //     ? prevLikes.filter(like => like.user_id !== userData.id)
+      //     : [...prevLikes, { user_id: userData.id }]
+      // );
 
       const response = await axios.post(`/api/posts/${post.id}/like`, null, {
         headers: {
@@ -240,16 +240,17 @@ const Post = ({ post, posts, setPosts, onDelete, categories, handleFollow }) => 
 
       if (response.data.success) {
         // Update with server response
+        
         setLikes(response.data.likes);
         setIsLiked(response.data.liked);
       } else {
         // Revert changes if server response is not as expected
-        setIsLiked(wasLiked);
-        setLikes(prevLikes =>
-          wasLiked
-            ? [...prevLikes, { user_id: userData.id }]
-            : prevLikes.filter(like => like.user_id !== userData.id)
-        );
+        // setIsLiked(wasLiked);
+        // setLikes(prevLikes =>
+        //   wasLiked
+        //     ? [...prevLikes, { user_id: userData.id }]
+        //     : prevLikes.filter(like => like.user_id !== userData.id)
+        // );
       }
     } catch (error) {
       console.error('Error liking post:', error);
