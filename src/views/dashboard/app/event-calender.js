@@ -15,7 +15,7 @@ import {
   Collapse,
   Form
 } from "react-bootstrap";
-
+import { Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "../../../utils/axios";
 import ReactQuill from 'react-quill';
@@ -23,7 +23,8 @@ import 'react-quill/dist/quill.snow.css';
 import Swal from "sweetalert2";
 import ReactCrop from 'react-image-crop'
 import { getProfileImageUrl, getBackgroundProfileImageUrl } from '../../../utils/helpers';
-
+import { IoIosHeartEmpty } from "react-icons/io";
+import { GoShare } from "react-icons/go";
 import avatar from '../../../assets/images/d0d79bd9c491d22b6f3398fcaedf2780.jpg'
 import post from '../../../assets/images/92a4f16eb9cbb1b124bd7efeb55f2f38.jpg'
 import { LuSearch } from "react-icons/lu";
@@ -479,8 +480,8 @@ const handleBackgroundImageChange = (e) => {
           </Card.Body>
         </Card>
 
-        <Row className="special-post-container">
-          <Col md={12}>
+        <Row className="special-post-container g-3">
+          <Col md={12} className='position-relative'>
             <Form.Control
               type="text"
               placeholder="Search by caption..."
@@ -490,6 +491,27 @@ const handleBackgroundImageChange = (e) => {
             />
             <LuSearch color='#939393' className='search-btn-left' />
             <LuSlidersHorizontal color='#939393' className='search-btn-right cursor-pointer' />
+          </Col>
+          <Col md={4} sm={6}>
+            <Link to="#">
+              <Card className="event-calender-card border">
+                <Card.Body>
+                  <Image src={`./Sample/education.png`} className='w-100 transition-transform duration-300 hover:scale-110 border-bottom' alt={''} />
+                  <div className="d-flex flex-column gap-3">
+                    <div className="d-flex flex-column gap-0">
+                      <div className="d-flex justify-content-between gap-2">
+                        <h5 className="cap-title"></h5>
+                        <div className="d-flex align-items-center gap-2 justify-content-end">
+                          <IoIosHeartEmpty />
+                          <GoShare />
+                        </div>
+                      </div>
+                      <p className="cap-subtitle"></p>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Link>
           </Col>
         </Row>
 

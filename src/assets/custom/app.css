@@ -19248,9 +19248,11 @@ color: white !important;
 .edit-profile-header .nav-pills .nav-link.active {
   padding: 12px 8px !important;
 }
+
 .edit-profile-header .nav-pills .nav-link {
   padding: 12px 8px !important;
 }
+
 div:where(.swal2-container) {
   z-index: 99999 !important;
 }
@@ -19299,7 +19301,6 @@ div:where(.swal2-container) {
   position: absolute;
 }
 
-<<<<<<< HEAD
 .ps-44, .px-44 {
   padding-left: 44px !important;
 }
@@ -19320,8 +19321,7 @@ div:where(.swal2-container) {
   top: 50%;
   right: 24px;
   transform: translateY(-50%);
-=======
-/* @media (min-width: 1200px) and (max-width: 1400px){
+  /* @media (min-width: 1200px) and (max-width: 1400px){
   .friend-select-list{
    .card-body{
     padding: 16px 10px !important;
@@ -19330,33 +19330,41 @@ div:where(.swal2-container) {
       font-size: 13px;
     }
    }
-  }
+  }*/
 
-} */
+}
 
-.iq-edit-profile{
-  .nav-item{
-    & a{
+.iq-edit-profile {
+  .nav-item {
+    & a {
       white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
 
-@media (max-width: 1200px){
-  .model-create-new-subject{
-  width : 90% !important;
+@media (max-width: 1200px) {
+  .model-create-new-subject {
+    width: 90% !important;
   }
 }
 
 
-.comment-reply-bar{
-& button{
-  position: absolute;
-right: 25%;
-bottom: 30px;
+.comment-reply-bar {
+  & button {
+    position: absolute;
+    right: 25%;
+    bottom: 30px;
+  }
 }
 
->>>>>>> f2fb07c781d50e41fa20a8f7fa7c8270dc6e46bf
-}
+.event-calender-card{
+  padding: 0 !important;
+  & .card-body{
+    & img{
+      aspect-ratio: 16 / 9 !important;
+      object-fit: cover !important;
+    }
+  }
+} 
