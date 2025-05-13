@@ -162,6 +162,8 @@ const Education = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get('/api/categories');
+      console.log('fetch response : ', response);
+      console.log('fetch response Data : ', response.data);
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);

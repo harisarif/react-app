@@ -26,6 +26,8 @@ import { getProfileImageUrl, getBackgroundProfileImageUrl } from '../../../utils
 
 import avatar from '../../../assets/images/d0d79bd9c491d22b6f3398fcaedf2780.jpg'
 import post from '../../../assets/images/92a4f16eb9cbb1b124bd7efeb55f2f38.jpg'
+import { LuSearch } from "react-icons/lu";
+import { LuSlidersHorizontal } from "react-icons/lu";
 
 import moment from "moment";
 import NoDataFound from '../../../components/NoDataFound';
@@ -478,52 +480,66 @@ const handleBackgroundImageChange = (e) => {
         </Card>
 
         <Row className="special-post-container">
-        {events.length < 1 ? (
-            <Col sm={12}>
-              <NoDataFound 
-                message={userData?.roles === "admin" ? "No events found. Click 'Add New Event' to create one!" : "No upcoming events at the moment."}
-                containerClassName="text-center py-5"
-              />
-            </Col>
-          ) : (
-            events.map((event) => (
-          <Col lg={12} className="special-post">
-            <Card className="card-block card-stretch card-height">
-              <Card.Body>
-                <div className={`media-grid position-relative media-grid-1 mt-0`}>
-                  <div className="media-item" >
-                    <div className="position-relative w-100 h-100" >
-                      <img src={process.env.REACT_APP_BACKEND_BASE_URL +'/'+ event?.main_image} alt='' />
-                    </div>
-                  </div>
-                  <span className={`badge badge-event-calendar position-absolute top-left-12`}>{event.status ? event.status : 'Public'}</span>
-                </div>
-                <div className='d-flex flex-column gap-2 mt-3'>
-                  <span className={`badge badge-event-calendar-detail`}>{event.type}</span>
-                  <h6 className="mb-0 me-2 text-dark fw-bold">{event.title}</h6>
-                  <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>{event.description}</p>
-                </div>
-                <div className='d-flex gap-3 mt-3'>
-                {userData && userData?.permissions[0]?.can_create_events == 1 && (
-                  <div className='d-flex gap-3'>
-                    <Button variant="primary" className='btn-purpule py-2 px-3 radius-8' onClick={() => handleShow(event)}>
-                      View Details
-                    </Button>
-                    <Button variant="danger" className='btn-red py-2 px-3 radius-8' onClick={(e) => {
-                        e.stopPropagation(); // Prevent the parent from receiving the click event
-                        handleDelete(event.id);
-                      }}>
-                      Delete
-                    </Button>
-                  </div>
-                )}
-                </div>
-              </Card.Body>
-            </Card>
+          <Col md={12}>
+            <Form.Control
+              type="text"
+              placeholder="Search by caption..."
+              // value={search}
+              // onChange={(e) => setSearch(e.target.value)}
+              className="w-100 radius-8 px-44"
+            />
+            <LuSearch color='#939393' className='search-btn-left' />
+            <LuSlidersHorizontal color='#939393' className='search-btn-right cursor-pointer' />
           </Col>
-          ))
-        )}
         </Row>
+
+        {/* <Row className="special-post-container">
+          {events.length < 1 ? (
+              <Col sm={12}>
+                <NoDataFound 
+                  message={userData?.roles === "admin" ? "No events found. Click 'Add New Event' to create one!" : "No upcoming events at the moment."}
+                  containerClassName="text-center py-5"
+                />
+              </Col>
+            ) : (
+              events.map((event) => (
+            <Col lg={12} className="special-post">
+              <Card className="card-block card-stretch card-height">
+                <Card.Body>
+                  <div className={`media-grid position-relative media-grid-1 mt-0`}>
+                    <div className="media-item" >
+                      <div className="position-relative w-100 h-100" >
+                        <img src={process.env.REACT_APP_BACKEND_BASE_URL +'/'+ event?.main_image} alt='' />
+                      </div>
+                    </div>
+                    <span className={`badge badge-event-calendar position-absolute top-left-12`}>{event.status ? event.status : 'Public'}</span>
+                  </div>
+                  <div className='d-flex flex-column gap-2 mt-3'>
+                    <span className={`badge badge-event-calendar-detail`}>{event.type}</span>
+                    <h6 className="mb-0 me-2 text-dark fw-bold">{event.title}</h6>
+                    <p className="mb-0 mt-n1 text-dark" style={{fontSize: 16, fontWeight: '300'}}>{event.description}</p>
+                  </div>
+                  <div className='d-flex gap-3 mt-3'>
+                  {userData && userData?.permissions[0]?.can_create_events == 1 && (
+                    <div className='d-flex gap-3'>
+                      <Button variant="primary" className='btn-purpule py-2 px-3 radius-8' onClick={() => handleShow(event)}>
+                        View Details
+                      </Button>
+                      <Button variant="danger" className='btn-red py-2 px-3 radius-8' onClick={(e) => {
+                          e.stopPropagation(); // Prevent the parent from receiving the click event
+                          handleDelete(event.id);
+                        }}>
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+            ))
+          )}
+        </Row> */}
 
         <Modal show={showModalDetail} size="lg" centered onHide={() => setShowModalDetail(false)}>
           <Modal.Body>
