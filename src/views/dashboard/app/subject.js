@@ -192,7 +192,7 @@ const CreateSubjectModal = ({ show, handleClose }) => {
       <Modal.Header closeButton>
         <Modal.Title>Create New Subject</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="mx-auto" style={{ width: '60%', height: 'calc(90vh - 120px)', overflowY: 'auto' }}>
+      <Modal.Body className="mx-auto model-create-new-subject" style={{ width: '60%', height: 'calc(90vh - 120px)', overflowY: 'auto' }}>
         <Form onSubmit={handleFormSubmit}>
           {step === 1 && (
             <>
@@ -713,7 +713,7 @@ const Education = () => {
               handleClose={() => setShowCreateSubjectModal(false)}
             />
 
-            <Row className="g-3 mb-3">
+            <Row className="g-3 mb-3 subject-create-new-model">
               <Col md={12}>
                 <Form.Control
                   type="text"
@@ -728,7 +728,7 @@ const Education = () => {
                   .filter(sub => sub.caption.toLowerCase().includes(search.toLowerCase()))
                   .map((sub, id) => {
                     return (
-                      <Col key={id} md={4} sm={6}>
+                      <Col key={id} md={6} sm={6}>
                         <Link to="/subjectDetail">
                           <Card className="education-subject-card border">
                             <Card.Body className='img-div'>

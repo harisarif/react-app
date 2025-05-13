@@ -606,8 +606,8 @@ const About = ({ profileData, linkData }) => {
   return (
     <>
       <Row className='g-3'>
-        <Col md={4}>
-          <Card className='radius-12 border nav-sticky-100'>
+        <Col md={12}>
+          <Card className='radius-12 border nav-sticky-100 '>
             <Card.Body>
               <Nav
                 variant="pills"
@@ -624,7 +624,7 @@ const About = ({ profileData, linkData }) => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={8}>
+        <Col md={12}>
           {tabs.find(tab => tab.key === activeKey)?.content}
         </Col >
       </Row >
@@ -857,8 +857,8 @@ const Friends = () => {
   return (
     <>
       <Row className='g-3'>
-        <Col md={3}>
-          <Card className='radius-12 border nav-sticky-100'>
+        <Col md={12}>
+          <Card className='radius-12 border nav-sticky-100 friend-select-list'>
             <Card.Body>
               <Nav
                 variant="pills"
@@ -875,7 +875,7 @@ const Friends = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={9}>
+        <Col md={12}>
           {tabs.find(tab => tab.key === activeKey)?.content}
         </Col >
       </Row >

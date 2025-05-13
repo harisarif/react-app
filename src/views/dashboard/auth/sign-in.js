@@ -94,10 +94,10 @@ const SignIn = () => {
     <>
       <section className="sign-in-page">
         <Container fluid>
-          <Row className="d-flex align-items-center">
-            <Col lg={6}>
+          <Row className="d-flex align-items-center ">
+            <Col lg={6} className="log-in-page-left-area">
             </Col>
-            <Col lg={6} className="d-flex align-items-center" style={{height: '100vh'}}>
+            <Col lg={6} className="d-flex align-items-center log-in-page-data-form" style={{height: '100vh'}}>
               <div className="sign-in-from">
                 <Link
                   to="/"

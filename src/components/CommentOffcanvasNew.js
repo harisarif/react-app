@@ -76,6 +76,7 @@ const getCategoryBadge = (categoryId) => {
 const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, ReplyTo ,setComments, setPosts, posts, isDocument, setShowCommentOffcanvas, getFileExtension, getFileIcon, badge, formatFileSize, setShowShareOffcanvas, setNewComment, handleEmojiSelect, isCommentLoading , showEmojiDropdown , fileNames , link , handleEditShow , handleFileChange , handleLinkChange , handleMediaClick , handlePreview , handleComment , newComment , isCommenting, likes, isLiked, handleLike, isLiking, comments,  post, show, onHide }) => {
   const { userData } = useContext(UserContext);
   const baseurl = process.env.REACT_APP_BACKEND_BASE_URL;
+  const [commentLikeLoading , setCommentLikeLoading] = useState(false);
   const handleCommentLike = async (commentId) => {
     // if (isLiking) return;
 
@@ -114,6 +115,8 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
       //     : [...prevLikes, { user_id: userData.id }]
       // );
 
+      setCommentLikeLoading(true);
+
       const response = await axios.post(`/api/like-comment`, {
         comment_id: commentId,
       }, {
@@ -123,6 +126,7 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
       });
 
       if (response.data.success) {
+
         if(response.data.message == 'Comment liked successfully') {
           const newLike = {
             id: Date.now(), // Generate a temporary ID
@@ -200,6 +204,7 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
            };
          }));
         }
+        setCommentLikeLoading(false);
 
         // Update with server response
         // setLikes(response.data.likes);
@@ -517,7 +522,7 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
             <div className='d-flex gap-2 justify-content-between'>
               <div className='d-flex gap-3'>
               <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>{moment(comment?.created_at).fromNow()}</p>
-              <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleCommentLike(comment.id)}>{comment?.isLiked ? 'Liked' : 'Like'}</p>
+<p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => !commentLikeLoading && handleCommentLike(comment.id)}>{comment?.isLiked ? 'Liked' : 'Like'}</p>
               <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleReply(comment.id, comment.user.id, comment.user.name)}>Reply</p>
               <p 
                 className="mb-0 mt-n1 text-gray"
@@ -561,7 +566,7 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
                     <div className='d-flex gap-2 justify-content-between'>
                       <div className='d-flex gap-3'>
                       <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}}>{moment(reply?.created_at).fromNow()}</p>
-                      <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleCommentLike(reply.id)}>{reply?.isLiked ? 'Liked' : 'Like'}</p>
+<p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => !commentLikeLoading && handleCommentLike(reply.id)}>{reply?.isLiked ? 'Liked' : 'Like'}</p>
                       <p className="mb-0 mt-n1 text-gray" style={{fontSize: 12, fontWeight: '400'}} onClick={() => handleReply(comment.id, reply.user.id, reply.user.name)}>Reply</p>
                       </div>
                       <span style={{fontSize: 12, fontWeight: '400', marginBottom: '8px'}}>{reply?.isLiked ? '❤️' : '♡'} {reply?.likes?.length}</span>
@@ -574,8 +579,8 @@ const CommentOffcanvasNew = ({handleReply, setShowReply, showReply, setReplyTo, 
     </div>
               <Form onSubmit={handleComment}>
                 {showReply && (
-                  <div className="reply-bar mb-2 p-2 bg-light rounded-1">
-                    <span className="text-muted small me-2">Replying to {ReplyTo.userName}</span>
+                  <div className="reply-bar    rounded-1 comment-reply-bar">
+                    {/* <span className="text-muted small me-2">Replying to {ReplyTo.userName}</span> */}
                     <button 
                       type="button" 
                       className="btn-close float-end" 
