@@ -17160,6 +17160,49 @@ img[src*="doubleclick.net"] {
   right: 12px !important;
 }
 
+
+.crypto-info-btn-sm {
+  background: #FEA832 !important;
+  padding: 1px 11px 0px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+.fitness-info-btn-sm {
+  background: #00A33C !important;
+  padding: 1px 11px 0px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+.info-btn-sm {
+  background: #497BF5 !important;
+  padding: 1px 11px 0px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+.mindset-info-btn-sm {
+  background: #F30055 !important;
+  padding: 1px 11px 0px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+
+}
+
+.tech-info-btn-sm {
+  background: #DC2626 !important;
+  border-radius: 16px !important;
+  padding: 1px 11px 0px !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+
+}
+
 .create-post-icons-main {
   /* border-top: 1px solid rgb(185, 185, 182); */
   /* margin-top: 12px; */
@@ -19360,11 +19403,33 @@ div:where(.swal2-container) {
 }
 
 .event-calender-card{
-  padding: 0 !important;
+  overflow: hidden;
+  margin: 0px !important;
   & .card-body{
+    padding: 0 !important;
     & img{
       aspect-ratio: 16 / 9 !important;
       object-fit: cover !important;
+    }
+
+    & .cap-title{
+      font-size: 17px;
+      font-weight: 600;
+    }
+    & .cap-subtitle{
+      font-size: 13px;
+      font-weight: 400;
+      line-height: normal;
+    }
+    & .cap-followers{
+      font-size: 12px;
+      font-weight: 400;
+      line-height: normal;
+    }
+    & .cap-bottomTitle{
+      font-size: 14px;
+      font-weight: 400;
+      line-height: normal;
     }
   }
 } 

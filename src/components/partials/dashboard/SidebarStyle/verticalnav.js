@@ -89,7 +89,7 @@ const VerticalNav = React.memo(() => {
                             <path d="M10 15V12.5" stroke="#1E1E1E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M8.39148 2.34992L2.61648 6.97492C1.96648 7.49158 1.54981 8.58325 1.69148 9.39992L2.79981 16.0332C2.99981 17.2166 4.13315 18.1749 5.33315 18.1749H14.6665C15.8581 18.1749 16.9998 17.2082 17.1998 16.0332L18.3081 9.39992C18.4415 8.58325 18.0248 7.49158 17.3831 6.97492L11.6081 2.35825C10.7165 1.64158 9.27481 1.64158 8.39148 2.34992Z" stroke="#1E1E1E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span className="item-name">Home</span>
+                            <span className="item-name elipsis-1">Home</span>
                         </Link>
                     </li>
 
@@ -101,7 +101,7 @@ const VerticalNav = React.memo(() => {
                                 <OverlayTrigger placement="right" overlay={<Tooltip>Profiles</Tooltip>}>
                                     {location.pathname === '/profile' ? <FaUser size={'1.5rem'} /> : <FaRegUser size={'1.5rem'} />}
                                 </OverlayTrigger>
-                                <span className="item-name">Profiles</span>
+                                <span className="item-name elipsis-1">Profiles</span>
                             </Link>
                         </li>
                     )} */}
@@ -109,7 +109,7 @@ const VerticalNav = React.memo(() => {
                     <li className={`${location.pathname === '/home' || location.pathname === '/business' || location.pathname === '/crypto' || location.pathname === '/fitness' || location.pathname === '/mindset' ? 'active' : ''} nav-item nav-seventh-li nav-common-class`}>
                         <Link className={`${location.pathname === '/home' || location.pathname === '/business' || location.pathname === '/crypto' || location.pathname === '/fitness' || location.pathname === '/mindset' ? 'active' : ''} nav-link `} aria-current="page" to="/home">
                             <RxDashboard />
-                            <span className="item-name">Feeds</span>
+                            <span className="item-name elipsis-1">Feeds</span>
                         </Link>
                     </li>
 
@@ -124,7 +124,7 @@ const VerticalNav = React.memo(() => {
 <path d="M7.08337 9.57501H4.58337" stroke="#1E1E1E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
-                            <span className="item-name">Education</span>
+                            <span className="item-name elipsis-1">Education</span>
                         </Link>
                     </li>
                     <li className={`${location.pathname === '/job-list' ? 'active' : ''} nav-item nav-sixth-li nav-common-class`}>
@@ -138,7 +138,7 @@ const VerticalNav = React.memo(() => {
                             <path d="M6.66675 10.8334H10.0001" stroke="#1E1E1E" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M6.66675 14.1666H13.3334" stroke="#1E1E1E" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span className="item-name">Job List</span>
+                            <span className="item-name elipsis-1">Job List</span>
                         </Link>
                     </li>
                     {userData && userData?.permissions[0]?.can_create_jobs == 1 && (
@@ -156,7 +156,7 @@ const VerticalNav = React.memo(() => {
                                 <path d="M6.66675 9.16663H13.3334" stroke="#1E1E1E" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M6.66675 13.3334H10.0001" stroke="#1E1E1E" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <span className="item-name">Job Applications</span>
+                                <span className="item-name elipsis-1">Job Applications</span>
                             </Link>
                         </li>
                     )}
@@ -173,7 +173,7 @@ const VerticalNav = React.memo(() => {
                             <path d="M6.41675 10H13.0834" stroke="#1E1E1E" stroke-width="1.2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M5.58325 13.3334H12.2499" stroke="#1E1E1E" stroke-width="1.2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span className="item-name">Events Calender</span>
+                            <span className="item-name elipsis-1">Events Calender</span>
                         </Link>
                         {/* {totalUnread > 0 && (
                             <div className="total-ntf-counter">{totalUnread}</div>
@@ -185,7 +185,7 @@ const VerticalNav = React.memo(() => {
                             <OverlayTrigger placement="right" overlay={<Tooltip>Notifications</Tooltip>}>
                                 {location.pathname === '/notification' ? <MdNotificationsActive size={'1.5rem'} /> : <MdOutlineNotificationsActive size={'1.5rem'} />}
                             </OverlayTrigger>
-                            <span className="item-name">Notifications</span>
+                            <span className="item-name elipsis-1">Notifications</span>
                         </Link>
                     </li> */}
 
@@ -208,7 +208,7 @@ const VerticalNav = React.memo(() => {
                                     </clipPath>
                                     </defs>
                                 </svg>
-                                <span className="item-name">Manage Users</span>
+                                <span className="item-name elipsis-1">Manage Users</span>
                             </Link>
                         </li>
                     )}

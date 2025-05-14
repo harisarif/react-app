@@ -23,8 +23,15 @@ import 'react-quill/dist/quill.snow.css';
 import Swal from "sweetalert2";
 import ReactCrop from 'react-image-crop'
 import { getProfileImageUrl, getBackgroundProfileImageUrl } from '../../../utils/helpers';
-import { IoIosHeartEmpty } from "react-icons/io";
-import { GoShare } from "react-icons/go";
+
+
+import { FaRegHeart } from "react-icons/fa6";
+import { RiShare2Line } from "react-icons/ri";
+import { FaRegUser } from "react-icons/fa";
+
+
+import DummyImage from '../../../assets/images/dummy-image.jpg'
+
 import avatar from '../../../assets/images/d0d79bd9c491d22b6f3398fcaedf2780.jpg'
 import post from '../../../assets/images/92a4f16eb9cbb1b124bd7efeb55f2f38.jpg'
 import { LuSearch } from "react-icons/lu";
@@ -32,6 +39,133 @@ import { LuSlidersHorizontal } from "react-icons/lu";
 
 import moment from "moment";
 import NoDataFound from '../../../components/NoDataFound';
+import DateTimeFormat from '../../../components/DateTimeFormat';
+
+const CategoryBatch = ({category}) => {
+  let classes = '';
+  if (category === 'Business Management') {
+    classes = 'text-white info-btn-sm';
+  } else if (category === 'Technology') {
+    classes = 'text-white tech-info-btn-sm';
+  } else if (category === 'Crypto') {
+    classes = 'text-white crypto-info-btn-sm';
+  } else if (category === 'Fitness') {
+    classes = 'text-white fitness-info-btn-sm';
+  }
+  const firstWord = category?.split(' ')[0] || '';
+  return (
+    <span class={`rounded-pill position-absolute top-left-12 ${classes}`}>{firstWord}</span>
+  );
+}
+
+const FilterModal = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('Any date');
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const dateOptions = [
+    'Any date',
+    'Today',
+    'Tomorrow',
+    'This week',
+    'This weekend',
+    'Choose a date'
+  ];
+
+  const categoryOptions = [
+    'Music',
+    'Fitness',
+    'Food',
+    'Art',
+    'Sports',
+    'Business',
+    'Technology'
+  ];
+
+  const handleCategoryChange = (category) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter(c => c !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
+
+  const handleApplyFilters = () => {
+    // Apply your filters here using selectedDate and selectedCategories
+    console.log('Selected Date:', selectedDate);
+    console.log('Selected Categories:', selectedCategories);
+    setShowModal(false);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedDate('Any date');
+    setSelectedCategories([]);
+  };
+
+  return (
+    <>
+      {/* Button to trigger modal */}
+      <LuSlidersHorizontal 
+        color='#939393' 
+        className='search-btn-right cursor-pointer' 
+        onClick={() => setShowModal(true)}
+      />
+
+      {/* Filter Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Filters</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Date Filter Section */}
+          <div className="mb-4">
+            <h6 className="fw-bold mb-3">DATE</h6>
+            <div className="d-flex flex-column gap-2">
+              {dateOptions.map((option, index) => (
+                <Form.Check
+                  key={index}
+                  type="radio"
+                  id={`date-${index}`}
+                  label={option}
+                  name="dateFilter"
+                  checked={selectedDate === option}
+                  onChange={() => setSelectedDate(option)}
+                  className="py-1"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Category Filter Section */}
+          <div className="mb-4">
+            <h6 className="fw-bold mb-3">CATEGORY</h6>
+            <div className="d-flex flex-column gap-2">
+              {categoryOptions.map((category, index) => (
+                <Form.Check
+                  key={index}
+                  type="checkbox"
+                  id={`category-${index}`}
+                  label={category}
+                  checked={selectedCategories.includes(category)}
+                  onChange={() => handleCategoryChange(category)}
+                  className="py-1"
+                />
+              ))}
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-secondary" onClick={handleResetFilters}>
+            Reset
+          </Button>
+          <Button variant="primary" onClick={handleApplyFilters}>
+            Apply Filters
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
 
 const EventCalender = () => {
   const [showModalDetail, setShowModalDetail] = useState(false);
@@ -480,40 +614,105 @@ const handleBackgroundImageChange = (e) => {
           </Card.Body>
         </Card>
 
-        <Row className="special-post-container g-3">
-          <Col md={12} className='position-relative'>
-            <Form.Control
-              type="text"
-              placeholder="Search by caption..."
-              // value={search}
-              // onChange={(e) => setSearch(e.target.value)}
-              className="w-100 radius-8 px-44"
-            />
-            <LuSearch color='#939393' className='search-btn-left' />
-            <LuSlidersHorizontal color='#939393' className='search-btn-right cursor-pointer' />
-          </Col>
-          <Col md={4} sm={6}>
-            <Link to="#">
-              <Card className="event-calender-card border">
-                <Card.Body>
-                  <Image src={`./Sample/education.png`} className='w-100 transition-transform duration-300 hover:scale-110 border-bottom' alt={''} />
-                  <div className="d-flex flex-column gap-3">
-                    <div className="d-flex flex-column gap-0">
-                      <div className="d-flex justify-content-between gap-2">
-                        <h5 className="cap-title"></h5>
-                        <div className="d-flex align-items-center gap-2 justify-content-end">
-                          <IoIosHeartEmpty />
-                          <GoShare />
-                        </div>
-                      </div>
-                      <p className="cap-subtitle"></p>
-                    </div>
+        <Row className="special-post-container g-3 mb-3">
+  <Col md={8} className='position-relative'>
+    <Form.Control
+      type="text"
+      placeholder="Search by caption..."
+      onChange={(e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.event-calender-card');
+        
+        cards.forEach(card => {
+          const parent = card.closest('[data-event-cat]');
+          if (!parent) return;
+          
+          // Get all searchable content from the card
+          const title = card.querySelector('.cap-title')?.textContent || '';
+          const subtitle = card.querySelector('.cap-subtitle')?.textContent || '';
+          const followers = card.querySelector('.cap-followers')?.textContent || '';
+          const bottomTitle = card.querySelector('.cap-bottomTitle')?.textContent || '';
+          const status = card.querySelector('.top-right-12')?.textContent || '';
+          const category = parent.getAttribute('data-event-cat') || '';
+          
+          // Combine all content for searching
+          const cardContent = `${title} ${subtitle} ${followers} ${bottomTitle} ${status} ${category}`.toLowerCase();
+          
+          // Show/hide based on search term
+          if (searchTerm === '' || cardContent.includes(searchTerm)) {
+            parent.style.display = '';
+          } else {
+            parent.style.display = 'none';
+          }
+        });
+      }}
+      className="w-100 radius-8 px-44"
+    />
+    <LuSearch color='#939393' className='search-btn-left' />
+    <LuSlidersHorizontal color='#939393' className='search-btn-right cursor-pointer' />
+  </Col>
+  <Col md={4}>
+    <Form.Select 
+      className="w-100 radius-8"
+      onChange={(e) => {
+        const category = e.target.value;
+        const cards = document.querySelectorAll('.event-calender-card');
+        
+        cards.forEach(card => {
+          const parent = card.closest('[data-event-cat]');
+          if (!parent) return;
+          
+          const cardCategory = parent.getAttribute('data-event-cat');
+          if (category === 'all' || cardCategory === category) {
+            parent.style.display = '';
+          } else {
+            parent.style.display = 'none';
+          }
+        });
+      }}
+    >
+      <option value="all">All Categories</option>
+      {[...new Set(events.map(event => event.category?.name))].filter(Boolean).map((category, index) => (
+        <option key={index} value={category}>{category}</option>
+      ))}
+    </Form.Select>
+  </Col>
+  
+  {events.length < 1 ? (
+    ''
+  ) : (
+    events.map((event, index) => (
+      <Col xxl={4} lg={6} key={index} data-event-cat={event.category?.name}>
+        <Card className="event-calender-card border">
+          <Card.Body>
+            <CategoryBatch category={event.category?.name} />
+            <span class={`rounded-pill position-absolute top-right-12 text-white fitness-info-btn-sm`}>{event.status}</span>
+            <Image src={`${event.banner_image == null ? DummyImage : event.banner_image}`} className='w-100 transition-transform duration-300 hover:scale-110 border-bottom' alt={''} />
+            <div className="d-flex flex-column gap-3 p-3">
+              <div className="d-flex flex-column gap-1">
+                <div className="d-flex justify-content-between gap-2">
+                  <h5 className="cap-title text-dark m-0">{event.title}</h5>
+                  <div className="d-flex align-items-center gap-1 justify-content-end">
+                    <FaRegHeart size={'16px'} color={`#444`} className='cursor-pointer' />
+                    <RiShare2Line size={'18px'} color={`#444`} className='cursor-pointer' />
                   </div>
-                </Card.Body>
-              </Card>
-            </Link>
-          </Col>
-        </Row>
+                </div>
+                <p className="cap-subtitle text-dark m-0"><DateTimeFormat dateTime={event.start_time} /> - {event.mode}</p>
+              </div>
+              <div className="d-flex flex-column gap-1 align-items-start">
+                <div className="d-flex gap-1 align-items-center justify-content-start">
+                  <FaRegUser size={'12px'} color={`#444`} />
+                  <p className="cap-followers text-dark m-0">{`${event.followers} Followers`}</p>
+                </div>
+                <p className="cap-bottomTitle text-dark m-0 text-uppercase">Dummy</p>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      </Col>
+    ))
+  )}
+</Row>
 
         {/* <Row className="special-post-container">
           {events.length < 1 ? (
