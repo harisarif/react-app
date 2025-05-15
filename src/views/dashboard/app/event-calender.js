@@ -17,7 +17,7 @@ import {
 } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import axios from "../../../utils/axios";
+import axios from '../../../utils/axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Swal from "sweetalert2";
@@ -58,10 +58,16 @@ const CategoryBatch = ({category}) => {
   );
 }
 
-const FilterModal = () => {
+const FilterModal = ({ events, onApplyFilters }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState('Any date');
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  // Dynamic categories from events - FIXED THE SYNTAX ERROR HERE
+  const categoryOptions = [
+    'All Categories',
+    ...new Set(events.map(event => event.category?.name).filter(Boolean))
+  ];
 
   const dateOptions = [
     'Any date',
@@ -72,18 +78,10 @@ const FilterModal = () => {
     'Choose a date'
   ];
 
-  const categoryOptions = [
-    'Music',
-    'Fitness',
-    'Food',
-    'Art',
-    'Sports',
-    'Business',
-    'Technology'
-  ];
-
   const handleCategoryChange = (category) => {
-    if (selectedCategories.includes(category)) {
+    if (category === 'All Categories') {
+      setSelectedCategories([]);
+    } else if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter(c => c !== category));
     } else {
       setSelectedCategories([...selectedCategories, category]);
@@ -91,9 +89,10 @@ const FilterModal = () => {
   };
 
   const handleApplyFilters = () => {
-    // Apply your filters here using selectedDate and selectedCategories
-    console.log('Selected Date:', selectedDate);
-    console.log('Selected Categories:', selectedCategories);
+    onApplyFilters({
+      date: selectedDate,
+      categories: selectedCategories
+    });
     setShowModal(false);
   };
 
@@ -104,26 +103,24 @@ const FilterModal = () => {
 
   return (
     <>
-      {/* Button to trigger modal */}
       <LuSlidersHorizontal 
         color='#939393' 
         className='search-btn-right cursor-pointer' 
         onClick={() => setShowModal(true)}
+        style={{ fontSize: '20px' }}
       />
 
-      {/* Filter Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Filters</Modal.Title>
+        <Modal.Header closeButton className="border-0 pb-0">
+          <Modal.Title className="fw-bold">Filters</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {/* Date Filter Section */}
+        <Modal.Body className="pt-1">
           <div className="mb-4">
-            <h6 className="fw-bold mb-3">DATE</h6>
-            <div className="d-flex flex-column gap-2">
+            <h6 className="fw-bold mb-3" style={{ fontSize: '14px', color: '#6B6B6B' }}>DATE</h6>
+            <div className="d-flex flex-column gap-2 ps-2">
               {dateOptions.map((option, index) => (
                 <Form.Check
-                  key={index}
+                  key={`date-${index}`}
                   type="radio"
                   id={`date-${index}`}
                   label={option}
@@ -131,34 +128,45 @@ const FilterModal = () => {
                   checked={selectedDate === option}
                   onChange={() => setSelectedDate(option)}
                   className="py-1"
+                  style={{ fontSize: '15px' }}
                 />
               ))}
             </div>
           </div>
 
-          {/* Category Filter Section */}
-          <div className="mb-4">
-            <h6 className="fw-bold mb-3">CATEGORY</h6>
-            <div className="d-flex flex-column gap-2">
+          <div className="mb-2">
+            <h6 className="fw-bold mb-3" style={{ fontSize: '14px', color: '#6B6B6B' }}>CATEGORY</h6>
+            <div className="d-flex flex-column gap-2 ps-2">
               {categoryOptions.map((category, index) => (
                 <Form.Check
-                  key={index}
-                  type="checkbox"
+                  key={`category-${index}`}
+                  type={category === 'All Categories' ? 'radio' : 'checkbox'}
                   id={`category-${index}`}
                   label={category}
-                  checked={selectedCategories.includes(category)}
+                  checked={category === 'All Categories' 
+                    ? selectedCategories.length === 0 
+                    : selectedCategories.includes(category)}
                   onChange={() => handleCategoryChange(category)}
                   className="py-1"
+                  style={{ fontSize: '15px' }}
                 />
               ))}
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-secondary" onClick={handleResetFilters}>
+        <Modal.Footer className="border-0">
+          <Button 
+            variant="outline-secondary" 
+            onClick={handleResetFilters}
+            style={{ borderRadius: '8px', padding: '8px 16px' }}
+          >
             Reset
           </Button>
-          <Button variant="primary" onClick={handleApplyFilters}>
+          <Button 
+            variant="primary" 
+            onClick={handleApplyFilters}
+            style={{ borderRadius: '8px', padding: '8px 16px' }}
+          >
             Apply Filters
           </Button>
         </Modal.Footer>
@@ -205,17 +213,17 @@ const EventCalender = () => {
   });
 
   const [isDirty, setIsDirty] = useState(false);
-const [showDiscardModal, setShowDiscardModal] = useState(false);
+  const [showDiscardModal, setShowDiscardModal] = useState(false);
 
-const initialData = JSON.stringify(formData); // Store initial state
+  const initialData = JSON.stringify(formData); // Store initial state
 
-useEffect(() => {
-    if (JSON.stringify(formData) !== initialData) {
-        setIsDirty(true);
-    } else {
-        setIsDirty(false);
-    }
-}, [formData]);
+  useEffect(() => {
+      if (JSON.stringify(formData) !== initialData) {
+          setIsDirty(true);
+      } else {
+          setIsDirty(false);
+      }
+  }, [formData]);
 
   useEffect(() => {
     fetchEvents();
@@ -248,14 +256,14 @@ useEffect(() => {
 
   const handleInputChange = (e) => {
     const { name, value, files, type } = e.target;
-    if(name === "media"){
-      setFormData({ ...formData, [name]: files });
-    }else{
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'file' ? files[0] : value
-    }));
-  }
+      if(name === "media"){
+        setFormData({ ...formData, [name]: files });
+      }else{
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'file' ? files[0] : value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -392,10 +400,10 @@ useEffect(() => {
   const handleModalClose = () => {
     if (isDirty) {
       setShowDiscardModal(true);
-  } else {
-      // Directly close without confirmation
-      setShowModal(false);
-  }
+    } else {
+        // Directly close without confirmation
+        setShowModal(false);
+    }
   };
 
 
@@ -419,184 +427,231 @@ useEffect(() => {
   const backgroundImgRef = React.useRef(null);
 
 
-const onLoad = (img) => {
-  imgRef.current = img;
-  const aspectRatio = 2.5; 
-  const cropWidth = img.width * 0.8; 
-  const cropHeight = cropWidth / aspectRatio; 
+  const onLoad = (img) => {
+    imgRef.current = img;
+    const aspectRatio = 2.5; 
+    const cropWidth = img.width * 0.8; 
+    const cropHeight = cropWidth / aspectRatio; 
 
-  const defaultCrop = {
-      unit: 'px',
-      x: (img.width - cropWidth) / 2,
-      y: (img.height - cropHeight) / 2,
-      width: cropWidth,
-      height: cropHeight,
-      aspect: aspectRatio,
+    const defaultCrop = {
+        unit: 'px',
+        x: (img.width - cropWidth) / 2,
+        y: (img.height - cropHeight) / 2,
+        width: cropWidth,
+        height: cropHeight,
+        aspect: aspectRatio,
+    };
+
+    setBackgroundCrop(defaultCrop);
+
+    // 🔹 Manually trigger crop complete to store crop data
+    handleBackgroundCropComplete(defaultCrop);
   };
 
-  setBackgroundCrop(defaultCrop);
-
-  // 🔹 Manually trigger crop complete to store crop data
-  handleBackgroundCropComplete(defaultCrop);
-};
-
-const handleCroppedImage = async (croppedImageBlob) => {
-  // Convert the Blob to a base64 string
-  const reader = new FileReader();
-  reader.onloadend = () => {
-      const base64data = reader.result; // This is the base64 string
-      setFormData(prevFormData => ({
-          ...prevFormData,
-          banner_image: base64data // Add the base64 string to formData
-      }));
+  const handleCroppedImage = async (croppedImageBlob) => {
+    // Convert the Blob to a base64 string
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        const base64data = reader.result; // This is the base64 string
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            banner_image: base64data // Add the base64 string to formData
+        }));
+    };
+    reader.readAsDataURL(croppedImageBlob); // Read the Blob as a data URL
   };
-  reader.readAsDataURL(croppedImageBlob); // Read the Blob as a data URL
-};
   const handleSaveBackgroundCrop = async () => {
     try {
-        setIsSaving(true);
-        console.log('Starting background crop save...');
-        if (!completedBackgroundCrop || !backgroundImgRef.current) {
-            console.error('No crop or image reference available');
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Please select an area to crop'
-            });
-            setIsSaving(false);
-            return;
-        }
+      setIsSaving(true);
+      console.log('Starting background crop save...');
+      if (!completedBackgroundCrop || !backgroundImgRef.current) {
+          console.error('No crop or image reference available');
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Please select an area to crop'
+          });
+          setIsSaving(false);
+          return;
+      }
 
-        const croppedImageBlob = await generateBackgroundCroppedImage(completedBackgroundCrop);
-        console.log('Generated cropped background image blob:', croppedImageBlob);
-        if (croppedImageBlob) {
-          handleCroppedImage(croppedImageBlob); // Call the function to handle conversion
-          setCroppedImageBlob(croppedImageBlob);
+      const croppedImageBlob = await generateBackgroundCroppedImage(completedBackgroundCrop);
+      console.log('Generated cropped background image blob:', croppedImageBlob);
+      if (croppedImageBlob) {
+        handleCroppedImage(croppedImageBlob); // Call the function to handle conversion
+        setCroppedImageBlob(croppedImageBlob);
 
-        // alert();
-        // Close modal and update image
-        setShowBackgroundCropper(false);
-        setBackgroundImage(null);
-        setIsSaving(false);
+      // alert();
+      // Close modal and update image
+      setShowBackgroundCropper(false);
+      setBackgroundImage(null);
+      setIsSaving(false);
         
-        // Show success message
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'banner image cropped successfully!',
-            customClass: {
-              popup: 'custom-swal-z-index',
-              container: 'custom-swal-container'
-            },
-            position: 'center',
-            showConfirmButton: true
-        });
-        
+      // Show success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'banner image cropped successfully!',
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
+      })        
     }
 
     } catch (error) {
-        setIsSaving(false);
-        console.error('Error in handleSaveBackgroundCrop:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.response?.data?.message || 'Failed to update background image',
-            backdrop: true,
-            background: '#fff',
-            customClass: {
-              popup: 'custom-swal-z-index',
-              container: 'custom-swal-container'
-            },
-            position: 'center',
-            showConfirmButton: true
-        });
+      setIsSaving(false);
+      console.error('Error in handleSaveBackgroundCrop:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data?.message || 'Failed to update background image',
+        backdrop: true,
+        background: '#fff',
+        customClass: {
+          popup: 'custom-swal-z-index',
+          container: 'custom-swal-container'
+        },
+        position: 'center',
+        showConfirmButton: true
+      });
     }
-};
+  };
 
-const handleBackgroundCropComplete = (crop) => {
-  setCompletedBackgroundCrop(crop);
-};
-
-
-const handleAdminSelect = (id) =>{
-  setFormData({
-    ...formData,
-    organizer_id: id
-});
-  setSelectedAdmin(id);
-};
-
-const [showDropdown,setShowDropdown] = useState();
+  const handleBackgroundCropComplete = (crop) => {
+    setCompletedBackgroundCrop(crop);
+  };
 
 
+  const handleAdminSelect = (id) =>{
+    setFormData({
+      ...formData,
+      organizer_id: id
+    });
+    setSelectedAdmin(id);
+  };
 
-const generateBackgroundCroppedImage = async (crop) => {
-  if (!crop || !backgroundImgRef.current) {
+  const [showDropdown,setShowDropdown] = useState();
+
+
+
+  const generateBackgroundCroppedImage = async (crop) => {
+    if (!crop || !backgroundImgRef.current) {
       console.error('No crop or image reference');
       return null;
-  }
+    }
 
-  const canvas = document.createElement('canvas');
-  const scaleX = backgroundImgRef.current.naturalWidth / backgroundImgRef.current.width;
-  const scaleY = backgroundImgRef.current.naturalHeight / backgroundImgRef.current.height;
-  const pixelRatio = window.devicePixelRatio;
-  
-  canvas.width = crop.width * pixelRatio;
-  canvas.height = crop.height * pixelRatio;
-  
-  const ctx = canvas.getContext('2d');
-  if (!ctx) {
+    const canvas = document.createElement('canvas');
+    const scaleX = backgroundImgRef.current.naturalWidth / backgroundImgRef.current.width;
+    const scaleY = backgroundImgRef.current.naturalHeight / backgroundImgRef.current.height;
+    const pixelRatio = window.devicePixelRatio;
+    
+    canvas.width = crop.width * pixelRatio;
+    canvas.height = crop.height * pixelRatio;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
       console.error('No 2d context');
       return null;
-  }
+    }
 
-  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-  ctx.imageSmoothingQuality = 'high';
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = 'high';
 
-  try {
+    try {
       ctx.drawImage(
-          backgroundImgRef.current,
-          crop.x * scaleX,
-          crop.y * scaleY,
-          crop.width * scaleX,
-          crop.height * scaleY,
-          0,
-          0,
-          crop.width,
-          crop.height
+        backgroundImgRef.current,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
       );
 
       return new Promise((resolve) => {
-          canvas.toBlob(
-              (blob) => {
-                  if (!blob) {
-                      console.error('Canvas to Blob conversion failed');
-                      resolve(null);
-                      return;
-                  }
-                  console.log('Generated background blob:', blob);
-                  resolve(blob);
-              },
-              'image/jpeg',
-              1
-          );
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              console.error('Canvas to Blob conversion failed');
+              resolve(null);
+              return;
+            }
+            console.log('Generated background blob:', blob);
+            resolve(blob);
+          },
+          'image/jpeg',
+          1
+        );
       });
-  } catch (error) {
+    } catch (error) {
       console.error('Error generating cropped background image:', error);
       return null;
-  }
-};
+    }
+  };
 
-const handleBackgroundImageChange = (e) => {
-  if (e.target.files && e.target.files[0]) {
+  const handleBackgroundImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
       reader.onload = () => {
-          setBackgroundImage(reader.result);
-          setShowBackgroundCropper(true);
+        setBackgroundImage(reader.result);
+        setShowBackgroundCropper(true);
       };
       reader.readAsDataURL(e.target.files[0]);
-  }
-};
+    }
+  };
+
+  const [filters, setFilters] = useState({
+    date: 'Any date',
+    categories: []
+  });
+
+  // Add this utility function above your component
+  const checkDateMatch = (eventDate, filterDate) => {
+    const eventDateObj = new Date(eventDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    const endOfWeek = new Date(today);
+    endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay()));
+    
+    const startOfWeekend = new Date(today);
+    startOfWeekend.setDate(startOfWeekend.getDate() + (5 - startOfWeekend.getDay())); // Friday
+    const endOfWeekend = new Date(startOfWeekend);
+    endOfWeekend.setDate(endOfWeekend.getDate() + 2); // Sunday
+
+    switch (filterDate) {
+      case 'Today':
+        return eventDateObj.toDateString() === today.toDateString();
+      case 'Tomorrow':
+        return eventDateObj.toDateString() === tomorrow.toDateString();
+      case 'This week':
+        return eventDateObj >= today && eventDateObj <= endOfWeek;
+      case 'This weekend':
+        return eventDateObj >= startOfWeekend && eventDateObj <= endOfWeekend;
+      default:
+        return true;
+    }
+  };
+
+  // Then in your component where you filter events:
+  const filteredEvents = events.filter(event => {
+    // Filter by date
+    const dateMatch = filters.date === 'Any date' || checkDateMatch(event.start_time, filters.date);
+    
+    // Filter by category
+    const categoryMatch = filters.categories.length === 0 || 
+                        filters.categories.includes(event.category?.name);
+    
+    return dateMatch && categoryMatch;
+  });
 
 
 
@@ -615,104 +670,108 @@ const handleBackgroundImageChange = (e) => {
         </Card>
 
         <Row className="special-post-container g-3 mb-3">
-  <Col md={8} className='position-relative'>
-    <Form.Control
-      type="text"
-      placeholder="Search by caption..."
-      onChange={(e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.event-calender-card');
-        
-        cards.forEach(card => {
-          const parent = card.closest('[data-event-cat]');
-          if (!parent) return;
+          <Col md={8} className='position-relative'>
+            <Form.Control
+              type="text"
+              placeholder="Search by caption..."
+              onChange={(e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.event-calender-card');
+                
+                cards.forEach(card => {
+                  const parent = card.closest('[data-event-cat]');
+                  if (!parent) return;
+                  
+                  // Get all searchable content from the card
+                  const title = card.querySelector('.cap-title')?.textContent || '';
+                  const subtitle = card.querySelector('.cap-subtitle')?.textContent || '';
+                  const followers = card.querySelector('.cap-followers')?.textContent || '';
+                  const bottomTitle = card.querySelector('.cap-bottomTitle')?.textContent || '';
+                  const status = card.querySelector('.top-right-12')?.textContent || '';
+                  const category = parent.getAttribute('data-event-cat') || '';
+                  
+                  // Combine all content for searching
+                  const cardContent = `${title} ${subtitle} ${followers} ${bottomTitle} ${status} ${category}`.toLowerCase();
+                  
+                  // Show/hide based on search term
+                  if (searchTerm === '' || cardContent.includes(searchTerm)) {
+                    parent.style.display = '';
+                  } else {
+                    parent.style.display = 'none';
+                  }
+                });
+              }}
+              className="w-100 radius-8 px-44"
+            />
+            <LuSearch color='#939393' className='search-btn-left' />
+            <FilterModal 
+              events={events} 
+              onApplyFilters={setFilters} 
+            />
+            {/* <LuSlidersHorizontal color='#939393' className='search-btn-right cursor-pointer' /> */}
+          </Col>
+          <Col md={4}>
+            <Form.Select 
+              className="w-100 radius-8"
+              onChange={(e) => {
+                const category = e.target.value;
+                const cards = document.querySelectorAll('.event-calender-card');
+                
+                cards.forEach(card => {
+                  const parent = card.closest('[data-event-cat]');
+                  if (!parent) return;
+                  
+                  const cardCategory = parent.getAttribute('data-event-cat');
+                  if (category === 'all' || cardCategory === category) {
+                    parent.style.display = '';
+                  } else {
+                    parent.style.display = 'none';
+                  }
+                });
+              }}
+            >
+              <option value="all">All Categories</option>
+              {[...new Set(events.map(event => event.category?.name))].filter(Boolean).map((category, index) => (
+                <option key={index} value={category}>{category}</option>
+              ))}
+            </Form.Select>
+          </Col>
           
-          // Get all searchable content from the card
-          const title = card.querySelector('.cap-title')?.textContent || '';
-          const subtitle = card.querySelector('.cap-subtitle')?.textContent || '';
-          const followers = card.querySelector('.cap-followers')?.textContent || '';
-          const bottomTitle = card.querySelector('.cap-bottomTitle')?.textContent || '';
-          const status = card.querySelector('.top-right-12')?.textContent || '';
-          const category = parent.getAttribute('data-event-cat') || '';
-          
-          // Combine all content for searching
-          const cardContent = `${title} ${subtitle} ${followers} ${bottomTitle} ${status} ${category}`.toLowerCase();
-          
-          // Show/hide based on search term
-          if (searchTerm === '' || cardContent.includes(searchTerm)) {
-            parent.style.display = '';
-          } else {
-            parent.style.display = 'none';
-          }
-        });
-      }}
-      className="w-100 radius-8 px-44"
-    />
-    <LuSearch color='#939393' className='search-btn-left' />
-    <LuSlidersHorizontal color='#939393' className='search-btn-right cursor-pointer' />
-  </Col>
-  <Col md={4}>
-    <Form.Select 
-      className="w-100 radius-8"
-      onChange={(e) => {
-        const category = e.target.value;
-        const cards = document.querySelectorAll('.event-calender-card');
-        
-        cards.forEach(card => {
-          const parent = card.closest('[data-event-cat]');
-          if (!parent) return;
-          
-          const cardCategory = parent.getAttribute('data-event-cat');
-          if (category === 'all' || cardCategory === category) {
-            parent.style.display = '';
-          } else {
-            parent.style.display = 'none';
-          }
-        });
-      }}
-    >
-      <option value="all">All Categories</option>
-      {[...new Set(events.map(event => event.category?.name))].filter(Boolean).map((category, index) => (
-        <option key={index} value={category}>{category}</option>
-      ))}
-    </Form.Select>
-  </Col>
-  
-  {events.length < 1 ? (
-    ''
-  ) : (
-    events.map((event, index) => (
-      <Col xxl={4} lg={6} key={index} data-event-cat={event.category?.name}>
-        <Card className="event-calender-card border">
-          <Card.Body>
-            <CategoryBatch category={event.category?.name} />
-            <span class={`rounded-pill position-absolute top-right-12 text-white fitness-info-btn-sm`}>{event.status}</span>
-            <Image src={`${event.banner_image == null ? DummyImage : event.banner_image}`} className='w-100 transition-transform duration-300 hover:scale-110 border-bottom' alt={''} />
-            <div className="d-flex flex-column gap-3 p-3">
-              <div className="d-flex flex-column gap-1">
-                <div className="d-flex justify-content-between gap-2">
-                  <h5 className="cap-title text-dark m-0">{event.title}</h5>
-                  <div className="d-flex align-items-center gap-1 justify-content-end">
-                    <FaRegHeart size={'16px'} color={`#444`} className='cursor-pointer' />
-                    <RiShare2Line size={'18px'} color={`#444`} className='cursor-pointer' />
-                  </div>
-                </div>
-                <p className="cap-subtitle text-dark m-0"><DateTimeFormat dateTime={event.start_time} /> - {event.mode}</p>
-              </div>
-              <div className="d-flex flex-column gap-1 align-items-start">
-                <div className="d-flex gap-1 align-items-center justify-content-start">
-                  <FaRegUser size={'12px'} color={`#444`} />
-                  <p className="cap-followers text-dark m-0">{`${event.followers} Followers`}</p>
-                </div>
-                <p className="cap-bottomTitle text-dark m-0 text-uppercase">Dummy</p>
-              </div>
-            </div>
-          </Card.Body>
-        </Card>
-      </Col>
-    ))
-  )}
-</Row>
+          {events.length < 1 ? (
+            ''
+          ) : (
+            events.map((event, index) => (
+              <Col xxl={4} lg={6} key={index} data-event-cat={event.category?.name}>
+                <Card className="event-calender-card border">
+                  <Card.Body>
+                    <CategoryBatch category={event.category?.name} />
+                    <span class={`rounded-pill position-absolute top-right-12 text-white fitness-info-btn-sm`}>{event.status}</span>
+                    <Image src={`${event.banner_image == null ? DummyImage : event.banner_image}`} className='w-100 transition-transform duration-300 hover:scale-110 border-bottom' alt={''} />
+                    <div className="d-flex flex-column gap-3 p-3">
+                      <div className="d-flex flex-column gap-1">
+                        <div className="d-flex justify-content-between gap-2">
+                          <h5 className="cap-title text-dark m-0">{event.title}</h5>
+                          <div className="d-flex align-items-center gap-1 justify-content-end">
+                            <FaRegHeart size={'16px'} color={`#444`} className='cursor-pointer' />
+                            <RiShare2Line size={'18px'} color={`#444`} className='cursor-pointer' />
+                          </div>
+                        </div>
+                        <p className="cap-subtitle text-dark m-0"><DateTimeFormat dateTime={event.start_time} /> - {event.mode}</p>
+                      </div>
+                      <div className="d-flex flex-column gap-1 align-items-start">
+                        <div className="d-flex gap-1 align-items-center justify-content-start">
+                          <FaRegUser size={'12px'} color={`#444`} />
+                          <p className="cap-followers text-dark m-0">{`${event.followers} Followers`}</p>
+                        </div>
+                        <p className="cap-bottomTitle text-dark m-0 text-uppercase">Dummy</p>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
+          )}
+        </Row>
 
         {/* <Row className="special-post-container">
           {events.length < 1 ? (
