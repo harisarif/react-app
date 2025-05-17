@@ -415,7 +415,6 @@ const UserFeeds = () => {
                       />
                     </Col>
                     <EventSlider/>
-
                   </Row>
                 )}
                 <Row className="special-post-container">

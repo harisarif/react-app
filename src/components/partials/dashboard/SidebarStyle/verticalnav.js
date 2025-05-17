@@ -60,7 +60,7 @@ const VerticalNav = React.memo(() => {
     const {
         notifications,
         totalUnread,
-        markAsRead,
+        markAsRead, 
         deleteNotification,
         setNotifications,
         setTotalUnread

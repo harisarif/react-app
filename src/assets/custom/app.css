@@ -15860,7 +15860,7 @@ img[src*="doubleclick.net"] {
 
 @media(max-width: 768px) {
   :root {
-    --page-width: calc(100% - 180px);
+    --page-width: calc(100% - 120px);
     --page-gap: 20px;
     --left-side-width: 200px;
     --sugession-width: 300px;
@@ -15869,19 +15869,13 @@ img[src*="doubleclick.net"] {
 
 @media(max-width: 700px) {
   :root {
-    --page-width: calc(100% - 120px);
-  }
-}
-
-@media(max-width: 700px) {
-  :root {
-    --page-width: calc(100% - 80px);
+    --page-width: calc(100% - 56px);
   }
 }
 
 @media(max-width: 540px) {
   :root {
-    --page-width: calc(100% - 60px);
+    --page-width: calc(100% - 36px);
   }
 }
 
@@ -17162,7 +17156,8 @@ img[src*="doubleclick.net"] {
 
 
 .crypto-info-btn-sm {
-  background: #FEA832 !important;
+  background: #FFF3E0 !important;
+  Color: #FFA91F !important;
   padding: 1px 11px 0px !important;
   border-radius: 16px !important;
   font-size: 12px !important;
@@ -17170,7 +17165,8 @@ img[src*="doubleclick.net"] {
 }
 
 .fitness-info-btn-sm {
-  background: #00A33C !important;
+  background: #DBFFE8 !important;
+  color: #00A33C !important;
   padding: 1px 11px 0px !important;
   border-radius: 16px !important;
   font-size: 12px !important;
@@ -17178,7 +17174,8 @@ img[src*="doubleclick.net"] {
 }
 
 .info-btn-sm {
-  background: #497BF5 !important;
+  background: #F0E6FE !important;
+  color: #6709F5 !important;
   padding: 1px 11px 0px !important;
   border-radius: 16px !important;
   font-size: 12px !important;
@@ -17195,7 +17192,8 @@ img[src*="doubleclick.net"] {
 }
 
 .tech-info-btn-sm {
-  background: #DC2626 !important;
+  background: #FFE5EA !important;
+  color: #FF3658 !important;
   border-radius: 16px !important;
   padding: 1px 11px 0px !important;
   font-weight: 400 !important;
@@ -18704,6 +18702,10 @@ color: white !important;
 
 .btn-gray-2 {
   background-color: var(--gray-2) !important;
+}
+
+.border-gray-2{
+  border-color: var(--gray-2) !important;
 }
 
 .bg-gray-2 {

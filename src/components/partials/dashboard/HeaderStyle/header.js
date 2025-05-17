@@ -11,6 +11,7 @@ import { getNotificationUrl } from '../../../../utils/notificationHelpers';
 import moment from 'moment';
 import './header.css';
 import SearchBar from '../SearchBar/SearchBar';
+import { LuPanelsTopLeft } from "react-icons/lu";
 
 
 import SettingOffCanvas from "../../../setting/SettingOffCanvas";
@@ -501,9 +502,9 @@ const Header = () => {
               <Nav.Item className="nav-item ms-1">
                 <button className='btn btn-bell'>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="none">
-                    <path d="M8.01516 1.84003C5.04405 1.84003 2.62946 4.25462 2.62946 7.22573V9.81984C2.62946 10.3674 2.39608 11.2022 2.11782 11.6689L1.08556 13.3834C0.448254 14.4426 0.888086 15.6184 2.05499 16.0134C5.92372 17.306 10.0976 17.306 13.9664 16.0134C15.0525 15.6543 15.5282 14.3708 14.9358 13.3834L13.9035 11.6689C13.6342 11.2022 13.4009 10.3674 13.4009 9.81984V7.22573C13.4009 4.26359 10.9773 1.84003 8.01516 1.84003Z" stroke="#1E1E1E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
-                    <path d="M9.67567 2.10091C9.39741 2.02012 9.11017 1.95729 8.81396 1.92138C7.95225 1.81367 7.12644 1.8765 6.35449 2.10091C6.6148 1.43667 7.26109 0.96991 8.01508 0.96991C8.76908 0.96991 9.41536 1.43667 9.67567 2.10091Z" stroke="#1E1E1E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M10.708 16.337C10.708 17.8181 9.49618 19.0299 8.01512 19.0299C7.27907 19.0299 6.59688 18.7247 6.11217 18.24C5.62745 17.7553 5.32227 17.0731 5.32227 16.337" stroke="#1E1E1E" stroke-width="1.5" stroke-miterlimit="10"/>
+                    <path d="M8.01516 1.84003C5.04405 1.84003 2.62946 4.25462 2.62946 7.22573V9.81984C2.62946 10.3674 2.39608 11.2022 2.11782 11.6689L1.08556 13.3834C0.448254 14.4426 0.888086 15.6184 2.05499 16.0134C5.92372 17.306 10.0976 17.306 13.9664 16.0134C15.0525 15.6543 15.5282 14.3708 14.9358 13.3834L13.9035 11.6689C13.6342 11.2022 13.4009 10.3674 13.4009 9.81984V7.22573C13.4009 4.26359 10.9773 1.84003 8.01516 1.84003Z" stroke="#1E1E1E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
+                    <path d="M9.67567 2.10091C9.39741 2.02012 9.11017 1.95729 8.81396 1.92138C7.95225 1.81367 7.12644 1.8765 6.35449 2.10091C6.6148 1.43667 7.26109 0.96991 8.01508 0.96991C8.76908 0.96991 9.41536 1.43667 9.67567 2.10091Z" stroke="#1E1E1E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M10.708 16.337C10.708 17.8181 9.49618 19.0299 8.01512 19.0299C7.27907 19.0299 6.59688 18.7247 6.11217 18.24C5.62745 17.7553 5.32227 17.0731 5.32227 16.337" stroke="#1E1E1E" stroke-width="1.5" stroke-miterlimit="10" />
                   </svg>
                 </button>
               </Nav.Item>
@@ -634,6 +635,21 @@ const Header = () => {
                             </svg>
 
                             Privacy Settings
+                          </div>
+                          <span className="material-symbols-outlined">
+                            keyboard_arrow_right
+                          </span>
+                        </Link>
+                      )}
+
+                      {userData && userData?.permissions[0]?.can_manage_users == 1 && (
+                        <Link
+                          to="#"
+                          className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
+                        >
+                          <div className="d-flex align-items-center gap-3">
+                            <LuPanelsTopLeft />
+                            Equity CRM
                           </div>
                           <span className="material-symbols-outlined">
                             keyboard_arrow_right

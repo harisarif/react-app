@@ -213,60 +213,60 @@ const Suggession = () => {
   const [open_replay2, setopen_replay2] = useState(false)
   const [open_replay3, setopen_replay3] = useState(false)
 
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadContent, setLoadContent] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchPosts = async (pageNumber) => {
-    if (isLoading || !hasMore) return;
+  // const fetchPosts = async (pageNumber) => {
+  //   if (isLoading || !hasMore) return;
 
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`/api/posts?page=${pageNumber}&category=1`);
-      console.log('Fetched posts:', response.data);
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await axios.get(`/api/posts?page=${pageNumber}&category=1`);
+  //     console.log('Fetched posts:', response.data);
 
-      if (pageNumber === 1) {
-        setPosts(response.data.data);
-      } else {
-        setPosts(prevPosts => [...prevPosts, ...response.data.data]);
-      }
+  //     if (pageNumber === 1) {
+  //       setPosts(response.data.data);
+  //     } else {
+  //       setPosts(prevPosts => [...prevPosts, ...response.data.data]);
+  //     }
 
-      setHasMore(response.data.has_more);
-      setLoadContent(false);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-      setLoadContent(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     setHasMore(response.data.has_more);
+  //     setLoadContent(false);
+  //   } catch (error) {
+  //     console.error('Error fetching posts:', error);
+  //     setLoadContent(false);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    setHasMore(false);
-    setIsLoading(false);
-    fetchPosts(1);
-  }, []);
+  // useEffect(() => {
+  //   setHasMore(false);
+  //   setIsLoading(false);
+  //   fetchPosts(1);
+  // }, []);
 
   // Function to check if user has scrolled near the end
-  const handleScroll = useCallback(() => {
-    if (window.innerHeight + document.documentElement.scrollTop
-      === document.documentElement.offsetHeight) {
-      if (hasMore && !isLoading) {
-        setPage(prevPage => {
-          const nextPage = prevPage + 1;
-          fetchPosts(nextPage);
-          return nextPage;
-        });
-      }
-    }
-  }, [hasMore, isLoading]);
+  // const handleScroll = useCallback(() => {
+  //   if (window.innerHeight + document.documentElement.scrollTop
+  //     === document.documentElement.offsetHeight) {
+  //     if (hasMore && !isLoading) {
+  //       setPage(prevPage => {
+  //         const nextPage = prevPage + 1;
+  //         fetchPosts(nextPage);
+  //         return nextPage;
+  //       });
+  //     }
+  //   }
+  // }, [hasMore, isLoading]);
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, [handleScroll]);
 
   const [imageController, setImageController] = useState({
     toggler: false,
@@ -287,9 +287,9 @@ const Suggession = () => {
     };
   });
 
-  const handleNewPost = () => {
-    fetchPosts(1);
-  };
+  // const handleNewPost = () => {
+  //   fetchPosts(1);
+  // };
 
   const [userCanCreatePostCategories, setUserCanCreatePostCategories] = useState([]);
   useEffect(() => {
@@ -366,10 +366,10 @@ const Suggession = () => {
       });
 
       if (response.data.status == 'success') {
-        console.log("follow")
-        setHasMore(false);
-        setIsLoading(false);
-        fetchPosts(1);
+        // console.log("follow")
+        // setHasMore(false);
+        // setIsLoading(false);
+        // fetchPosts(1);
 
         // setPosts(posts.map(p => {
         //   if (p.user?.id === userId) {
