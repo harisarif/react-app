@@ -95,10 +95,10 @@ const JobApplications = () => {
             )}
           </div>
           <div className='d-flex flex-column gap-2'>
-            <h5 className="card-title mb-0">{application.job.title}</h5>
+            <h5 className="card-title mb-0">{application?.job?.title}</h5>
             <div className='d-flex flex-column gap-0'>
-              <span className='text-dark'><strong className="card-sub-title text-dark">Applicant:</strong> {application.user.name}</span>
-              <span className='text-dark mt-n1'><strong className="card-sub-title">Applied on:</strong> {new Date(application.created_at).toLocaleDateString()}</span>
+              <span className='text-dark'><strong className="card-sub-title text-dark">Applicant:</strong> {application?.user?.name}</span>
+              <span className='text-dark mt-n1'><strong className="card-sub-title">Applied on:</strong> {new Date(application?.created_at).toLocaleDateString()}</span>
             </div>
           </div>
           <div className='d-flex gap-2 justify-content-start'>

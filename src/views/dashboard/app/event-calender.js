@@ -198,7 +198,7 @@ const EventCalender = () => {
   const handleInputChange = (e) => {
     const { name, value, files, type } = e.target;
     if (name === "media") {
-      setFormData({ ...formData, [name]: files });
+      setFormData({ ...formData, media: files });
     } else {
       setFormData(prev => ({
         ...prev,
@@ -220,15 +220,15 @@ const EventCalender = () => {
         }
       });
 
-      // Handle media files
-      if (formData.media && formData.media.length > 0) {
-        for (let i = 0; i < formData.media.length; i++) {
-          const file = formData.media[i];
-          if (file instanceof File) {
-            formDataToSend.append('media[]', file);
-          }
-        }
-      }
+      // // Handle media files
+      // if (formData.media && formData.media.length > 0) {
+      //   for (let i = 0; i < formData.media.length; i++) {
+      //     const file = formData.media[i];
+      //     if (file instanceof File) {
+      //       formDataToSend.append('media[]', file);
+      //     }
+      //   }
+      // }
       if (selectedEvent) {
         await axios.put(`/api/events/${selectedEvent.id}`, formDataToSend);
       } else {
@@ -374,16 +374,24 @@ const EventCalender = () => {
   };
 
   const handleCroppedImage = async (croppedImageBlob) => {
-    // Convert the Blob to a base64 string
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64data = reader.result; // This is the base64 string
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        banner_image: base64data // Add the base64 string to formData
-      }));
-    };
-    reader.readAsDataURL(croppedImageBlob); // Read the Blob as a data URL
+    // Create a FormData object
+    
+    const formData = new FormData();
+    
+    // Create a File object from the Blob
+    const file = new File([croppedImageBlob], 'cropped-image.jpg', {
+      type: 'image/jpeg'
+    });
+    
+    // Append the file to FormData
+    formData.append('media', file);
+    
+    // Store the FormData object
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      media: formData
+    }));
+    alert('handleCroppedImage');
   };
   const handleSaveBackgroundCrop = async () => {
     try {
@@ -402,8 +410,9 @@ const EventCalender = () => {
 
       const croppedImageBlob = await generateBackgroundCroppedImage(completedBackgroundCrop);
       console.log('Generated cropped background image blob:', croppedImageBlob);
+      
+      handleCroppedImage(croppedImageBlob); // Call the function to handle conversion
       if (croppedImageBlob) {
-        handleCroppedImage(croppedImageBlob); // Call the function to handle conversion
         setCroppedImageBlob(croppedImageBlob);
 
         // alert();
@@ -1056,7 +1065,116 @@ const EventCalender = () => {
                 style={{ height: '200px', marginBottom: '50px' }}
               /> */}
             </Form.Group>
-
+            <Row>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Basic Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    required
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Standard Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="standard_price"
+                    value={formData.standard_price}
+                    onChange={handleInputChange}
+                    placeholder=""
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Premium Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="premium_price"
+                    value={formData.premium_price}
+                    onChange={handleInputChange}
+                    placeholder=""
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Mode</Form.Label>
+                  <Form.Select
+                    name="mode"
+                    value={formData.mode}
+                    onChange={handleInputChange}
+                    className='radius-8'
+                  >
+                    <option value="1">Online Event</option>
+                    <option value="2">In-person Event</option>
+                    <option value="3">Hybrid Event</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+            <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Country</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    required
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Location</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    required
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Lat</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="lat"
+                    value={formData.lat}
+                    onChange={handleInputChange}
+                    placeholder=""
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Long</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="long"
+                    value={formData.long}
+                    onChange={handleInputChange}
+                    placeholder=""
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
             <Row>
               <Col sm={12}>
                 <Form.Group className="mb-3">
@@ -1086,6 +1204,19 @@ const EventCalender = () => {
               </Col>
               <Col sm={6}>
                 <Form.Group className="mb-3">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    placeholder="Set Status"
+                    className='radius-8'
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3">
                   <Form.Label>End Time</Form.Label>
                   <Form.Control
                     type="time"
@@ -1096,6 +1227,8 @@ const EventCalender = () => {
                     className='radius-8'
                   />
                 </Form.Group>
+              </Col>
+              <Col sm={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Attachments (optional)</Form.Label>
                   <Form.Control

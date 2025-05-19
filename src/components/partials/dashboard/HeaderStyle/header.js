@@ -644,12 +644,13 @@ const Header = () => {
 
                       {userData && userData?.permissions[0]?.can_manage_users == 1 && (
                         <Link
-                          to="#"
+                          to="https://equity-crm.techtrack.online"
+                          target="_blank"
                           className="d-flex justify-content-between align-items-center gap-3 text-dark py-2 px-3 profile-link"
                         >
                           <div className="d-flex align-items-center gap-3">
                             <LuPanelsTopLeft />
-                            Equity CRM
+                            Equity CRM Dashboard
                           </div>
                           <span className="material-symbols-outlined">
                             keyboard_arrow_right

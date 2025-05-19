@@ -33,6 +33,41 @@ const ManageUsers = () => {
     setShowEditModal(true);
   };
 
+  const handleDeleteClick = async (user) => {
+    try {
+      // Show confirmation dialog
+      const confirmDelete = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You are about to delete ${user.name}. This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      });
+
+      if (confirmDelete.isConfirmed) {
+        const response = await axios.delete(`/api/del-user/${user.id}`);
+        fetchUsers();
+        
+        // Show success message
+        Swal.fire(
+          'Deleted!',
+          'User has been deleted successfully.',
+          'success'
+        );
+      }
+    } catch (error) {
+      // Show error message
+      Swal.fire(
+        'Error!',
+        'Failed to delete user. Please try again.',
+        'error'
+      );
+      console.error('Error deleting user:', error);
+    }
+  };
+
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -72,6 +107,9 @@ const ManageUsers = () => {
                   <div className='user-action'>
                     <Button variant="secondary user-edit-btn" onClick={() => handleEditClick(user)}>
                       Edit Permissions
+                    </Button>
+                    <Button variant="danger user-edit-btn" onClick={() => handleDeleteClick(user)}>
+                      Delete
                     </Button>
                   </div>
                 </Card.Body>
