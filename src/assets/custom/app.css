@@ -19510,3 +19510,68 @@ div:where(.swal2-container) {
   align-items: center;
   justify-content: center;
 }
+
+.create-new-event-modal {
+  max-height: 100vh;
+  overflow-y: scroll;
+
+  .modal-body {
+    max-height: 760px;
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  .bottom-button {
+    padding: 14px;
+    border-top: 1px solid var(--bs-modal-header-border-color);
+  }
+
+  .dropzone-container {
+    max-height: 200px;
+    height: 100%;
+    width: 100%;
+
+  }
+
+  .modal-content {
+    height: 91vh;
+  }
+
+  .modal-inner-dropdown {
+    width: 95% !important;
+  }
+}
+
+@media (min-width: 991px) and (max-width: 1606px) {
+  .modal-inner-dropdown {
+    width: 96% !important;
+  }
+}
+
+@media (min-width: 450px) {
+  .create-new-event-modal {
+    .modal-step-main-div {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      width: 180px !important;
+      height: 50px;
+
+      & small {
+        padding-top: 2px;
+      }
+    }
+  }
+}
+
+.education-modal-add-new-box{
+  padding: 10px !important;
+  & tetxarea{
+        min-height: 93px !important;
+    max-height: 200px;
+  }
+}
+
+.educ-modal-image-picker{
+   height: 200px; 
+}

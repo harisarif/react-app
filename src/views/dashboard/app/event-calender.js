@@ -113,7 +113,7 @@ const EventCalender = () => {
     event_type: '',
     event_mode: '',
     title: '',
-    subtitle: '', 
+    subtitle: '',
     description: '',
     price: '',
     standard_price: '',
@@ -413,17 +413,17 @@ const EventCalender = () => {
 
   const handleCroppedImage = async (croppedImageBlob) => {
     // Create a FormData object
-    
+
     const formData = new FormData();
-    
+
     // Create a File object from the Blob
     const file = new File([croppedImageBlob], 'cropped-image.jpg', {
       type: 'image/jpeg'
     });
-    
+
     // Append the file to FormData
     formData.append('media', file);
-    
+
     // Store the FormData object
     setFormData(prevFormData => ({
       ...prevFormData,
@@ -448,7 +448,7 @@ const EventCalender = () => {
 
       const croppedImageBlob = await generateBackgroundCroppedImage(completedBackgroundCrop);
       console.log('Generated cropped background image blob:', croppedImageBlob);
-      
+
       handleCroppedImage(croppedImageBlob); // Call the function to handle conversion
       if (croppedImageBlob) {
         setCroppedImageBlob(croppedImageBlob);
@@ -918,231 +918,233 @@ const EventCalender = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showModal} onHide={handleModalClose} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>{selectedEvent ? 'Edit Event' : 'Create New Event'}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div style={stepStyles.stepContainer}>
-          <div 
-            style={{
-              ...stepStyles.step,
-              ...(currentStep === 1 ? stepStyles.activeStep : {})
-            }}
-            onClick={() => setCurrentStep(1)}
-          >
-            <div>Step 1</div>
-            <small>Basic Info</small>
+      <Modal show={showModal} onHide={handleModalClose} size="lg" className="create-new-event-modal">
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedEvent ? 'Edit Event' : 'Create New Event'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="modal-body">
+          <div style={stepStyles.stepContainer}>
+            <div
+            class="modal-step-main-div"
+              style={{
+                ...stepStyles.step,
+                ...(currentStep === 1 ? stepStyles.activeStep : {})
+              }}
+              onClick={() => setCurrentStep(1)}
+            >
+              <div>Step 1</div>
+              <small>Basic Info</small>
+            </div>
+            <div
+              class="modal-step-main-div"
+              style={{
+                ...stepStyles.step,
+                ...(currentStep === 2 ? stepStyles.activeStep : {})
+              }}
+              onClick={() => setCurrentStep(2)}
+            >
+              <div>Step 2</div>
+              <small>Additional Details</small>
+            </div>
           </div>
-          <div 
-            style={{
-              ...stepStyles.step,
-              ...(currentStep === 2 ? stepStyles.activeStep : {})
-            }}
-            onClick={() => setCurrentStep(2)}
-          >
-            <div>Step 2</div>
-            <small>Additional Details</small>
-          </div>
-        </div>
 
-        {currentStep === 1 ? (
-          <Form>
-            <div className="mb-4">
-              <label className="dropzone-container" style={{ aspectRatio: '16/9' }}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleBackgroundImageChange}
-                  className="d-none"
-                />
-                <div className="dropzone-content">
-                  {croppedGETImageBlob ? (
-                    <img
-                      src={URL.createObjectURL(croppedGETImageBlob)}
-                      alt="Preview"
-                      className="img-fluid"
-                    />
-                  ) : (
-                    <div className="text-center">
-                      <i className="fas fa-cloud-upload-alt fa-3x mb-2"></i>
-                      <p>Drag and drop or click to upload image (16:9)</p>
+          {currentStep === 1 ? (
+            <Form>
+              <div className="mb-4">
+                <label className="dropzone-container " style={{ aspectRatio: '16/9' }}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBackgroundImageChange}
+                    className="d-none"
+                  />
+                  <div className="dropzone-content">
+                    {croppedGETImageBlob ? (
+                      <img
+                        src={URL.createObjectURL(croppedGETImageBlob)}
+                        alt="Preview"
+                        className="img-fluid"
+                      />
+                    ) : (
+                      <div className="text-center">
+                        <i className="fas fa-cloud-upload-alt fa-3x mb-2"></i>
+                        <p>Drag and drop or click to upload image (16:9)</p>
+                      </div>
+                    )}
+                  </div>
+                </label>
+              </div>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Category</Form.Label>
+                <Form.Select
+                  name="category_id"
+                  value={formData.category_id}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Event Type</Form.Label>
+                <Form.Select
+                  name="event_type"
+                  value={formData.event_type}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Event Type</option>
+                  {eventTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Event Mode</Form.Label>
+                <Form.Select
+                  name="event_mode"
+                  value={formData.event_mode}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Event Mode</option>
+                  {eventModes.map((mode) => (
+                    <option key={mode} value={mode}>
+                      {mode}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Select Organizer (optional)</Form.Label>
+                <div>
+                  <div
+                    className="d-flex align-items-center justify-content-between border rounded p-2 mb-2"
+                    style={{ cursor: "pointer", background: "#fff" }}
+                    onClick={() => setShowDropdown(!showDropdown)}
+                  >
+                    <div className="d-flex align-items-center">
+                      {selectedAdmin ? (
+                        <>
+                          <img
+                            src={getProfileImageUrl(admins.find(a => a.id === selectedAdmin))}
+                            alt={admins.find(a => a.id === selectedAdmin)?.name}
+                            className="rounded-circle me-2"
+                            style={{ width: "30px", height: "30px" }}
+                          />
+                          <h6 className="mb-0">
+                            {admins.find(a => a.id === selectedAdmin)?.name || "Select Organizer"}
+                          </h6>
+                        </>
+                      ) : (
+                        <h6 className="mb-0 text-muted">Select Organizer</h6>
+                      )}
+                    </div>
+                    <i className={`fas fa-chevron-${showDropdown ? "up" : "down"}`}></i>
+                  </div>
+
+
+                  {showDropdown && (
+                    <div
+                      className="border rounded p-2 position-absolute bg-white shadow modal-inner-dropdown"
+                      style={{ maxHeight: "250px", width: "100%", overflowY: "auto", zIndex: 1000 }}
+                    >
+
+                      <Form.Control
+                        type="text"
+                        placeholder="Search Users..."
+                        value={searchQuery}
+                        onChange={(e) => {
+                          const query = e.target.value;
+                          axios.get(`/api/get-admins?search=${query}`)
+                            .then(response => {
+                              const adminsArray = response.data.users || [];
+                              const userArray = userData ? [userData] : [];
+                              setAdmins([...userArray, ...adminsArray].filter((v, i, a) => a.findIndex(v2 => v2.id === v.id) === i));
+                            })
+                            .catch(error => console.log(error));
+                          setSearchQuery(query);
+                        }}
+                        autoFocus
+                      />
+
+
+                      <div className="mt-2">
+                        {admins?.length > 0 ? (
+                          admins.slice(0, 3).map((admin) => (
+                            <Card
+                              key={admin.id}
+                              className={`mb-1 p-2 ${selectedAdmin === admin.id ? "bg-light" : ""}`}
+                              style={{ cursor: "pointer", fontSize: "14px" }}
+                              onClick={() => {
+                                handleAdminSelect(admin.id);
+                                setShowDropdown(false);
+                              }}
+                            >
+                              <Card.Body className="d-flex justify-content-between align-items-center p-2">
+                                <div className="d-flex align-items-center">
+                                  <img
+                                    src={getProfileImageUrl(admin)}
+                                    alt={admin.name}
+                                    className="rounded-circle me-2"
+                                    style={{ width: "25px", height: "25px" }}
+                                  />
+                                  <h6 className="mb-0">{admin.name}</h6>
+                                </div>
+                                {selectedAdmin === admin.id && <i className="fas fa-check text-success"></i>}
+                              </Card.Body>
+                            </Card>
+                          ))
+                        ) : (
+                          <p className="text-muted text-center">No admins found</p>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
-              </label>
-            </div>
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Category</Form.Label>
-              <Form.Select
-                name="category_id"
-                value={formData.category_id}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                  className="radius-8"
+                  placeholder="Enter Title"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Event Type</Form.Label>
-              <Form.Select
-                name="event_type"
-                value={formData.event_type}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Event Type</option>
-                {eventTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Subtitle</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="subtitle"
+                  value={formData.subtitle}
+                  onChange={handleInputChange}
+                  className="radius-8"
+                  placeholder="Enter Subitle"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Event Mode</Form.Label>
-              <Form.Select
-                name="event_mode"
-                value={formData.event_mode}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Event Mode</option>
-                {eventModes.map((mode) => (
-                  <option key={mode} value={mode}>
-                    {mode}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Select Organizer (optional)</Form.Label>
-              <div>
-                <div
-                  className="d-flex align-items-center justify-content-between border rounded p-2 mb-2"
-                  style={{ cursor: "pointer", background: "#fff" }}
-                  onClick={() => setShowDropdown(!showDropdown)}
-                >
-                  <div className="d-flex align-items-center">
-                    {selectedAdmin ? (
-                      <>
-                        <img
-                          src={getProfileImageUrl(admins.find(a => a.id === selectedAdmin))}
-                          alt={admins.find(a => a.id === selectedAdmin)?.name}
-                          className="rounded-circle me-2"
-                          style={{ width: "30px", height: "30px" }}
-                        />
-                        <h6 className="mb-0">
-                          {admins.find(a => a.id === selectedAdmin)?.name || "Select Organizer"}
-                        </h6>
-                      </>
-                    ) : (
-                      <h6 className="mb-0 text-muted">Select Organizer</h6>
-                    )}
-                  </div>
-                  <i className={`fas fa-chevron-${showDropdown ? "up" : "down"}`}></i>
-                </div>
-
-
-                {showDropdown && (
-                  <div
-                    className="border rounded p-2 position-absolute bg-white shadow"
-                    style={{ maxHeight: "250px", width: "100%", overflowY: "auto", zIndex: 1000 }}
-                  >
-
-                    <Form.Control
-                      type="text"
-                      placeholder="Search Users..."
-                      value={searchQuery}
-                      onChange={(e) => {
-                        const query = e.target.value;
-                        axios.get(`/api/get-admins?search=${query}`)
-                          .then(response => {
-                            const adminsArray = response.data.users || [];
-                            const userArray = userData ? [userData] : [];
-                            setAdmins([...userArray, ...adminsArray].filter((v, i, a) => a.findIndex(v2 => v2.id === v.id) === i));
-                          })
-                          .catch(error => console.log(error));
-                        setSearchQuery(query);
-                      }}
-                      autoFocus
-                    />
-
-
-                    <div className="mt-2">
-                      {admins?.length > 0 ? (
-                        admins.slice(0, 3).map((admin) => (
-                          <Card
-                            key={admin.id}
-                            className={`mb-1 p-2 ${selectedAdmin === admin.id ? "bg-light" : ""}`}
-                            style={{ cursor: "pointer", fontSize: "14px" }}
-                            onClick={() => {
-                              handleAdminSelect(admin.id);
-                              setShowDropdown(false);
-                            }}
-                          >
-                            <Card.Body className="d-flex justify-content-between align-items-center p-2">
-                              <div className="d-flex align-items-center">
-                                <img
-                                  src={getProfileImageUrl(admin)}
-                                  alt={admin.name}
-                                  className="rounded-circle me-2"
-                                  style={{ width: "25px", height: "25px" }}
-                                />
-                                <h6 className="mb-0">{admin.name}</h6>
-                              </div>
-                              {selectedAdmin === admin.id && <i className="fas fa-check text-success"></i>}
-                            </Card.Body>
-                          </Card>
-                        ))
-                      ) : (
-                        <p className="text-muted text-center">No admins found</p>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-                className="radius-8"
-                placeholder="Enter Title"
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Subtitle</Form.Label>
-              <Form.Control
-                type="text"
-                name="subtitle"
-                value={formData.subtitle}
-                onChange={handleInputChange}
-                className="radius-8"
-                placeholder="Enter Subitle"
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <ReactQuill
-                value={formData.description}
-                onChange={(value) => setFormData({ ...formData, description: value })}
-                modules={modules}
-              />
-              {/* <ReactQuill
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <ReactQuill
+                  value={formData.description}
+                  onChange={(value) => setFormData({ ...formData, description: value })}
+                  modules={modules}
+                />
+                {/* <ReactQuill
                 theme="snow"
                 name="description"
                 value={formData.description}
@@ -1155,77 +1157,77 @@ const EventCalender = () => {
                 modules={modules}
                 style={{ height: '200px', marginBottom: '50px' }}
               /> */}
-            </Form.Group>
-          </Form>
-        ) : (
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleInputChange}
-                placeholder="Enter price"
-              />
-            </Form.Group>
+              </Form.Group>
+            </Form>
+          ) : (
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  placeholder="Enter price"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Standard Price</Form.Label>
-              <Form.Control
-                type="number"
-                name="standard_price"
-                value={formData.standard_price}
-                onChange={handleInputChange}
-                placeholder="Enter standard price"
-              />
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Standard Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="standard_price"
+                  value={formData.standard_price}
+                  onChange={handleInputChange}
+                  placeholder="Enter standard price"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Premium Price</Form.Label>
-              <Form.Control
-                type="number"
-                name="premium_price"
-                value={formData.premium_price}
-                onChange={handleInputChange}
-                placeholder="Enter premium price"
-              />
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Premium Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="premium_price"
+                  value={formData.premium_price}
+                  onChange={handleInputChange}
+                  placeholder="Enter premium price"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Followers</Form.Label>
-              <Form.Control
-                type="number"
-                name="followers"
-                value={formData.followers}
-                onChange={handleInputChange}
-                placeholder="Enter number of followers"
-              />
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Followers</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="followers"
+                  value={formData.followers}
+                  onChange={handleInputChange}
+                  placeholder="Enter number of followers"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Location</Form.Label>
-              <Form.Control
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleInputChange}
-                placeholder="Enter location"
-              />
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleInputChange}
+                  placeholder="Enter location"
+                />
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Country</Form.Label>
-              <Form.Control
-                type="text"
-                name="country"
-                value={formData.country}
-                onChange={handleInputChange}
-                placeholder="Enter country"
-              />
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Country</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  placeholder="Enter country"
+                />
+              </Form.Group>
 
-            {/* <Form.Group className="mb-3">
+              {/* <Form.Group className="mb-3">
               <Form.Label>Type</Form.Label>
               <Form.Select
                   name="type"
@@ -1239,7 +1241,7 @@ const EventCalender = () => {
               </Form.Select>
             </Form.Group> */}
 
-            {/* <Form.Group className="mb-3">
+              {/* <Form.Group className="mb-3">
               <Form.Label>Visibility</Form.Label>
               <Form.Select
                 name="is_active"
@@ -1251,26 +1253,26 @@ const EventCalender = () => {
               </Form.Select>
             </Form.Group> */}
 
-          </Form>
-        )}
-      </Modal.Body>
-      <div className="d-flex justify-content-between mt-4">
-        {currentStep > 1 && (
-          <Button variant="outline-secondary" onClick={handleBack}>
-            Back
-          </Button>
-        )}
-        {currentStep < 2 ? (
-          <Button variant="primary" onClick={handleNext} className="ms-auto">
-            Next
-          </Button>
-        ) : (
-          <Button type="submit" variant="primary" className="ms-auto">
-            {selectedEvent ? 'Update Event' : 'Create Event'}
-          </Button>
-        )}
-      </div>
-    </Modal>
+            </Form>
+          )}
+        </Modal.Body>
+        <div className="d-flex justify-content-between  bottom-button">
+          {currentStep > 1 && (
+            <Button variant="outline-secondary" onClick={handleBack}>
+              Back
+            </Button>
+          )}
+          {currentStep < 2 ? (
+            <Button variant="primary" onClick={handleNext} className="ms-auto">
+              Next
+            </Button>
+          ) : (
+            <Button type="submit" variant="primary" className="ms-auto">
+              {selectedEvent ? 'Update Event' : 'Create Event'}
+            </Button>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };

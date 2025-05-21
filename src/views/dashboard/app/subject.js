@@ -185,14 +185,14 @@ const CreateSubjectModal = ({ show, handleClose }) => {
     <Modal
       show={show}
       onHide={handleModalClose}
-      size="xl"
+      size="lg"
       centered
       dialogClassName="modal-90vh"
     >
       <Modal.Header closeButton>
         <Modal.Title>Create New Subject</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="mx-auto model-create-new-subject" style={{ width: '60%', height: 'calc(90vh - 120px)', overflowY: 'auto' }}>
+      <Modal.Body className="mx-auto model-create-new-subject" style={{ width: '96%', height: 'calc(90vh - 120px)', overflowY: 'auto' }}>
         <Form onSubmit={handleFormSubmit}>
           {step === 1 && (
             <>
@@ -293,7 +293,7 @@ const CreateSubjectModal = ({ show, handleClose }) => {
                 <Form.Label>Subject Image</Form.Label>
                 <div
                   {...getImageRootProps()}
-                  className="dropzone border rounded p-3 text-center radius-10 border-2-dash"
+                  className="dropzone border rounded p-3 text-center radius-10 border-2-dash educ-modal-image-picker"
                   style={{ borderColor: errors.image ? '#cf0202' : '', cursor: 'pointer' }}
 
                 >
@@ -465,7 +465,7 @@ const CreateSubjectModal = ({ show, handleClose }) => {
                         }}
                         className="radius-10"
                         style={{
-                          minHeight: '98px',
+                          minHeight: '93px',
                           maxHeight: '200px',
                           borderColor: errors[`transcriptText${index}`] ? '#cf0202' : '',
                         }}
@@ -521,7 +521,7 @@ const CreateSubjectModal = ({ show, handleClose }) => {
                     {index === formData.transcripts.length - 1 ? (
                       <Button
                         variant="success"
-                        className="flex-grow-1 w-100 btn-purpule py-2 radius-10 border-0"
+                        className="flex-grow-1 w-100 btn-purpule py-2 radius-10 border-0 education-modal-add-new-box"
                         onClick={handleAddTranscript}
                       >
                         Add
