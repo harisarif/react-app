@@ -51,12 +51,37 @@ const CategoryBatch = ({ category }) => {
     classes = 'text-white crypto-info-btn-sm';
   } else if (category === 'Fitness') {
     classes = 'text-white fitness-info-btn-sm';
+  } else if (category === 'Mindset') {
+    classes = 'text-white mindset-info-btn-sm';
+  } else {
+    classes = 'text-white other-info-btn-sm';
   }
   const firstWord = category?.split(' ')[0] || '';
   return (
     <span class={`rounded-pill position-absolute top-left-12 ${classes}`}>{firstWord}</span>
   );
 }
+
+const stepStyles = {
+  stepContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '2rem',
+    gap: '1rem'
+  },
+  step: {
+    width: '150px',
+    padding: '0.75rem',
+    textAlign: 'center',
+    borderRadius: '8px',
+    backgroundColor: '#f8f9fa',
+    cursor: 'pointer'
+  },
+  activeStep: {
+    backgroundColor: '#6c5dd3',
+    color: 'white'
+  }
+};
 
 const EventCalender = () => {
   const [showModalDetail, setShowModalDetail] = useState(false);
@@ -81,20 +106,33 @@ const EventCalender = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { userData } = useContext(UserContext);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    // organizer_id:'',
-    // banner_image: '',
-    // main_image: '',
     media: null,
+    category_id: '',
+    event_type: '',
+    event_mode: '',
     title: '',
-    subtitle: '',
+    subtitle: '', 
     description: '',
-    event_date: '',
-    start_time: '',
-    end_time: '',
-    // type: '',
-    // is_active: true
+    price: '',
+    standard_price: '',
+    premium_price: '',
+    followers: '',
+    location: '',
+    country: ''
   });
+
+  const eventTypes = ['Workshop', 'Seminar', 'Conference', 'Webinar'];
+  const eventModes = ['Online', 'Offline', 'Hybrid'];
+
+  const handleNext = () => {
+    setCurrentStep(2);
+  };
+
+  const handleBack = () => {
+    setCurrentStep(1);
+  };
 
   const [isDirty, setIsDirty] = useState(false);
   const [showDiscardModal, setShowDiscardModal] = useState(false);
@@ -672,10 +710,19 @@ const EventCalender = () => {
                           <div className="d-flex align-items-center gap-1 justify-content-end">
                             <FaRegHeart size={'16px'} color={`#444`} className='cursor-pointer' />
                             <RiShare2Line size={'18px'} color={`#444`} className='cursor-pointer' />
-                            <SlOptionsVertical color={`#444`} className="cursor-pointer" size={'14px'} />
+                            <Dropdown>
+                              <Dropdown.Toggle variant="Link" id="dropdown-basic" className="p-0 d-flex align-items-start border-0">
+                                <SlOptionsVertical color={`#444`} className="cursor-pointer" size={'14px'} />
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item href="#">Edit</Dropdown.Item>
+                                <Dropdown.Item href="#">Delete</Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
                           </div>
                         </div>
-                        <p className="cap-subtitle text-dark m-0"><DateTimeFormat dateTime={event.start_time} /> - {event.mode}</p>
+                        <p className="cap-subtitle text-dark m-0"><DateTimeFormat dateTime={event.start_time} /> {event.mode && (`- ${event.mode}`)}</p>
                       </div>
                       <div className="d-flex flex-column gap-1 align-items-start">
                         <div className="d-flex gap-1 align-items-center justify-content-start">
@@ -871,59 +918,107 @@ const EventCalender = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showModal} onHide={() => handleModalClose()} size="lg">
-        <Modal.Header className="d-flex justify-content-between px-3 py-2">
-          <Modal.Title className="d-flex align-items-center hover-bg mx-auto">
-            <div className="d-flex align-items-center flex-grow-1">
-              {selectedEvent ? 'Edit Event' : 'Create New Event'}
-            </div>
-          </Modal.Title>
-          <Link to="#" className="lh-1" onClick={() => setShowModal(false)}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <rect x="0.21875" y="0.21875" width="27.5625" height="27.5625" rx="13.7812" stroke="#CCCCCC" stroke-width="0.4375" />
-              <path d="M10.6982 17.3016L17.3016 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M17.3016 17.3016L10.6982 10.6982" stroke="#292D32" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </Link>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Banner Image</Form.Label>
-              <div className="profile-header" style={{
-                backgroundImage: `url(${croppedGETImageBlob ? URL.createObjectURL(croppedGETImageBlob) : process.env.REACT_APP_BACKEND_BASE_URL + '/' + selectedEvent?.banner_image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                borderRadius: '0.25rem',
-                padding: '7rem',
-                position: 'relative',
-                marginBottom: '2rem'
-              }}>
-                <div className="position-relative">
+      <Modal show={showModal} onHide={handleModalClose} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>{selectedEvent ? 'Edit Event' : 'Create New Event'}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={stepStyles.stepContainer}>
+          <div 
+            style={{
+              ...stepStyles.step,
+              ...(currentStep === 1 ? stepStyles.activeStep : {})
+            }}
+            onClick={() => setCurrentStep(1)}
+          >
+            <div>Step 1</div>
+            <small>Basic Info</small>
+          </div>
+          <div 
+            style={{
+              ...stepStyles.step,
+              ...(currentStep === 2 ? stepStyles.activeStep : {})
+            }}
+            onClick={() => setCurrentStep(2)}
+          >
+            <div>Step 2</div>
+            <small>Additional Details</small>
+          </div>
+        </div>
 
-                  <div className="upload-background-button" style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    zIndex: 1
-                  }}>
-                    <input
-                      type="file"
-                      id="background-upload"
-                      className="file-upload"
-                      accept="image/*"
-                      onChange={handleBackgroundImageChange}
-                      style={{ display: 'none' }}
+        {currentStep === 1 ? (
+          <Form>
+            <div className="mb-4">
+              <label className="dropzone-container" style={{ aspectRatio: '16/9' }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleBackgroundImageChange}
+                  className="d-none"
+                />
+                <div className="dropzone-content">
+                  {croppedGETImageBlob ? (
+                    <img
+                      src={URL.createObjectURL(croppedGETImageBlob)}
+                      alt="Preview"
+                      className="img-fluid"
                     />
-                    <label htmlFor="background-upload" className="btn btn-primary btn-sm">
-                      <svg width="14" height="14" viewBox="0 0 24 24" className="me-2">
-                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                      </svg>
-                      Add Banner Image
-                    </label>
-                  </div>
+                  ) : (
+                    <div className="text-center">
+                      <i className="fas fa-cloud-upload-alt fa-3x mb-2"></i>
+                      <p>Drag and drop or click to upload image (16:9)</p>
+                    </div>
+                  )}
                 </div>
-              </div>
+              </label>
+            </div>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>
+              <Form.Select
+                name="category_id"
+                value={formData.category_id}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Event Type</Form.Label>
+              <Form.Select
+                name="event_type"
+                value={formData.event_type}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Event Type</option>
+                {eventTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Event Mode</Form.Label>
+              <Form.Select
+                name="event_mode"
+                value={formData.event_mode}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Event Mode</option>
+                {eventModes.map((mode) => (
+                  <option key={mode} value={mode}>
+                    {mode}
+                  </option>
+                ))}
+              </Form.Select>
             </Form.Group>
 
             <Form.Group>
@@ -1042,14 +1137,10 @@ const EventCalender = () => {
 
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={5}
-                name="description"
+              <ReactQuill
                 value={formData.description}
-                onChange={handleInputChange}
-                className='radius-8'
-                placeholder='Write here...'
+                onChange={(value) => setFormData({ ...formData, description: value })}
+                modules={modules}
               />
               {/* <ReactQuill
                 theme="snow"
@@ -1065,183 +1156,74 @@ const EventCalender = () => {
                 style={{ height: '200px', marginBottom: '50px' }}
               /> */}
             </Form.Group>
-            <Row>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Basic Price</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    required
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Standard Price</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="standard_price"
-                    value={formData.standard_price}
-                    onChange={handleInputChange}
-                    placeholder=""
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Premium Price</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="premium_price"
-                    value={formData.premium_price}
-                    onChange={handleInputChange}
-                    placeholder=""
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Mode</Form.Label>
-                  <Form.Select
-                    name="mode"
-                    value={formData.mode}
-                    onChange={handleInputChange}
-                    className='radius-8'
-                  >
-                    <option value="1">Online Event</option>
-                    <option value="2">In-person Event</option>
-                    <option value="3">Hybrid Event</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-            <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    required
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Location</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleInputChange}
-                    required
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Lat</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="lat"
-                    value={formData.lat}
-                    onChange={handleInputChange}
-                    placeholder=""
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Long</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="long"
-                    value={formData.long}
-                    onChange={handleInputChange}
-                    placeholder=""
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={12}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Event Date</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="event_date"
-                    value={formData.event_date}
-                    onChange={handleInputChange}
-                    required
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Start Time</Form.Label>
-                  <Form.Control
-                    type="time"
-                    name="start_time"
-                    value={formData.start_time}
-                    onChange={handleInputChange}
-                    placeholder="Set Start Time"
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    placeholder="Set Status"
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>End Time</Form.Label>
-                  <Form.Control
-                    type="time"
-                    name="end_time"
-                    value={formData.end_time}
-                    onChange={handleInputChange}
-                    placeholder="Set End Time"
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Attachments (optional)</Form.Label>
-                  <Form.Control
-                    type="file"
-                    name="media"
-                    multiple
-                    onChange={handleInputChange}
-                    accept="*/*"
-                    className='radius-8'
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+          </Form>
+        ) : (
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                placeholder="Enter price"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Standard Price</Form.Label>
+              <Form.Control
+                type="number"
+                name="standard_price"
+                value={formData.standard_price}
+                onChange={handleInputChange}
+                placeholder="Enter standard price"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Premium Price</Form.Label>
+              <Form.Control
+                type="number"
+                name="premium_price"
+                value={formData.premium_price}
+                onChange={handleInputChange}
+                placeholder="Enter premium price"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Followers</Form.Label>
+              <Form.Control
+                type="number"
+                name="followers"
+                value={formData.followers}
+                onChange={handleInputChange}
+                placeholder="Enter number of followers"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Location</Form.Label>
+              <Form.Control
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
+                placeholder="Enter location"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Country</Form.Label>
+              <Form.Control
+                type="text"
+                name="country"
+                value={formData.country}
+                onChange={handleInputChange}
+                placeholder="Enter country"
+              />
+            </Form.Group>
 
             {/* <Form.Group className="mb-3">
               <Form.Label>Type</Form.Label>
@@ -1269,14 +1251,26 @@ const EventCalender = () => {
               </Form.Select>
             </Form.Group> */}
 
-            <div className="text-end">
-              <Button variant="primary" type="submit" className="radius-8 btn-purpule w-100">
-                {selectedEvent ? 'Update' : 'Create'} Event
-              </Button>
-            </div>
           </Form>
-        </Modal.Body>
-      </Modal>
+        )}
+      </Modal.Body>
+      <div className="d-flex justify-content-between mt-4">
+        {currentStep > 1 && (
+          <Button variant="outline-secondary" onClick={handleBack}>
+            Back
+          </Button>
+        )}
+        {currentStep < 2 ? (
+          <Button variant="primary" onClick={handleNext} className="ms-auto">
+            Next
+          </Button>
+        ) : (
+          <Button type="submit" variant="primary" className="ms-auto">
+            {selectedEvent ? 'Update Event' : 'Create Event'}
+          </Button>
+        )}
+      </div>
+    </Modal>
     </div>
   );
 };
