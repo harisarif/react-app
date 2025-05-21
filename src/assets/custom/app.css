@@ -19541,7 +19541,9 @@ div:where(.swal2-container) {
     width: 95% !important;
   }
 }
-
+ .modal-step-main-div {
+  justify-content: center;
+ }
 @media (min-width: 991px) and (max-width: 1606px) {
   .modal-inner-dropdown {
     width: 96% !important;
@@ -19554,7 +19556,7 @@ div:where(.swal2-container) {
       display: flex;
       gap: 10px;
       align-items: center;
-      width: 180px !important;
+      width: 130px !important;
       height: 50px;
 
       & small {

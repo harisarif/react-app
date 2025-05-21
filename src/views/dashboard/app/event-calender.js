@@ -932,7 +932,7 @@ const EventCalender = () => {
               }}
               onClick={() => setCurrentStep(1)}
             >
-              <div>Step 1</div>
+              {/* <div>Step 1</div> */}
               <small>Basic Info</small>
             </div>
             <div
@@ -943,7 +943,7 @@ const EventCalender = () => {
               }}
               onClick={() => setCurrentStep(2)}
             >
-              <div>Step 2</div>
+              {/* <div>Step 2</div> */}
               <small>Additional Details</small>
             </div>
           </div>
