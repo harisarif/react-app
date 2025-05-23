@@ -186,7 +186,7 @@ const SignIn = () => {
                     <Button
                       variant="primary"
                       type="submit"
-                      className="btn-purpule radius-8 mt-4 w-100"
+                      className="bg-light text-black border-0 radius-8 mt-4 w-100"
                     >
 
                       {IsLoader ? (
