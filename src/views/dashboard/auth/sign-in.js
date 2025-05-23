@@ -14,7 +14,7 @@ import * as SettingSelector from "../../../store/setting/selectors";
 import { useSelector } from "react-redux";
 
 //img
-import LogoFull from "../../../assets/images/Equity_Circle-sign-in.png";
+import LogoFull from "../../../assets/images/Equity_Circle-sign-in-light-logo.png";
 // import logo from "../../../assets/images/logo-full.png";
 import login1 from "../../../assets/images/login/1.jpg";
 import login2 from "../../../assets/images/login/2.jpg";
@@ -107,37 +107,38 @@ const SignIn = () => {
           <Row className="d-flex align-items-center ">
             {/* <Col lg={6} className="log-in-page-left-area">
             </Col> */}
-            <Col lg={12} className="d-flex align-items-center log-in-page-data-form" style={{height: '100vh'}}>
+            <Col lg={12} className="d-flex align-items-center log-in-page-data-form" style={{ height: '100vh' }}>
               <div className="sign-in-from">
                 <Link
                   to="/"
                   className="d-inline-flex align-items-center justify-content-center gap-2"
                 >
-                  <img src={LogoFull} width={200} alt='' />
+                  <img src={LogoFull} width={200} alt='' className="sing-in-page-logo"/>
                 </Link>
-                <h6 className='mt-5 mb-2 fw-bold'>Login</h6>
-                <p className="mb-0 font-size-16" style={{fontSize: '14px', lineHeight: 'normal'}}>
-                  Welcome to Equity Circle, a platform to connect with the <br />social world
-                </p>
-                <Form onSubmit={submitForm} className="mt-3">
-                  {error && <div className="alert alert-danger" role="alert">{error}</div>}
-                  {success && <div className="alert alert-success" role="alert">{success}</div>}
-                  <Form.Group className="form-group text-start">
-                    <h6 className="form-label fw-bold" style={{fontSize: '14px', fontWeight: '600'}}>
-                      Eamil
-                    </h6>
-                    <Form.Control
-                      type="email"
-                      name="email"
-                      className="mb-0 radius-8"
-                      placeholder="Enter your email address"
-                      defaultValue=""
-                      onChange={FormDataEvent}
-                    />
-                  </Form.Group>
-                  <Form.Group className="form-group text-start mb-2">
-                    <h6 className="form-label fw-bold"  style={{fontSize: '14px', fontWeight: '600'}}>Password</h6>
-                    {/* <div className="input-group">
+                <div className="form-inner-content-holder">
+                  {/* <h6 className='mt-5 mb-2 fw-bold'>Login</h6>
+                  <p className="mb-0 font-size-16" style={{ fontSize: '14px', lineHeight: 'normal' }}>
+                    Welcome to Equity Circle, a platform to connect with the <br />social world
+                  </p> */}
+                  <Form onSubmit={submitForm} className="mt-3">
+                    {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                    {success && <div className="alert alert-success" role="alert">{success}</div>}
+                    <Form.Group className="form-group text-start">
+                      <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>
+                        Eamil
+                      </h6>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        className="mb-0 radius-8"
+                        placeholder="Enter your email address"
+                        defaultValue=""
+                        onChange={FormDataEvent}
+                      />
+                    </Form.Group>
+                    <Form.Group className="form-group text-start mb-2">
+                      <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Password</h6>
+                      {/* <div className="input-group">
                       <Form.Control
                         type={passwordVisible ? 'text' : 'password'}
                         name="password"
@@ -150,89 +151,90 @@ const SignIn = () => {
                         {passwordVisible ? '👁️' : '👁️‍🗨️'}
                       </span>
                     </div> */}
-                    <div className="position-relative">
-                      <Form.Control
-                        type={passwordVisible ? 'text' : 'password'}
-                        name="password"
-                        placeholder="Password"
-                        defaultValue=""
-                        onChange={FormDataEvent}
-                        className="mb-0 radius-8"
-                      />
-                      <Button 
-                        variant="link" 
-                        className="position-absolute top-50 end-16px translate-middle-y cursor-pointer"
-                        onClick={togglePasswordVisibility}
-                      >
-                        <span className="material-symbols-outlined pt-2">
-                          {passwordVisible ? 'visibility_off' : 'visibility'}
-                        </span>
-                      </Button>
-                    </div>
-                  </Form.Group>
-                  <div className="d-flex align-items-center justify-content-between">
-                    <Form.Check className="form-check d-flex gap-2 m-0">
-                      <Form.Check.Input
-                        type="checkbox"
-                        className="form-check-input"
-                      />
-                      <h6 className="form-check-label mt-1" style={{fontSize: '12px', fontWeight: '500'}}>Remember Me</h6>
-                    </Form.Check>
-                    <Link to="/auth/recover-password" className="font-italic" style={{fontSize: '12px', fontWeight: '500'}}>
-                      Forgot Password?
-                    </Link>
-                  </div>
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    className="btn-purpule radius-8 mt-4 w-100"
-                  >
-
-                    {IsLoader ? (
-                      <div className="Authloader" style={{ margin: '0 auto' }}></div>
-                    ) : (
-                      'Login'
-                    )}
-                  </Button>
-                  <div className="mt-4">
-                    <div className="d-flex align-items-center justify-content-center mb-2">
-                      <hr className="flex-grow-1" />
-                      <span className="mx-3" style={{fontSize: '12px'}}>OR</span>
-                      <hr className="flex-grow-1" />
-                    </div>
-                    <div className="d-flex gap-2 justify-content-between align-items-center">
-                      <div className="google-btn" onClick={handleGoogleClick}>
-                        <img src={googleImage} alt="Google" />
-                        <div className="text">Google</div>
-                      </div>
-                      <div className="facebook-btn">
-                        <img src={facebookImage} alt="FaceBook" />
-                        <div className="text">FaceBook</div>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'none' }}>
-                      <GoogleOAuthProvider clientId={Google_client_ID}>
-                        <GoogleLogin
-                          ref={googleLoginRef}
-                          onSuccess={handleGoogleSuccess}
-                          onError={(error) => {
-                            console.error('Google Login Error:', error);
-                            alert('Failed to sign in with Google. Please try again.');
-                          }}
-                          flow="implicit"
-                          auto_select={false}
-                          useOneTap={false}
-                          context="signin"
+                      <div className="position-relative">
+                        <Form.Control
+                          type={passwordVisible ? 'text' : 'password'}
+                          name="password"
+                          placeholder="Password"
+                          defaultValue=""
+                          onChange={FormDataEvent}
+                          className="mb-0 radius-8"
                         />
-                      </GoogleOAuthProvider>
+                        <Button
+                          variant="link"
+                          className="position-absolute top-50 end-16px translate-middle-y cursor-pointer"
+                          onClick={togglePasswordVisibility}
+                        >
+                          <span className="material-symbols-outlined pt-2">
+                            {passwordVisible ? 'visibility_off' : 'visibility'}
+                          </span>
+                        </Button>
+                      </div>
+                    </Form.Group>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <Form.Check className="form-check d-flex gap-2 m-0">
+                        <Form.Check.Input
+                          type="checkbox"
+                          className="form-check-input"
+                        />
+                        <h6 className="form-check-label mt-1" style={{ fontSize: '12px', fontWeight: '500' }}>Remember Me</h6>
+                      </Form.Check>
+                      <Link to="/auth/recover-password" className="font-italic" style={{ fontSize: '12px', fontWeight: '500' }}>
+                        Forgot Password?
+                      </Link>
                     </div>
-                  </div>
-                  <h6 className="mt-5 text-center">
-                    <span style={{fontSize: '14px', fontWeight: '400'}}>Don't Have An Account ?{" "}</span>
-                    <Link to="/auth/sign-up" style={{fontSize: '14px', fontWeight: '600', textDecoration: 'underline'}}>Sign Up</Link>
-                  </h6>
-                </Form>
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      className="btn-purpule radius-8 mt-4 w-100"
+                    >
+
+                      {IsLoader ? (
+                        <div className="Authloader" style={{ margin: '0 auto' }}></div>
+                      ) : (
+                        'Login'
+                      )}
+                    </Button>
+                    <div className="mt-4">
+                      <div className="d-flex align-items-center justify-content-center mb-2">
+                        <hr className="flex-grow-1" />
+                        <span className="mx-3" style={{ fontSize: '12px' }}>OR</span>
+                        <hr className="flex-grow-1" />
+                      </div>
+                      <div className="d-flex gap-2 justify-content-between align-items-center social-btn-div">
+                        <div className="google-btn" onClick={handleGoogleClick}>
+                          <img src={googleImage} alt="Google" />
+                          <div className="text">Google</div>
+                        </div>
+                        <div className="facebook-btn">
+                          <img src={facebookImage} alt="FaceBook" />
+                          <div className="text">FaceBook</div>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'none' }}>
+                        <GoogleOAuthProvider clientId={Google_client_ID}>
+                          <GoogleLogin
+                            ref={googleLoginRef}
+                            onSuccess={handleGoogleSuccess}
+                            onError={(error) => {
+                              console.error('Google Login Error:', error);
+                              alert('Failed to sign in with Google. Please try again.');
+                            }}
+                            flow="implicit"
+                            auto_select={false}
+                            useOneTap={false}
+                            context="signin"
+                          />
+                        </GoogleOAuthProvider>
+                      </div>
+                    </div>
+                    <h6 className="mt-5 text-center">
+                      <span style={{ fontSize: '14px', fontWeight: '400' }}>Don't Have An Account ?{" "}</span>
+                      <Link to="/auth/sign-up" style={{ fontSize: '14px', fontWeight: '600', textDecoration: 'underline' }}>Sign Up</Link>
+                    </h6>
+                  </Form>
+                </div>
               </div>
             </Col>
           </Row>
