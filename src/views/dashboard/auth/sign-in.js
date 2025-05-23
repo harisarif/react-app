@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import { useEffect } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-
+import React, { useState, useRef } from "react";
 //swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
@@ -20,6 +19,8 @@ import LogoFull from "../../../assets/images/Equity_Circle-sign-in.png";
 import login1 from "../../../assets/images/login/1.jpg";
 import login2 from "../../../assets/images/login/2.jpg";
 import login3 from "../../../assets/images/login/3.jpg";
+import googleImage from "../../../assets/images/login/google.png";
+import facebookImage from "../../../assets/images/login/facebook.png";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Autoplay]);
@@ -30,8 +31,10 @@ const SignIn = () => {
   const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
   const Google_client_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   console.log('Google Client ID:', Google_client_ID);
+  const googleLoginRef = useRef(null);
 
-
+  // Add the state for Google login visibility
+  const [showGoogleLogin, setShowGoogleLogin] = useState(false);
   const [IsLoader, setLoader] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -90,14 +93,21 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleClick = () => {
+    // Trigger click on the actual GoogleLogin button
+    if (googleLoginRef.current) {
+      googleLoginRef.current.click();
+    }
+  };
+
   return (
     <>
       <section className="sign-in-page">
         <Container fluid>
           <Row className="d-flex align-items-center ">
-            <Col lg={6} className="log-in-page-left-area">
-            </Col>
-            <Col lg={6} className="d-flex align-items-center log-in-page-data-form" style={{height: '100vh'}}>
+            {/* <Col lg={6} className="log-in-page-left-area">
+            </Col> */}
+            <Col lg={12} className="d-flex align-items-center log-in-page-data-form" style={{height: '100vh'}}>
               <div className="sign-in-from">
                 <Link
                   to="/"
@@ -190,19 +200,33 @@ const SignIn = () => {
                       <span className="mx-3" style={{fontSize: '12px'}}>OR</span>
                       <hr className="flex-grow-1" />
                     </div>
-                    <GoogleOAuthProvider clientId={Google_client_ID}>
-                      <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={(error) => {
-                          console.error('Google Login Error:', error);
-                          alert('Failed to sign in with Google. Please try again.');
-                        }}
-                        flow="implicit"
-                        auto_select={false}
-                        useOneTap={false}
-                        context="signin"
-                      />
-                    </GoogleOAuthProvider>
+                    <div className="d-flex gap-2 justify-content-between align-items-center">
+                      <div className="google-btn" onClick={handleGoogleClick}>
+                        <img src={googleImage} alt="Google" />
+                        <div className="text">Google</div>
+                      </div>
+                      <div className="facebook-btn">
+                        <img src={facebookImage} alt="FaceBook" />
+                        <div className="text">FaceBook</div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'none' }}>
+                      <GoogleOAuthProvider clientId={Google_client_ID}>
+                        <GoogleLogin
+                          ref={googleLoginRef}
+                          onSuccess={handleGoogleSuccess}
+                          onError={(error) => {
+                            console.error('Google Login Error:', error);
+                            alert('Failed to sign in with Google. Please try again.');
+                          }}
+                          flow="implicit"
+                          auto_select={false}
+                          useOneTap={false}
+                          context="signin"
+                        />
+                      </GoogleOAuthProvider>
+                    </div>
                   </div>
                   <h6 className="mt-5 text-center">
                     <span style={{fontSize: '14px', fontWeight: '400'}}>Don't Have An Account ?{" "}</span>

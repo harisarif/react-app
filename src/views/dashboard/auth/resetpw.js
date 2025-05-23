@@ -14,6 +14,11 @@ import login1 from "../../../assets/images/login/1.jpg";
 import login2 from "../../../assets/images/login/2.jpg";
 import login3 from "../../../assets/images/login/3.jpg";
 
+import { useRef } from "react";
+
+import googleImage from "../../../assets/images/login/google.png";
+import facebookImage from "../../../assets/images/login/facebook.png";
+
 // Import selectors & action from setting store
 import * as SettingSelector from "../../../store/setting/selectors";
 // Redux Selector / Action
@@ -89,7 +94,7 @@ const ResetPassword = () => {
       <section className="sign-in-page">
         <Container fluid>
           <Row className="align-items-center">
-            <Col md={6} className="overflow-hidden position-relative">
+            {/* <Col md={6} className="overflow-hidden position-relative">
               <div className="bg-primary w-100 h-100 position-absolute top-0 bottom-0 start-0 end-0"></div>
               <div className="container-inside z-1">
                 <div className="main-circle circle-small"></div>
@@ -155,8 +160,8 @@ const ResetPassword = () => {
                   </ul>
                 </Swiper>
               </div>
-            </Col>
-            <Col md={6}>
+            </Col> */}
+            <Col md={12}>
               <div className="sign-in-from">
                 <Link
                   to={"/"}

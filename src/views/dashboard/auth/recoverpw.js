@@ -61,9 +61,9 @@ const Recoverpw = () => {
       <section className="sign-in-page">
         <Container fluid>
           <Row className="align-items-center">
-            <Col lg={6}>
-            </Col>
-            <Col lg={6} className="d-flex align-items-center" style={{ height: '100vh' }}>
+            {/* <Col lg={6}>
+            </Col> */}
+            <Col lg={12} className="d-flex align-items-center" style={{ height: '100vh' }}>
               <div className="sign-in-from">
                 <Link
                   to="/"
