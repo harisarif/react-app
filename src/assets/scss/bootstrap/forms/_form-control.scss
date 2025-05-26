@@ -10,7 +10,7 @@
   @include font-size($input-font-size);
   font-weight: $input-font-weight;
   line-height: $input-line-height;
-  color: $input-color;
+  color: #e3e3e3;
   appearance: none; // Fix appearance for date inputs in Safari
   background-color: $input-bg;
   background-clip: padding-box;
@@ -32,9 +32,9 @@
 
   // Customize the `:focus` state to imitate native WebKit styles.
   &:focus {
-    color: $input-focus-color;
-    background-color: $input-focus-bg;
-    border-color: $input-focus-border-color;
+    color: #e3e3e3;
+    background-color: #181818;
+    border-color: #696969;
     outline: 0;
     @if $enable-shadows {
       @include box-shadow($input-box-shadow, $input-focus-box-shadow);

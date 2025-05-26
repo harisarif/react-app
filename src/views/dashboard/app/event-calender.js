@@ -696,7 +696,7 @@ const EventCalender = () => {
           {console.log('Categories', categories)}
           {filteredEvents.length < 1 ? (
             <NoDataFound message={'No Events Found'} width={'w-25'} image={eventImage} />
-          ) : (
+          ) : ( 
             filteredEvents.map((event, index) => (
               <Col xxl={4} lg={6} key={index} data-event-cat={event.category?.name}>
                 <Card className="event-calender-card border">
