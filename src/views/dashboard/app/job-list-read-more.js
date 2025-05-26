@@ -178,7 +178,7 @@ const handleSubmit = async (e) => {
           </div>
         </div>
         <div className="col-12 col-md-5 col-lg-5 find-more-right-side">
-          <div className="sign-in-from text-center">
+          <div className="sign-in-from text-center  ">
             <a
               href=""
               className="d-inline-flex align-items-center justify-content-center gap-2"

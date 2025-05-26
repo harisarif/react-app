@@ -19,6 +19,10 @@ import * as SettingSelector from "../../../store/setting/selectors";
 // Redux Selector / Action
 import { useSelector } from "react-redux";
 import axios from 'axios';
+import { useRef } from "react";
+
+import googleImage from "../../../assets/images/login/google.png";
+import facebookImage from "../../../assets/images/login/facebook.png";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Autoplay]);
@@ -37,6 +41,8 @@ const SignUp = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [IsLoader, setLoader] = useState(false);
+
+  const googleLoginRef = useRef(null);
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -140,14 +146,21 @@ const SignUp = () => {
     );
   };
 
+  const handleGoogleClick = () => {
+    // Trigger click on the actual GoogleLogin button
+    if (googleLoginRef.current) {
+      googleLoginRef.current.click();
+    }
+  };
+
   return (
     <>
       <section className="sign-in-page">
         <Container fluid>
           <Row className="align-items-center">
-            <Col lg={6}>
-            </Col>
-            <Col lg={6} className="d-flex align-items-center" style={{ height: '100vh' }}>
+            {/* <Col lg={6}>
+            </Col> */}
+            <Col lg={12} className="d-flex align-items-center" style={{ height: '100vh' }}>
               <div className="sign-in-from">
                 <Link
                   to="/"
@@ -259,8 +272,19 @@ const SignUp = () => {
                       <span className="mx-3" style={{ fontSize: '12px' }}>OR</span>
                       <hr className="flex-grow-1" />
                     </div>
+                    <div className="d-flex gap-2 justify-content-between align-items-center">
+                      <div className="google-btn" onClick={handleGoogleClick}>
+                        <img src={googleImage} alt="Google" />
+                        <div className="text">Google</div>
+                      </div>
+                      <div className="facebook-btn">
+                        <img src={facebookImage} alt="FaceBook" />
+                        <div className="text">FaceBook</div>
+                      </div>
+                    </div>
 
-                    <div className="mt-4">
+                    <div style={{ display: 'none' }}>
+                      
                       <GoogleOAuthProvider clientId={Google_client_ID}>
                         <GoogleLogin
                           onSuccess={handleGoogleSuccess}
@@ -274,9 +298,6 @@ const SignUp = () => {
                           context="signup"
                         />
                       </GoogleOAuthProvider>
-                      {/* <button onClick={handleFBLogin} type="button" className="btn btn-primary">
-                        Login with Facebook
-                      </button> */}
                     </div>
                   </div>
 
