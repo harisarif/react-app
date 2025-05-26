@@ -728,19 +728,45 @@ const Education = () => {
                   .filter(sub => sub.caption.toLowerCase().includes(search.toLowerCase()))
                   .map((sub, id) => {
                     return (
-                      <Col key={id} md={6} sm={6}>
-                        <Link to="/subjectDetail">
+                      // <Col key={id} md={6} sm={6}>
+                      //   <Link to="/subjectDetail">
+                      //     <Card className="education-subject-card border">
+                      //       <Card.Body className='img-div'>
+                      //         <Image src={`./Sample/gym/${sub.img}`} className='w-100 transition-transform duration-300 hover:scale-110' alt={sub.caption} />
+                      //         <div className='caption'>{sub.caption}</div>
+                      //       </Card.Body>
+                      //       <Card.Body className='d-flex flex-column caption-area'>
+                      //         <h4 className='text-dark'>Avaiable Seats: {sub.seat}</h4>
+                      //         <p className='text-dark mb-0'>
+                      //           Duration: {sub.duration}
+                      //         </p>
+                      //       </Card.Body>
+                      //     </Card>
+                      //   </Link>
+                      // </Col>
+                      <Col key={id} xxl={12}>
+                        <Link to="/subjectDetail" className="text-decoration-none">
                           <Card className="education-subject-card border">
-                            <Card.Body className='img-div'>
-                              <Image src={`./Sample/gym/${sub.img}`} className='w-100 transition-transform duration-300 hover:scale-110' alt={sub.caption} />
-                              <div className='caption'>{sub.caption}</div>
-                            </Card.Body>
-                            <Card.Body className='d-flex flex-column caption-area'>
-                              <h4 className='text-dark'>Avaiable Seats: {sub.seat}</h4>
-                              <p className='text-dark mb-0'>
-                                Duration: {sub.duration}
-                              </p>
-                            </Card.Body>
+                            <div className="d-flex flex-md-row flex-column">
+                              <div className="img-div col-md-3 col-12">
+                                <Image 
+                                  src={`./Sample/gym/${sub.img}`} 
+                                  className='w-100 h-100 object-fit-cover transition-transform duration-300 hover:scale-110' 
+                                  alt={sub.caption} 
+                                />
+                              </div>
+                              <div className="col-md-9 col-12 d-flex flex-column justify-content-between">
+                                <Card.Body>
+                                  <div className='caption mb-2'>{sub.caption}</div>
+                                </Card.Body>
+                                <Card.Body className='caption-area'>
+                                  <h4 className='text-dark'>Available Seats: {sub.seat}</h4>
+                                  <p className='text-dark mb-0'>
+                                    Duration: {sub.duration}
+                                  </p>
+                                </Card.Body>
+                              </div>
+                            </div>
                           </Card>
                         </Link>
                       </Col>

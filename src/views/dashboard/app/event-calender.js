@@ -31,6 +31,7 @@ import { FaRegUser } from "react-icons/fa";
 import { SlOptionsVertical } from "react-icons/sl";
 
 import DummyImage from '../../../assets/images/dummy-image.png'
+import eventImage from '../../../assets/images/gifs/events.gif';
 
 import avatar from '../../../assets/images/d0d79bd9c491d22b6f3398fcaedf2780.jpg'
 import post from '../../../assets/images/92a4f16eb9cbb1b124bd7efeb55f2f38.jpg'
@@ -694,7 +695,7 @@ const EventCalender = () => {
           </Col>
           {console.log('Categories', categories)}
           {filteredEvents.length < 1 ? (
-            <NoDataFound />
+            <NoDataFound message={'No Events Found'} width={'w-25'} image={eventImage} />
           ) : (
             filteredEvents.map((event, index) => (
               <Col xxl={4} lg={6} key={index} data-event-cat={event.category?.name}>

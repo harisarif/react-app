@@ -14,7 +14,7 @@ import * as SettingSelector from "../../../store/setting/selectors";
 import { useSelector } from "react-redux";
 
 //img
-import LogoFull from "../../../assets/images/Equity_Circle-sign-in-light-logo.png";
+import LogoFull from "../../../assets/images/sign-in-logo.png";
 // import logo from "../../../assets/images/logo-full.png";
 import login1 from "../../../assets/images/login/1.jpg";
 import login2 from "../../../assets/images/login/2.jpg";
@@ -113,8 +113,9 @@ const SignIn = () => {
                   to="/"
                   className="d-inline-flex align-items-center justify-content-center gap-2"
                 >
-                  <img src={LogoFull} width={200} alt='' className="sing-in-page-logo"/>
-                </Link>
+                  <img src={LogoFull} width={80} alt='' className="sing-in-page-logo"/>
+                  <h5 className='h5 mb-0 text-light' style={{fontSize: '46px', fontWeight: '800'}}>Equity Circle</h5>
+                </Link> 
                 <div className="form-inner-content-holder">
                   {/* <h6 className='mt-5 mb-2 fw-bold'>Login</h6>
                   <p className="mb-0 font-size-16" style={{ fontSize: '14px', lineHeight: 'normal' }}>

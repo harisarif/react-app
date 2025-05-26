@@ -554,12 +554,28 @@ const Education = () => {
                   .filter(cat => cat.caption.toLowerCase().includes(search.toLowerCase()))
                   .map((cat, id) => {
                     return (
-                      <Col key={id} md={4} sm={6}>
+                      // <Col key={id} md={4} sm={6}>
+                      //   <Link to="/subject">
+                      //     <Card className="education-category-card">
+                      //       <Card.Body>
+                      //         <Image src={`./Sample/${cat.img}`} className='w-100 transition-transform duration-300 hover:scale-110' alt={cat.caption} />
+                      //         <div className='caption'>{cat.caption}</div>
+                      //       </Card.Body>
+                      //     </Card>
+                      //   </Link>
+                      // </Col>
+                      <Col key={id} md={6} sm={6}>
                         <Link to="/subject">
-                          <Card className="education-category-card">
-                            <Card.Body>
+                          <Card className="education-subject-card border">
+                            <Card.Body className='img-div'>
                               <Image src={`./Sample/${cat.img}`} className='w-100 transition-transform duration-300 hover:scale-110' alt={cat.caption} />
                               <div className='caption'>{cat.caption}</div>
+                            </Card.Body>
+                            <Card.Body className='d-flex flex-column caption-area'>
+                              <h4 className='text-dark'>Avaiable Cources: 7</h4>
+                              <p className='text-dark mb-0 elipsis-2'>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                              </p>
                             </Card.Body>
                           </Card>
                         </Link>

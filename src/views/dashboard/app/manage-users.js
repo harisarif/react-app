@@ -8,6 +8,8 @@ import axios from '../../../utils/axios';
 import NoDataFound from '../../../components/NoDataFound';
 import EditPermissionsModal from "../../../components/EditPermissionsModal.js"; // Component for editing permissions
 
+import userImage from '../../../assets/images/gifs/users.gif';
+
 const ManageUsers = () => {
   const { userData } = useContext(UserContext);
   const [users, setUsers] = useState([]);
@@ -116,7 +118,7 @@ const ManageUsers = () => {
               </Card>
             ))
           ) : (
-            <NoDataFound message="No users found." />
+            <NoDataFound message="No users found." image={userImage} width={'w-25'} />
           )}
 
           {/* <Table striped bordered hover>
