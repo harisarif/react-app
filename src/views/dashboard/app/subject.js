@@ -7,6 +7,7 @@ import Card from "../../../components/Card";
 import NoDataFound from '../../../components/NoDataFound';
 import Swal from 'sweetalert2';
 import { useDropzone } from 'react-dropzone';
+import subjectImage from '../../../assets/images/gifs/education.gif';
 
 const CreateSubjectModal = ({ show, handleClose }) => {
   const [step, setStep] = useState(1);
@@ -776,6 +777,7 @@ const Education = () => {
                 <NoDataFound
                   message="No Content Available!"
                   containerClassName="text-center py-5 col-12"
+                  image={subjectImage} width={'w-25'}
                 />
               )}
             </Row>

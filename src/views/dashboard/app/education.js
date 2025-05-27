@@ -10,6 +10,7 @@ import { Image } from "react-bootstrap";
 import Card from "../../../components/Card";
 import NoDataFound from '../../../components/NoDataFound';
 import toast from 'react-hot-toast';
+import educationImage from '../../../assets/images/gifs/education.gif';
 
 
 import { Autoplay } from "swiper/modules";
@@ -586,6 +587,7 @@ const Education = () => {
                 <NoDataFound
                   message="No Content Available!"
                   containerClassName="text-center py-5 col-12"
+                  image={educationImage} width="w-25"
                 />
               )}
             </Row>

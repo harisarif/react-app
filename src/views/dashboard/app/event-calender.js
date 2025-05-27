@@ -702,7 +702,7 @@ const EventCalender = () => {
                 <Card className="event-calender-card border">
                   <Card.Body>
                     <CategoryBatch category={event.category?.name} />
-                    <span class={`rounded-pill position-absolute top-right-12 text-white fitness-info-btn-sm`}>{event.status}</span>
+                    <span class={`rounded-pill position-absolute top-right-12 text-white fitness-info-btn-sm`}>{event.status?.name}</span>
                     <Image src={`${event.banner_image == null ? DummyImage : event.banner_image}`} className='w-100 transition-transform duration-300 hover:scale-110 border-bottom' alt={''} />
                     <div className="d-flex flex-column gap-3 p-3">
                       <div className="d-flex flex-column gap-1">

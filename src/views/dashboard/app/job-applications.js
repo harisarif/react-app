@@ -8,7 +8,11 @@ import NoDataFound from '../../../components/NoDataFound';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import ViewAppDetailModal from "../../../components/ViewAppDetailModal";
 import ViewJobDetailModal from "../../../components/ViewJobDetailModal";
+import jobImage from '../../../assets/images/gifs/job.gif';
+
+
 const statusArray = ['pending', 'accepted', 'rejected']
+
 
 const JobApplications = () => {
   const { userData } = useContext(UserContext);
@@ -146,6 +150,7 @@ const JobApplications = () => {
         <NoDataFound 
           message={messages[status]}
           containerClassName="text-center py-5"
+          image={jobImage} width="w-25"
         />
       );
     }
