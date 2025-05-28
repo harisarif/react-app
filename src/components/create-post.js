@@ -36,7 +36,11 @@ const CreatePost = ({
 
 
   const handleCategoryChange = (event, category) => {
-    handleInputChange(event); // Call parent function to update formData
+   
+    setFormData(prev => ({
+      ...prev,
+      category_id: category.id
+    }));
     setSelectedCategory(category.name.split(" ")[0]); // Update dropdown label
   };
 
@@ -355,10 +359,10 @@ const rgbToHex = (rgb) => {
 
   const handleInputChange = (e) => {
     if(e.target.name === 'category_id'){
-      // setFormData({
-      //   ...formData,
-      //   category_id: e.target.value
-      // });
+      setFormData({
+        ...formData,
+        category_id: e.target.value
+      });
       setSelectedCategory(e.target.value);
     }
     setFormData({

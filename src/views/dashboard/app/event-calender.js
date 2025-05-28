@@ -567,6 +567,7 @@ const EventCalender = () => {
     }
   };
 
+
   const handleBackgroundImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
@@ -717,8 +718,12 @@ const EventCalender = () => {
                               </Dropdown.Toggle>
 
                               <Dropdown.Menu>
+                              {userData && (userData?.roles == "admin" || userData?.permissions[0]?.can_create_education == 1) && (
+                                <>
                                 <Dropdown.Item href="#">Edit</Dropdown.Item>
-                                <Dropdown.Item href="#">Delete</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>{handleDelete(event.id)}}>Delete</Dropdown.Item>
+                                </>
+                              )}
                               </Dropdown.Menu>
                             </Dropdown>
                           </div>
