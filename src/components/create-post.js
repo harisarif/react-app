@@ -36,7 +36,6 @@ const CreatePost = ({
 
 
   const handleCategoryChange = (event, category) => {
-   
     setFormData(prev => ({
       ...prev,
       category_id: category.id

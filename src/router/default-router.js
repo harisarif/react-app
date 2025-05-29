@@ -99,7 +99,7 @@ import Recoverpw from '../views/dashboard/auth/recoverpw'
 import ResetPassword from '../views/dashboard/auth/resetpw'
 
 export const DefaultRouter = [
- 
+  
   {
     path: "/profile/:id",
     element: <UserProfile />,

@@ -19,6 +19,7 @@ import ComingSoon from "../views/dashboard/extrapages/comingsoon";
 
 import Recoverpw from '../views/dashboard/auth/recoverpw'
 import ResetPassword from '../views/dashboard/auth/resetpw'
+import AuthCallback from '../views/dashboard/auth/auth-callback'
 
 export const SimpleRouter = [
   {
@@ -29,6 +30,10 @@ export const SimpleRouter = [
     path: "auth/lock-screen",
     element: <LockScreen />,
 
+  },
+  {
+    path: "auth-callback",
+    element: <AuthCallback />,
   },
   // {
   //   path: "auth/recoverpw",
