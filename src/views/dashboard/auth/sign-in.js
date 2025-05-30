@@ -22,6 +22,7 @@ import login3 from "../../../assets/images/login/3.jpg";
 import googleImage from "../../../assets/images/login/google.png";
 import facebookImage from "../../../assets/images/login/facebook.png";
 
+
 // install Swiper modules
 SwiperCore.use([Navigation, Autoplay]);
 
@@ -117,41 +118,25 @@ const SignIn = () => {
                   <h5 className='h5 mb-0 text-light' style={{fontSize: '46px', fontWeight: '800'}}>Equity Circle</h5>
                 </Link> 
                 <div className="form-inner-content-holder">
-                  {/* <h6 className='mt-5 mb-2 fw-bold'>Login</h6>
-                  <p className="mb-0 font-size-16" style={{ fontSize: '14px', lineHeight: 'normal' }}>
-                    Welcome to Equity Circle, a platform to connect with the <br />social world
-                  </p> */}
+                  <h3 className="sign-in-sub-title text-uppercase">Login.</h3>
                   <Form onSubmit={submitForm} className="mt-3">
                     {error && <div className="alert alert-danger" role="alert">{error}</div>}
                     {success && <div className="alert alert-success" role="alert">{success}</div>}
                     <Form.Group className="form-group text-start">
-                      <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>
+                      {/* <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>
                         Eamil
-                      </h6>
+                      </h6> */}
                       <Form.Control
                         type="email"
                         name="email"
-                        className="mb-0 radius-8"
-                        placeholder="Enter your email address"
+                        className="mb-0"
+                        placeholder="Email"
                         defaultValue=""
                         onChange={FormDataEvent}
                       />
                     </Form.Group>
                     <Form.Group className="form-group text-start mb-2">
-                      <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Password</h6>
-                      {/* <div className="input-group">
-                      <Form.Control
-                        type={passwordVisible ? 'text' : 'password'}
-                        name="password"
-                        className="mb-0 radius-8"
-                        placeholder="Password"
-                        defaultValue=""
-                        onChange={FormDataEvent}
-                      />
-                      <span className="input-group-text" onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
-                        {passwordVisible ? '👁️' : '👁️‍🗨️'}
-                      </span>
-                    </div> */}
+                      {/* <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Password</h6> */}
                       <div className="position-relative">
                         <Form.Control
                           type={passwordVisible ? 'text' : 'password'}
@@ -159,11 +144,11 @@ const SignIn = () => {
                           placeholder="Password"
                           defaultValue=""
                           onChange={FormDataEvent}
-                          className="mb-0 radius-8"
+                          className="mb-0"
                         />
                         <Button
                           variant="link"
-                          className="position-absolute top-50 end-16px translate-middle-y cursor-pointer"
+                          className="position-absolute top-50 end-0 translate-middle-y cursor-pointer"
                           onClick={togglePasswordVisibility}
                         >
                           <span className="material-symbols-outlined pt-2">
@@ -172,14 +157,14 @@ const SignIn = () => {
                         </Button>
                       </div>
                     </Form.Group>
-                    <div className="d-flex align-items-center justify-content-between">
-                      <Form.Check className="form-check d-flex gap-2 m-0">
+                    <div className="d-flex align-items-center justify-content-end mt-n1">
+                      {/* <Form.Check className="form-check d-flex gap-2 m-0">
                         <Form.Check.Input
                           type="checkbox"
                           className="form-check-input"
                         />
                         <h6 className="form-check-label mt-1" style={{ fontSize: '12px', fontWeight: '500' }}>Remember Me</h6>
-                      </Form.Check>
+                      </Form.Check> */}
                       <Link to="/auth/recover-password" className="font-italic" style={{ fontSize: '12px', fontWeight: '500' }}>
                         Forgot Password?
                       </Link>
@@ -187,7 +172,7 @@ const SignIn = () => {
                     <Button
                       variant="primary"
                       type="submit"
-                      className="bg-light text-black border-0 radius-8 mt-4 w-100"
+                      className="sign-in-primary-btn mt-4 w-100"
                     >
 
                       {IsLoader ? (
@@ -197,12 +182,12 @@ const SignIn = () => {
                       )}
                     </Button>
                     <div className="mt-4">
-                      <div className="d-flex align-items-center justify-content-center mb-2">
+                      {/* <div className="d-flex align-items-center justify-content-center mb-2">
                         <hr className="flex-grow-1" />
                         <span className="mx-3" style={{ fontSize: '12px' }}>OR</span>
                         <hr className="flex-grow-1" />
-                      </div>
-                      <div className="d-flex gap-2 justify-content-between align-items-center social-btn-div">
+                      </div> */}
+                      {/* <div className="d-flex gap-2 justify-content-between align-items-center social-btn-div">
                         <div className="google-btn" onClick={handleGoogleClick}>
                           <img src={googleImage} alt="Google" />
                           <div className="text">Google</div>
@@ -211,7 +196,7 @@ const SignIn = () => {
                           <img src={facebookImage} alt="FaceBook" />
                           <div className="text">FaceBook</div>
                         </div>
-                      </div>
+                      </div> */}
 
                       <div style={{ display: 'none' }}>
                         <GoogleOAuthProvider clientId={Google_client_ID}>
@@ -230,9 +215,9 @@ const SignIn = () => {
                         </GoogleOAuthProvider>
                       </div>
                     </div>
-                    <h6 className="mt-5 text-center">
+                    <h6 className="mt-2 text-center">
                       <span style={{ fontSize: '14px', fontWeight: '400' }}>Don't Have An Account ?{" "}</span>
-                      <Link to="/auth/sign-up" style={{ fontSize: '14px', fontWeight: '600', textDecoration: 'underline' }}>Sign Up</Link>
+                      <Link to="/auth/sign-up" class='sign-in-link' style={{ fontSize: '14px', fontWeight: '600', textDecoration: 'underline' }}>Sign Up</Link>
                     </h6>
                   </Form>
                 </div>

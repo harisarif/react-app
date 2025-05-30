@@ -6,6 +6,8 @@ import LockScreen from "../views/dashboard/auth/lock-screen";
 // import Recoverpw from "../views/dashboard/auth/recoverpw";
 import SignIn from "../views/dashboard/auth/sign-in";
 
+import Welcome from "../views/dashboard/auth/welcome";
+
 import Index from "../views/dashboard/app/index";
 import SignUp from "../views/dashboard/auth/sign-up";
 
@@ -32,7 +34,7 @@ export const SimpleRouter = [
 
   },
   {
-    path: "auth-callback",
+    path: "/auth-callback",
     element: <AuthCallback />,
   },
   // {
@@ -52,6 +54,10 @@ export const SimpleRouter = [
   //   path: "/",
   //   element: <Index />,
   // },
+  {
+    path: "/welcome",
+    element: <Welcome />,
+  },
   {
     path: "auth/sign-in",
     element: <SignIn />,
