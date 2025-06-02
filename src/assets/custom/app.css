@@ -19631,15 +19631,17 @@ div:where(.swal2-container) {
 
     --simple-bg: #fff;
 
-    --btn-primary-bg: #EDFCBB;
+    --btn-primary-bg: #a7d900;
     --btn-secondary-bg: #0000000D;
 
     --input-bg: #ffffff2e;
     --input-border: #aeaeae;
+    --sign-border: #d3d3d3;
+    --sign-bg: #f5f5f5;
 
-    & .sign-in-page{
+    & .sign-in-page {
       background: var(--simple-bg);
-      background-image: url('../images/login-background.png');  
+      background-image: url('../images/login-background.png');
     }
   }
 
@@ -19653,8 +19655,10 @@ div:where(.swal2-container) {
     --btn-secondary-bg: #FFFFFF0D;
     --input-bg: #1818182e;
     --input-border: #414141;
-    
-    & .sign-in-page{
+    --sign-border: #2e2e2e;
+    --sign-bg: #131313;
+
+    & .sign-in-page {
       background: var(--simple-bg);
       /* background-image: url('../images/login-background-dark.png');   */
     }
@@ -19672,6 +19676,32 @@ body {
   background-position-y: top !important;
   background-size: 880px !important;
 
+  & .form-inner-content-holder {
+    padding: 2rem;
+    color: #BABABA;
+    border: 1px solid var(--sign-border);
+    border-radius: 16px;
+    background-color: var(--sign-bg);
+  }
+
+  & .interest-in-secondary-btn{
+    background: var(--btn-secondary-bg);
+    color: var(--text-dark);
+    border: 1px solid var(--btn-secondary-bg);
+    padding: 10px 16px;
+    border-radius: 32px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-family: 'Space Grotesk' !important;
+    cursor: pointer;
+
+    &.checked{
+      background: var(--btn-primary-bg);
+      color: var(--text-light);
+      border: 1px solid var(--btn-primary-bg);
+    }
+  }
+
   & .sign-in-primary-btn {
     background: var(--btn-primary-bg);
     color: var(--text-light);
@@ -19682,6 +19712,8 @@ body {
     text-transform: uppercase;
     font-family: 'Space Grotesk' !important;
   }
+
+  
 
   & .sign-in-secondary-btn {
     background: var(--btn-secondary-bg);

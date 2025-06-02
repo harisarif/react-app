@@ -159,7 +159,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
-    window.location.href = '/auth/sign-in';
+    window.location.href = '/welcome';
   }
 
   // useEffect(() => {
@@ -663,7 +663,7 @@ const Header = () => {
 
                       {!userData && (
                         <Link
-                          to="/auth/sign-in"
+                          to="/welcome"
                           className="d-flex align-items-center gap-3 text-dark py-2 px-3 profile-link"
                         >
                           <span className="material-symbols-outlined">

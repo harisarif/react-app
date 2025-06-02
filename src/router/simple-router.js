@@ -7,6 +7,8 @@ import LockScreen from "../views/dashboard/auth/lock-screen";
 import SignIn from "../views/dashboard/auth/sign-in";
 
 import Welcome from "../views/dashboard/auth/welcome";
+import Interest from "../views/dashboard/auth/interest";
+import LetsBegain from "../views/dashboard/auth/letsBegain";
 
 import Index from "../views/dashboard/app/index";
 import SignUp from "../views/dashboard/auth/sign-up";
@@ -57,6 +59,14 @@ export const SimpleRouter = [
   {
     path: "/welcome",
     element: <Welcome />,
+  },
+  {
+    path: "/interest",
+    element: <Interest />,
+  },
+  {
+    path: "/lets-begain",
+    element: <LetsBegain />,
   },
   {
     path: "auth/sign-in",

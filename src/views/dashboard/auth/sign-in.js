@@ -110,13 +110,13 @@ const SignIn = () => {
             </Col> */}
             <Col lg={12} className="d-flex align-items-center log-in-page-data-form" style={{ height: '100vh' }}>
               <div className="sign-in-from">
-                <Link
+                {/* <Link
                   to="/"
                   className="d-inline-flex align-items-center justify-content-center gap-2"
                 >
                   <img src={LogoFull} width={80} alt='' className="sing-in-page-logo"/>
                   <h5 className='h5 mb-0 text-light' style={{fontSize: '46px', fontWeight: '800'}}>Equity Circle</h5>
-                </Link> 
+                </Link>  */}
                 <div className="form-inner-content-holder">
                   <h3 className="sign-in-sub-title text-uppercase">Login.</h3>
                   <Form onSubmit={submitForm} className="mt-3">
@@ -170,7 +170,7 @@ const SignIn = () => {
                       </Link>
                     </div>
                     <Button
-                      variant="primary"
+                      variant="link"
                       type="submit"
                       className="sign-in-primary-btn mt-4 w-100"
                     >

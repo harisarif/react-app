@@ -41,13 +41,11 @@ const SignIn = () => {
                 </Link>  */}
                 <div className="form-inner-content-holder d-flex flex-column gap-4">
                   <div className="d-flex flex-column gap-3">
-                    <h5 className="sign-in-title text-uppercase">Welcome to Equity Circle</h5>
-                    <h3 className="sign-in-sub-title text-uppercase">Your all-in-one career, learning, fitness & finance hub.</h3>
-                    <p className="sign-in-text text-uppercase">Access personalized tools and insights to grow your skills, health, and wealth—everything in one place.</p>
+                    <h3 className="sign-in-sub-title text-center text-uppercase">Welcome to Equity Circle</h3>
+                    <p className="sign-in-text text-captalize text-center">A private space where ambition meets action — across business, mindset, crypto, and fitness.</p>
                   </div>
                   <div className="d-flex flex-column">
-                    <Link to='/auth/sign-up' className='sign-in-secondary-btn text-center mb-3'>Create an Account</Link>
-                    <Link to='/auth/sign-in' className='sign-in-primary-btn text-center'>Sign In</Link>
+                    <Link to='/' className='sign-in-primary-btn text-center'>Begin My Journey</Link>
                   </div>
                 </div>
               </div>

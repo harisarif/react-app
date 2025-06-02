@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from '../../../utils/axios';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import React, { useState, useRef } from "react";
 //swiper
@@ -22,6 +22,27 @@ import LogoFull from "../../../assets/images/sign-in-logo.png";
 SwiperCore.use([Navigation, Autoplay]);
 
 const SignIn = () => {
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState();
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+
+  useEffect(() => {
+    
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/categories`);
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const changeCategory = (categoryId) => {
+    setSelectedCategory(categoryId);
+  };
 
   return (
     <>
@@ -41,13 +62,28 @@ const SignIn = () => {
                 </Link>  */}
                 <div className="form-inner-content-holder d-flex flex-column gap-4">
                   <div className="d-flex flex-column gap-3">
-                    <h5 className="sign-in-title text-uppercase">Welcome to Equity Circle</h5>
-                    <h3 className="sign-in-sub-title text-uppercase">Your all-in-one career, learning, fitness & finance hub.</h3>
-                    <p className="sign-in-text text-uppercase">Access personalized tools and insights to grow your skills, health, and wealth—everything in one place.</p>
+                    <h3 className="sign-in-sub-title text-uppercase">Your Interest.</h3>
+                  </div>
+                  <div className="d-flex gap-2 mb-4 flex-column">
+                  {categories.map((category, index) => {
+                    return (
+                      <label for={index} className={`interest-in-secondary-btn text-center text-1 ${selectedCategory == category.id && 'checked'}`}>
+                        <input
+                          type="radio"
+                          value={category.id}
+                          id={index}
+                          checked={selectedCategory === category.id}
+                          onChange={() => changeCategory(category.id)}
+                          className='d-none'
+                        />
+                        {category.name}
+                      </label>
+                    )
+                  })}
+                  {console.log('Categories', categories)}
                   </div>
                   <div className="d-flex flex-column">
-                    <Link to='/auth/sign-up' className='sign-in-secondary-btn text-center mb-3'>Create an Account</Link>
-                    <Link to='/auth/sign-in' className='sign-in-primary-btn text-center'>Sign In</Link>
+                    <Link to='/lets-begain' className='sign-in-primary-btn text-center'>Next</Link>
                   </div>
                 </div>
               </div>
@@ -60,3 +96,4 @@ const SignIn = () => {
 };
 
 export default SignIn;
+

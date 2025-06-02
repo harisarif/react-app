@@ -35,9 +35,11 @@ const SignUp = () => {
   const Google_client_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const Facebook_client_ID = process.env.REACT_APP_FACEBOOK_CLIENT_ID;
   console.log(Google_client_ID);
+  const [currentStep, setCurrentStep] = useState(1);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -45,40 +47,45 @@ const SignUp = () => {
 
   const googleLoginRef = useRef(null);
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisiable, setPasswordVisiable] = useState(true);
+  const [cpasswordVisiable, setcPasswordVisiable] = useState(true);
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
+  const passwordToggle = () => {
+    setPasswordVisiable(!passwordVisiable);
   };
 
-  const handleSubmit = async (e) => {
-    setSuccess(null);
-    setError(null);
-    setLoader(true);
-    e.preventDefault();
-
-    if (!termsAccepted) {
-      alert('You must accept the terms and conditions.');
-      return;
-    }
-
-    try {
-      const response = await axios.post(`${baseUrl}/api/register`, {
-        name: fullName,
-        email: email,
-        password: password,
-        password_confirmation: password,
-      });
-      setSuccess(response.data.message);
-      localStorage.setItem('access_token', response.data.access_token);
-      setLoader(false);
-      window.location.href = '/'
-    } catch (error) {
-      console.error('Signup error:', error);
-      setError(error.response ? error.response.data.message : 'Signup failed. Please try again.');
-      setLoader(false);
-    }
+  const cpasswordToggle = () => {
+    setcPasswordVisiable(!cpasswordVisiable);
   };
+
+  // const handleSubmit = async (e) => {
+  //   setSuccess(null);
+  //   setError(null);
+  //   setLoader(true);
+  //   e.preventDefault();
+
+  //   if (!termsAccepted) {
+  //     alert('You must accept the terms and conditions.');
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post(`${baseUrl}/api/register`, {
+  //       name: fullName,
+  //       email: email,
+  //       password: password,
+  //       password_confirmation: password,
+  //     });
+  //     setSuccess(response.data.message);
+  //     localStorage.setItem('access_token', response.data.access_token);
+  //     setLoader(false);
+  //     window.location.href = '/'
+  //   } catch (error) {
+  //     console.error('Signup error:', error);
+  //     setError(error.response ? error.response.data.message : 'Signup failed. Please try again.');
+  //     setLoader(false);
+  //   }
+  // };
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
@@ -94,7 +101,6 @@ const SignUp = () => {
       alert('Failed to sign in with Google. Please try again.');
     }
   };
-
 
   useEffect(() => {
     window.fbAsyncInit = function () {
@@ -154,6 +160,68 @@ const SignUp = () => {
     }
   };
 
+  const [errors, setErrors] = useState({});
+
+  const validateStep = () => {
+    let stepErrors = {};
+    if (currentStep === 1) {
+      if (!fullName.trim()) stepErrors.fullName = 'Full name is required';
+    }
+    if (currentStep === 2) {
+      if (!email.trim()) stepErrors.email = 'Email is required';
+      else if (!/^\S+@\S+\.\S+$/.test(email)) stepErrors.email = 'Invalid email address';
+    }
+    if (currentStep === 3) {
+      if (!password) stepErrors.password = 'Password is required';
+      if (!confirmPassword) stepErrors.confirmPassword = 'Confirm password is required';
+      if (password && confirmPassword && password !== confirmPassword) stepErrors.confirmPassword = 'Passwords do not match';
+    }
+    setErrors(stepErrors);
+    return Object.keys(stepErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validateStep()) setCurrentStep(currentStep + 1);
+  };
+  const handlePrev = () => {
+    setCurrentStep(currentStep - 1);
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (currentStep === 3) {
+      setSuccess(null);
+      setError(null);
+      setLoader(true);
+      e.preventDefault();
+
+      if(!validateStep()) return;
+
+      console.log('handleSubmit :', fullName, email, password, confirmPassword);
+
+      if (!termsAccepted) {
+        alert('You must accept the terms and conditions.');
+        return;
+      }
+
+      try {
+        const response = await axios.post(`${baseUrl}/api/register`, {
+          name: fullName,
+          email: email,
+          password: password,
+          password_confirmation: password,
+        });
+        setSuccess(response.data.message);
+        localStorage.setItem('access_token', response.data.access_token);
+        setLoader(false);
+        window.location.href = '/interest'
+      } catch (error) {
+        console.error('Signup error:', error);
+        setError(error.response ? error.response.data.message : 'Signup failed. Please try again.');
+        setLoader(false);
+      }
+    }
+  };
+
   return (
     <>
       <section className="sign-in-page">
@@ -163,120 +231,138 @@ const SignUp = () => {
             </Col> */}
             <Col lg={12} className="d-flex align-items-center" style={{ height: '100vh' }}>
               <div className="sign-in-from">
-                <Link
+                {/* <Link
                   to="/"
                   className="d-inline-flex align-items-center justify-content-center gap-2"
                 >
                   <img src={LogoFull} width={80} alt='' className="sing-in-page-logo"/>
                   <h5 className='h5 mb-0 text-light' style={{fontSize: '46px', fontWeight: '800'}}>Equity Circle</h5>
-                </Link>                
+                </Link>                 */}
                 <div className='form-inner-content-holder'>
                   <Form className="mt-3" onSubmit={handleSubmit}>
                     {error && <div className="alert alert-danger" role="alert">{error}</div>}
                     {success && <div className="alert alert-success" role="alert">{success}</div>}
 
-                    <Form.Group className="form-group text-start">
-                      <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Full Name</h6>
-                      <Form.Control
-                        type="text"
-                        className="form-control mb-0 radius-8"
-                        placeholder="Your Full Name"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Form.Group className="form-group text-start">
-                      <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Email</h6>
-                      <Form.Control
-                        type="email"
-                        className="form-control mb-0 radius-8"
-                        placeholder="Enter Your Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Form.Group className="form-group text-start mb-2">
-                      <h6 className="form-label fw-bold" style={{ fontSize: '14px', fontWeight: '600' }}>Password</h6>
-                      {/* <Form.Control
-                        type="password"
-                        className="form-control mb-0 radius-8"
-                        placeholder="Enter Your Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      /> */}
-                      <div className="position-relative">
+                    {currentStep === 1 && (
+                      <Form.Group className="mb-3">
+                        <Form.Label>Full Name</Form.Label>
                         <Form.Control
-                          type={passwordVisible ? 'text' : 'password'}
-                          placeholder="Enter Your Password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="mb-0 radius-8"
+                          type="text"
+                          placeholder="Enter your full name"
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          isInvalid={!!errors.fullName}
                         />
-                        <Button
-                          variant="link"
-                          className="position-absolute top-50 end-4px translate-middle-y cursor-pointer"
-                          onClick={togglePasswordVisibility}
-                        >
-                          <span className="material-symbols-outlined pt-2">
-                            {passwordVisible ? 'visibility_off' : 'visibility'}
-                          </span>
-                        </Button>
-                      </div>
-                    </Form.Group>
-                    {/* <div className="d-flex align-items-center justify-content-between">
-                      <Form.Check className="form-check d-inline-block m-0">
-                        <Form.Check.Input
-                          type="checkbox"
-                          className="form-check-input"
-                          checked={termsAccepted}
-                          onChange={(e) => setTermsAccepted(e.target.checked)}
+                        <Form.Control.Feedback type="invalid">{errors.fullName}</Form.Control.Feedback>
+                        <Button className='mt-3 sign-in-primary-btn w-100' onClick={handleNext} type="button">Next</Button>
+                      </Form.Group>
+                    )}
+                    {currentStep === 2 && (
+                      // Email field
+                      <Form.Group className="mb-3">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="Enter your email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          isInvalid={!!errors.email}
                         />
-                        <h6 className="form-check-label fw-500 font-size-14">
-                          I accept{" "}
-                          <Link className="fw-light ms-1" to="/dashboard/extrapages/terms-of-service">
-                            Terms and Conditions
-                          </Link>
-                        </h6>
-                      </Form.Check>
-                    </div> */}
-
-                    <div className="d-flex align-items-center justify-content-between">
-                      <Form.Check className="form-check d-flex gap-2 m-0">
-                        <Form.Check.Input
-                          type="checkbox"
-                          className="form-check-input"
-                        />
-                        <h6 className="form-check-label mt-1" style={{ fontSize: '12px', fontWeight: '500' }}>Remember Me</h6>
-                      </Form.Check>
-                      <Link to="/auth/recover-password" className="font-italic" style={{ fontSize: '12px', fontWeight: '500' }}>
-                        Forgot Password?
-                      </Link>
-                    </div>
-
-                    <Button
-                      variant="primary"
-                      type="submit"
-                      className="bg-light border-0 text-dark radius-8 mt-4 w-100"
-                    >
-                      {IsLoader ? (
-                        <div className="Authloader" style={{ margin: '0 auto' }}></div>
-                      ) : (
-                        'Sign up'
-                      )}
-                    </Button>
+                        <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                        <div className="d-flex gap-2 justify-content-between mt-3">
+                          <Button onClick={handlePrev} className='sign-in-secondary-btn w-100' type="button">Previous</Button>
+                          <Button onClick={handleNext} className='sign-in-primary-btn w-100' type="button">Next</Button>
+                        </div>
+                      </Form.Group>
+                    )}
+                    {currentStep === 3 && (
+                      <>
+                        <Form.Group controlId="formPassword">
+                          <Form.Label>Password</Form.Label>
+                          <div className='position-relative'>
+                            <Form.Control
+                              type={passwordVisiable ? 'password' : 'text'}
+                              placeholder="Enter password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              isInvalid={!!errors.password}
+                            />
+                            <Button
+                              variant="link"
+                              className="position-absolute top-50 end-0 translate-middle-y cursor-pointer"
+                              onClick={passwordToggle}
+                            >
+                              <span className="material-symbols-outlined pt-2">
+                                {passwordVisiable ? 'visibility_off' : 'visibility'}
+                              </span>
+                            </Button>
+                          </div>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.password}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group controlId="formConfirmPassword">
+                          <Form.Label>Confirm Password</Form.Label>
+                          <div className='position-relative'>
+                            <Form.Control
+                              type={cpasswordVisiable ? 'password' : 'text'}
+                              placeholder="Confirm password"
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              isInvalid={!!errors.confirmPassword}
+                            />
+                            <Button
+                              variant="link"
+                              className="position-absolute top-50 end-0 translate-middle-y cursor-pointer"
+                              onClick={cpasswordToggle}
+                            >
+                              <span className="material-symbols-outlined pt-2">
+                                {cpasswordVisiable ? 'visibility_off' : 'visibility'}
+                              </span>
+                            </Button>
+                          </div>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.confirmPassword}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <div className="d-flex align-items-center justify-content-between">
+                          <Form.Check className="form-check d-inline-block m-0">
+                            <Form.Check.Input
+                              type="checkbox"
+                              className="form-check-input"
+                              checked={termsAccepted}
+                              onChange={(e) => setTermsAccepted(e.target.checked)}
+                            />
+                            <h6 className="form-check-label fw-500 font-size-14">
+                              I accept{" "}
+                              <Link className="fw-light ms-1" to="/dashboard/extrapages/terms-of-service">
+                                Terms and Conditions
+                              </Link>
+                            </h6>
+                          </Form.Check>
+                        </div>
+                        <div className="d-flex gap-2 justify-content-between mt-3">
+                          <Button onClick={handlePrev} className="sign-in-secondary-btn w-100" type="button">Previous</Button>
+                          <Button className="sign-in-primary-btn w-100" type="submit">
+                            Sign Up
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                    
 
                     <div className="mt-4">
                       <div className="d-flex align-items-center justify-content-center mb-2">
                         <hr className="flex-grow-1" />
-                        <span className="mx-3" style={{ fontSize: '12px' }}>OR</span>
+                        <span className="mx-3" style={{ fontSize: '12px' }}>OR REGISTERD BY</span>
                         <hr className="flex-grow-1" />
                       </div>
-                      <div className="d-flex gap-2 justify-content-between align-items-center">
-                        <div className="google-btn" onClick={handleGoogleClick}>
+                      <div className="d-flex gap-2 flex-column justify-content-between align-items-center">
+                        <div className="google-btn sign-in-secondary-btn text-center w-100 justify-content-center" onClick={handleGoogleClick}>
                           <img src={googleImage} alt="Google" />
                           <div className="text">Google</div>
                         </div>
-                        <div className="facebook-btn">
+                        <div className="facebook-btn sign-in-secondary-btn text-center w-100 justify-content-center">
                           <img src={facebookImage} alt="FaceBook" />
                           <div className="text">FaceBook</div>
                         </div>
@@ -302,7 +388,7 @@ const SignUp = () => {
 
                     <h6 className="mt-5 text-center">
                       <span style={{ fontSize: '14px', fontWeight: '400' }}>Already Have An Account ?{" "}</span>
-                      <Link to="/auth/sign-in" style={{ fontSize: '14px', fontWeight: '600', textDecoration: 'underline' }}>Login</Link>
+                      <Link to="/auth/sign-in" class='sign-in-link' style={{ fontSize: '14px', fontWeight: '600', textDecoration: 'underline' }}>Login</Link>
                     </h6>
 
                     {/* <h6 className="mt-5">
@@ -316,29 +402,6 @@ const SignUp = () => {
           </Row>
         </Container>
       </section>
-      <style jsx>{`
-        .or-divider {
-          position: relative;
-          text-align: center;
-          margin: 20px 0;
-        }
-        .or-divider:before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: #e0e0e0;
-        }
-        .or-text {
-          background: #fff;
-          padding: 0 15px;
-          color: #666;
-          position: relative;
-          font-size: 14px;
-        }
-      `}</style>
     </>
   );
 };
